@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>兑换中心 · 运营管理后台</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #b7141b;
+    --red-deep: #8a0f15;
+    --red-light: #fef0f0;
+    --gold: #c8a36a;
+    --gold-bg: #fdf6ec;
+    --ink: #1a1a1a;
+    --ink-2: #4a4a4a;
+    --ink-3: #8a8a8a;
+    --ink-4: #b8b8b8;
+    --bg: #f5f6fa;
+    --card: #ffffff;
+    --border: #e8e8ec;
+    --success: #19be6b;
+    --warning: #f29100;
+    --danger: #e8363e;
+    --info: #3b82f6;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+    --radius: 8px;
+    --sidebar-w: 220px;
+    --header-h: 56px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { font-family: 'Noto Sans SC', -apple-system, sans-serif; color: var(--ink); background: var(--bg); font-size: 14px; line-height: 1.5; }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; font-size: inherit; }
+  input, select, textarea { font-family: inherit; font-size: 13px; }
+
+  /* Layout */
+  .layout { display: flex; min-height: 100vh; }
+  .sidebar {
+    width: var(--sidebar-w); background: #1a1a2e; color: #fff; position: fixed; top: 0; left: 0; bottom: 0;
+    display: flex; flex-direction: column; z-index: 100; transition: transform .3s;
+  }
+  .sidebar-brand { padding: 20px 18px 16px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .sidebar-brand h1 { font-size: 15px; font-weight: 600; letter-spacing: 1px; }
+  .sidebar-brand small { font-size: 11px; color: rgba(255,255,255,0.45); display: block; margin-top: 2px; }
+  .sidebar-nav { flex: 1; overflow-y: auto; padding: 12px 0; }
+  .nav-group { margin-bottom: 4px; }
+  .nav-group-title { padding: 8px 18px 4px; font-size: 11px; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 1px; }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px; padding: 10px 18px; color: rgba(255,255,255,0.65);
+    transition: all .15s; cursor: pointer; font-size: 13px; border-left: 3px solid transparent;
+  }
+  .nav-item:hover { color: #fff; background: rgba(255,255,255,0.06); }
+  .nav-item.active { color: #fff; background: rgba(183,20,27,0.15); border-left-color: var(--red); }
+  .nav-item svg { width: 18px; height: 18px; flex-shrink: 0; opacity: .7; }
+  .nav-item.active svg { opacity: 1; }
+  .nav-badge { margin-left: auto; background: var(--red); color: #fff; font-size: 10px; padding: 1px 6px; border-radius: 10px; }
+
+  .main { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
+  .header {
+    height: var(--header-h); background: #fff; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between; padding: 0 24px;
+    position: sticky; top: 0; z-index: 50;
+  }
+  .header-left { display: flex; align-items: center; gap: 16px; }
+  .header-title { font-size: 16px; font-weight: 600; }
+  .header-breadcrumb { font-size: 12px; color: var(--ink-3); }
+  .header-breadcrumb span { color: var(--ink-2); }
+  .header-right { display: flex; align-items: center; gap: 16px; }
+  .header-avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--red), var(--red-deep)); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 13px; font-weight: 600; }
+
+  .content { flex: 1; padding: 24px; }
+
+  /* Page panels */
+  .panel { display: none; }
+  .panel.active { display: block; animation: fadeIn .2s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* Stat cards */
+  .stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+  .stat-card { background: #fff; border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); }
+  .stat-label { font-size: 13px; color: var(--ink-3); margin-bottom: 8px; }
+  .stat-value { font-size: 28px; font-weight: 700; line-height: 1; }
+  .stat-value.red { color: var(--red); }
+  .stat-value.gold { color: var(--gold); }
+  .stat-value.green { color: var(--success); }
+  .stat-change { font-size: 12px; margin-top: 8px; display: flex; align-items: center; gap: 4px; }
+  .stat-change.up { color: var(--success); }
+  .stat-change.down { color: var(--danger); }
+
+  /* Toolbar */
+  .toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 12px; }
+  .toolbar-left { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .toolbar-right { display: flex; align-items: center; gap: 8px; }
+
+  /* Form controls */
+  .form-input {
+    height: 34px; padding: 0 12px; border: 1px solid var(--border); border-radius: 6px;
+    background: #fff; color: var(--ink); outline: none; transition: border-color .2s;
+  }
+  .form-input:focus { border-color: var(--red); }
+  .form-input::placeholder { color: var(--ink-4); }
+  .form-select { appearance: none; padding-right: 28px; background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%238a8a8a' stroke-width='1.5' fill='none'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; cursor: pointer; }
+
+  /* Buttons */
+  .btn { display: inline-flex; align-items: center; gap: 6px; padding: 0 16px; height: 34px; border-radius: 6px; font-size: 13px; font-weight: 500; transition: all .15s; white-space: nowrap; }
+  .btn svg { width: 16px; height: 16px; }
+  .btn-primary { background: var(--red); color: #fff; }
+  .btn-primary:hover { background: var(--red-deep); }
+  .btn-outline { border: 1px solid var(--border); color: var(--ink-2); background: #fff; }
+  .btn-outline:hover { border-color: var(--red); color: var(--red); }
+  .btn-text { color: var(--red); padding: 0 8px; }
+  .btn-text:hover { background: var(--red-light); }
+  .btn-danger { color: var(--danger); }
+  .btn-danger:hover { background: #fef0f0; }
+  .btn-sm { height: 28px; padding: 0 10px; font-size: 12px; }
+  .btn-ghost { background: transparent; color: var(--ink-3); }
+  .btn-ghost:hover { color: var(--ink); background: rgba(0,0,0,0.04); }
+
+  /* Table */
+  .table-wrap { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+  .table-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; }
+  thead { background: #fafafa; }
+  th { padding: 12px 16px; text-align: left; font-size: 12px; font-weight: 600; color: var(--ink-3); border-bottom: 1px solid var(--border); white-space: nowrap; }
+  td { padding: 10px 16px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #fafafa; }
+    .td-img { width: 36px; height: 36px; border-radius: 6px; object-fit: cover; background: #f4f4f5; flex-shrink: 0; }
+  .td-actions { display: flex; gap: 4px; align-items: center; }
+  td .toggle { flex-shrink: 0; }
+
+  /* Tags */
+  .tag { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; }
+  .tag-red { background: var(--red-light); color: var(--red); }
+  .tag-gold { background: var(--gold-bg); color: var(--gold); }
+  .type-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 500; }
+  .tag-green { background: #edf9f0; color: var(--success); }
+  .tag-gray { background: #f4f4f5; color: var(--ink-3); }
+  .tag-blue { background: #eff6ff; color: var(--info); }
+
+  /* Pagination */
+  .pagination { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-top: 1px solid var(--border); }
+  .page-info { font-size: 12px; color: var(--ink-3); }
+  .page-btns { display: flex; gap: 4px; }
+  .page-btn { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 6px; font-size: 13px; color: var(--ink-2); border: 1px solid var(--border); background: #fff; }
+  .page-btn:hover { border-color: var(--red); color: var(--red); }
+  .page-btn.active { background: var(--red); color: #fff; border-color: var(--red); }
+
+  /* Modal */
+  .modal-mask {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 200;
+    display: none; align-items: center; justify-content: center;
+    animation: fadeIn .2s;
+  }
+  .modal-mask.show { display: flex; }
+  .modal {
+    background: #fff; border-radius: 12px; width: 640px; max-width: 92vw; max-height: 85vh;
+    display: flex; flex-direction: column; box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    animation: modalIn .25s ease;
+  }
+  @keyframes modalIn { from { opacity: 0; transform: scale(.96) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+  .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px 16px; border-bottom: 1px solid var(--border); }
+  .modal-title { font-size: 16px; font-weight: 600; }
+  .modal-close { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 6px; color: var(--ink-3); }
+  .modal-close:hover { background: #f4f4f5; color: var(--ink); }
+  .modal-body { padding: 20px 24px; overflow-y: auto; flex: 1; }
+  .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 8px; }
+
+  /* Form layout */
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-grid .full { grid-column: 1 / -1; }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-label { font-size: 13px; font-weight: 500; color: var(--ink-2); }
+  .form-label .required { color: var(--red); margin-left: 2px; }
+  .form-control { height: 36px; padding: 0 12px; border: 1px solid var(--border); border-radius: 6px; background: #fff; outline: none; transition: border-color .2s; width: 100%; }
+  .form-control:focus { border-color: var(--red); box-shadow: 0 0 0 3px rgba(183,20,27,0.08); }
+  textarea.form-control { height: auto; padding: 10px 12px; resize: vertical; min-height: 80px; }
+  .form-hint { font-size: 11px; color: var(--ink-4); }
+  .form-section { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); }
+  .form-section-title { font-size: 14px; font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .form-section-title::before { content: ''; width: 3px; height: 14px; background: var(--red); border-radius: 2px; }
+
+  /* Inline edit table */
+  .level-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .level-card { background: #fafafa; border-radius: 8px; padding: 12px; border: 1px solid var(--border); }
+  .level-card-title { font-size: 12px; color: var(--ink-3); margin-bottom: 6px; }
+  .level-card input { width: 100%; height: 34px; border: 1px solid var(--border); border-radius: 6px; padding: 0 10px; text-align: center; font-weight: 600; }
+
+  /* Toggle switch */
+  .toggle { position: relative; width: 40px; height: 22px; cursor: pointer; }
+  .toggle input { opacity: 0; width: 0; height: 0; }
+  .toggle-slider {
+    position: absolute; inset: 0; background: var(--ink-4); border-radius: 11px; transition: .25s;
+  }
+  .toggle-slider::before {
+    content: ''; position: absolute; left: 3px; top: 3px; width: 16px; height: 16px;
+    background: #fff; border-radius: 50%; transition: .25s;
+  }
+  .toggle input:checked + .toggle-slider { background: var(--red); }
+  .toggle input:checked + .toggle-slider::before { transform: translateX(18px); }
+
+  /* Status dot */
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+  .status-dot.on { background: var(--success); }
+  .status-dot.off { background: var(--ink-4); }
+
+  /* Toast */
+  .toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; }
+  .toast-item { background: #fff; padding: 12px 20px; border-radius: 8px; box-shadow: 0 8px 30px rgba(0,0,0,0.12); display: flex; align-items: center; gap: 10px; font-size: 13px; animation: toastIn .3s ease; }
+  .toast-item.out { animation: toastOut .3s ease forwards; }
+  @keyframes toastIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+  @keyframes toastOut { to { opacity: 0; transform: translateX(20px); } }
+  .toast-icon { width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .toast-success .toast-icon { background: #edf9f0; color: var(--success); }
+  .toast-error .toast-icon { background: #fef0f0; color: var(--danger); }
+  .toast-warning .toast-icon { background: var(--gold-bg); color: var(--warning); }
+
+  /* Config sections */
+  .config-card { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px; margin-bottom: 16px; }
+  .config-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+  .config-card-title { font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+  .config-card-title svg { width: 18px; height: 18px; color: var(--red); }
+  .config-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--border); }
+  .config-row:last-child { border-bottom: none; }
+  .config-row-label { font-size: 13px; color: var(--ink-2); }
+  .config-row-label small { display: block; font-size: 11px; color: var(--ink-4); margin-top: 2px; }
+  .config-row-value { display: flex; align-items: center; gap: 8px; }
+  .config-input-sm { width: 80px; height: 30px; border: 1px solid var(--border); border-radius: 6px; padding: 0 8px; text-align: center; font-size: 13px; }
+
+  /* Entry config cards */
+  .entry-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .entry-card { border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; transition: all .2s; }
+  .entry-card:hover { border-color: var(--red); box-shadow: 0 4px 16px rgba(183,20,27,0.08); }
+  .entry-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .entry-card-icon { width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+  .entry-card-name { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .entry-card-desc { font-size: 12px; color: var(--ink-3); margin-bottom: 12px; }
+  .entry-card-meta { display: flex; align-items: center; justify-content: space-between; padding-top: 12px; border-top: 1px solid var(--border); font-size: 12px; color: var(--ink-3); }
+
+  /* Rule editor */
+  .rule-list { display: flex; flex-direction: column; gap: 10px; }
+  .rule-item { display: flex; align-items: flex-start; gap: 10px; padding: 12px 16px; background: #fafafa; border-radius: 8px; border: 1px solid var(--border); }
+  .rule-item-num { width: 24px; height: 24px; background: var(--red); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; flex-shrink: 0; margin-top: 2px; }
+  .rule-item-content { flex: 1; }
+  .rule-item-content input { width: 100%; height: 32px; border: 1px solid transparent; background: transparent; padding: 0 6px; border-radius: 4px; font-size: 13px; }
+  .rule-item-content input:focus { border-color: var(--red); background: #fff; outline: none; }
+  .rule-item-actions { display: flex; gap: 4px; }
+
+  /* Order status timeline */
+  .order-timeline { display: flex; flex-direction: column; gap: 0; padding-left: 20px; border-left: 2px solid var(--border); }
+  .timeline-item { position: relative; padding: 0 0 20px 20px; }
+  .timeline-item::before { content: ''; position: absolute; left: -26px; top: 2px; width: 10px; height: 10px; border-radius: 50%; background: var(--ink-4); border: 2px solid #fff; }
+  .timeline-item.active::before { background: var(--red); box-shadow: 0 0 0 4px rgba(183,20,27,0.15); }
+  .timeline-item:last-child { padding-bottom: 0; }
+  .timeline-text { font-size: 13px; color: var(--ink-2); }
+  .timeline-text strong { color: var(--ink); }
+  .timeline-time { font-size: 11px; color: var(--ink-4); margin-top: 2px; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-thumb { background: #d0d0d5; border-radius: 3px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+</style>
+</head>
+<body>
+<div class="layout">
+
+  <!-- ===== Sidebar ===== -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <h1>CDF Exchange</h1>
+      <small>兑换中心运营后台</small>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-group">
+        <div class="nav-group-title">功能模块</div>
+        <div class="nav-item active" onclick="switchPanel('products', this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+          兑换商品
+          <span class="nav-badge">10</span>
+        </div>
+        <div class="nav-item" onclick="switchPanel('categories', this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7V4h16v3"/><path d="M9 20h6"/><path d="M12 4v16"/></svg>
+          分类管理
+        </div>
+        <div class="nav-item" onclick="switchPanel('activities', this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          活动管理
+        </div>
+        <div class="nav-item" onclick="switchPanel('orders', this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+          兑换订单
+          <span class="nav-badge">23</span>
+        </div>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- ===== Main ===== -->
+  <div class="main">
+    <header class="header">
+      <div class="header-left">
+        <div>
+          <div class="header-title" id="pageTitle">兑换商品</div>
+          <div class="header-breadcrumb">兑换中心 / <span id="breadcrumb">兑换商品</span></div>
+        </div>
+      </div>
+      <div class="header-right">
+        <button class="btn btn-ghost btn-sm" onclick="showToast('已刷新数据', 'success')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+          刷新
+        </button>
+        <div class="header-avatar" title="运营管理员">陈</div>
+      </div>
+    </header>
+
+    <div class="content">
+
+      <!-- ========== 2. 商品列表 ========== -->
+      <div class="panel active" id="panel-products">
+        <div class="toolbar">
+          <div class="toolbar-left">
+            <input class="form-input" style="width:220px;" placeholder="搜索商品名称 / SKU" id="searchProduct">
+            <select class="form-input form-select" style="width:130px;" id="filterCategory">
+              <option value="">全部分类</option>
+              <option value="香水化妆品">香水化妆品</option>
+              <option value="电子券">电子券</option>
+              <option value="虚拟权益">虚拟权益</option>
+            </select>
+            <select class="form-input form-select" style="width:130px;" id="filterTag">
+              <option value="">全部标签</option>
+              <option value="香水化妆品">香水化妆品</option>
+              <option value="电子券">电子券</option>
+              <option value="虚拟权益">虚拟权益</option>
+            </select>
+          </div>
+          <div class="toolbar-right">
+            <button class="btn btn-outline" onclick="showToast('已导出商品列表', 'success')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              导出
+            </button>
+            <button class="btn btn-primary" onclick="openProductModal()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              新增商品
+            </button>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>商品</th>
+                  <th>SKU</th>
+                  <th>分类</th>
+                  <th>标签</th>
+                  <th>商品类型</th>
+                  <th>原价</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="productTableBody"></tbody>
+            </table>
+          </div>
+          <div class="pagination">
+            <div class="page-info">共 <strong>10</strong> 条记录</div>
+            <div class="page-btns">
+              <button class="page-btn" disabled>&lt;</button>
+              <button class="page-btn active">1</button>
+              <button class="page-btn">&gt;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== 3. 分类管理 ========== -->
+      <div class="panel" id="panel-categories">
+        <div class="toolbar">
+          <div class="toolbar-left">
+            <span style="font-size:13px;color:var(--ink-3);">管理商品分类，支持拖拽排序</span>
+          </div>
+          <div class="toolbar-right">
+            <button class="btn btn-primary" onclick="openCategoryModal()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              新增分类
+            </button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>排序</th><th>分类名称</th><th>商品数</th><th>状态</th><th>操作</th></tr></thead>
+            <tbody>
+              <tr><td style="color:var(--ink-4);">1</td><td style="font-weight:500;">美妆护肤</td><td>8</td><td><span class="status-dot on"></span>启用</td><td class="td-actions"><button class="btn btn-text btn-sm" onclick="openCategoryModal('美妆护肤',1)">编辑</button><button class="btn btn-danger btn-sm">删除</button></td></tr>
+              <tr><td style="color:var(--ink-4);">2</td><td style="font-weight:500;">本地服务</td><td>2</td><td><span class="status-dot on"></span>启用</td><td class="td-actions"><button class="btn btn-text btn-sm" onclick="openCategoryModal('本地服务',2)">编辑</button><button class="btn btn-danger btn-sm">删除</button></td></tr>
+              <tr><td style="color:var(--ink-4);">3</td><td style="font-weight:500;">品牌周边</td><td>3</td><td><span class="status-dot on"></span>启用</td><td class="td-actions"><button class="btn btn-text btn-sm" onclick="openCategoryModal('品牌周边',3)">编辑</button><button class="btn btn-danger btn-sm">删除</button></td></tr>
+              <tr><td style="color:var(--ink-4);">4</td><td style="font-weight:500;">虚拟权益</td><td>1</td><td><span class="status-dot off"></span>停用</td><td class="td-actions"><button class="btn btn-text btn-sm" onclick="openCategoryModal('虚拟权益',4)">编辑</button><button class="btn btn-danger btn-sm">删除</button></td></tr>
+              <tr><td style="color:var(--ink-4);">5</td><td style="font-weight:500;">有税商户</td><td>1</td><td><span class="status-dot on"></span>启用</td><td class="td-actions"><button class="btn btn-text btn-sm" onclick="openCategoryModal('有税商户',5)">编辑</button><button class="btn btn-danger btn-sm">删除</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ========== 活动管理 ========== -->
+      <div class="panel" id="panel-activities">
+        <div class="toolbar">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <button class="btn btn-primary" onclick="openActivityModal()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              新建活动
+            </button>
+            <span style="font-size:12px;color:var(--ink-4);">配置每日开放兑换的商品、库存及支付方式</span>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>活动日期</th>
+                  <th>上架时间</th>
+                  <th>商品数</th>
+                  <th>总库存</th>
+                  <th>支付方式</th>
+                  <th>状态</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="activityTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ========== 8. 订单列表 ========== -->
+      <div class="panel" id="panel-orders">
+        <div class="toolbar">
+          <div class="toolbar-left">
+            <input class="form-input" style="width:200px;" placeholder="搜索订单号 / 券编号">
+            <select class="form-input form-select" style="width:120px;"><option value="">全部状态</option><option>待核销</option><option>已核销</option><option>已过期</option><option>已退款</option></select>
+            <select class="form-input form-select" style="width:120px;"><option value="">全部类型</option><option>到店核销</option><option>实物邮寄</option></select>
+            <input class="form-input" type="date" style="width:150px;" value="2026-07-13">
+            <span style="color:var(--ink-4);">至</span>
+            <input class="form-input" type="date" style="width:150px;" value="2026-07-19">
+          </div>
+          <div class="toolbar-right">
+            <button class="btn btn-outline" onclick="showToast('已导出订单', 'success')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              导出
+            </button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <div class="table-scroll">
+            <table>
+              <thead><tr><th>订单号</th><th>商品</th><th>用户</th><th>支付方式</th><th>消耗</th><th>状态</th><th>时间</th><th>操作</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td style="font-family:monospace;font-size:12px;">EX20260719001</td>
+                  <td>雅诗兰黛粉底液</td>
+                  <td>王** (138****8888)</td>
+                  <td><span class="tag tag-red">积分</span></td>
+                  <td style="font-weight:600;">7,600 分</td>
+                  <td><span class="tag tag-gold">待核销</span></td>
+                  <td style="font-size:12px;color:var(--ink-3);">07-19 14:32</td>
+                  <td class="td-actions"><button class="btn btn-text btn-sm" onclick="showToast('订单详情功能已移除', 'warning')">详情</button></td>
+                </tr>
+                <tr>
+                  <td style="font-family:monospace;font-size:12px;">EX20260719002</td>
+                  <td>兰蔻小黑瓶</td>
+                  <td>李** (186****6677)</td>
+                  <td><span class="tag tag-red">积分</span></td>
+                  <td style="font-weight:600;">10,200 分</td>
+                  <td><span class="tag tag-green">已核销</span></td>
+                  <td style="font-size:12px;color:var(--ink-3);">07-19 11:08</td>
+                  <td class="td-actions"><button class="btn btn-text btn-sm" onclick="showToast('订单详情功能已移除', 'warning')">详情</button></td>
+                </tr>
+                <tr>
+                  <td style="font-family:monospace;font-size:12px;">EX20260718015</td>
+                  <td>迪奥口红礼盒</td>
+                  <td>张** (159****3344)</td>
+                  <td><span class="tag tag-gold">贝壳</span></td>
+                  <td style="font-weight:600;">288 贝壳</td>
+                  <td><span class="tag tag-blue">配送中</span></td>
+                  <td style="font-size:12px;color:var(--ink-3);">07-18 16:45</td>
+                  <td class="td-actions"><button class="btn btn-text btn-sm" onclick="showToast('订单详情功能已移除', 'warning')">详情</button></td>
+                </tr>
+                <tr>
+                  <td style="font-family:monospace;font-size:12px;">EX20260717008</td>
+                  <td>SPA 体验券</td>
+                  <td>陈** (177****2211)</td>
+                  <td><span class="tag tag-red">积分</span></td>
+                  <td style="font-weight:600;">6,500 分</td>
+                  <td><span class="tag tag-green">已核销</span></td>
+                  <td style="font-size:12px;color:var(--ink-3);">07-17 10:22</td>
+                  <td class="td-actions"><button class="btn btn-text btn-sm" onclick="showToast('订单详情功能已移除', 'warning')">详情</button></td>
+                </tr>
+                <tr>
+                  <td style="font-family:monospace;font-size:12px;">EX20260715003</td>
+                  <td>SK-II 神仙水</td>
+                  <td>赵** (135****9900)</td>
+                  <td><span class="tag tag-red">积分</span></td>
+                  <td style="font-weight:600;">11,160 分</td>
+                  <td><span class="tag tag-gray">已过期</span></td>
+                  <td style="font-size:12px;color:var(--ink-3);">07-15 09:18</td>
+                  <td class="td-actions"><button class="btn btn-text btn-sm" onclick="showToast('订单详情功能已移除', 'warning')">详情</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="pagination">
+            <div class="page-info">共 <strong>156</strong> 条记录</div>
+            <div class="page-btns">
+              <button class="page-btn">&lt;</button>
+              <button class="page-btn active">1</button>
+              <button class="page-btn">2</button>
+              <button class="page-btn">3</button>
+              <button class="page-btn">...</button>
+              <button class="page-btn">16</button>
+              <button class="page-btn">&gt;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /layout -->
+
+<!-- ===== 分类编辑弹窗 ===== -->
+<div class="modal-mask" id="categoryModal">
+  <div class="modal" style="width:480px;">
+    <div class="modal-header">
+      <div class="modal-title" id="categoryModalTitle">新增分类</div>
+      <button class="modal-close" onclick="closeModal('categoryModal')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">分类名称<span class="required">*</span></label>
+          <input class="form-control" id="cat_name" placeholder="如：美妆护肤">
+        </div>
+        <div class="form-group">
+          <label class="form-label">排序权重</label>
+          <input class="form-control" id="cat_sort" type="number" placeholder="0">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('categoryModal')">取消</button>
+      <button class="btn btn-primary" onclick="saveCategory()">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 新建/编辑活动弹窗 ===== -->
+<div class="modal-mask" id="activityModal">
+  <div class="modal" style="width:560px;">
+    <div class="modal-header">
+      <div class="modal-title" id="activityModalTitle">新建活动</div>
+      <button class="modal-close" onclick="closeModal('activityModal')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">活动日期<span class="required">*</span></label>
+          <input class="form-control" type="date" id="act_date">
+        </div>
+        <div class="form-group">
+          <label class="form-label">上架时间</label>
+          <input class="form-control" type="time" id="act_time" value="10:00">
+        </div>
+        <div class="form-group">
+          <label class="form-label">支付方式<span class="required">*</span></label>
+          <div style="display:flex;gap:16px;margin-top:4px;">
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;">
+              <input type="radio" name="act_payType" value="points" checked style="accent-color:var(--red);"> 积分
+            </label>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;">
+              <input type="radio" name="act_payType" value="shell" style="accent-color:var(--red);"> 贝壳
+            </label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">状态</label>
+          <select class="form-control form-select" id="act_status">
+            <option value="active">进行中</option>
+            <option value="upcoming" selected>未开始</option>
+            <option value="ended">已结束</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label class="form-label">活动规则说明</label>
+          <textarea class="form-control" id="act_rule" placeholder="如：每人每场限兑2件"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('activityModal')">取消</button>
+      <button class="btn btn-primary" onclick="saveActivity()">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 活动商品配置弹窗 ===== -->
+<div class="modal-mask" id="activityConfigModal">
+  <div class="modal" style="width:760px;">
+    <div class="modal-header">
+      <div class="modal-title" id="activityConfigTitle">活动商品配置</div>
+      <button class="modal-close" onclick="closeModal('activityConfigModal')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body" style="padding:0;">
+      <div style="display:flex;align-items:center;gap:16px;padding:16px 24px;border-bottom:1px solid var(--border);background:#fafafa;">
+        <span style="font-size:13px;color:var(--ink-3);">活动日期：<strong id="configActDate" style="color:var(--ink);">-</strong></span>
+        <span style="font-size:13px;color:var(--ink-3);">支付方式：<strong id="configActPayType" style="color:var(--ink);">-</strong></span>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 24px;">
+        <span style="font-size:13px;color:var(--ink-3);">已配置商品列表</span>
+        <button class="btn btn-primary btn-sm" onclick="openActivityItemModal(currentConfigActivityId, null)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          添加商品/优惠券
+        </button>
+      </div>
+      <div class="table-wrap" style="border-radius:0;border:none;box-shadow:none;">
+        <table>
+          <thead>
+            <tr>
+              <th>商品/优惠券名称</th>
+              <th>类型</th>
+              <th>兑换价格</th>
+              <th>活动库存</th>
+              <th>已兑</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="configItemBody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('activityConfigModal')">取消</button>
+      <button class="btn btn-primary" onclick="saveActivityConfig()">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 新增/编辑活动商品弹窗 ===== -->
+<div class="modal-mask" id="activityItemModal">
+  <div class="modal" style="width:520px;">
+    <div class="modal-header">
+      <div class="modal-title" id="activityItemModalTitle">添加商品/优惠券</div>
+      <button class="modal-close" onclick="closeModal('activityItemModal')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group full">
+          <label class="form-label">类型选择</label>
+          <div style="display:flex;gap:16px;margin-top:4px;">
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;">
+              <input type="radio" name="item_type" value="product" checked onchange="onItemTypeChange()" style="accent-color:var(--red);"> 商品
+            </label>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;">
+              <input type="radio" name="item_type" value="coupon" onchange="onItemTypeChange()" style="accent-color:var(--red);"> 优惠券
+            </label>
+          </div>
+        </div>
+        <div class="form-group full" id="itemProductGroup">
+          <label class="form-label">选择商品<span class="required">*</span></label>
+          <select class="form-control form-select" id="item_product">
+            <option value="">请选择商品</option>
+          </select>
+        </div>
+        <div class="form-group full" id="itemCouponGroup" style="display:none;">
+          <label class="form-label">选择优惠券<span class="required">*</span></label>
+          <select class="form-control form-select" id="item_coupon">
+            <option value="">请选择优惠券</option>
+            <option value="CDF 100元代金券">CDF 100元代金券</option>
+            <option value="海南免税95折券">海南免税95折券</option>
+            <option value="CDF 50元无门槛券">CDF 50元无门槛券</option>
+            <option value="CDF 200元代金券">CDF 200元代金券</option>
+            <option value="免税店专属折扣券">免税店专属折扣券</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">兑换价格<span class="required">*</span></label>
+          <input class="form-control" type="number" id="item_price" placeholder="0">
+        </div>
+        <div class="form-group">
+          <label class="form-label">活动库存<span class="required">*</span></label>
+          <input class="form-control" type="number" id="item_stock" placeholder="0">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('activityItemModal')">取消</button>
+      <button class="btn btn-primary" onclick="saveActivityItem()">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 商品编辑弹窗 ===== -->
+<div class="modal-mask" id="productModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modalTitle">新增商品</div>
+      <button class="modal-close" onclick="closeModal('productModal')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">商品名称<span class="required">*</span></label>
+          <input class="form-control" id="f_name" placeholder="如：雅诗兰黛持妆粉底液 30ml">
+        </div>
+        <div class="form-group">
+          <label class="form-label">商品描述</label>
+          <input class="form-control" id="f_desc" placeholder="如：到店兑换券">
+        </div>
+        <div class="form-group">
+          <label class="form-label">SKU编码</label>
+          <input class="form-control" id="f_sku" placeholder="EX-XXXX-001">
+        </div>
+        <div class="form-group">
+          <label class="form-label">分类</label>
+          <select class="form-control form-select" id="f_category">
+            <option>香水化妆品</option><option>电子券</option><option>虚拟权益</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">标签</label>
+          <select class="form-control form-select" id="f_tag">
+            <option>电子券</option><option>香水化妆品</option><option>虚拟权益</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">商品类型</label>
+          <select class="form-control form-select" id="f_type">
+            <option>实物</option><option>虚拟</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">原价（参考）</label>
+          <input class="form-control" id="f_original" type="number" placeholder="0">
+        </div>
+        <div class="form-group full">
+          <label class="form-label">商品文描</label>
+          <textarea class="form-control" id="f_detail" placeholder="商品详细描述..."></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('productModal')">取消</button>
+      <button class="btn btn-primary" onclick="saveProduct()">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast 容器 -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+  // ===== 商品数据 =====
+  const allProducts = [
+    { id: 1, name: '雅诗兰黛持妆粉底液 30ml', desc: '到店兑换券', sku: 'EX-CDF-001', category: '香水化妆品', tag: '香水化妆品', type: '实物', original: 880, img: 'assets/product-1.jpg' },
+    { id: 2, name: '兰蔻小黑瓶精华肌底液 20ml', desc: '到店核销券', sku: 'EX-CDF-002', category: '香水化妆品', tag: '香水化妆品', type: '实物', original: 1280, img: 'assets/product-2.jpg' },
+    { id: 3, name: '三亚免税城 SPA 美容服务体验券', desc: '到店核销', sku: 'EX-CDF-003', category: '电子券', tag: '电子券', type: '虚拟', original: 680, img: 'assets/product-3.jpg' },
+    { id: 4, name: '资生堂红腰子精华 50ml', desc: '到店核销券', sku: 'EX-CDF-004', category: '香水化妆品', tag: '香水化妆品', type: '实物', original: 980, img: 'assets/product-4.jpg' },
+    { id: 5, name: '有税商户代金券 100元', desc: '三亚国免', sku: 'EX-CDF-005', category: '电子券', tag: '电子券', type: '虚拟', original: 100, img: 'assets/product-5.jpg' },
+    { id: 6, name: 'SK-II 神仙水 230ml', desc: '门店兑换券', sku: 'EX-CDF-006', category: '香水化妆品', tag: '香水化妆品', type: '实物', original: 1880, img: 'assets/product-6.jpg' },
+    { id: 7, name: '迪奥口红礼盒套装', desc: '限量典藏版', sku: 'EX-CDF-007', category: '香水化妆品', tag: '香水化妆品', type: '实物', original: 480, img: 'assets/product-7.jpg' },
+    { id: 8, name: '中免海南限定化妆包', desc: '海星主题', sku: 'EX-CDF-008', category: '香水化妆品', tag: '香水化妆品', type: '实物', original: 280, img: 'assets/product-8.jpg' },
+    { id: 9, name: '三亚机场贵宾室服务券', desc: '电子权益', sku: 'EX-CDF-009', category: '电子券', tag: '电子券', type: '虚拟', original: 350, img: 'assets/product-9.jpg' },
+    { id: 10, name: '转盘抽奖机会 × 3', desc: '福利转盘', sku: 'EX-CDF-010', category: '虚拟权益', tag: '虚拟权益', type: '虚拟', original: 0, img: 'assets/product-10.jpg' }
+  ];
+
+  // ===== 面板切换 =====
+  function switchPanel(panelId, navEl) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('panel-' + panelId).classList.add('active');
+    if (navEl) {
+      navEl.classList.add('active');
+    } else {
+      document.querySelectorAll('.nav-item').forEach(n => {
+        if (n.getAttribute('onclick') && n.getAttribute('onclick').includes("'" + panelId + "'")) {
+          n.classList.add('active');
+        }
+      });
+    }
+    const titles = {
+      products: '兑换商品', categories: '分类管理', activities: '活动管理',
+      orders: '订单列表'
+    };
+    document.getElementById('pageTitle').textContent = titles[panelId] || panelId;
+    document.getElementById('breadcrumb').textContent = titles[panelId] || panelId;
+    if (panelId === 'products') renderProducts();
+  }
+
+  // ===== 渲染商品表格 =====
+  const tagStyleMap = {
+    '香水化妆品': 'color:#e91e8c;background:#fce4ec;',
+    '电子券': 'color:var(--warning);background:#fff3e0;',
+    '虚拟权益': 'color:var(--info);background:#eff6ff;'
+  };
+
+  function renderProducts() {
+    const search = (document.getElementById('searchProduct')?.value || '').toLowerCase();
+    const categoryFilter = document.getElementById('filterCategory')?.value || '';
+    const tagFilter = document.getElementById('filterTag')?.value || '';
+
+    let list = allProducts.filter(p => {
+      if (search && !p.name.toLowerCase().includes(search) && !p.sku.toLowerCase().includes(search)) return false;
+      if (categoryFilter && p.category !== categoryFilter) return false;
+      if (tagFilter && p.tag !== tagFilter) return false;
+      return true;
+    });
+
+    const tbody = document.getElementById('productTableBody');
+    tbody.innerHTML = list.map(p => `
+      <tr>
+        <td>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <img class="td-img" src="${p.img}" alt="${p.name}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2736%27 height=%2736%27%3E%3Crect fill=%27%23f0e6d6%27 width=%2736%27 height=%2736%27 rx=%276%27/%3E%3C/svg%3E'">
+            <div>
+              <div style="font-weight:500;font-size:13px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${p.name}</div>
+              <div style="font-size:11px;color:var(--ink-4);margin-top:2px;">${p.desc}</div>
+            </div>
+          </div>
+        </td>
+        <td style="font-family:monospace;font-size:12px;color:var(--ink-3);">${p.sku}</td>
+        <td>${p.category}</td>
+        <td><span class="tag" style="${tagStyleMap[p.tag] || ''}">${p.tag}</span></td>
+        <td><span class="type-badge" style="${p.type === '实物' ? 'background:#e8f5e9;color:#2e7d32;' : 'background:#e3f2fd;color:#1565c0;'}">${p.type}</span></td>
+        <td style="color:var(--ink-3);font-size:12px;">${p.original ? '¥' + p.original : '-'}</td>
+        <td class="td-actions">
+          <button class="btn btn-text btn-sm" onclick="editProduct(${p.id})">编辑</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteProduct(${p.id})">删除</button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  // ===== 商品CRUD =====
+  let editingId = null;
+
+  function openProductModal(id) {
+    editingId = id || null;
+    document.getElementById('modalTitle').textContent = id ? '编辑商品' : '新增商品';
+    if (id) {
+      const p = allProducts.find(x => x.id === id);
+      if (!p) return;
+      document.getElementById('f_name').value = p.name;
+      document.getElementById('f_desc').value = p.desc;
+      document.getElementById('f_sku').value = p.sku;
+      document.getElementById('f_category').value = p.category;
+      document.getElementById('f_tag').value = p.tag;
+      document.getElementById('f_type').value = p.type || '实物';
+      document.getElementById('f_original').value = p.original || '';
+    } else {
+      document.querySelectorAll('#productModal .form-control').forEach(el => { if (el.tagName !== 'SELECT') el.value = ''; });
+    }
+    document.getElementById('productModal').classList.add('show');
+  }
+
+  function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+
+  function editProduct(id) { openProductModal(id); }
+
+  function saveProduct() {
+    const name = document.getElementById('f_name').value.trim();
+    if (!name) { showToast('请填写商品名称', 'warning'); return; }
+    showToast(editingId ? '商品已更新' : '商品已创建', 'success');
+    closeModal('productModal');
+    if (!editingId) {
+      const newId = Math.max(...allProducts.map(p => p.id)) + 1;
+      allProducts.push({
+        id: newId, name, desc: document.getElementById('f_desc').value,
+        sku: document.getElementById('f_sku').value || 'EX-NEW-' + String(newId).padStart(3, '0'),
+        category: document.getElementById('f_category').value,
+        tag: document.getElementById('f_tag').value,
+        type: document.getElementById('f_type').value || '实物',
+        original: parseInt(document.getElementById('f_original').value) || 0
+      });
+    }
+    renderProducts();
+  }
+
+  function deleteProduct(id) {
+    const p = allProducts.find(x => x.id === id);
+    if (!p) return;
+    const idx = allProducts.indexOf(p);
+    allProducts.splice(idx, 1);
+    showToast(`已删除「${p.name}」`, 'success');
+    renderProducts();
+  }
+
+  // ===== 订单详情（已移除） =====
+
+  // ===== 分类管理 =====
+  function openCategoryModal(name, sort) {
+    document.getElementById('categoryModalTitle').textContent = (name ? '编辑分类' : '新增分类');
+    document.getElementById('cat_name').value = name || '';
+    document.getElementById('cat_sort').value = sort || '';
+    document.getElementById('categoryModal').classList.add('show');
+  }
+
+  function saveCategory() {
+    const name = document.getElementById('cat_name').value.trim();
+    if (!name) { showToast('请填写分类名称', 'warning'); return; }
+    showToast(document.getElementById('categoryModalTitle').textContent === '编辑分类' ? '分类已更新' : '分类已创建', 'success');
+    closeModal('categoryModal');
+  }
+
+
+  // ===== 搜索/筛选事件 =====
+  document.getElementById('searchProduct')?.addEventListener('input', renderProducts);
+  document.getElementById('filterCategory')?.addEventListener('change', renderProducts);
+  document.getElementById('filterTag')?.addEventListener('change', renderProducts);
+
+  // ===== 活动管理 =====
+  const allActivities = [
+    { id: 1, date: '2026-07-19', time: '10:00', payType: 'points', status: 'active', rule: '每人每场限兑2件',
+      items: [
+        { name: '雅诗兰黛粉底液 30ml', type: '商品', price: 8800, stock: 50, exchanged: 12 },
+        { name: 'CDF 100元代金券', type: '优惠券', price: 500, stock: 200, exchanged: 67 },
+        { name: '海南免税95折券', type: '优惠券', price: 350, stock: 300, exchanged: 120 },
+      ]
+    },
+    { id: 2, date: '2026-07-20', time: '10:00', payType: 'shell', status: 'upcoming', rule: '',
+      items: [
+        { name: 'SK-II 神仙水 230ml', type: '商品', price: 12000, stock: 40, exchanged: 0 },
+        { name: 'CDF 200元代金券', type: '优惠券', price: 1000, stock: 100, exchanged: 0 },
+        { name: '免税店专属折扣券', type: '优惠券', price: 80, stock: 500, exchanged: 0 },
+      ]
+    },
+    { id: 3, date: '2026-07-21', time: '10:00', payType: 'points', status: 'upcoming', rule: '每人每场限兑3件',
+      items: [
+        { name: '资生堂红腰子 75ml', type: '商品', price: 9500, stock: 60, exchanged: 0 },
+        { name: '迪奥口红套装', type: '商品', price: 3500, stock: 25, exchanged: 0 },
+      ]
+    },
+    { id: 4, date: '2026-07-18', time: '10:00', payType: 'points', status: 'ended', rule: '',
+      items: [
+        { name: '海蓝之谜面霜 30ml', type: '商品', price: 15000, stock: 20, exchanged: 20 },
+        { name: 'CDF 50元无门槛券', type: '优惠券', price: 300, stock: 500, exchanged: 489 },
+      ]
+    },
+  ];
+
+  let editingActivityId = null;
+  let currentConfigActivityId = null;
+  let editingItemIndex = null;
+
+  function renderActivities() {
+    const tbody = document.getElementById('activityTableBody');
+    tbody.innerHTML = allActivities.map(a => {
+      const totalStock = a.items.reduce((s, i) => s + i.stock, 0);
+      const statusMap = { active: ['进行中', 'on'], upcoming: ['未开始', 'off'], ended: ['已结束', 'off'] };
+      const [statusText, statusDot] = statusMap[a.status] || ['未知', 'off'];
+      const payLabel = a.payType === 'points' ? '积分' : '贝壳';
+      const payTag = a.payType === 'points' ? 'tag-red' : 'tag-gold';
+      return `<tr>
+        <td style="font-weight:500;">${a.date}</td>
+        <td>${a.time}</td>
+        <td>${a.items.length} 件</td>
+        <td>${totalStock}</td>
+        <td><span class="tag ${payTag}">${payLabel}</span></td>
+        <td><span class="status-dot ${statusDot}"></span>${statusText}</td>
+        <td class="td-actions">
+          <button class="btn btn-text btn-sm" onclick="openActivityConfig(${a.id})">配置</button>
+          <button class="btn btn-text btn-sm" onclick="openActivityModal(${a.id})">编辑</button>
+          ${a.status === 'upcoming' ? '<button class="btn btn-danger btn-sm" onclick="deleteActivity(' + a.id + ')">删除</button>' : ''}
+        </td>
+      </tr>`;
+    }).join('');
+  }
+
+  // ===== 新建/编辑活动弹窗 =====
+  function openActivityModal(id) {
+    editingActivityId = id || null;
+    document.getElementById('activityModalTitle').textContent = id ? '编辑活动' : '新建活动';
+    if (id) {
+      const a = allActivities.find(x => x.id === id);
+      if (!a) return;
+      document.getElementById('act_date').value = a.date;
+      document.getElementById('act_time').value = a.time;
+      document.querySelector('input[name="act_payType"][value="' + a.payType + '"]').checked = true;
+      document.getElementById('act_status').value = a.status;
+      document.getElementById('act_rule').value = a.rule || '';
+    } else {
+      document.getElementById('act_date').value = '';
+      document.getElementById('act_time').value = '10:00';
+      document.querySelector('input[name="act_payType"][value="points"]').checked = true;
+      document.getElementById('act_status').value = 'upcoming';
+      document.getElementById('act_rule').value = '';
+    }
+    document.getElementById('activityModal').classList.add('show');
+  }
+
+  function saveActivity() {
+    const date = document.getElementById('act_date').value;
+    if (!date) { showToast('请选择活动日期', 'warning'); return; }
+    const payType = document.querySelector('input[name="act_payType"]:checked').value;
+    const time = document.getElementById('act_time').value || '10:00';
+    const status = document.getElementById('act_status').value;
+    const rule = document.getElementById('act_rule').value.trim();
+
+    if (editingActivityId) {
+      const a = allActivities.find(x => x.id === editingActivityId);
+      if (a) {
+        a.date = date; a.time = time; a.payType = payType; a.status = status; a.rule = rule;
+      }
+      showToast('活动已更新', 'success');
+    } else {
+      const newId = allActivities.length > 0 ? Math.max(...allActivities.map(a => a.id)) + 1 : 1;
+      allActivities.push({ id: newId, date, time, payType, status, rule, items: [] });
+      showToast('活动已创建', 'success');
+    }
+    closeModal('activityModal');
+    renderActivities();
+  }
+
+  function deleteActivity(id) {
+    const idx = allActivities.findIndex(a => a.id === id);
+    if (idx >= 0) { allActivities.splice(idx, 1); renderActivities(); showToast('活动已删除', 'success'); }
+  }
+
+  // ===== 活动商品配置弹窗 =====
+  function openActivityConfig(activityId) {
+    currentConfigActivityId = activityId;
+    const a = allActivities.find(x => x.id === activityId);
+    if (!a) return;
+    const payLabel = a.payType === 'points' ? '积分' : '贝壳';
+    document.getElementById('configActDate').textContent = a.date;
+    document.getElementById('configActPayType').textContent = payLabel;
+    document.getElementById('activityConfigTitle').textContent = a.date + ' 商品配置';
+    renderConfigItems(a);
+    document.getElementById('activityConfigModal').classList.add('show');
+  }
+
+  function renderConfigItems(a) {
+    const tbody = document.getElementById('configItemBody');
+    const payLabel = a.payType === 'points' ? '积分' : '贝壳';
+    const payTag = a.payType === 'points' ? 'tag-red' : 'tag-gold';
+    tbody.innerHTML = a.items.map((item, idx) => {
+      return `<tr>
+        <td>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:6px;font-size:11px;font-weight:600;background:${item.type === '优惠券' ? '#fff3e0' : '#f0f0f0'};color:${item.type === '优惠券' ? '#e65100' : 'var(--ink-2)'};">${item.type === '优惠券' ? '券' : '品'}</span>
+            <span style="font-weight:500;font-size:13px;">${item.name}</span>
+          </div>
+        </td>
+        <td><span class="tag" style="background:${item.type === '优惠券' ? '#fff3e0' : '#f0f0f0'};color:${item.type === '优惠券' ? '#e65100' : 'var(--ink-2)'};">${item.type}</span></td>
+        <td><span class="tag ${payTag}">${item.price.toLocaleString()} ${payLabel}</span></td>
+        <td>
+          <input type="number" value="${item.stock}" data-idx="${idx}" onchange="updateConfigStock(${currentConfigActivityId}, this)" style="width:70px;height:30px;border:1px solid var(--border);border-radius:6px;padding:0 8px;text-align:center;font-size:13px;">
+        </td>
+        <td style="font-size:12px;color:var(--ink-3);">${item.exchanged}</td>
+        <td class="td-actions">
+          <button class="btn btn-text btn-sm" onclick="openActivityItemModal(${currentConfigActivityId}, ${idx})">编辑</button>
+          <button class="btn btn-danger btn-sm" onclick="removeActivityItem(${currentConfigActivityId}, ${idx})">移除</button>
+        </td>
+      </tr>`;
+    }).join('');
+  }
+
+  function updateConfigStock(activityId, input) {
+    const a = allActivities.find(x => x.id === activityId);
+    if (!a) return;
+    const idx = parseInt(input.dataset.idx);
+    if (a.items[idx]) {
+      a.items[idx].stock = parseInt(input.value) || 0;
+    }
+  }
+
+  function saveActivityConfig() {
+    renderActivities();
+    closeModal('activityConfigModal');
+    showToast('商品配置已保存', 'success');
+  }
+
+  // ===== 新增/编辑活动商品弹窗 =====
+  function onItemTypeChange() {
+    const type = document.querySelector('input[name="item_type"]:checked').value;
+    document.getElementById('itemProductGroup').style.display = type === 'product' ? '' : 'none';
+    document.getElementById('itemCouponGroup').style.display = type === 'coupon' ? '' : 'none';
+  }
+
+  function openActivityItemModal(activityId, itemIndex) {
+    editingItemIndex = itemIndex;
+    document.getElementById('activityItemModalTitle').textContent = itemIndex !== null ? '编辑商品/优惠券' : '添加商品/优惠券';
+
+    // 填充商品下拉
+    const productSelect = document.getElementById('item_product');
+    productSelect.innerHTML = '<option value="">请选择商品</option>' + allProducts.map(p => '<option value="' + p.name + '">' + p.name + '</option>').join('');
+
+    const a = allActivities.find(x => x.id === activityId);
+    if (!a) return;
+
+    if (itemIndex !== null && a.items[itemIndex]) {
+      const item = a.items[itemIndex];
+      const typeVal = item.type === '商品' ? 'product' : 'coupon';
+      document.querySelector('input[name="item_type"][value="' + typeVal + '"]').checked = true;
+      onItemTypeChange();
+      if (typeVal === 'product') {
+        document.getElementById('item_product').value = item.name;
+        document.getElementById('item_coupon').value = '';
+      } else {
+        document.getElementById('item_coupon').value = item.name;
+        document.getElementById('item_product').value = '';
+      }
+      document.getElementById('item_price').value = item.price;
+      document.getElementById('item_stock').value = item.stock;
+    } else {
+      document.querySelector('input[name="item_type"][value="product"]').checked = true;
+      onItemTypeChange();
+      document.getElementById('item_product').value = '';
+      document.getElementById('item_coupon').value = '';
+      document.getElementById('item_price').value = '';
+      document.getElementById('item_stock').value = '';
+    }
+
+    document.getElementById('activityItemModal').classList.add('show');
+  }
+
+  function saveActivityItem() {
+    const typeVal = document.querySelector('input[name="item_type"]:checked').value;
+    const name = typeVal === 'product' ? document.getElementById('item_product').value : document.getElementById('item_coupon').value;
+    if (!name) { showToast(typeVal === 'product' ? '请选择商品' : '请选择优惠券', 'warning'); return; }
+    const price = parseInt(document.getElementById('item_price').value);
+    const stock = parseInt(document.getElementById('item_stock').value);
+    if (isNaN(price) || price <= 0) { showToast('请填写兑换价格', 'warning'); return; }
+    if (isNaN(stock) || stock <= 0) { showToast('请填写活动库存', 'warning'); return; }
+
+    const a = allActivities.find(x => x.id === currentConfigActivityId);
+    if (!a) return;
+
+    const newItem = {
+      name: name,
+      type: typeVal === 'product' ? '商品' : '优惠券',
+      price: price,
+      stock: stock,
+      exchanged: 0
+    };
+
+    if (editingItemIndex !== null && a.items[editingItemIndex]) {
+      newItem.exchanged = a.items[editingItemIndex].exchanged;
+      a.items[editingItemIndex] = newItem;
+      showToast('商品已更新', 'success');
+    } else {
+      a.items.push(newItem);
+      showToast('商品已添加', 'success');
+    }
+
+    closeModal('activityItemModal');
+    renderConfigItems(a);
+    renderActivities();
+  }
+
+  function removeActivityItem(activityId, index) {
+    const a = allActivities.find(x => x.id === activityId);
+    if (!a) return;
+    a.items.splice(index, 1);
+    renderConfigItems(a);
+    renderActivities();
+    showToast('商品已移除', 'success');
+  }
+
+  // 初始化活动列表
+  renderActivities();
+
+  // ===== Toast =====
+  function showToast(msg, type = 'success') {
+    const container = document.getElementById('toastContainer');
+    const icons = { success: '✓', error: '✕', warning: '!' };
+    const el = document.createElement('div');
+    el.className = `toast-item toast-${type}`;
+    el.innerHTML = `<div class="toast-icon">${icons[type] || '✓'}</div><span>${msg}</span>`;
+    container.appendChild(el);
+    setTimeout(() => { el.classList.add('out'); setTimeout(() => el.remove(), 300); }, 2200);
+  }
+
+  // ===== 点击遮罩关闭弹窗 =====
+  document.querySelectorAll('.modal-mask').forEach(mask => {
+    mask.addEventListener('click', e => { if (e.target === mask) mask.classList.remove('show'); });
+  });
+
+  // ===== 初始化 =====
+  renderProducts();
+</script>
+</body>
+</html>

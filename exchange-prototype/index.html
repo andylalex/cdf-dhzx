@@ -1,0 +1,1746 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>中免权益商城 · 兑换中心</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cdf-red: #b7141b;
+    --cdf-red-deep: #8a0f15;
+    --cdf-red-light: #d63a40;
+    --cdf-gold: #c8a36a;
+    --cdf-gold-deep: #a37f48;
+    --cdf-gold-light: #e6c896;
+    --cdf-ink: #1a1a1a;
+    --cdf-ink-2: #4a4a4a;
+    --cdf-ink-3: #8a8a8a;
+    --cdf-ink-4: #b8b8b8;
+    --cdf-border: #ececec;
+    --shadow-sm: 0 1px 4px rgba(0,0,0,0.04);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body { font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif; color: var(--cdf-ink); background: #000; line-height: 1.5; }
+  body { display: flex; justify-content: center; min-height: 100vh; }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+  img { display: block; max-width: 100%; }
+
+  /* iPhone frame */
+  .phone-shell {
+    width: 390px;
+    min-height: 100vh;
+    background: #fff;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 80px rgba(0,0,0,0.4);
+  }
+  @media (min-width: 768px) {
+    body { padding: 20px 0; }
+    .phone-shell { min-height: calc(100vh - 40px); overflow: hidden; }
+  }
+
+  /* status bar */
+  .status-bar {
+    height: 44px;
+    background: var(--cdf-red);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: 600;
+    position: relative;
+    z-index: 10;
+  }
+  .status-bar .time { position: absolute; left: 24px; font-variant-numeric: tabular-nums; }
+  .status-bar .icons { position: absolute; right: 20px; display: flex; gap: 5px; align-items: center; }
+
+  /* nav header */
+  .nav-header {
+    background: linear-gradient(135deg, var(--cdf-red) 0%, var(--cdf-red-deep) 100%);
+    color: #fff;
+    padding: 0 16px 14px;
+    position: relative;
+  }
+  .nav-header::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; bottom: -1px; height: 0;
+    background: #fff;
+  }
+  .nav-row { display: flex; align-items: center; height: 44px; }
+  .nav-back { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; }
+  .nav-back svg { width: 20px; height: 20px; }
+  .nav-title { flex: 1; text-align: center; font-size: 17px; font-weight: 600; font-family: 'Noto Serif SC', serif; letter-spacing: 1px; }
+  .nav-action { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; }
+  .nav-action svg { width: 20px; height: 20px; }
+
+  /* asset banner */
+  .asset-banner {
+    background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.04) 100%);
+    border: 1px solid rgba(200,163,106,0.3);
+    padding: 12px 14px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .asset-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+  .asset-label { font-size: 11px; opacity: 0.85; letter-spacing: 1px; }
+  .asset-value { font-family: 'Noto Serif SC', serif; font-size: 20px; font-weight: 700; color: var(--cdf-gold-light); }
+  .asset-value .unit { font-size: 11px; font-weight: 400; margin-left: 3px; opacity: 0.85; }
+  .asset-divider { width: 1px; height: 28px; background: rgba(200,163,106,0.3); }
+
+  /* date tabs */
+  .date-tab-bar {
+    display: flex;
+    background: #fff;
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    border-bottom: 1px solid var(--cdf-border);
+  }
+  .date-tab {
+    flex: 1;
+    text-align: center;
+    padding: 14px 0 11px;
+    position: relative;
+    transition: all 0.25s;
+    cursor: pointer;
+  }
+  .date-tab .dt-label { font-size: 15px; font-weight: 600; color: var(--cdf-ink-3); transition: color 0.2s; }
+  .date-tab .dt-sub { font-size: 10px; color: var(--cdf-ink-4); margin-top: 1px; transition: color 0.2s; }
+  .date-tab.active .dt-label { color: var(--cdf-red); }
+  .date-tab.active .dt-sub { color: var(--cdf-red-light); }
+  .date-tab-indicator {
+    position: absolute;
+    bottom: 0;
+    height: 3px;
+    background: var(--cdf-red);
+    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* filter bar: countdown */
+  .filter-bar {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    background: #fff;
+    border-bottom: 1px solid var(--cdf-border);
+  }
+  .countdown-part {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    color: var(--cdf-red);
+    flex-shrink: 0;
+  }
+  .countdown-part svg { width: 13px; height: 13px; flex-shrink: 0; }
+
+  /* type filter bar: type tabs + currency select */
+  .type-filter-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 12px 10px;
+    background: #fff;
+  }
+  .type-tabs {
+    display: flex;
+    gap: 0;
+    background: #f5f5f5;
+    border-radius: 6px;
+    padding: 2px;
+  }
+  .type-tab {
+    padding: 5px 12px;
+    font-size: 12px;
+    color: var(--cdf-ink-2);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .type-tab.active {
+    background: #fff;
+    color: var(--cdf-ink);
+    font-weight: 600;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+  .currency-select select {
+    height: 30px;
+    border: 1px solid #e8e8e8;
+    border-radius: 6px;
+    padding: 0 28px 0 10px;
+    font-size: 12px;
+    color: var(--cdf-ink);
+    background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23999' stroke-width='1.5' fill='none'/%3E%3C/svg%3E") no-repeat right 8px center;
+    -webkit-appearance: none;
+    appearance: none;
+    outline: none;
+  }
+  .currency-select select:focus { border-color: var(--cdf-red); }
+  .cd-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--cdf-red);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 4px;
+    font-variant-numeric: tabular-nums;
+  }
+  .cd-sep { color: var(--cdf-red); font-weight: 700; }
+
+  /* flash-sale list */
+  .flash-list { padding: 0 12px; }
+  .flash-item {
+    background: #fff;
+    display: flex;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    position: relative;
+  }
+  .flash-item:last-child { border-bottom: none; }
+  .flash-item:active { opacity: 0.7; }
+  .flash-img {
+    width: 88px;
+    height: 88px;
+    background: #f5f5f5;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .flash-img img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
+  .flash-body { flex: 1; display: flex; flex-direction: column; justify-content: space-between; min-width: 0; padding: 2px 0; }
+  .flash-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+  .flash-name {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .flash-desc { font-size: 11px; color: var(--cdf-ink-4); margin-top: 2px; }
+  .flash-bottom { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; }
+  .flash-price-row { display: flex; align-items: baseline; gap: 3px; }
+  .flash-price {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--cdf-red);
+    line-height: 1;
+  }
+  .flash-price.gold { color: var(--cdf-gold-deep); }
+
+  /* currency icon inline */
+  .curr-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    margin-right: 2px;
+    flex-shrink: 0;
+    vertical-align: middle;
+    position: relative;
+    top: -1px;
+  }
+  .curr-icon svg { width: 16px; height: 16px; }
+  .flash-price-unit { font-size: 12px; font-weight: 500; }
+  .flash-price-unit.red { color: var(--cdf-red); }
+  .flash-price-unit.gold { color: var(--cdf-gold-deep); }
+  .flash-original-price { font-size: 12px; color: var(--cdf-ink-4); text-decoration: line-through; margin-left: 6px; }
+
+  /* stock — simple, unified */
+  .flash-stock {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .flash-stock-bar {
+    flex: 1;
+    height: 4px;
+    background: #f0f0f0;
+    overflow: hidden;
+  }
+  .flash-stock-fill {
+    height: 100%;
+    background: var(--cdf-red);
+    transition: width 0.4s;
+  }
+  .flash-stock-fill.shell-fill { background: var(--cdf-gold-deep); }
+  .flash-stock-label { font-size: 10px; color: var(--cdf-ink-4); white-space: nowrap; }
+
+  /* rush button */
+  .flash-exchange-btn {
+    flex-shrink: 0;
+    height: 34px;
+    padding: 0 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    align-self: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .flash-exchange-btn svg { width: 14px; height: 14px; }
+  .flash-exchange-btn.points-btn { background: var(--cdf-red); }
+  .flash-exchange-btn.shell-btn { background: var(--cdf-gold-deep); }
+  .flash-exchange-btn:active { opacity: 0.85; }
+  .flash-exchange-btn.sold-out {
+    background: #d9d9d9 !important;
+    color: #bbb;
+    pointer-events: none;
+  }
+
+  /* page container */
+  .page { display: none; }
+  .page.active { display: flex; flex-direction: column; animation: pageIn 0.3s ease; }
+  @keyframes pageIn {
+    from { opacity: 0; transform: translateX(8px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  /* scroll area */
+  .scroll-area {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* detail page */
+  .detail-hero {
+    width: 100%;
+    aspect-ratio: 1;
+    background: #f5f5f5;
+    position: relative;
+    overflow: hidden;
+  }
+  .detail-hero img { width: 100%; height: 100%; object-fit: cover; }
+  .detail-hero-tags {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    display: flex;
+    gap: 6px;
+    z-index: 2;
+  }
+  .detail-hero-tag {
+    font-size: 11px;
+    padding: 3px 8px;
+    font-weight: 600;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .detail-hero-tag svg { width: 12px; height: 12px; }
+  .detail-hero-tag.red { background: var(--cdf-red); }
+  .detail-hero-tag.gold { background: var(--cdf-gold-deep); }
+  .detail-hero-tag.green { background: #19be6b; }
+  .detail-info {
+    background: #fff;
+    padding: 16px;
+    margin-top: -12px;
+    position: relative;
+  }
+  .detail-price-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .detail-price {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--cdf-red);
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .detail-price.gold { color: var(--cdf-gold-deep); }
+  .detail-price svg { width: 20px; height: 20px; }
+  .detail-price .unit { font-size: 14px; font-weight: 400; margin-left: 4px; }
+  .detail-original { font-size: 14px; color: var(--cdf-ink-4); text-decoration: line-through; }
+  .detail-name {
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.4;
+    margin-bottom: 8px;
+  }
+  .detail-sub {
+    font-size: 12px;
+    color: var(--cdf-ink-3);
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+  .detail-sub span { display: flex; align-items: center; gap: 3px; }
+
+  /* guidance banner */
+  .guidance-banner {
+    padding: 12px 14px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    line-height: 1.5;
+    border-left: 3px solid;
+  }
+  .guidance-banner svg { width: 18px; height: 18px; flex-shrink: 0; }
+  .guidance-banner.points-guide {
+    background: #fff5f5;
+    border-left-color: var(--cdf-red);
+    color: var(--cdf-red-deep);
+  }
+  .guidance-banner.shell-guide {
+    background: #fdf6ec;
+    border-left-color: var(--cdf-gold);
+    color: var(--cdf-gold-deep);
+  }
+  .guidance-banner .guide-link { font-weight: 600; text-decoration: underline; margin-left: 4px; }
+
+  .level-price-box {
+    background: #fdf6ec;
+    border: 1px solid #f5e6c8;
+    padding: 12px;
+    margin-bottom: 16px;
+  }
+  .level-price-title { font-size: 12px; color: var(--cdf-gold-deep); font-weight: 600; margin-bottom: 8px; }
+  .level-price-list { display: flex; gap: 8px; }
+  .level-price-item {
+    flex: 1;
+    background: #fff;
+    padding: 8px;
+    text-align: center;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+  }
+  .level-price-item.active { border-color: var(--cdf-red); background: #fff5f5; }
+  .level-name { font-size: 11px; color: var(--cdf-ink-3); margin-bottom: 2px; }
+  .level-num { font-family: 'Noto Serif SC', serif; font-size: 16px; font-weight: 700; color: var(--cdf-red); }
+
+  .detail-section {
+    margin-top: 12px;
+    padding-top: 16px;
+    border-top: 1px solid var(--cdf-border);
+  }
+  .section-title { font-size: 14px; font-weight: 600; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+  .section-title::before { content: ''; width: 3px; height: 14px; background: var(--cdf-red); }
+  .rule-list { font-size: 12px; color: var(--cdf-ink-2); line-height: 1.8; }
+  .rule-list li { list-style: none; padding-left: 14px; position: relative; }
+  .rule-list li::before { content: '·'; position: absolute; left: 4px; color: var(--cdf-red); font-weight: bold; }
+
+  /* bottom CTA bar */
+  .cta-bar {
+    background: #fff;
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
+    z-index: 100;
+    flex-shrink: 0;
+  }
+  .cta-primary {
+    flex: 1;
+    height: 44px;
+    background: linear-gradient(135deg, var(--cdf-red) 0%, var(--cdf-red-deep) 100%);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 16px rgba(183,20,27,0.3);
+    transition: transform 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .cta-primary:active { transform: scale(0.97); }
+  .cta-primary svg { width: 18px; height: 18px; }
+  .cta-primary.gold { background: linear-gradient(135deg, var(--cdf-gold) 0%, var(--cdf-gold-deep) 100%); box-shadow: 0 4px 16px rgba(163,127,72,0.3); }
+  .cta-primary.disabled { background: #e4e7ed; color: var(--cdf-ink-4); box-shadow: none; }
+
+  /* settle page */
+  .settle-section {
+    background: #fff;
+    margin-bottom: 10px;
+    padding: 14px 16px;
+  }
+  .settle-section-title { font-size: 13px; color: var(--cdf-ink-3); margin-bottom: 10px; }
+  .settle-product {
+    display: flex;
+    gap: 12px;
+    padding: 10px 0;
+  }
+  .settle-product-img {
+    width: 80px; height: 80px;
+    background: #f5f5f5;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .settle-product-img img { width: 100%; height: 100%; object-fit: cover; }
+  .settle-product-info { flex: 1; }
+  .settle-product-name { font-size: 14px; font-weight: 500; line-height: 1.4; margin-bottom: 6px; }
+  .settle-product-tag { font-size: 11px; color: var(--cdf-gold-deep); background: #fdf6ec; padding: 2px 6px; display: inline-block; }
+
+  .address-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 0;
+  }
+  .address-box svg { width: 18px; height: 18px; color: var(--cdf-red); flex-shrink: 0; }
+  .address-info { flex: 1; }
+  .address-name { font-size: 14px; font-weight: 500; }
+  .address-name .phone { color: var(--cdf-ink-3); font-weight: 400; margin-left: 8px; }
+  .address-detail { font-size: 12px; color: var(--cdf-ink-3); margin-top: 2px; }
+
+  .pay-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #fff5f5;
+    padding: 8px 12px;
+    font-size: 13px;
+    font-weight: 500;
+    border: 1px solid #fde2e2;
+  }
+  .pay-badge.shell-badge { background: #fdf6ec; border-color: #f5e6c8; }
+  .pay-badge-icon {
+    width: 22px; height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .pay-badge-icon svg { width: 22px; height: 22px; }
+  .pay-badge-desc { font-size: 11px; color: var(--cdf-ink-3); margin-top: 2px; }
+
+  .price-summary { padding-top: 12px; }
+  .price-row { display: flex; justify-content: space-between; font-size: 13px; padding: 4px 0; color: var(--cdf-ink-2); }
+  .price-row.total { font-size: 15px; font-weight: 600; color: var(--cdf-ink); padding-top: 10px; margin-top: 6px; border-top: 1px solid var(--cdf-border); }
+  .price-row.total .amount { color: var(--cdf-red); font-family: 'Noto Serif SC', serif; font-size: 20px; display: flex; align-items: center; gap: 4px; }
+  .price-row.total .amount svg { width: 18px; height: 18px; }
+  .price-row.total .amount.gold { color: var(--cdf-gold-deep); }
+
+  /* success page */
+  .success-page { background: #fff; min-height: 100vh; }
+  .success-hero {
+    background: #fff;
+    padding: 40px 16px 30px;
+    text-align: center;
+  }
+  .success-icon {
+    width: 72px; height: 72px;
+    margin: 0 auto 16px;
+    background: var(--cdf-red);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 32px rgba(183,20,27,0.25);
+    animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  @keyframes popIn {
+    0% { transform: scale(0); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .success-icon svg { width: 36px; height: 36px; color: #fff; }
+  .success-title { font-family: 'Noto Serif SC', serif; font-size: 22px; font-weight: 700; color: var(--cdf-ink); margin-bottom: 6px; }
+  .success-desc { font-size: 13px; color: var(--cdf-ink-3); }
+
+  .voucher-card {
+    margin: 20px 16px;
+    background: var(--cdf-red);
+    padding: 20px;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(183,20,27,0.2);
+  }
+  .voucher-card::before, .voucher-card::after {
+    content: '';
+    position: absolute;
+    width: 24px; height: 24px;
+    background: #fff;
+    top: 50%; transform: translateY(-50%);
+  }
+  .voucher-card::before { left: -12px; }
+  .voucher-card::after { right: -12px; }
+  .voucher-deco {
+    position: absolute;
+    right: -20px; top: -20px;
+    width: 140px; height: 140px;
+    background: radial-gradient(circle, rgba(200,163,106,0.3) 0%, transparent 70%);
+  }
+  .voucher-label { font-size: 11px; opacity: 0.85; letter-spacing: 2px; margin-bottom: 8px; }
+  .voucher-name { font-family: 'Noto Serif SC', serif; font-size: 20px; font-weight: 700; margin-bottom: 12px; }
+  .voucher-amount { font-family: 'Noto Serif SC', serif; font-size: 36px; font-weight: 900; line-height: 1; }
+  .voucher-amount .symbol { font-size: 18px; }
+  .voucher-amount .unit { font-size: 14px; font-weight: 400; margin-left: 4px; opacity: 0.85; }
+  .voucher-meta { margin-top: 14px; padding-top: 12px; border-top: 1px dashed rgba(255,255,255,0.3); font-size: 11px; opacity: 0.85; line-height: 1.7; }
+  .voucher-qr {
+    margin-top: 16px;
+    background: #fff;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .voucher-qr-img {
+    width: 64px; height: 64px;
+    background: #000;
+    background-image:
+      linear-gradient(45deg, #fff 25%, transparent 25%, transparent 75%, #fff 75%),
+      linear-gradient(45deg, #fff 25%, transparent 25%, transparent 75%, #fff 75%);
+    background-size: 12px 12px;
+    background-position: 0 0, 6px 6px;
+    position: relative;
+  }
+  .voucher-qr-img::after { content: ''; position: absolute; inset: 24px; background: #fff; }
+  .voucher-qr-text { flex: 1; }
+  .voucher-qr-title { font-size: 12px; color: var(--cdf-ink); font-weight: 600; }
+  .voucher-qr-desc { font-size: 11px; color: var(--cdf-ink-3); margin-top: 2px; }
+
+  /* success card variants */
+  .result-card {
+    margin: 20px 16px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+  }
+  .result-card.virtual-card {
+    background: var(--cdf-gold-deep);
+    color: #fff;
+  }
+  .result-card.physical-card {
+    background: #fff;
+    border: 1px solid var(--cdf-border);
+    color: var(--cdf-ink);
+  }
+  .result-card-icon {
+    width: 48px; height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+  }
+  .result-card-icon.virtual { background: rgba(255,255,255,0.25); }
+  .result-card-icon.physical { background: #e8f5e9; color: #2e7d32; }
+  .result-card-icon svg { width: 24px; height: 24px; }
+  .result-card-title { font-family: 'Noto Serif SC', serif; font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+  .result-card-desc { font-size: 13px; opacity: 0.85; line-height: 1.6; }
+  .result-card .shipping-info {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px dashed rgba(255,255,255,0.3);
+    font-size: 12px;
+    line-height: 1.8;
+  }
+  .result-card.physical-card .shipping-info {
+    border-top-color: var(--cdf-border);
+    color: var(--cdf-ink-2);
+  }
+
+  .success-actions {
+    display: flex;
+    gap: 12px;
+    margin: 20px 16px;
+  }
+  .success-btn {
+    flex: 1;
+    height: 44px;
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.15s;
+  }
+  .success-btn:active { transform: scale(0.97); }
+  .success-btn.primary { background: var(--cdf-red); color: #fff; }
+  .success-btn.secondary { background: #fff; color: var(--cdf-ink); border: 1px solid var(--cdf-border); }
+
+  /* order list page */
+  .order-tab-bar {
+    display: flex;
+    background: #fff;
+    border-bottom: 1px solid var(--cdf-border);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .order-tab {
+    flex: 1;
+    text-align: center;
+    padding: 13px 0 10px;
+    font-size: 14px;
+    color: var(--cdf-ink-3);
+    position: relative;
+    font-weight: 500;
+    transition: color 0.2s;
+    cursor: pointer;
+  }
+  .order-tab.active { color: var(--cdf-red); font-weight: 600; }
+  .order-tab .ot-count {
+    display: inline-block;
+    background: var(--cdf-red);
+    color: #fff;
+    font-size: 10px;
+    min-width: 16px;
+    height: 16px;
+    line-height: 16px;
+    padding: 0 4px;
+    margin-left: 2px;
+    font-weight: 600;
+    vertical-align: top;
+    transform: scale(0.9);
+  }
+
+  .order-list { padding: 10px 12px; }
+  .order-card {
+    background: #fff;
+    margin-bottom: 10px;
+    border: 1px solid var(--cdf-border);
+    overflow: hidden;
+  }
+  .order-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--cdf-border);
+    font-size: 12px;
+  }
+  .order-no { color: var(--cdf-ink-3); }
+  .order-status { font-weight: 600; }
+  .order-status.pending { color: var(--cdf-gold-deep); }
+  .order-status.shipped { color: #1976d2; }
+  .order-status.done { color: #2e7d32; }
+  .order-status.cancelled { color: var(--cdf-ink-4); }
+  .order-card-body {
+    display: flex;
+    gap: 12px;
+    padding: 14px;
+    cursor: pointer;
+  }
+  .order-card-img {
+    width: 72px; height: 72px;
+    background: #f5f5f5;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .order-card-img img { width: 100%; height: 100%; object-fit: cover; }
+  .order-card-info { flex: 1; min-width: 0; }
+  .order-card-name {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 6px;
+  }
+  .order-card-meta { font-size: 12px; color: var(--cdf-ink-3); }
+  .order-card-price {
+    text-align: right;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+  .order-card-price .amount {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--cdf-red);
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+  .order-card-price .amount svg { width: 14px; height: 14px; }
+  .order-card-price .amount.gold { color: var(--cdf-gold-deep); }
+  .order-card-price .amount-unit { font-size: 11px; font-weight: 400; }
+  .order-card-price .date { font-size: 11px; color: var(--cdf-ink-4); }
+
+  /* order detail page */
+  .od-section {
+    background: #fff;
+    margin-bottom: 10px;
+    padding: 14px 16px;
+  }
+  .od-section-title { font-size: 14px; font-weight: 600; margin-bottom: 12px; }
+  .od-info-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    padding: 5px 0;
+    color: var(--cdf-ink-2);
+  }
+  .od-info-row .label { color: var(--cdf-ink-3); }
+  .od-info-row .value { color: var(--cdf-ink); font-weight: 500; text-align: right; max-width: 60%; }
+  .od-qrcode-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 16px;
+    padding: 16px 0;
+    border-top: 1px solid #f0f0f0;
+  }
+  .od-qrcode {
+    width: 140px;
+    height: 140px;
+    border: 1px solid #e8e8e8;
+    border-radius: 8px;
+    padding: 8px;
+    background: #fff;
+  }
+  .od-qrcode canvas { width: 100%; height: 100%; }
+  .od-qrcode-tip {
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--cdf-ink-3);
+  }
+  .od-product-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+  .od-product-img {
+    width: 64px; height: 64px;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: #f5f5f5;
+  }
+  .od-product-img img { width: 100%; height: 100%; object-fit: cover; }
+  .od-product-name { font-size: 14px; font-weight: 500; line-height: 1.4; flex: 1; }
+  .od-product-qty { font-size: 12px; color: var(--cdf-ink-3); }
+  .od-status-hero {
+    background: #fff;
+    padding: 24px 16px 20px;
+    text-align: center;
+  }
+  .od-status-icon {
+    width: 48px; height: 48px;
+    margin: 0 auto 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .od-status-icon.done { background: #e8f5e9; color: #2e7d32; }
+  .od-status-icon.pending { background: #fff3e0; color: #e65100; }
+  .od-status-icon svg { width: 24px; height: 24px; }
+  .od-status-text { font-size: 16px; font-weight: 600; }
+  .od-status-desc { font-size: 12px; color: var(--cdf-ink-3); margin-top: 4px; }
+
+  /* toast */
+  .toast {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    background: rgba(0,0,0,0.75);
+    color: #fff;
+    padding: 12px 20px;
+    font-size: 13px;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.25s;
+    z-index: 9999;
+  }
+  .toast.show { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+
+  /* empty state */
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--cdf-ink-3);
+  }
+  .empty-state svg { width: 48px; height: 48px; color: var(--cdf-ink-4); margin-bottom: 12px; }
+  .empty-state .title { font-size: 15px; font-weight: 500; color: var(--cdf-ink-2); margin-bottom: 4px; }
+  .empty-state .desc { font-size: 12px; }
+</style>
+</head>
+<body>
+<div class="phone-shell" id="app">
+
+  <!-- ========== Page 1: 兑换中心列表页 ========== -->
+  <div class="page active" id="page-list">
+    <div class="status-bar">
+      <span class="time">9:41</span>
+      <span>中免海南</span>
+      <span class="icons">
+        <svg viewBox="0 0 16 12" fill="currentColor"><path d="M1 8h2v4H1zM5 5h2v7H5zM9 2h2v10H9zM13 0h2v12h-2z"/></svg>
+        <svg viewBox="0 0 24 12" fill="currentColor"><path d="M8 2C5 2 2.5 3 1 4.5L8 12l7-7.5C13.5 3 11 2 8 2z"/></svg>
+        <svg viewBox="0 0 24 12" fill="none"><rect x="1" y="1" width="20" height="10" rx="2" stroke="currentColor" stroke-width="1"/><rect x="3" y="3" width="16" height="6" rx="1" fill="currentColor"/><rect x="22" y="4" width="1.5" height="4" rx="0.5" fill="currentColor"/></svg>
+      </span>
+    </div>
+    <div class="nav-header">
+      <div class="nav-row">
+        <button class="nav-back" onclick="showToast('返回福利中心')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <div class="nav-title">兑换中心</div>
+        <button class="nav-action" onclick="navigateTo('page-orders')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        </button>
+      </div>
+      <div class="asset-banner">
+        <div class="asset-item">
+          <div class="asset-label">我的积分</div>
+          <div class="asset-value">12,860<span class="unit">分</span></div>
+        </div>
+        <div class="asset-divider"></div>
+        <div class="asset-item">
+          <div class="asset-label">我的贝壳</div>
+          <div class="asset-value">328<span class="unit">枚</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="date-tab-bar" id="dateTabs">
+      <div class="date-tab active" data-date="0" onclick="switchDateTab(0)">
+        <div class="dt-label">今日</div>
+        <div class="dt-sub">7月19日 · 10:00上新</div>
+      </div>
+      <div class="date-tab" data-date="1" onclick="switchDateTab(1)">
+        <div class="dt-label">明日</div>
+        <div class="dt-sub">7月20日 · 10:00</div>
+      </div>
+      <div class="date-tab" data-date="2" onclick="switchDateTab(2)">
+        <div class="dt-label">后天</div>
+        <div class="dt-sub">7月21日 · 10:00</div>
+      </div>
+      <div class="date-tab-indicator" id="dateTabIndicator"></div>
+    </div>
+
+    <div class="filter-bar" id="filterBar">
+      <div class="countdown-part" id="countdownBar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span>本场距结束</span>
+        <span class="cd-num">05</span><span class="cd-sep">:</span>
+        <span class="cd-num">23</span><span class="cd-sep">:</span>
+        <span class="cd-num">47</span>
+      </div>
+    </div>
+
+    <div class="type-filter-bar">
+      <div class="type-tabs" id="typeTabs">
+        <span class="type-tab active" data-type="all" onclick="switchType('all')">全部</span>
+        <span class="type-tab" data-type="电子券" onclick="switchType('电子券')">电子券</span>
+        <span class="type-tab" data-type="香水化妆品" onclick="switchType('香水化妆品')">香水化妆品</span>
+        <span class="type-tab" data-type="虚拟权益" onclick="switchType('虚拟权益')">虚拟权益</span>
+      </div>
+      <div class="currency-select">
+        <select id="currencyFilter" onchange="applyCurrencyFilter()">
+          <option value="all">全部类型</option>
+          <option value="points">积分商品</option>
+          <option value="shell">贝壳商品</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="scroll-area" style="padding-bottom: 16px;">
+      <div class="flash-list" id="flashList"></div>
+    </div>
+  </div>
+
+  <!-- ========== Page 2: 商品详情页 ========== -->
+  <div class="page" id="page-detail">
+    <div class="status-bar">
+      <span class="time">9:41</span>
+      <span>中免海南</span>
+      <span class="icons">
+        <svg viewBox="0 0 16 12" fill="currentColor"><path d="M1 8h2v4H1zM5 5h2v7H5zM9 2h2v10H9zM13 0h2v12h-2z"/></svg>
+        <svg viewBox="0 0 24 12" fill="currentColor"><path d="M8 2C5 2 2.5 3 1 4.5L8 12l7-7.5C13.5 3 11 2 8 2z"/></svg>
+        <svg viewBox="0 0 24 12" fill="none"><rect x="1" y="1" width="20" height="10" rx="2" stroke="currentColor" stroke-width="1"/><rect x="3" y="3" width="16" height="6" rx="1" fill="currentColor"/><rect x="22" y="4" width="1.5" height="4" rx="0.5" fill="currentColor"/></svg>
+      </span>
+    </div>
+    <div class="nav-row" style="background:#fff;padding:0 16px;border-bottom:1px solid var(--cdf-border);">
+      <button class="nav-back" onclick="navigateTo('page-list')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--cdf-ink)" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <div class="nav-title" style="color:var(--cdf-ink);">商品详情</div>
+    </div>
+
+    <div class="scroll-area">
+      <div class="detail-hero" id="detailHero">
+        <img src="assets/product-1-esteelauder.jpg" alt="商品图">
+        <div class="detail-hero-tags">
+          <div class="detail-hero-tag red">
+            <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1.5 L9.8 6 L14.5 6.5 L11 9.8 L12 14.5 L8 12 L4 14.5 L5 9.8 L1.5 6.5 L6.2 6 Z"/></svg>
+            积分
+          </div>
+          <div class="detail-hero-tag green">电子券</div>
+        </div>
+      </div>
+      <div class="detail-info">
+        <div class="detail-price-row">
+          <div class="detail-price" id="detailPrice">
+            <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1.5 L9.8 6 L14.5 6.5 L11 9.8 L12 14.5 L8 12 L4 14.5 L5 9.8 L1.5 6.5 L6.2 6 Z"/></svg>
+            8,800<span class="unit">积分</span>
+          </div>
+          <div class="detail-original" id="detailOriginal">¥880</div>
+        </div>
+        <div class="detail-name" id="detailName">雅诗兰黛持妆粉底液 30ml</div>
+        <div class="detail-sub" id="detailSub">
+          <span>已兑 156 件</span>
+          <span>·</span>
+          <span>剩余 44 件</span>
+          <span>·</span>
+          <span>限兑1次</span>
+        </div>
+
+        <div class="guidance-banner points-guide" id="guidanceBanner">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          <span>消耗积分兑换，会员享等级优惠。<span class="guide-link" onclick="showToast('前往积分中心')">如何获取积分 &gt;</span></span>
+        </div>
+
+        <div class="level-price-box" id="levelPriceBox">
+          <div class="level-price-title">会员等级价</div>
+          <div class="level-price-list" id="levelPriceList">
+            <div class="level-price-item"><div class="level-name">银卡</div><div class="level-num">10,000</div></div>
+            <div class="level-price-item active"><div class="level-name">金卡</div><div class="level-num">8,800</div></div>
+            <div class="level-price-item"><div class="level-name">白金</div><div class="level-num">7,500</div></div>
+            <div class="level-price-item"><div class="level-name">钻石</div><div class="level-num">6,200</div></div>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <div class="section-title">兑换规则</div>
+          <ul class="rule-list" id="detailRules">
+            <li>本商品为电子券权益，兑换成功后系统自动派发至会员账户</li>
+            <li>电子券有效期为30天，逾期自动作废</li>
+            <li>一旦兑换成功不支持退款退积分</li>
+            <li>本券不可与其他优惠叠加，不可兑换现金</li>
+          </ul>
+        </div>
+
+        <div class="detail-section">
+          <div class="section-title">奖品文描</div>
+          <div id="detailDesc" style="font-size:13px;color:var(--cdf-ink-2);line-height:1.7;">
+            雅诗兰黛持妆粉底液，24小时不脱妆科技，轻盈遮瑕，自然柔焦。蕴含抗氧化成分，抵御环境污染。30ml 旅行装，方便携带，是您海岛度假的理想伴侣。
+          </div>
+        </div>
+        <div style="height: 20px;"></div>
+      </div>
+    </div>
+
+    <div class="cta-bar">
+      <button class="cta-primary" id="detailCtaBtn" onclick="navigateTo('page-settle')">
+        <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1.5 L9.8 6 L14.5 6.5 L11 9.8 L12 14.5 L8 12 L4 14.5 L5 9.8 L1.5 6.5 L6.2 6 Z"/></svg>
+        立即兑换
+      </button>
+    </div>
+  </div>
+
+  <!-- ========== Page 3: 结算页 ========== -->
+  <div class="page" id="page-settle">
+    <div class="status-bar">
+      <span class="time">9:41</span>
+      <span>中免海南</span>
+      <span class="icons">
+        <svg viewBox="0 0 16 12" fill="currentColor"><path d="M1 8h2v4H1zM5 5h2v7H5zM9 2h2v10H9zM13 0h2v12h-2z"/></svg>
+        <svg viewBox="0 0 24 12" fill="currentColor"><path d="M8 2C5 2 2.5 3 1 4.5L8 12l7-7.5C13.5 3 11 2 8 2z"/></svg>
+        <svg viewBox="0 0 24 12" fill="none"><rect x="1" y="1" width="20" height="10" rx="2" stroke="currentColor" stroke-width="1"/><rect x="3" y="3" width="16" height="6" rx="1" fill="currentColor"/><rect x="22" y="4" width="1.5" height="4" rx="0.5" fill="currentColor"/></svg>
+      </span>
+    </div>
+    <div class="nav-row" style="background:#fff;padding:0 16px;border-bottom:1px solid var(--cdf-border);">
+      <button class="nav-back" onclick="navigateTo('page-detail')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--cdf-ink)" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <div class="nav-title" style="color:var(--cdf-ink);">兑换结算</div>
+      <div style="width:28px;"></div>
+    </div>
+
+    <div class="scroll-area">
+      <div class="settle-section" id="settleAddressSection" style="display:none;">
+        <div class="settle-section-title">收货地址</div>
+        <div class="address-box" onclick="showToast('选择收货地址')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+          <div class="address-info">
+            <div class="address-name">王女士<span class="phone">138****8888</span></div>
+            <div class="address-detail">海南省三亚市天涯区三亚国际免税城一期</div>
+          </div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--cdf-ink-3)" stroke-width="2" style="width:16px;height:16px;flex-shrink:0;"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+      </div>
+
+      <div class="settle-section">
+        <div class="settle-section-title">兑换商品</div>
+        <div class="settle-product">
+          <div class="settle-product-img" id="settleProductImg"><img src="assets/product-1-esteelauder.jpg" alt=""></div>
+          <div class="settle-product-info">
+            <div class="settle-product-name" id="settleProductName">雅诗兰黛持妆粉底液 30ml</div>
+            <div style="margin-top:6px;" id="settleProductTag"><span class="settle-product-tag">电子券 · 自动派发</span></div>
+            <div style="margin-top:8px;font-size:13px;color:var(--cdf-ink-3);">兑换数量 × 1</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="settle-section" id="settlePaySection">
+        <div class="settle-section-title">支付方式</div>
+        <div class="pay-badge" id="settlePayBadge">
+          <div class="pay-badge-icon points" id="settlePayIcon">
+            <svg viewBox="0 0 16 16" fill="#b7141b"><path d="M8 1.5 L9.8 6 L14.5 6.5 L11 9.8 L12 14.5 L8 12 L4 14.5 L5 9.8 L1.5 6.5 L6.2 6 Z"/></svg>
+          </div>
+          <div>
+            <div id="settlePayName">积分支付</div>
+            <div class="pay-badge-desc" id="settlePayDesc">当前积分 12,860 · 本次消耗 8,800 分</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="settle-section">
+        <div class="settle-section-title">费用明细</div>
+        <div class="price-summary" id="settlePriceSummary">
+          <div class="price-row"><span>商品价格</span><span id="settlePriceVal">8,800 积分</span></div>
+          <div class="price-row" id="settleDiscountRow"><span>金卡会员折扣</span><span style="color:var(--cdf-red);" id="settleDiscountVal">-1,200 积分</span></div>
+          <div class="price-row total">
+            <span>实付</span>
+            <span class="amount" id="settleTotalVal">7,600 积分</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding:14px 16px;font-size:11px;color:var(--cdf-ink-3);line-height:1.7;background:#fff;margin-top:10px;" id="settleTips">
+        <strong style="color:var(--cdf-red);">温馨提示：</strong><br>
+        · 兑换成功后系统将自动派发电子券至会员账户<br>
+        · 电子券有效期为30天<br>
+        · 一旦兑换成功不支持退款退积分<br>
+        · 积分兑换场景需完成大会员实名认证
+      </div>
+    </div>
+
+    <div class="cta-bar">
+      <button class="cta-primary" id="settleCtaBtn" onclick="navigateTo('page-success')">
+        <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1.5 L9.8 6 L14.5 6.5 L11 9.8 L12 14.5 L8 12 L4 14.5 L5 9.8 L1.5 6.5 L6.2 6 Z"/></svg>
+        确认兑换 · 7,600 积分
+      </button>
+    </div>
+  </div>
+
+  <!-- ========== Page 4: 兑换成功页 ========== -->
+  <div class="page" id="page-success">
+    <div class="success-page">
+      <div class="status-bar">
+        <span class="time">9:41</span>
+        <span>中免海南</span>
+        <span class="icons">
+          <svg viewBox="0 0 16 12" fill="currentColor"><path d="M1 8h2v4H1zM5 5h2v7H5zM9 2h2v10H9zM13 0h2v12h-2z"/></svg>
+          <svg viewBox="0 0 24 12" fill="currentColor"><path d="M8 2C5 2 2.5 3 1 4.5L8 12l7-7.5C13.5 3 11 2 8 2z"/></svg>
+          <svg viewBox="0 0 24 12" fill="none"><rect x="1" y="1" width="20" height="10" rx="2" stroke="currentColor" stroke-width="1"/><rect x="3" y="3" width="16" height="6" rx="1" fill="currentColor"/><rect x="22" y="4" width="1.5" height="4" rx="0.5" fill="currentColor"/></svg>
+        </span>
+      </div>
+      <div class="success-hero">
+        <div class="success-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="success-title">兑换成功</div>
+        <div class="success-desc" id="successDesc">电子券已派发至您的会员账户</div>
+      </div>
+
+      <div class="voucher-card" id="successCouponCard">
+        <div class="voucher-deco"></div>
+        <div class="voucher-label">CDF · 电子券</div>
+        <div class="voucher-name" id="successVoucherName">雅诗兰黛持妆粉底液 30ml</div>
+        <div class="voucher-amount"><span class="symbol">¥</span>880<span class="unit">面值</span></div>
+        <div class="voucher-meta">
+          券编号：CDF20260719882001<br>
+          有效期：2026-07-19 至 2026-08-18
+        </div>
+        <div class="voucher-qr">
+          <div class="voucher-qr-img"></div>
+          <div class="voucher-qr-text">
+            <div class="voucher-qr-title">出示此二维码使用</div>
+            <div class="voucher-qr-desc">可在"我的-兑换订单"中查看</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="result-card virtual-card" id="successVirtualCard" style="display:none;">
+        <div class="result-card-icon virtual">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/><path d="M18 12a2 2 0 0 0 0 4h4v-4z"/></svg>
+        </div>
+        <div class="result-card-title">虚拟权益已发放</div>
+        <div class="result-card-desc">转盘抽奖机会 × 3 已发放至您的账户，请前往福利中心使用。</div>
+      </div>
+
+      <div class="result-card physical-card" id="successPhysicalCard" style="display:none;">
+        <div class="result-card-icon physical">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        </div>
+        <div class="result-card-title">实物商品已下单</div>
+        <div class="result-card-desc">商品将在1-3个工作日内发货</div>
+        <div class="shipping-info">
+          <div>收货人：王女士 138****8888</div>
+          <div>地址：海南省三亚市天涯区三亚国际免税城一期</div>
+          <div>快递单号：<span style="color:var(--cdf-red);font-weight:500;">待发货</span></div>
+        </div>
+      </div>
+
+      <div style="padding:0 16px;font-size:12px;color:var(--cdf-ink-3);text-align:center;" id="successBalance">
+        消耗积分 7,600 分 · 当前剩余 5,260 分
+      </div>
+
+      <div class="success-actions">
+        <button class="success-btn secondary" onclick="navigateTo('page-list')">继续兑换</button>
+        <button class="success-btn primary" onclick="navigateTo('page-orders')">查看订单</button>
+      </div>
+      <div style="text-align:center;padding:20px;font-size:11px;color:var(--cdf-ink-4);">— 中免海南 · 福利中心 —</div>
+    </div>
+  </div>
+
+  <!-- ========== Page 5: 兑换订单列表页 ========== -->
+  <div class="page" id="page-orders">
+    <div class="status-bar">
+      <span class="time">9:41</span>
+      <span>中免海南</span>
+      <span class="icons">
+        <svg viewBox="0 0 16 12" fill="currentColor"><path d="M1 8h2v4H1zM5 5h2v7H5zM9 2h2v10H9zM13 0h2v12h-2z"/></svg>
+        <svg viewBox="0 0 24 12" fill="currentColor"><path d="M8 2C5 2 2.5 3 1 4.5L8 12l7-7.5C13.5 3 11 2 8 2z"/></svg>
+        <svg viewBox="0 0 24 12" fill="none"><rect x="1" y="1" width="20" height="10" rx="2" stroke="currentColor" stroke-width="1"/><rect x="3" y="3" width="16" height="6" rx="1" fill="currentColor"/><rect x="22" y="4" width="1.5" height="4" rx="0.5" fill="currentColor"/></svg>
+      </span>
+    </div>
+    <div class="nav-row" style="background:#fff;padding:0 16px;border-bottom:1px solid var(--cdf-border);">
+      <button class="nav-back" onclick="navigateTo('page-list')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--cdf-ink)" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <div class="nav-title" style="color:var(--cdf-ink);">兑换订单</div>
+      <div style="width:28px;"></div>
+    </div>
+
+    <div class="order-tab-bar" id="orderTabs">
+      <div class="order-tab active" data-status="all" onclick="switchOrderTab('all')">全部</div>
+      <div class="order-tab" data-status="pending" onclick="switchOrderTab('pending')">待发货<span class="ot-count">1</span></div>
+      <div class="order-tab" data-status="shipped" onclick="switchOrderTab('shipped')">已发货</div>
+      <div class="order-tab" data-status="done" onclick="switchOrderTab('done')">已完成</div>
+    </div>
+
+    <div class="scroll-area">
+      <div class="order-list" id="orderList"></div>
+    </div>
+  </div>
+
+  <!-- ========== Page 6: 订单详情页 ========== -->
+  <div class="page" id="page-order-detail">
+    <div class="status-bar">
+      <span class="time">9:41</span>
+      <span>中免海南</span>
+      <span class="icons">
+        <svg viewBox="0 0 16 12" fill="currentColor"><path d="M1 8h2v4H1zM5 5h2v7H5zM9 2h2v10H9zM13 0h2v12h-2z"/></svg>
+        <svg viewBox="0 0 24 12" fill="currentColor"><path d="M8 2C5 2 2.5 3 1 4.5L8 12l7-7.5C13.5 3 11 2 8 2z"/></svg>
+        <svg viewBox="0 0 24 12" fill="none"><rect x="1" y="1" width="20" height="10" rx="2" stroke="currentColor" stroke-width="1"/><rect x="3" y="3" width="16" height="6" rx="1" fill="currentColor"/><rect x="22" y="4" width="1.5" height="4" rx="0.5" fill="currentColor"/></svg>
+      </span>
+    </div>
+    <div class="nav-row" style="background:#fff;padding:0 16px;border-bottom:1px solid var(--cdf-border);">
+      <button class="nav-back" onclick="navigateTo('page-orders')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--cdf-ink)" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <div class="nav-title" style="color:var(--cdf-ink);">订单详情</div>
+      <div style="width:28px;"></div>
+    </div>
+
+    <div class="scroll-area">
+      <div class="od-status-hero" id="odStatusHero">
+        <div class="od-status-icon done">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="od-status-text" id="odStatusText">已完成</div>
+        <div class="od-status-desc" id="odStatusDesc">电子券已派发至您的会员账户</div>
+      </div>
+
+      <div class="od-section" id="odAddressSection" style="display:none;">
+        <div class="od-section-title">收货信息</div>
+        <div class="od-info-row"><span class="label">收货人</span><span class="value">王女士 138****8888</span></div>
+        <div class="od-info-row"><span class="label">收货地址</span><span class="value">海南省三亚市天涯区三亚国际免税城一期</span></div>
+        <div class="od-info-row"><span class="label">快递单号</span><span class="value" style="color:var(--cdf-red);" id="odTracking">SF1234567890</span></div>
+      </div>
+
+      <div class="od-section">
+        <div class="od-section-title">商品信息</div>
+        <div class="od-product-row">
+          <div class="od-product-img" id="odProductImg"><img src="assets/product-1-esteelauder.jpg" alt=""></div>
+          <div>
+            <div class="od-product-name" id="odProductName">雅诗兰黛持妆粉底液 30ml</div>
+            <div class="od-product-qty" id="odProductQty">× 1</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="od-section">
+        <div class="od-section-title">订单信息</div>
+        <div class="od-info-row"><span class="label">订单编号</span><span class="value" id="odOrderNo">EX20260719001</span></div>
+        <div class="od-info-row"><span class="label">兑换时间</span><span class="value" id="odOrderTime">2026-07-19 14:23:45</span></div>
+        <div class="od-info-row"><span class="label">支付方式</span><span class="value" id="odPayMethod">积分支付</span></div>
+        <div class="od-info-row"><span class="label">商品价格</span><span class="value" id="odPriceVal">8,800 积分</span></div>
+        <div class="od-info-row" id="odDiscountRow"><span class="label">会员折扣</span><span class="value" id="odDiscountVal" style="color:var(--cdf-red);">-1,200 积分</span></div>
+        <div class="od-info-row" style="font-weight:600;color:var(--cdf-ink);"><span>实付</span><span id="odTotalVal" style="color:var(--cdf-red);font-family:'Noto Serif SC',serif;font-size:16px;">7,600 积分</span></div>
+      </div>
+
+      <div class="od-section" id="odCouponSection">
+        <div class="od-section-title">券码信息</div>
+        <div class="od-info-row"><span class="label">券编号</span><span class="value">CDF20260719882001</span></div>
+        <div class="od-info-row"><span class="label">有效期</span><span class="value">2026-07-19 至 2026-08-18</span></div>
+        <div class="od-info-row"><span class="label">券状态</span><span class="value" style="color:#2e7d32;">待使用</span></div>
+        <div class="od-qrcode-area">
+          <div class="od-qrcode" id="odQrCode"></div>
+          <div class="od-qrcode-tip">到店出示二维码核销</div>
+        </div>
+      </div>
+      <div style="height: 20px;"></div>
+    </div>
+
+    <div class="cta-bar">
+      <button class="cta-primary" onclick="navigateTo('page-list')">
+        <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1.5 L9.8 6 L14.5 6.5 L11 9.8 L12 14.5 L8 12 L4 14.5 L5 9.8 L1.5 6.5 L6.2 6 Z"/></svg>
+        继续兑换
+      </button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+</div>
+
+<script>
+  // SVG icons
+  const STAR_PATH = 'M8 1.5 L9.8 6 L14.5 6.5 L11 9.8 L12 14.5 L8 12 L4 14.5 L5 9.8 L1.5 6.5 L6.2 6 Z';
+  const SHELL_PATH = 'M778.5 305.7c-10.6-8-14.4-14.3-24.6-22.3-7.8-6.1-14.9-11.8-25-18.4C301.1-14.6-137.7 641.3 263.4 787.8c44.1 16.1 94.4 27.5 144.5 32.8 208.4 22.5 476.2-10.2 507.8-204.8 19-116.6-70.5-259.6-137.2-310.1zM601.7 796.5c33.4-76.5-40.9-130.3-90.1-130.5-62.7-.3-123.9 70.6-90 131-105.4-37-17.7-191.5 90-190.4 117 1 187.4 160.4 90.1 189.9z m71.2-15.5c48.3-42.2 30.6-124.8-5.8-172.1-127.7-166.2-328.3-54.7-346.9 83.3-6.7 49.7 11.2 62.1 29 89.4-86.6-32.9-86.4-133.2-34-209.8 106.1-155.2 304.1-142.3 395.2 4.8 68.7 111.1 13.4 195.5-37.5 204.4z m156.5-136.7c-5.4 55.6-47.8 104.9-86.1 120.4 11.3-16.2 26.4-24.9 36.9-50.6 28.6-69.9-1.2-145.3-40.7-199C614.8 345.8 402 354 285.9 509.7c-21.7 29.2-46.9 74.8-52.8 121.1-8.2 64.2 10.4 91.9 42.2 129.8-40.6-13.8-81.2-68.3-82.8-130.2-1.6-60.4 26.8-118.1 53.9-156.6 140-199.2 403.9-192.4 536.2 8.9 25.8 39.5 52.6 101.4 46.8 161.6z';
+  const POINTS_ICON = `<svg viewBox="0 0 16 16" fill="currentColor"><path d="${STAR_PATH}"/></svg>`;
+  const SHELL_ICON = `<svg viewBox="0 0 1024 1024" fill="currentColor"><path d="${SHELL_PATH}"/></svg>`;
+  const POINTS_ICON_SM = POINTS_ICON;
+  const SHELL_ICON_SM = SHELL_ICON;
+
+  // ===== 商品数据 =====
+  const allProducts = [
+    { id: 1, name: '雅诗兰黛持妆粉底液 30ml', desc: '电子券', price: 10000, original: 0, tag: '电子券', type: 'coupon', currency: 'points', brand: 'ESTĒE LAUDER', level: true, levelPrices: [10000, 8800, 7500, 6200], stock: 44, total: 200, date: 0, img: 'assets/product-1-esteelauder.jpg' },
+    { id: 2, name: '兰蔻小黑瓶精华肌底液 20ml', desc: '电子券', price: 13000, original: 0, tag: '电子券', type: 'coupon', currency: 'points', brand: 'LANCÔME', level: true, levelPrices: [13000, 10800, 9500, 8200], stock: 12, total: 80, date: 0, img: 'assets/product-2-lancome.jpg' },
+    { id: 7, name: '迪奥口红礼盒套装', desc: '香水化妆品', price: 288, original: 480, tag: '香水化妆品', type: 'physical', currency: 'shell', brand: 'DIOR', level: false, stock: 8, total: 20, date: 0, img: 'assets/product-7-dior.jpg' },
+    { id: 9, name: '转盘抽奖机会 × 3', desc: '虚拟权益', price: 50, original: 0, tag: '虚拟权益', type: 'virtual', currency: 'shell', brand: 'LUCKY', level: false, stock: 500, total: 500, date: 0, img: 'assets/product-9-lucky.jpg' },
+
+    { id: 4, name: '资生堂红腰子精华 50ml', desc: '电子券', price: 11000, original: 0, tag: '电子券', type: 'coupon', currency: 'points', brand: 'SHISEIDO', level: true, levelPrices: [11000, 9800, 8500, 7200], stock: 60, total: 100, date: 1, img: 'assets/product-4-shiseido.jpg' },
+    { id: 8, name: '中免海南限定化妆包', desc: '香水化妆品', price: 158, original: 280, tag: '香水化妆品', type: 'physical', currency: 'shell', brand: 'CDF 限定', level: false, stock: 25, total: 100, date: 1, img: 'assets/product-8-cdfbag.jpg' },
+    { id: 5, name: '有税商户代金券 100元', desc: '电子券', price: 500, original: 0, tag: '电子券', type: 'coupon', couponType: 'online', currency: 'points', brand: 'CDF 代金券', level: false, stock: 200, total: 300, date: 1, img: 'assets/product-5-voucher.jpg' },
+
+    { id: 6, name: 'SK-II 神仙水 230ml', desc: '电子券', price: 20000, original: 0, tag: '电子券', type: 'coupon', currency: 'points', brand: 'SK-II', level: true, levelPrices: [20000, 18000, 16000, 14000], stock: 15, total: 30, date: 2, img: 'assets/product-6-skii.jpg' },
+    { id: 10, name: '香奈儿五号经典香水 5ml', desc: '香水化妆品', price: 198, original: 350, tag: '香水化妆品', type: 'physical', currency: 'shell', brand: 'CHANEL', level: false, stock: 40, total: 60, date: 2, img: 'assets/product-10-chanel.jpg' },
+  ];
+
+  const mockOrders = [
+    { id: 'EX20260719001', productId: 1, status: 'done', date: '2026-07-19 14:23', type: 'coupon', currency: 'points', payAmount: 8800, price: 10000, discount: 1200 },
+    { id: 'EX20260719003', productId: 5, status: 'done', date: '2026-07-19 11:30', type: 'coupon', couponType: 'online', currency: 'points', payAmount: 500, price: 500, discount: 0 },
+    { id: 'EX20260719002', productId: 7, status: 'pending', date: '2026-07-19 10:05', type: 'physical', currency: 'shell', payAmount: 288, price: 288, discount: 0 },
+    { id: 'EX20260717001', productId: 9, status: 'done', date: '2026-07-17 09:11', type: 'virtual', currency: 'shell', payAmount: 50, price: 50, discount: 0 },
+    { id: 'EX20260715001', productId: 2, status: 'shipped', date: '2026-07-15 20:33', type: 'coupon', currency: 'points', payAmount: 10800, price: 13000, discount: 2200 },
+  ];
+
+  let currentDateTab = 0;
+  let currentProduct = null;
+  let currentOrderTab = 'all';
+  let currentCurrencyFilter = 'all';
+  let currentTypeFilter = 'all';
+
+  function renderFlashList(dateIndex) {
+    const list = document.getElementById('flashList');
+    let items = allProducts.filter(p => p.date === dateIndex);
+    if (currentCurrencyFilter !== 'all') {
+      items = items.filter(p => p.currency === currentCurrencyFilter);
+    }
+    if (currentTypeFilter !== 'all') {
+      items = items.filter(p => p.tag === currentTypeFilter);
+    }
+    const cdBar = document.getElementById('countdownBar');
+    cdBar.style.display = dateIndex === 0 ? 'flex' : 'none';
+
+    if (items.length === 0) {
+      list.innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18"/><line x1="9" y1="9" x2="15" y2="15"/><line x1="15" y1="9" x2="9" y2="15"/></svg><div class="title">暂无商品</div><div class="desc">该日期暂无兑换商品</div></div>';
+      return;
+    }
+
+    const isUpcoming = currentDateTab !== 0;
+
+    list.innerHTML = items.map(p => {
+      const isShell = p.currency === 'shell';
+      const sold = isUpcoming ? 0 : (p.total - p.stock);
+      const soldPct = isUpcoming ? 0 : Math.round((sold / p.total) * 100);
+      const btnClass = isShell ? 'shell-btn' : 'points-btn';
+      const btnIcon = isShell ? SHELL_ICON_SM : POINTS_ICON_SM;
+      const isSoldOut = !isUpcoming && p.stock <= 0;
+
+      return `
+      <div class="flash-item"${isUpcoming ? '' : ` onclick="openDetail(${p.id})"`}>
+        <div class="flash-img">
+          ${p.img ? `<img src="${p.img}" alt="${p.name}">` : ''}
+        </div>
+        <div class="flash-body">
+          <div class="flash-top">
+            <div style="min-width:0">
+              <div class="flash-name">${p.name}</div>
+              <div class="flash-desc">${p.desc}</div>
+            </div>
+            <button class="flash-exchange-btn ${btnClass}${isUpcoming ? ' sold-out' : ''}${isSoldOut ? ' sold-out' : ''}" ${isUpcoming || isSoldOut ? '' : `onclick="event.stopPropagation();openDetail(${p.id})"`}>${isUpcoming ? '即将上架' : isSoldOut ? '已抢光' : btnIcon + '立即兑换'}</button>
+          </div>
+          <div class="flash-bottom">
+            <div style="flex:1;min-width:0">
+              <div class="flash-price-row">
+                <span class="flash-price ${isShell ? 'gold' : ''}">${p.price.toLocaleString()}</span>
+                <span class="flash-price-unit ${isShell ? 'gold' : 'red'}">${isShell ? '贝壳' : '积分'}</span>
+                ${p.type === 'physical' && p.original ? `<span class="flash-original-price">¥${p.original}</span>` : ''}
+              </div>
+              <div class="flash-stock">
+                <div class="flash-stock-bar"><div class="flash-stock-fill${isShell ? ' shell-fill' : ''}" style="width:${soldPct}%"></div></div>
+                <span class="flash-stock-label">${isUpcoming ? '库存'+p.total+'件' : isSoldOut ? '已抢光' : '剩余'+p.stock+'件'}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  function switchType(type) {
+    currentTypeFilter = type;
+    document.querySelectorAll('#typeTabs .type-tab').forEach(t => {
+      t.classList.toggle('active', t.dataset.type === type);
+    });
+    renderFlashList(currentDateTab);
+  }
+
+  function applyCurrencyFilter() {
+    currentCurrencyFilter = document.getElementById('currencyFilter').value;
+    renderFlashList(currentDateTab);
+  }
+
+  function switchDateTab(idx) {
+    currentDateTab = idx;
+    document.querySelectorAll('#dateTabs .date-tab').forEach(t => t.classList.toggle('active', parseInt(t.dataset.date) === idx));
+    updateDateIndicator();
+    renderFlashList(idx);
+  }
+
+  function updateDateIndicator() {
+    const active = document.querySelector('#dateTabs .date-tab.active');
+    const indicator = document.getElementById('dateTabIndicator');
+    if (active && indicator) {
+      const rect = active.getBoundingClientRect();
+      const parentRect = active.parentElement.getBoundingClientRect();
+      const w = 24;
+      indicator.style.left = (rect.left - parentRect.left + (rect.width - w) / 2) + 'px';
+      indicator.style.width = w + 'px';
+    }
+  }
+
+  function navigateTo(pageId) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(pageId).classList.add('active');
+  }
+
+  function openDetail(id) {
+    const product = allProducts.find(p => p.id === id);
+    if (!product) return;
+    currentProduct = product;
+    const isShell = product.currency === 'shell';
+    const currIcon = isShell ? SHELL_ICON : POINTS_ICON;
+
+    const heroEl = document.getElementById('detailHero');
+    const currencyTag = isShell
+      ? `<div class="detail-hero-tag gold">${currIcon}贝壳</div>`
+      : `<div class="detail-hero-tag red">${currIcon}积分</div>`;
+    const typeText = product.tag;
+    heroEl.innerHTML = `
+      ${product.img ? `<img src="${product.img}" alt="${product.name}">` : ''}
+      <div class="detail-hero-tags">${currencyTag}<div class="detail-hero-tag green">${typeText}</div></div>`;
+
+    const priceEl = document.getElementById('detailPrice');
+    priceEl.innerHTML = `${currIcon}${product.price.toLocaleString()}<span class="unit">${isShell ? '贝壳' : '积分'}</span>`;
+    priceEl.className = `detail-price${isShell ? ' gold' : ''}`;
+    document.getElementById('detailOriginal').textContent = product.original ? `¥${product.original}` : '';
+    document.getElementById('detailName').textContent = `${product.name}`;
+    document.getElementById('detailSub').innerHTML = `<span>已兑 ${product.total - product.stock} 件</span><span>·</span><span>剩余 ${product.stock} 件</span><span>·</span><span>限兑1次</span>`;
+
+    const guideEl = document.getElementById('guidanceBanner');
+    if (isShell) {
+      guideEl.className = 'guidance-banner shell-guide';
+      guideEl.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg><span>消耗贝壳兑换，做任务赚更多贝壳。<span class="guide-link" onclick="showToast('前往贝壳中心')">如何获取贝壳 &gt;</span></span>`;
+    } else {
+      guideEl.className = 'guidance-banner points-guide';
+      guideEl.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg><span>消耗积分兑换，会员享等级优惠。<span class="guide-link" onclick="showToast('前往积分中心')">如何获取积分 &gt;</span></span>`;
+    }
+
+    const levelBox = document.getElementById('levelPriceBox');
+    if (product.level && product.levelPrices) {
+      levelBox.style.display = 'block';
+      const levels = ['银卡', '金卡', '白金', '钻石'];
+      document.getElementById('levelPriceList').innerHTML = levels.map((name, i) => `
+        <div class="level-price-item${i === 1 ? ' active' : ''}"><div class="level-name">${name}</div><div class="level-num">${product.levelPrices[i].toLocaleString()}</div></div>`).join('');
+    } else { levelBox.style.display = 'none'; }
+
+    const ctaBtn = document.getElementById('detailCtaBtn');
+    ctaBtn.className = `cta-primary${isShell ? ' gold' : ''}`;
+    ctaBtn.innerHTML = `${currIcon}立即兑换`;
+
+    const rulesEl = document.getElementById('detailRules');
+    if (product.type === 'coupon') {
+      rulesEl.innerHTML = '<li>本商品为电子券权益，兑换成功后系统自动派发至会员账户</li><li>电子券有效期为30天，逾期自动作废</li><li>一旦兑换成功不支持退款退积分</li><li>本券不可与其他优惠叠加，不可兑换现金</li>';
+      document.getElementById('detailDesc').textContent = `${product.name}，${product.brand}品牌正品保障。兑换成功后系统自动派发电子券至您的会员账户。`;
+    } else if (product.type === 'physical') {
+      rulesEl.innerHTML = '<li>本商品为实物礼品，兑换成功后将按地址邮寄</li><li>请确保收货地址正确，发货后无法修改地址</li><li>商品将在1-3个工作日内安排发货</li><li>签收后如有质量问题，请在7天内联系客服</li><li>不支持退款退贝壳</li>';
+      document.getElementById('detailDesc').textContent = `${product.name}，${product.brand}品牌正品保障。兑换成功后将按您选择的收货地址安排快递邮寄，请保持手机畅通。`;
+    } else {
+      rulesEl.innerHTML = '<li>本商品为虚拟权益，兑换成功后即时到账</li><li>请前往福利中心对应入口使用</li><li>虚拟权益不支持退款退贝壳</li>';
+      document.getElementById('detailDesc').textContent = `${product.name}，兑换成功后即时到账至您的会员账户，请前往福利中心对应入口使用。`;
+    }
+
+    updateSettlePage(product);
+    updateSuccessPage(product);
+    navigateTo('page-detail');
+  }
+
+  function updateSettlePage(product) {
+    const isShell = product.currency === 'shell';
+    const isPhysical = product.type === 'physical';
+    const currIcon = isShell ? SHELL_ICON : POINTS_ICON;
+
+    document.getElementById('settleProductImg').innerHTML = product.img ? `<img src="${product.img}" alt="${product.name}">` : '';
+    document.getElementById('settleProductName').textContent = `${product.name}`;
+    const tagTexts = { coupon: '电子券 · 自动派发', physical: '实物商品 · 快递邮寄', virtual: '虚拟权益 · 即时到账' };
+    document.getElementById('settleProductTag').innerHTML = `<span class="settle-product-tag">${tagTexts[product.type]}</span>`;
+    document.getElementById('settleAddressSection').style.display = isPhysical ? 'block' : 'none';
+
+    const payBadge = document.getElementById('settlePayBadge');
+    const payIcon = document.getElementById('settlePayIcon');
+    if (isShell) {
+      payBadge.className = 'pay-badge shell-badge';
+      payIcon.innerHTML = SHELL_ICON.replace('currentColor', '#a37f48');
+      document.getElementById('settlePayName').textContent = '贝壳支付';
+      document.getElementById('settlePayDesc').textContent = `当前贝壳 328 · 本次消耗 ${product.price} 枚`;
+    } else {
+      payBadge.className = 'pay-badge';
+      payIcon.innerHTML = POINTS_ICON.replace('currentColor', '#b7141b');
+      document.getElementById('settlePayName').textContent = '积分支付';
+      document.getElementById('settlePayDesc').textContent = `当前积分 12,860 · 本次消耗 ${product.price} 分`;
+    }
+
+    const currencyText = isShell ? '贝壳' : '积分';
+    const hasDiscount = product.level && product.levelPrices;
+    const finalPrice = hasDiscount ? product.levelPrices[1] : product.price;
+    const discountAmount = hasDiscount ? product.price - product.levelPrices[1] : 0;
+
+    document.getElementById('settlePriceVal').textContent = `${product.price.toLocaleString()} ${currencyText}`;
+    const discountRow = document.getElementById('settleDiscountRow');
+    if (hasDiscount) { discountRow.style.display = 'flex'; document.getElementById('settleDiscountVal').textContent = `-${discountAmount.toLocaleString()} ${currencyText}`; }
+    else { discountRow.style.display = 'none'; }
+
+    const totalEl = document.getElementById('settleTotalVal');
+    totalEl.innerHTML = `${currIcon}${finalPrice.toLocaleString()} ${currencyText}`;
+    totalEl.className = `amount${isShell ? ' gold' : ''}`;
+
+    const ctaBtn = document.getElementById('settleCtaBtn');
+    ctaBtn.className = `cta-primary${isShell ? ' gold' : ''}`;
+    ctaBtn.innerHTML = `${currIcon}确认兑换 · ${finalPrice.toLocaleString()} ${currencyText}`;
+
+    const tipsEl = document.getElementById('settleTips');
+    if (isPhysical) {
+      tipsEl.innerHTML = '<strong style="color:var(--cdf-red);">温馨提示：</strong><br>· 实物商品将在1-3个工作日内安排发货<br>· 请确保收货地址正确，发货后无法修改<br>· 签收后如有质量问题请在7天内联系客服<br>· 贝壳兑换场景需完成大会员实名认证';
+    } else if (product.type === 'virtual') {
+      tipsEl.innerHTML = '<strong style="color:var(--cdf-red);">温馨提示：</strong><br>· 虚拟权益兑换成功后即时到账<br>· 请前往福利中心对应入口使用<br>· 虚拟权益不支持退款退贝壳';
+    } else {
+      tipsEl.innerHTML = '<strong style="color:var(--cdf-red);">温馨提示：</strong><br>· 兑换成功后系统将自动派发电子券至会员账户<br>· 电子券有效期为30天<br>· 一旦兑换成功不支持退款退积分<br>· 积分兑换场景需完成大会员实名认证';
+    }
+  }
+
+  function updateSuccessPage(product) {
+    const isShell = product.currency === 'shell';
+    const currencyText = isShell ? '贝壳' : '积分';
+    const hasDiscount = product.level && product.levelPrices;
+    const finalPrice = hasDiscount ? product.levelPrices[1] : product.price;
+    const balanceText = isShell ? `消耗贝壳 ${finalPrice} 枚 · 当前剩余 ${(328 - finalPrice)} 枚` : `消耗积分 ${finalPrice} 分 · 当前剩余 ${(12860 - finalPrice)} 分`;
+    document.getElementById('successBalance').textContent = balanceText;
+
+    document.getElementById('successCouponCard').style.display = 'none';
+    document.getElementById('successVirtualCard').style.display = 'none';
+    document.getElementById('successPhysicalCard').style.display = 'none';
+
+    if (product.type === 'coupon') {
+      document.getElementById('successDesc').textContent = '电子券已派发至您的会员账户';
+      document.getElementById('successCouponCard').style.display = 'block';
+      document.getElementById('successVoucherName').textContent = product.name;
+    } else if (product.type === 'virtual') {
+      document.getElementById('successDesc').textContent = '虚拟权益已发放至您的账户';
+      document.getElementById('successVirtualCard').style.display = 'block';
+      document.querySelector('#successVirtualCard .result-card-desc').textContent = `${product.name} 已发放至您的账户，请前往福利中心使用。`;
+    } else {
+      document.getElementById('successDesc').textContent = '实物商品已下单，请等待发货';
+      document.getElementById('successPhysicalCard').style.display = 'block';
+    }
+  }
+
+  function renderOrderList(status) {
+    const listEl = document.getElementById('orderList');
+    const filtered = status === 'all' ? mockOrders : mockOrders.filter(o => o.status === status);
+    if (filtered.length === 0) {
+      listEl.innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18"/><line x1="9" y1="9" x2="15" y2="15"/><line x1="15" y1="9" x2="9" y2="15"/></svg><div class="title">暂无订单</div><div class="desc">当前筛选条件下没有订单</div></div>';
+      return;
+    }
+    listEl.innerHTML = filtered.map(o => {
+      const product = allProducts.find(p => p.id === o.productId);
+      if (!product) return '';
+      const isShell = o.currency === 'shell';
+      const statusTexts = { pending: '待发货', shipped: '已发货', done: '已完成', cancelled: '已取消' };
+      const currIconSm = isShell ? SHELL_ICON_SM : POINTS_ICON_SM;
+      return `
+      <div class="order-card">
+        <div class="order-card-header"><span class="order-no">${o.id}</span><span class="order-status ${o.status}">${statusTexts[o.status]}</span></div>
+        <div class="order-card-body" onclick="openOrderDetail('${o.id}')">
+          <div class="order-card-img">${product.img ? `<img src="${product.img}" alt="${product.name}">` : ''}</div>
+          <div class="order-card-info"><div class="order-card-name">${product.name}</div><div class="order-card-meta">${o.date}</div></div>
+          <div class="order-card-price">
+            <div class="amount ${isShell ? 'gold' : ''}">${currIconSm}${o.payAmount.toLocaleString()}<span class="amount-unit"> ${isShell ? '贝壳' : '积分'}</span></div>
+            <div class="date">${statusTexts[o.status]}</div>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  function switchOrderTab(status) {
+    currentOrderTab = status;
+    document.querySelectorAll('#orderTabs .order-tab').forEach(t => t.classList.toggle('active', t.dataset.status === status));
+    renderOrderList(status);
+  }
+
+  function openOrderDetail(orderId) {
+    const order = mockOrders.find(o => o.id === orderId);
+    if (!order) return;
+    const product = allProducts.find(p => p.id === order.productId);
+    if (!product) return;
+    const isShell = order.currency === 'shell';
+    const currencyText = isShell ? '贝壳' : '积分';
+    const statusTexts = { pending: '待发货', shipped: '已发货', done: '已完成', cancelled: '已取消' };
+    const isOnlineCoupon = product.type === 'coupon' && (product.couponType === 'online' || order.couponType === 'online');
+    const statusDescs = {
+      pending: product.type === 'physical' ? '实物商品准备中，请耐心等待' : '处理中',
+      shipped: '快递已发出',
+      done: product.type === 'coupon' ? (isOnlineCoupon ? '线上电子券已发放，请在订单中使用' : '电子券已派发至您的会员账户') : product.type === 'physical' ? '商品已签收' : '权益已到账',
+      cancelled: '订单已取消'
+    };
+
+    const iconEl = document.querySelector('#odStatusHero .od-status-icon');
+    iconEl.className = `od-status-icon ${order.status === 'done' ? 'done' : 'pending'}`;
+    iconEl.innerHTML = order.status === 'done'
+      ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>'
+      : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
+    document.getElementById('odStatusText').textContent = statusTexts[order.status];
+    document.getElementById('odStatusDesc').textContent = statusDescs[order.status];
+
+    document.getElementById('odAddressSection').style.display = product.type === 'physical' ? 'block' : 'none';
+    document.getElementById('odProductImg').innerHTML = product.img ? `<img src="${product.img}" alt="">` : '';
+    document.getElementById('odProductName').textContent = `${product.name}`;
+    document.getElementById('odProductQty').textContent = '× 1';
+    document.getElementById('odOrderNo').textContent = order.id;
+    document.getElementById('odOrderTime').textContent = order.date + ':45';
+    document.getElementById('odPayMethod').textContent = isShell ? '贝壳支付' : '积分支付';
+    document.getElementById('odPriceVal').textContent = `${order.price.toLocaleString()} ${currencyText}`;
+
+    const discountRow = document.getElementById('odDiscountRow');
+    if (order.discount > 0) { discountRow.style.display = 'flex'; document.getElementById('odDiscountVal').textContent = `-${order.discount.toLocaleString()} ${currencyText}`; }
+    else { discountRow.style.display = 'none'; }
+
+    const totalEl = document.getElementById('odTotalVal');
+    totalEl.textContent = `${order.payAmount.toLocaleString()} ${currencyText}`;
+    totalEl.style.color = isShell ? 'var(--cdf-gold-deep)' : 'var(--cdf-red)';
+    document.getElementById('odCouponSection').style.display = product.type === 'coupon' ? 'block' : 'none';
+
+    // QR code only for offline coupon; online coupon shows usage hint
+    const qrArea = document.getElementById('odQrCode');
+    const qrTip = document.querySelector('.od-qrcode-tip');
+    if (product.type === 'coupon') {
+      if (isOnlineCoupon) {
+        qrArea.style.display = 'none';
+        qrTip.textContent = '线上使用：下单时选择该券自动抵扣';
+      } else {
+        qrArea.style.display = '';
+        qrTip.textContent = '到店出示二维码核销';
+        renderMockQrCode('odQrCode');
+      }
+    }
+
+    navigateTo('page-order-detail');
+  }
+
+  function renderMockQrCode(containerId) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = '';
+    const canvas = document.createElement('canvas');
+    const size = 124;
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(0, 0, size, size);
+    // Draw QR-like pattern
+    const cellSize = 4;
+    const cols = Math.floor(size / cellSize);
+    // Seeded random for consistent pattern
+    let seed = 20260719;
+    function rand() { seed = (seed * 16807 + 0) % 2147483647; return seed / 2147483647; }
+    ctx.fillStyle = '#333';
+    for (let r = 0; r < cols; r++) {
+      for (let c = 0; c < cols; c++) {
+        // Finder patterns (3 corners)
+        const inFinder = (r < 8 && c < 8) || (r < 8 && c >= cols - 8) || (r >= cols - 8 && c < 8);
+        if (inFinder) {
+          const fr = r < 8 ? r : r - (cols - 8);
+          const fc = c < 8 ? c : c - (cols - 8);
+          if (fr === 0 || fr === 6 || fc === 0 || fc === 6 || (fr >= 2 && fr <= 4 && fc >= 2 && fc <= 4)) {
+            ctx.fillRect(c * cellSize, r * cellSize, cellSize, cellSize);
+          }
+        } else if (rand() > 0.5) {
+          ctx.fillRect(c * cellSize, r * cellSize, cellSize, cellSize);
+        }
+      }
+    }
+    container.appendChild(canvas);
+  }
+
+  function showToast(msg) {
+    const toast = document.getElementById('toast');
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 1800);
+  }
+
+  window.addEventListener('load', () => {
+    renderFlashList(0);
+    renderOrderList('all');
+    setTimeout(updateDateIndicator, 100);
+  });
+  window.addEventListener('resize', updateDateIndicator);
+</script>
+</body>
+</html>
