@@ -101,7 +101,7 @@
   }
   .form-input:focus { border-color: var(--red); }
   .form-input::placeholder { color: var(--ink-4); }
-  .form-select { appearance: none; padding-right: 28px; background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%238a8a8a' stroke-width='1.5' fill='none'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; cursor: pointer; }
+  .form-select { appearance: none; padding-right: 32px; background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5l5 5 5-5' stroke='%234a4a4a' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; cursor: pointer; }
 
   /* Buttons */
   .btn { display: inline-flex; align-items: center; gap: 6px; padding: 0 16px; height: 34px; border-radius: 6px; font-size: 13px; font-weight: 500; transition: all .15s; white-space: nowrap; }
@@ -156,7 +156,7 @@
   }
   .modal-mask.show { display: flex; }
   .modal {
-    background: #fff; border-radius: 12px; width: 640px; max-width: 92vw; max-height: 85vh;
+    background: #fff; border-radius: 12px; width: 800px; max-width: 92vw; max-height: 85vh;
     display: flex; flex-direction: column; box-shadow: 0 20px 60px rgba(0,0,0,0.2);
     animation: modalIn .25s ease;
   }
@@ -174,13 +174,119 @@
   .form-group { display: flex; flex-direction: column; gap: 6px; }
   .form-label { font-size: 13px; font-weight: 500; color: var(--ink-2); }
   .form-label .required { color: var(--red); margin-left: 2px; }
-  .form-control { height: 36px; padding: 0 12px; border: 1px solid var(--border); border-radius: 6px; background: #fff; outline: none; transition: border-color .2s; width: 100%; }
+  .form-control { height: 36px; padding: 0 12px; border: 1px solid var(--border); border-radius: 6px; background-color: #fff; outline: none; transition: border-color .2s; width: 100%; }
   .form-control:focus { border-color: var(--red); box-shadow: 0 0 0 3px rgba(183,20,27,0.08); }
   textarea.form-control { height: auto; padding: 10px 12px; resize: vertical; min-height: 80px; }
   .form-hint { font-size: 11px; color: var(--ink-4); }
   .form-section { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); }
-  .form-section-title { font-size: 14px; font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .form-section-title {
+    font-size: 13px; font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+    background: #f4f4f5; padding: 8px 12px; border-radius: 6px; color: var(--ink-2);
+  }
   .form-section-title::before { content: ''; width: 3px; height: 14px; background: var(--red); border-radius: 2px; }
+  .discount-box {
+    background: #f9fafb; border: 1px solid var(--border); border-radius: 8px; padding: 16px;
+  }
+  .discount-row {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 10px;
+  }
+  .discount-row:last-child { margin-bottom: 0; }
+  .discount-label { width: 90px; font-size: 13px; color: var(--ink-2); flex-shrink: 0; }
+  .discount-input { flex: 1; height: 34px; padding: 0 10px; border: 1px solid var(--border); border-radius: 6px; background: #fff; outline: none; }
+  .discount-input:focus { border-color: var(--red); }
+  .upload-area {
+    border: 2px dashed var(--border); border-radius: 8px; padding: 20px; text-align: center; cursor: pointer;
+    transition: border-color .2s; background: #fafafa;
+  }
+  .upload-area:hover { border-color: var(--red); }
+  .upload-hint { font-size: 12px; color: var(--ink-4); margin-top: 6px; }
+  .radio-group { display: flex; gap: 16px; margin-top: 4px; }
+  .radio-group label { display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 13px; }
+  .dynamic-section { display: none; }
+  .dynamic-section.show { display: block; }
+
+  /* Stepper */
+  .stepper {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    padding: 24px 0 20px; position: relative; margin-bottom: 4px;
+  }
+  .stepper::before {
+    content: ''; position: absolute; top: 14px; left: calc(100% / 6); right: calc(100% / 6);
+    height: 2px; background: var(--border); z-index: 0;
+  }
+  .stepper-line {
+    position: absolute; top: 14px; left: calc(100% / 6); height: 2px;
+    background: var(--red); z-index: 1; transition: width .3s ease; width: 0;
+  }
+  .step-item {
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    position: relative; z-index: 2; flex: 1;
+  }
+  .step-circle {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: #fff; border: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 600; color: var(--ink-3);
+    transition: all .25s ease;
+  }
+  .step-item.active .step-circle {
+    border-color: var(--red); background: var(--red); color: #fff;
+    box-shadow: 0 2px 8px rgba(183,20,27,0.3);
+  }
+  .step-item.done .step-circle {
+    border-color: var(--red); background: #fff; color: var(--red);
+  }
+  .step-label { font-size: 13px; color: var(--ink-3); font-weight: 500; transition: color .2s; }
+  .step-item.active .step-label { color: var(--ink); }
+  .step-item.done .step-label { color: var(--red); }
+
+  /* Step panels */
+  .step-panel { display: none; animation: slideIn .25s ease; }
+  .step-panel.active { display: block; }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(12px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  /* Discount enhanced */
+  .discount-row {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 10px;
+  }
+  .discount-row:last-child { margin-bottom: 0; }
+  .discount-label { width: 90px; font-size: 13px; color: var(--ink-2); flex-shrink: 0; }
+  .discount-input-wrap {
+    flex: 1; display: flex; align-items: center; gap: 8px;
+  }
+  .discount-input { flex: 1; height: 34px; padding: 0 10px; border: 1px solid var(--border); border-radius: 6px; background: #fff; outline: none; }
+  .discount-input:focus { border-color: var(--red); }
+  .discount-percent { color: var(--ink-3); font-size: 13px; }
+  .discount-calc {
+    min-width: 100px; text-align: right; font-size: 13px; color: var(--red);
+    font-weight: 500;
+  }
+  .discount-calc span { color: var(--ink-3); font-weight: 400; margin-right: 4px; }
+  .discount-base-hint {
+    font-size: 12px; color: var(--ink-3); margin-bottom: 10px;
+    padding-bottom: 8px; border-bottom: 1px dashed var(--border);
+  }
+  .discount-base-hint strong { color: var(--ink-2); font-weight: 600; }
+
+  /* Rich text toolbar */
+  .rte-toolbar {
+    display: flex; align-items: center; gap: 4px; padding: 6px 8px;
+    border: 1px solid var(--border); border-bottom: none; border-radius: 6px 6px 0 0;
+    background: #fafbfc; flex-wrap: wrap;
+  }
+  .rte-toolbar button {
+    width: 28px; height: 26px; border-radius: 4px; display: flex; align-items: center; justify-content: center;
+    font-size: 13px; color: var(--ink-2); transition: all .15s; cursor: pointer; border: 1px solid transparent;
+  }
+  .rte-toolbar button:hover { background: #e8e8ec; color: var(--ink); }
+  .rte-toolbar button.active { background: #e8e8ec; color: var(--red); border-color: var(--border); }
+  .rte-toolbar .rte-sep { width: 1px; height: 18px; background: var(--border); margin: 0 4px; }
+  .rte-toolbar + textarea.form-control {
+    border-radius: 0 0 6px 6px; border-top: 1px solid var(--border);
+  }
 
   /* Inline edit table */
   .level-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
@@ -262,6 +368,13 @@
   ::-webkit-scrollbar { width: 6px; height: 6px; }
   ::-webkit-scrollbar-thumb { background: #d0d0d5; border-radius: 3px; }
   ::-webkit-scrollbar-track { background: transparent; }
+
+  /* Tag management */
+  .tag-list { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag-item { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 4px; background: #f4f4f5; font-size: 13px; }
+  .tag-item .tag-del { cursor: pointer; color: var(--ink-4); }
+  .tag-item .tag-del:hover { color: var(--danger); }
+  .status-terminated { color: var(--ink-4); }
 </style>
 </head>
 <body>
@@ -278,13 +391,10 @@
         <div class="nav-group-title">功能模块</div>
         <div class="nav-item active" onclick="switchPanel('products', this)">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
-          兑换商品
+          兑换奖品
           <span class="nav-badge">10</span>
         </div>
-        <div class="nav-item" onclick="switchPanel('categories', this)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7V4h16v3"/><path d="M9 20h6"/><path d="M12 4v16"/></svg>
-          分类管理
-        </div>
+        
         <div class="nav-item" onclick="switchPanel('activities', this)">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
           活动管理
@@ -303,8 +413,8 @@
     <header class="header">
       <div class="header-left">
         <div>
-          <div class="header-title" id="pageTitle">兑换商品</div>
-          <div class="header-breadcrumb">兑换中心 / <span id="breadcrumb">兑换商品</span></div>
+          <div class="header-title" id="pageTitle">兑换奖品</div>
+          <div class="header-breadcrumb">兑换中心 / <span id="breadcrumb">兑换奖品</span></div>
         </div>
       </div>
       <div class="header-right">
@@ -337,6 +447,10 @@
             </select>
           </div>
           <div class="toolbar-right">
+            <button class="btn btn-outline" onclick="openTagModal()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+              新增标签
+            </button>
             <button class="btn btn-outline" onclick="showToast('已导出商品列表', 'success')">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
               导出
@@ -353,12 +467,17 @@
             <table>
               <thead>
                 <tr>
-                  <th>商品</th>
-                  <th>SKU</th>
-                  <th>分类</th>
-                  <th>标签</th>
-                  <th>商品类型</th>
-                  <th>原价</th>
+                  <th style="width:50px;">序号</th>
+                  <th>奖品ID</th>
+                  <th>奖品名称</th>
+                  <th>奖品类型</th>
+                  <th>奖品标签</th>
+                  <th>奖品价值</th>
+                  <th>支付方式</th>
+                  <th>消耗福利值</th>
+                  <th>适用门店</th>
+                  <th>库存</th>
+                  <th>状态</th>
                   <th>操作</th>
                 </tr>
               </thead>
@@ -373,33 +492,6 @@
               <button class="page-btn">&gt;</button>
             </div>
           </div>
-        </div>
-      </div>
-
-      <!-- ========== 3. 分类管理 ========== -->
-      <div class="panel" id="panel-categories">
-        <div class="toolbar">
-          <div class="toolbar-left">
-            <span style="font-size:13px;color:var(--ink-3);">管理商品分类，支持拖拽排序</span>
-          </div>
-          <div class="toolbar-right">
-            <button class="btn btn-primary" onclick="openCategoryModal()">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-              新增分类
-            </button>
-          </div>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>排序</th><th>分类名称</th><th>商品数</th><th>状态</th><th>操作</th></tr></thead>
-            <tbody>
-              <tr><td style="color:var(--ink-4);">1</td><td style="font-weight:500;">美妆护肤</td><td>8</td><td><span class="status-dot on"></span>启用</td><td class="td-actions"><button class="btn btn-text btn-sm" onclick="openCategoryModal('美妆护肤',1)">编辑</button><button class="btn btn-danger btn-sm">删除</button></td></tr>
-              <tr><td style="color:var(--ink-4);">2</td><td style="font-weight:500;">本地服务</td><td>2</td><td><span class="status-dot on"></span>启用</td><td class="td-actions"><button class="btn btn-text btn-sm" onclick="openCategoryModal('本地服务',2)">编辑</button><button class="btn btn-danger btn-sm">删除</button></td></tr>
-              <tr><td style="color:var(--ink-4);">3</td><td style="font-weight:500;">品牌周边</td><td>3</td><td><span class="status-dot on"></span>启用</td><td class="td-actions"><button class="btn btn-text btn-sm" onclick="openCategoryModal('品牌周边',3)">编辑</button><button class="btn btn-danger btn-sm">删除</button></td></tr>
-              <tr><td style="color:var(--ink-4);">4</td><td style="font-weight:500;">虚拟权益</td><td>1</td><td><span class="status-dot off"></span>停用</td><td class="td-actions"><button class="btn btn-text btn-sm" onclick="openCategoryModal('虚拟权益',4)">编辑</button><button class="btn btn-danger btn-sm">删除</button></td></tr>
-              <tr><td style="color:var(--ink-4);">5</td><td style="font-weight:500;">有税商户</td><td>1</td><td><span class="status-dot on"></span>启用</td><td class="td-actions"><button class="btn btn-text btn-sm" onclick="openCategoryModal('有税商户',5)">编辑</button><button class="btn btn-danger btn-sm">删除</button></td></tr>
-            </tbody>
-          </table>
         </div>
       </div>
 
@@ -419,11 +511,11 @@
             <table>
               <thead>
                 <tr>
-                  <th>活动日期</th>
-                  <th>上架时间</th>
-                  <th>商品数</th>
-                  <th>总库存</th>
-                  <th>支付方式</th>
+                  <th>活动ID</th>
+                  <th>兑换活动名称</th>
+                  <th>活动时间(范围)</th>
+                  <th>创建时间</th>
+                  <th>创建人</th>
                   <th>状态</th>
                   <th>操作</th>
                 </tr>
@@ -531,33 +623,7 @@
   </div><!-- /main -->
 </div><!-- /layout -->
 
-<!-- ===== 分类编辑弹窗 ===== -->
-<div class="modal-mask" id="categoryModal">
-  <div class="modal" style="width:480px;">
-    <div class="modal-header">
-      <div class="modal-title" id="categoryModalTitle">新增分类</div>
-      <button class="modal-close" onclick="closeModal('categoryModal')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-    </div>
-    <div class="modal-body">
-      <div class="form-grid">
-        <div class="form-group">
-          <label class="form-label">分类名称<span class="required">*</span></label>
-          <input class="form-control" id="cat_name" placeholder="如：美妆护肤">
-        </div>
-        <div class="form-group">
-          <label class="form-label">排序权重</label>
-          <input class="form-control" id="cat_sort" type="number" placeholder="0">
-        </div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-outline" onclick="closeModal('categoryModal')">取消</button>
-      <button class="btn btn-primary" onclick="saveCategory()">保存</button>
-    </div>
-  </div>
-</div>
+
 
 <!-- ===== 新建/编辑活动弹窗 ===== -->
 <div class="modal-mask" id="activityModal">
@@ -570,36 +636,32 @@
     </div>
     <div class="modal-body">
       <div class="form-grid">
-        <div class="form-group">
-          <label class="form-label">活动日期<span class="required">*</span></label>
-          <input class="form-control" type="date" id="act_date">
+        <div class="form-group full">
+          <label class="form-label">兑换活动名称<span class="required">*</span></label>
+          <input class="form-control" id="act_name" placeholder="如：夏日狂欢兑换活动">
         </div>
         <div class="form-group">
-          <label class="form-label">上架时间</label>
-          <input class="form-control" type="time" id="act_time" value="10:00">
+          <label class="form-label">活动开始时间<span class="required">*</span></label>
+          <input class="form-control" type="datetime-local" id="act_start">
         </div>
         <div class="form-group">
-          <label class="form-label">支付方式<span class="required">*</span></label>
-          <div style="display:flex;gap:16px;margin-top:4px;">
-            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;">
-              <input type="radio" name="act_payType" value="points" checked style="accent-color:var(--red);"> 积分
-            </label>
-            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;">
-              <input type="radio" name="act_payType" value="shell" style="accent-color:var(--red);"> 贝壳
-            </label>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="form-label">状态</label>
-          <select class="form-control form-select" id="act_status">
-            <option value="active">进行中</option>
-            <option value="upcoming" selected>未开始</option>
-            <option value="ended">已结束</option>
-          </select>
+          <label class="form-label">活动结束时间<span class="required">*</span></label>
+          <input class="form-control" type="datetime-local" id="act_end">
         </div>
         <div class="form-group full">
-          <label class="form-label">活动规则说明</label>
-          <textarea class="form-control" id="act_rule" placeholder="如：每人每场限兑2件"></textarea>
+          <label class="form-label">兑换规则</label>
+          <div class="rte-toolbar">
+            <button title="加粗"><b>B</b></button>
+            <button title="斜体"><i>I</i></button>
+            <button title="下划线"><u>U</u></button>
+            <span class="rte-sep"></span>
+            <button title="有序列表">1.</button>
+            <button title="无序列表">•</button>
+            <span class="rte-sep"></span>
+            <button title="图片">🖼</button>
+            <button title="链接">🔗</button>
+          </div>
+          <textarea class="form-control" id="act_rule" placeholder="请填写兑换规则说明，如兑换时间、兑换方式、使用限制等..." style="min-height:100px;"></textarea>
         </div>
       </div>
     </div>
@@ -610,36 +672,31 @@
   </div>
 </div>
 
-<!-- ===== 活动商品配置弹窗 ===== -->
+<!-- ===== 活动奖品配置弹窗（只读） ===== -->
 <div class="modal-mask" id="activityConfigModal">
   <div class="modal" style="width:760px;">
     <div class="modal-header">
-      <div class="modal-title" id="activityConfigTitle">活动商品配置</div>
+      <div class="modal-title" id="activityConfigTitle">活动奖品配置</div>
       <button class="modal-close" onclick="closeModal('activityConfigModal')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
     <div class="modal-body" style="padding:0;">
       <div style="display:flex;align-items:center;gap:16px;padding:16px 24px;border-bottom:1px solid var(--border);background:#fafafa;">
-        <span style="font-size:13px;color:var(--ink-3);">活动日期：<strong id="configActDate" style="color:var(--ink);">-</strong></span>
-        <span style="font-size:13px;color:var(--ink-3);">支付方式：<strong id="configActPayType" style="color:var(--ink);">-</strong></span>
+        <span style="font-size:13px;color:var(--ink-3);">活动名称：<strong id="configActName" style="color:var(--ink);">-</strong></span>
+        <span style="font-size:13px;color:var(--ink-3);">活动时间：<strong id="configActTimeRange" style="color:var(--ink);">-</strong></span>
       </div>
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 24px;">
-        <span style="font-size:13px;color:var(--ink-3);">已配置商品列表</span>
-        <button class="btn btn-primary btn-sm" onclick="openActivityItemModal(currentConfigActivityId, null)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          添加商品/优惠券
-        </button>
+      <div style="display:flex;align-items:center;padding:12px 24px;">
+        <span style="font-size:13px;color:var(--ink-3);">已配置奖品列表（只读）</span>
       </div>
       <div class="table-wrap" style="border-radius:0;border:none;box-shadow:none;">
         <table>
           <thead>
             <tr>
-              <th>商品/优惠券名称</th>
-              <th>类型</th>
+              <th>奖品名称</th>
+              <th>奖品类型</th>
               <th>兑换价格</th>
-              <th>活动库存</th>
-              <th>已兑</th>
+              <th>库存(剩余库存/总库存)</th>
               <th>操作</th>
             </tr>
           </thead>
@@ -648,122 +705,274 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-outline" onclick="closeModal('activityConfigModal')">取消</button>
-      <button class="btn btn-primary" onclick="saveActivityConfig()">保存</button>
+      <button class="btn btn-outline" onclick="closeModal('activityConfigModal')">关闭</button>
     </div>
   </div>
 </div>
 
-<!-- ===== 新增/编辑活动商品弹窗 ===== -->
-<div class="modal-mask" id="activityItemModal">
-  <div class="modal" style="width:520px;">
-    <div class="modal-header">
-      <div class="modal-title" id="activityItemModalTitle">添加商品/优惠券</div>
-      <button class="modal-close" onclick="closeModal('activityItemModal')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-    </div>
-    <div class="modal-body">
-      <div class="form-grid">
-        <div class="form-group full">
-          <label class="form-label">类型选择</label>
-          <div style="display:flex;gap:16px;margin-top:4px;">
-            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;">
-              <input type="radio" name="item_type" value="product" checked onchange="onItemTypeChange()" style="accent-color:var(--red);"> 商品
-            </label>
-            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;">
-              <input type="radio" name="item_type" value="coupon" onchange="onItemTypeChange()" style="accent-color:var(--red);"> 优惠券
-            </label>
-          </div>
-        </div>
-        <div class="form-group full" id="itemProductGroup">
-          <label class="form-label">选择商品<span class="required">*</span></label>
-          <select class="form-control form-select" id="item_product">
-            <option value="">请选择商品</option>
-          </select>
-        </div>
-        <div class="form-group full" id="itemCouponGroup" style="display:none;">
-          <label class="form-label">选择优惠券<span class="required">*</span></label>
-          <select class="form-control form-select" id="item_coupon">
-            <option value="">请选择优惠券</option>
-            <option value="CDF 100元代金券">CDF 100元代金券</option>
-            <option value="海南免税95折券">海南免税95折券</option>
-            <option value="CDF 50元无门槛券">CDF 50元无门槛券</option>
-            <option value="CDF 200元代金券">CDF 200元代金券</option>
-            <option value="免税店专属折扣券">免税店专属折扣券</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">兑换价格<span class="required">*</span></label>
-          <input class="form-control" type="number" id="item_price" placeholder="0">
-        </div>
-        <div class="form-group">
-          <label class="form-label">活动库存<span class="required">*</span></label>
-          <input class="form-control" type="number" id="item_stock" placeholder="0">
-        </div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-outline" onclick="closeModal('activityItemModal')">取消</button>
-      <button class="btn btn-primary" onclick="saveActivityItem()">保存</button>
-    </div>
-  </div>
-</div>
+
 
 <!-- ===== 商品编辑弹窗 ===== -->
 <div class="modal-mask" id="productModal">
-  <div class="modal">
+  <div class="modal" style="width:760px;">
     <div class="modal-header">
-      <div class="modal-title" id="modalTitle">新增商品</div>
+      <div class="modal-title" id="modalTitle">新增奖品</div>
       <button class="modal-close" onclick="closeModal('productModal')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
-    <div class="modal-body">
-      <div class="form-grid">
-        <div class="form-group">
-          <label class="form-label">商品名称<span class="required">*</span></label>
-          <input class="form-control" id="f_name" placeholder="如：雅诗兰黛持妆粉底液 30ml">
+
+    <!-- 步骤指示器 -->
+    <div class="stepper" style="padding: 0 24px;">
+      <div class="stepper-line" id="stepperLine"></div>
+      <div class="step-item active" data-step="1">
+        <div class="step-circle">1</div>
+        <div class="step-label">基本信息</div>
+      </div>
+      <div class="step-item" data-step="2">
+        <div class="step-circle">2</div>
+        <div class="step-label">兑换规则</div>
+      </div>
+      <div class="step-item" data-step="3">
+        <div class="step-circle">3</div>
+        <div class="step-label">奖品详情</div>
+      </div>
+    </div>
+
+    <div class="modal-body" style="padding-top: 8px; max-height: 520px; overflow-y: auto;">
+      <!-- 步骤1：基本信息 -->
+      <div class="step-panel active" id="stepPanel1">
+        <div class="form-section-title">奖品基本信息</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">奖品类型<span class="required">*</span></label>
+            <select class="form-control form-select" id="f_prizeType" onchange="onPrizeTypeChange()">
+              <option value="福利值">福利值</option>
+              <option value="优惠券-优选单券">优惠券-优选单券</option>
+              <option value="优惠券-券中心">优惠券-券中心</option>
+              <option value="实物礼品">实物礼品</option>
+              <option value="预约抽奖">预约抽奖</option>
+              <option value="转盘抽奖">转盘抽奖</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">奖品名称<span class="required">*</span></label>
+            <input class="form-control" id="f_name" placeholder="如：雅诗兰黛持妆粉底液 30ml">
+          </div>
+          <div class="form-group" id="relatedPrizeGroup">
+            <label class="form-label">关联奖品</label>
+            <input class="form-control" id="f_relatedPrize" placeholder="请选择关联奖品">
+          </div>
+          <div class="form-group">
+            <label class="form-label">奖品主图</label>
+            <div class="upload-area" onclick="document.getElementById('f_image').click()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24" style="color:var(--ink-4);margin-bottom:4px;"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <div style="font-size:13px;color:var(--ink-3);">点击上传图片</div>
+              <div class="upload-hint">建议规格：900*900</div>
+            </div>
+            <input type="file" id="f_image" style="display:none;" accept="image/*">
+          </div>
+          <div class="form-group">
+            <label class="form-label">奖品标签</label>
+            <select class="form-control form-select" id="f_label">
+              <option value="">请选择标签</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">奖品价值（元）</label>
+            <input class="form-control" id="f_value" type="number" placeholder="0">
+          </div>
         </div>
-        <div class="form-group">
-          <label class="form-label">商品描述</label>
-          <input class="form-control" id="f_desc" placeholder="如：到店兑换券">
+      </div>
+
+      <!-- 步骤2：兑换规则设置 -->
+      <div class="step-panel" id="stepPanel2">
+        <div class="form-section-title">兑换规则设置</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">支付方式<span class="required">*</span></label>
+            <div class="radio-group">
+              <label><input type="radio" name="f_payType" value="points" checked onchange="onPayTypeChange(); updateDiscountCalc();"> 积分</label>
+              <label><input type="radio" name="f_payType" value="shell" onchange="onPayTypeChange(); updateDiscountCalc();"> 贝壳</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">消耗福利值<span class="required">*</span></label>
+            <input class="form-control" id="f_cost" type="number" placeholder="0" oninput="updateDiscountCalc()">
+          </div>
+          <div class="form-group">
+            <label class="form-label">奖品总库存<span class="required">*</span></label>
+            <input class="form-control" id="f_stock" type="number" value="-1" placeholder="-1 表示不限">
+          </div>
+          <div class="form-group">
+            <label class="form-label">奖品每日库存</label>
+            <input class="form-control" id="f_dailyStock" type="number" value="-1" placeholder="-1 表示不限">
+          </div>
+          <div class="form-group">
+            <label class="form-label">状态</label>
+            <select class="form-control form-select" id="f_status">
+              <option value="启用">启用</option>
+              <option value="停用">停用</option>
+            </select>
+          </div>
+          <div class="form-group" style="display:none;" id="storeGroup">
+            <label class="form-label">适用门店</label>
+            <select class="form-control form-select" id="f_store">
+              <option>三亚国际免税城</option>
+              <option>海口国际免税城</option>
+              <option>博鳌免税店</option>
+              <option>三亚凤凰机场店</option>
+              <option>海口美兰机场店</option>
+            </select>
+          </div>
+          <div class="form-group" style="display:none;" id="deadlineGroup">
+            <label class="form-label">兑换后使用截止时间</label>
+            <div class="radio-group">
+              <label><input type="radio" name="f_deadlineType" value="days" checked onchange="toggleDeadlineType()"> 固定天数</label>
+              <label><input type="radio" name="f_deadlineType" value="date" onchange="toggleDeadlineType()"> 固定日期</label>
+            </div>
+            <input class="form-control" id="f_deadlineDays" type="number" value="-1" placeholder="-1 表示不限" style="margin-top:8px;">
+            <input class="form-control" id="f_deadlineDate" type="date" style="margin-top:8px; display:none;">
+          </div>
+          <div class="form-group">
+            <label class="form-label">每月兑换次数上限/人</label>
+            <input class="form-control" id="f_monthLimit" type="number" value="-1" placeholder="-1 表示不限">
+          </div>
+          <div class="form-group">
+            <label class="form-label">每日兑换次数上限/人</label>
+            <input class="form-control" id="f_dayLimit" type="number" value="-1" placeholder="-1 表示不限">
+          </div>
+          <div class="form-group" style="display:none;" id="usageSceneGroup">
+            <label class="form-label">奖品使用场景<span class="required">*</span></label>
+            <select class="form-control form-select" id="f_usageScene">
+              <option>到店核销</option>
+              <option>线上自动抵扣</option>
+            </select>
+          </div>
+          <div class="form-group" style="display:none;" id="remarkGroup">
+            <label class="form-label">备注</label>
+            <input class="form-control" id="f_remark" placeholder="">
+          </div>
+
+          <!-- 积分折扣设置 -->
+          <div class="form-group full" id="discountSection">
+            <label class="form-label">会员等级折扣设置</label>
+            <div class="discount-box">
+              <div class="discount-base-hint">
+                基础消耗：<strong id="discountBaseValue">0</strong> <span id="discountBaseUnit">积分</span>
+              </div>
+              <div class="discount-row">
+                <div class="discount-label">普通会员</div>
+                <div class="discount-input-wrap">
+                  <input class="discount-input" id="f_discount_normal" type="number" placeholder="默认 100%" value="100" oninput="updateDiscountCalc()">
+                  <span class="discount-percent">%</span>
+                </div>
+                <div class="discount-calc"><span>=</span><strong id="calc_normal">0</strong> <span id="unit_normal">积分</span></div>
+              </div>
+              <div class="discount-row">
+                <div class="discount-label">银卡会员</div>
+                <div class="discount-input-wrap">
+                  <input class="discount-input" id="f_discount_silver" type="number" placeholder="默认 95%" value="95" oninput="updateDiscountCalc()">
+                  <span class="discount-percent">%</span>
+                </div>
+                <div class="discount-calc"><span>=</span><strong id="calc_silver">0</strong> <span id="unit_silver">积分</span></div>
+              </div>
+              <div class="discount-row">
+                <div class="discount-label">金卡会员</div>
+                <div class="discount-input-wrap">
+                  <input class="discount-input" id="f_discount_gold" type="number" placeholder="默认 90%" value="90" oninput="updateDiscountCalc()">
+                  <span class="discount-percent">%</span>
+                </div>
+                <div class="discount-calc"><span>=</span><strong id="calc_gold">0</strong> <span id="unit_gold">积分</span></div>
+              </div>
+              <div class="discount-row">
+                <div class="discount-label">钻石会员</div>
+                <div class="discount-input-wrap">
+                  <input class="discount-input" id="f_discount_diamond" type="number" placeholder="默认 85%" value="85" oninput="updateDiscountCalc()">
+                  <span class="discount-percent">%</span>
+                </div>
+                <div class="discount-calc"><span>=</span><strong id="calc_diamond">0</strong> <span id="unit_diamond">积分</span></div>
+              </div>
+            </div>
+          </div>
+
         </div>
-        <div class="form-group">
-          <label class="form-label">SKU编码</label>
-          <input class="form-control" id="f_sku" placeholder="EX-XXXX-001">
-        </div>
-        <div class="form-group">
-          <label class="form-label">分类</label>
-          <select class="form-control form-select" id="f_category">
-            <option>香水化妆品</option><option>电子券</option><option>虚拟权益</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">标签</label>
-          <select class="form-control form-select" id="f_tag">
-            <option>电子券</option><option>香水化妆品</option><option>虚拟权益</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">商品类型</label>
-          <select class="form-control form-select" id="f_type">
-            <option>实物</option><option>虚拟</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">原价（参考）</label>
-          <input class="form-control" id="f_original" type="number" placeholder="0">
-        </div>
-        <div class="form-group full">
-          <label class="form-label">商品文描</label>
-          <textarea class="form-control" id="f_detail" placeholder="商品详细描述..."></textarea>
+      </div>
+
+      <!-- 步骤3：奖品详情 -->
+      <div class="step-panel" id="stepPanel3">
+        <div class="form-section-title">奖品详情</div>
+        <div class="form-grid">
+          <div class="form-group full">
+            <label class="form-label">兑换规则</label>
+            <div class="rte-toolbar">
+              <button title="加粗"><b>B</b></button>
+              <button title="斜体"><i>I</i></button>
+              <button title="下划线"><u>U</u></button>
+              <span class="rte-sep"></span>
+              <button title="有序列表">1.</button>
+              <button title="无序列表">•</button>
+              <span class="rte-sep"></span>
+              <button title="图片">🖼</button>
+              <button title="链接">🔗</button>
+            </div>
+            <textarea class="form-control" id="f_exchangeRule" placeholder="请填写兑换规则说明，如兑换时间、兑换方式、使用限制等..." style="min-height:100px;"></textarea>
+          </div>
+          <div class="form-group full">
+            <label class="form-label">奖品详情</label>
+            <div class="rte-toolbar">
+              <button title="加粗"><b>B</b></button>
+              <button title="斜体"><i>I</i></button>
+              <button title="下划线"><u>U</u></button>
+              <span class="rte-sep"></span>
+              <button title="有序列表">1.</button>
+              <button title="无序列表">•</button>
+              <span class="rte-sep"></span>
+              <button title="图片">🖼</button>
+              <button title="链接">🔗</button>
+            </div>
+            <textarea class="form-control" id="f_desc" placeholder="请填写奖品详细介绍，如产品规格、使用方法、注意事项等..." style="min-height:150px;"></textarea>
+          </div>
         </div>
       </div>
     </div>
+    <div class="modal-footer" style="justify-content: space-between;">
+      <div>
+        <button class="btn btn-outline" onclick="closeModal('productModal')">取消</button>
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <button class="btn btn-outline" id="prevStepBtn" onclick="prevStep()" style="display: none;">上一步</button>
+        <button class="btn btn-primary" id="nextStepBtn" onclick="nextStep()">下一步</button>
+        <button class="btn btn-primary" id="saveBtn" onclick="saveProduct()" style="display: none;">保存</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 标签管理弹窗 ===== -->
+<div class="modal-mask" id="tagModal">
+  <div class="modal" style="width:480px;">
+    <div class="modal-header">
+      <div class="modal-title">标签管理</div>
+      <button class="modal-close" onclick="closeModal('tagModal')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group" style="margin-bottom:16px;">
+        <label class="form-label">新增标签</label>
+        <div style="display:flex;gap:8px;">
+          <input class="form-control" id="tagInput" placeholder="输入标签名称" style="flex:1;">
+          <button class="btn btn-primary" onclick="addTag()">添加</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">现有标签</label>
+        <div class="tag-list" id="tagList"></div>
+      </div>
+    </div>
     <div class="modal-footer">
-      <button class="btn btn-outline" onclick="closeModal('productModal')">取消</button>
-      <button class="btn btn-primary" onclick="saveProduct()">保存</button>
+      <button class="btn btn-outline" onclick="closeModal('tagModal')">关闭</button>
     </div>
   </div>
 </div>
@@ -774,16 +983,16 @@
 <script>
   // ===== 商品数据 =====
   const allProducts = [
-    { id: 1, name: '雅诗兰黛持妆粉底液 30ml', desc: '到店兑换券', sku: 'EX-CDF-001', category: '香水化妆品', tag: '香水化妆品', type: '实物', original: 880, img: 'assets/product-1.jpg' },
-    { id: 2, name: '兰蔻小黑瓶精华肌底液 20ml', desc: '到店核销券', sku: 'EX-CDF-002', category: '香水化妆品', tag: '香水化妆品', type: '实物', original: 1280, img: 'assets/product-2.jpg' },
-    { id: 3, name: '三亚免税城 SPA 美容服务体验券', desc: '到店核销', sku: 'EX-CDF-003', category: '电子券', tag: '电子券', type: '虚拟', original: 680, img: 'assets/product-3.jpg' },
-    { id: 4, name: '资生堂红腰子精华 50ml', desc: '到店核销券', sku: 'EX-CDF-004', category: '香水化妆品', tag: '香水化妆品', type: '实物', original: 980, img: 'assets/product-4.jpg' },
-    { id: 5, name: '有税商户代金券 100元', desc: '三亚国免', sku: 'EX-CDF-005', category: '电子券', tag: '电子券', type: '虚拟', original: 100, img: 'assets/product-5.jpg' },
-    { id: 6, name: 'SK-II 神仙水 230ml', desc: '门店兑换券', sku: 'EX-CDF-006', category: '香水化妆品', tag: '香水化妆品', type: '实物', original: 1880, img: 'assets/product-6.jpg' },
-    { id: 7, name: '迪奥口红礼盒套装', desc: '限量典藏版', sku: 'EX-CDF-007', category: '香水化妆品', tag: '香水化妆品', type: '实物', original: 480, img: 'assets/product-7.jpg' },
-    { id: 8, name: '中免海南限定化妆包', desc: '海星主题', sku: 'EX-CDF-008', category: '香水化妆品', tag: '香水化妆品', type: '实物', original: 280, img: 'assets/product-8.jpg' },
-    { id: 9, name: '三亚机场贵宾室服务券', desc: '电子权益', sku: 'EX-CDF-009', category: '电子券', tag: '电子券', type: '虚拟', original: 350, img: 'assets/product-9.jpg' },
-    { id: 10, name: '转盘抽奖机会 × 3', desc: '福利转盘', sku: 'EX-CDF-010', category: '虚拟权益', tag: '虚拟权益', type: '虚拟', original: 0, img: 'assets/product-10.jpg' }
+    { id: 1, prizeId: 'PRIZE-0001', name: '雅诗兰黛持妆粉底液 30ml', desc: '到店兑换券', sku: 'EX-CDF-001', category: '香水化妆品', tag: '香水化妆品', type: '实物', original: 880, img: 'assets/product-1.jpg', prizeTag: '热销款', value: 880, payType: 'points', cost: 7600, store: '三亚国际免税城', stock: 25, totalStock: 100, status: '启用', prizeType: '实物礼品' },
+    { id: 2, prizeId: 'PRIZE-0002', name: '兰蔻小黑瓶精华肌底液 20ml', desc: '到店核销券', sku: 'EX-CDF-002', category: '香水化妆品', tag: '香水化妆品', type: '实物', original: 1280, img: 'assets/product-2.jpg', prizeTag: '新到货', value: 1280, payType: 'points', cost: 10200, store: '海口国际免税城', stock: 12, totalStock: 50, status: '启用', prizeType: '实物礼品' },
+    { id: 3, prizeId: 'PRIZE-0003', name: '三亚免税城 SPA 美容服务体验券', desc: '到店核销', sku: 'EX-CDF-003', category: '电子券', tag: '电子券', type: '虚拟', original: 680, img: 'assets/product-3.jpg', prizeTag: '限时', value: 680, payType: 'shell', cost: 288, store: '三亚国际免税城', stock: 100, totalStock: 200, status: '启用', prizeType: '预约抽奖' },
+    { id: 4, prizeId: 'PRIZE-0004', name: '资生堂红腰子精华 50ml', desc: '到店核销券', sku: 'EX-CDF-004', category: '香水化妆品', tag: '香水化妆品', type: '实物', original: 980, img: 'assets/product-4.jpg', prizeTag: '', value: 980, payType: 'points', cost: 9500, store: '博鳌免税店', stock: 8, totalStock: 60, status: '停用', prizeType: '实物礼品' },
+    { id: 5, prizeId: 'PRIZE-0005', name: '有税商户代金券 100元', desc: '三亚国免', sku: 'EX-CDF-005', category: '电子券', tag: '电子券', type: '虚拟', original: 100, img: 'assets/product-5.jpg', prizeTag: '爆款', value: 100, payType: 'shell', cost: 50, store: '三亚国际免税城', stock: 500, totalStock: 1000, status: '启用', prizeType: '转盘抽奖' },
+    { id: 6, prizeId: 'PRIZE-0006', name: 'SK-II 神仙水 230ml', desc: '门店兑换券', sku: 'EX-CDF-006', category: '香水化妆品', tag: '香水化妆品', type: '实物', original: 1880, img: 'assets/product-6.jpg', prizeTag: '会员专享', value: 1880, payType: 'points', cost: 11160, store: '海口国际免税城', stock: 3, totalStock: 30, status: '启用', prizeType: '实物礼品' },
+    { id: 7, prizeId: 'PRIZE-0007', name: '迪奥口红礼盒套装', desc: '限量典藏版', sku: 'EX-CDF-007', category: '香水化妆品', tag: '香水化妆品', type: '实物', original: 480, img: 'assets/product-7.jpg', prizeTag: '限量', value: 480, payType: 'points', cost: 3500, store: '三亚凤凰机场店', stock: 15, totalStock: 80, status: '启用', prizeType: '实物礼品' },
+    { id: 8, prizeId: 'PRIZE-0008', name: '中免海南限定化妆包', desc: '海星主题', sku: 'EX-CDF-008', category: '香水化妆品', tag: '香水化妆品', type: '实物', original: 280, img: 'assets/product-8.jpg', prizeTag: '', value: 280, payType: 'shell', cost: 120, store: '海口美兰机场店', stock: 60, totalStock: 150, status: '启用', prizeType: '实物礼品' },
+    { id: 9, prizeId: 'PRIZE-0009', name: '三亚机场贵宾室服务券', desc: '电子权益', sku: 'EX-CDF-009', category: '电子券', tag: '电子券', type: '虚拟', original: 350, img: 'assets/product-9.jpg', prizeTag: '服务', value: 350, payType: 'points', cost: 6500, store: '三亚凤凰机场店', stock: 40, totalStock: 80, status: '停用', prizeType: '预约抽奖' },
+    { id: 10, prizeId: 'PRIZE-0010', name: '转盘抽奖机会 × 3', desc: '福利转盘', sku: 'EX-CDF-010', category: '虚拟权益', tag: '虚拟权益', type: '虚拟', original: 0, img: 'assets/product-10.jpg', prizeTag: '活动', value: 0, payType: 'shell', cost: 10, store: '三亚国际免税城', stock: -1, totalStock: -1, status: '启用', prizeType: '转盘抽奖' }
   ];
 
   // ===== 面板切换 =====
@@ -801,7 +1010,7 @@
       });
     }
     const titles = {
-      products: '兑换商品', categories: '分类管理', activities: '活动管理',
+      products: '兑换奖品', activities: '活动管理',
       orders: '订单列表'
     };
     document.getElementById('pageTitle').textContent = titles[panelId] || panelId;
@@ -816,6 +1025,51 @@
     '虚拟权益': 'color:var(--info);background:#eff6ff;'
   };
 
+  let prizeTags = ['新到货', '热销款', '限时', '爆款', '会员专享', '限量', '服务', '活动'];
+
+  function renderPrizeTags() {
+    const sel = document.getElementById('f_label');
+    if (!sel) return;
+    const currentVal = sel.value;
+    sel.innerHTML = '<option value="">请选择标签</option>';
+    prizeTags.forEach(t => {
+      sel.innerHTML += '<option value="' + t + '">' + t + '</option>';
+    });
+    if (currentVal) sel.value = currentVal;
+  }
+
+  function renderTagList() {
+    const list = document.getElementById('tagList');
+    if (!list) return;
+    list.innerHTML = prizeTags.map(t =>
+      '<span class="tag-item">' + t + '<span class="tag-del" onclick="deleteTag(\'' + t + '\')">&#10005;</span></span>'
+    ).join('');
+  }
+
+  function openTagModal() {
+    renderTagList();
+    document.getElementById('tagModal').classList.add('show');
+  }
+
+  function addTag() {
+    const input = document.getElementById('tagInput');
+    const tag = input.value.trim();
+    if (!tag) { showToast('请输入标签名称', 'warning'); return; }
+    if (prizeTags.includes(tag)) { showToast('标签已存在', 'warning'); return; }
+    prizeTags.push(tag);
+    input.value = '';
+    renderTagList();
+    renderPrizeTags();
+    showToast('标签已添加', 'success');
+  }
+
+  function deleteTag(tag) {
+    prizeTags = prizeTags.filter(t => t !== tag);
+    renderTagList();
+    renderPrizeTags();
+    showToast('标签已删除', 'success');
+  }
+
   function renderProducts() {
     const search = (document.getElementById('searchProduct')?.value || '').toLowerCase();
     const categoryFilter = document.getElementById('filterCategory')?.value || '';
@@ -829,49 +1083,269 @@
     });
 
     const tbody = document.getElementById('productTableBody');
-    tbody.innerHTML = list.map(p => `
+    tbody.innerHTML = list.map((p, idx) => {
+      const payTag = p.payType === 'points' ? '<span class="tag tag-red">积分</span>' : '<span class="tag tag-gold">贝壳</span>';
+      const costText = p.payType === 'points' ? p.cost.toLocaleString() + ' 积分' : p.cost.toLocaleString() + ' 贝壳';
+      const stockText = p.stock === -1 ? '不限' : (p.stock + '/' + (p.totalStock === -1 ? '不限' : p.totalStock));
+      const statusDot = p.status === '启用' ? 'on' : 'off';
+      const typeStyle = p.type === '实物' ? 'background:#e8f5e9;color:#2e7d32;' : 'background:#e3f2fd;color:#1565c0;';
+      const toggleBtn = p.status === '启用'
+        ? '<button class="btn btn-danger btn-sm" onclick="toggleProductStatus(' + p.id + ')">下架</button>'
+        : '<button class="btn btn-text btn-sm" onclick="toggleProductStatus(' + p.id + ')">上架</button>';
+      const tagDisplay = p.prizeTag ? '<span class="tag tag-blue">' + p.prizeTag + '</span>' : '-';
+      return `
       <tr>
+        <td style="color:var(--ink-4);font-size:12px;">${idx + 1}</td>
+        <td style="font-family:monospace;font-size:12px;color:var(--ink-2);">${p.prizeId || 'PRIZE-' + String(p.id).padStart(4, '0')}</td>
         <td>
           <div style="display:flex;align-items:center;gap:12px;">
             <img class="td-img" src="${p.img}" alt="${p.name}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2736%27 height=%2736%27%3E%3Crect fill=%27%23f0e6d6%27 width=%2736%27 height=%2736%27 rx=%276%27/%3E%3C/svg%3E'">
             <div>
               <div style="font-weight:500;font-size:13px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${p.name}</div>
-              <div style="font-size:11px;color:var(--ink-4);margin-top:2px;">${p.desc}</div>
+              <div style="font-size:11px;color:var(--ink-4);margin-top:2px;">${p.sku}</div>
             </div>
           </div>
         </td>
-        <td style="font-family:monospace;font-size:12px;color:var(--ink-3);">${p.sku}</td>
-        <td>${p.category}</td>
-        <td><span class="tag" style="${tagStyleMap[p.tag] || ''}">${p.tag}</span></td>
-        <td><span class="type-badge" style="${p.type === '实物' ? 'background:#e8f5e9;color:#2e7d32;' : 'background:#e3f2fd;color:#1565c0;'}">${p.type}</span></td>
-        <td style="color:var(--ink-3);font-size:12px;">${p.original ? '¥' + p.original : '-'}</td>
+        <td><span class="type-badge" style="${typeStyle}">${p.type}</span></td>
+        <td>${tagDisplay}</td>
+        <td style="font-weight:600;font-size:13px;">${p.value ? '¥' + p.value : '-'}</td>
+        <td>${payTag}</td>
+        <td style="font-size:13px;">${costText}</td>
+        <td style="font-size:12px;color:var(--ink-2);">${p.store || '-'}</td>
+        <td style="font-size:12px;">${stockText}</td>
+        <td><span class="status-dot ${statusDot}"></span>${p.status}</td>
         <td class="td-actions">
+          ${toggleBtn}
           <button class="btn btn-text btn-sm" onclick="editProduct(${p.id})">编辑</button>
+          <button class="btn btn-text btn-sm" onclick="copyProduct(${p.id})">复制</button>
+          <button class="btn btn-text btn-sm" onclick="showToast('操作日志功能已打开', 'success')">操作日志</button>
           <button class="btn btn-danger btn-sm" onclick="deleteProduct(${p.id})">删除</button>
         </td>
       </tr>
-    `).join('');
+    `}).join('');
+  }
+
+  function toggleProductStatus(id) {
+    const p = allProducts.find(x => x.id === id);
+    if (!p) return;
+    p.status = p.status === '启用' ? '停用' : '启用';
+    showToast('奖品已' + (p.status === '启用' ? '上架' : '下架'), 'success');
+    renderProducts();
+  }
+
+  function copyProduct(id) {
+    const p = allProducts.find(x => x.id === id);
+    if (!p) return;
+    const newId = allProducts.length > 0 ? Math.max(...allProducts.map(x => x.id)) + 1 : 1;
+    const newPrizeId = 'PRIZE-' + String(newId).padStart(4, '0');
+    const newP = JSON.parse(JSON.stringify(p));
+    newP.id = newId;
+    newP.prizeId = newPrizeId;
+    newP.name = p.name + ' - 副本';
+    newP.sku = 'EX-NEW-' + String(newId).padStart(3, '0');
+    allProducts.push(newP);
+    showToast('奖品已复制', 'success');
+    renderProducts();
   }
 
   // ===== 商品CRUD =====
   let editingId = null;
 
+  function onPrizeTypeChange() {
+    const prizeType = document.getElementById('f_prizeType').value;
+    const storeGroup = document.getElementById('storeGroup');
+    const deadlineGroup = document.getElementById('deadlineGroup');
+    const usageSceneGroup = document.getElementById('usageSceneGroup');
+    const remarkGroup = document.getElementById('remarkGroup');
+    const relatedPrizeGroup = document.getElementById('relatedPrizeGroup');
+
+    // 重置所有
+    storeGroup.style.display = 'none';
+    deadlineGroup.style.display = 'none';
+    usageSceneGroup.style.display = 'none';
+    remarkGroup.style.display = 'none';
+    relatedPrizeGroup.style.display = '';
+
+    if (prizeType === '实物礼品') {
+      storeGroup.style.display = '';
+      deadlineGroup.style.display = '';
+    } else if (prizeType === '预约抽奖' || prizeType === '转盘抽奖') {
+      usageSceneGroup.style.display = '';
+      remarkGroup.style.display = '';
+    }
+
+    if (prizeType === '福利值' || prizeType === '实物礼品') {
+      relatedPrizeGroup.style.display = 'none';
+    }
+  }
+
+  function toggleDeadlineType() {
+    const type = document.querySelector('input[name="f_deadlineType"]:checked').value;
+    document.getElementById('f_deadlineDays').style.display = type === 'days' ? '' : 'none';
+    document.getElementById('f_deadlineDate').style.display = type === 'date' ? '' : 'none';
+  }
+
+  function onPayTypeChange() {
+    const payType = document.querySelector('input[name="f_payType"]:checked').value;
+    const discountSection = document.getElementById('discountSection');
+    if (payType === 'points') {
+      discountSection.style.display = '';
+    } else {
+      discountSection.style.display = 'none';
+    }
+  }
+
+  // ===== 步骤切换 =====
+  let currentStep = 1;
+  const totalSteps = 3;
+
+  function goToStep(step) {
+    currentStep = step;
+    // 更新步骤面板
+    for (let i = 1; i <= totalSteps; i++) {
+      const panel = document.getElementById('stepPanel' + i);
+      if (panel) {
+        panel.classList.toggle('active', i === step);
+      }
+    }
+    // 更新步骤指示器
+    const stepItems = document.querySelectorAll('.step-item');
+    stepItems.forEach((item, index) => {
+      const stepNum = index + 1;
+      item.classList.remove('active', 'done');
+      if (stepNum < step) {
+        item.classList.add('done');
+      } else if (stepNum === step) {
+        item.classList.add('active');
+      }
+    });
+    // 更新进度线
+    const stepperLine = document.getElementById('stepperLine');
+    if (stepperLine) {
+      const progress = ((step - 1) / (totalSteps - 1));
+      stepperLine.style.width = (progress * 100 / 3) + '%';
+    }
+    // 更新按钮显示
+    const prevBtn = document.getElementById('prevStepBtn');
+    const nextBtn = document.getElementById('nextStepBtn');
+    const saveBtn = document.getElementById('saveBtn');
+    if (prevBtn) prevBtn.style.display = step > 1 ? '' : 'none';
+    if (nextBtn) nextBtn.style.display = step < totalSteps ? '' : 'none';
+    if (saveBtn) saveBtn.style.display = step === totalSteps ? '' : 'none';
+  }
+
+  function nextStep() {
+    // 步骤1校验：奖品类型、名称
+    if (currentStep === 1) {
+      const name = document.getElementById('f_name').value.trim();
+      if (!name) {
+        showToast('请填写奖品名称', 'warning');
+        return;
+      }
+    }
+    // 步骤2校验：支付方式、消耗福利值、库存
+    if (currentStep === 2) {
+      const cost = document.getElementById('f_cost').value;
+      if (!cost && cost !== '0') {
+        showToast('请填写消耗福利值', 'warning');
+        return;
+      }
+    }
+    if (currentStep < totalSteps) {
+      goToStep(currentStep + 1);
+    }
+  }
+
+  function prevStep() {
+    if (currentStep > 1) {
+      goToStep(currentStep - 1);
+    }
+  }
+
+  // ===== 折扣计算 =====
+  function updateDiscountCalc() {
+    const cost = parseFloat(document.getElementById('f_cost').value) || 0;
+    const payType = document.querySelector('input[name="f_payType"]:checked').value;
+    const unit = payType === 'points' ? '积分' : '贝壳';
+
+    // 更新基础值显示
+    const baseValueEl = document.getElementById('discountBaseValue');
+    const baseUnitEl = document.getElementById('discountBaseUnit');
+    if (baseValueEl) baseValueEl.textContent = cost;
+    if (baseUnitEl) baseUnitEl.textContent = unit;
+
+    const levels = ['normal', 'silver', 'gold', 'diamond'];
+    levels.forEach(level => {
+      const discountInput = document.getElementById('f_discount_' + level);
+      const calcEl = document.getElementById('calc_' + level);
+      const unitEl = document.getElementById('unit_' + level);
+      if (discountInput && calcEl) {
+        const discountPercent = parseFloat(discountInput.value) || 0;
+        const calcValue = Math.round(cost * discountPercent / 100);
+        calcEl.textContent = calcValue;
+      }
+      if (unitEl) unitEl.textContent = unit;
+    });
+  }
+
   function openProductModal(id) {
     editingId = id || null;
-    document.getElementById('modalTitle').textContent = id ? '编辑商品' : '新增商品';
+    document.getElementById('modalTitle').textContent = id ? '编辑奖品' : '新增奖品';
+    renderPrizeTags();
     if (id) {
       const p = allProducts.find(x => x.id === id);
       if (!p) return;
+      document.getElementById('f_prizeType').value = p.prizeType || '实物礼品';
       document.getElementById('f_name').value = p.name;
-      document.getElementById('f_desc').value = p.desc;
-      document.getElementById('f_sku').value = p.sku;
-      document.getElementById('f_category').value = p.category;
-      document.getElementById('f_tag').value = p.tag;
-      document.getElementById('f_type').value = p.type || '实物';
-      document.getElementById('f_original').value = p.original || '';
+      document.getElementById('f_relatedPrize').value = p.relatedPrize || '';
+      if (p.prizeTag) {
+        document.getElementById('f_label').value = p.prizeTag;
+      } else {
+        document.getElementById('f_label').value = '';
+      }
+      document.getElementById('f_value').value = p.value || '';
+      document.getElementById('f_desc').value = p.desc || '';
+      document.getElementById('f_exchangeRule').value = p.exchangeRule || '';
+      const payType = p.payType || 'points';
+      document.querySelector('input[name="f_payType"][value="' + payType + '"]').checked = true;
+      document.getElementById('f_cost').value = p.cost || '';
+      document.getElementById('f_stock').value = p.stock !== undefined ? p.stock : '';
+      document.getElementById('f_status').value = p.status || '启用';
+      document.getElementById('f_discount_normal').value = p.discount?.normal ?? 100;
+      document.getElementById('f_discount_silver').value = p.discount?.silver ?? 95;
+      document.getElementById('f_discount_gold').value = p.discount?.gold ?? 90;
+      document.getElementById('f_discount_diamond').value = p.discount?.diamond ?? 85;
+      document.getElementById('f_store').value = p.store || '三亚国际免税城';
+      document.getElementById('f_monthLimit').value = p.monthLimit !== undefined ? p.monthLimit : -1;
+      document.getElementById('f_dayLimit').value = p.dayLimit !== undefined ? p.dayLimit : -1;
+      document.getElementById('f_deadlineDays').value = p.deadlineValue || -1;
+      document.getElementById('f_dailyStock').value = p.dailyStock !== undefined ? p.dailyStock : -1;
+      document.getElementById('f_usageScene').value = p.usageScene || '到店核销';
+      document.getElementById('f_remark').value = p.remark || '';
     } else {
-      document.querySelectorAll('#productModal .form-control').forEach(el => { if (el.tagName !== 'SELECT') el.value = ''; });
+      document.querySelectorAll('#productModal input[type="text"], #productModal input[type="number"], #productModal textarea').forEach(el => el.value = '');
+      document.getElementById('f_prizeType').value = '实物礼品';
+      document.getElementById('f_label').value = '';
+      document.getElementById('f_status').value = '启用';
+      document.querySelector('input[name="f_payType"][value="points"]').checked = true;
+      document.getElementById('f_discount_normal').value = 100;
+      document.getElementById('f_discount_silver').value = 95;
+      document.getElementById('f_discount_gold').value = 90;
+      document.getElementById('f_discount_diamond').value = 85;
+      document.getElementById('f_stock').value = -1;
+      document.getElementById('f_dailyStock').value = -1;
+      document.getElementById('f_monthLimit').value = -1;
+      document.getElementById('f_dayLimit').value = -1;
+      document.getElementById('f_deadlineDays').value = -1;
+      document.getElementById('f_deadlineDate').value = '';
+      document.getElementById('f_store').value = '三亚国际免税城';
+      document.getElementById('f_usageScene').value = '到店核销';
+      document.querySelector('input[name="f_deadlineType"][value="days"]').checked = true;
     }
+    onPrizeTypeChange();
+    onPayTypeChange();
+    goToStep(1);
+    updateDiscountCalc();
     document.getElementById('productModal').classList.add('show');
   }
 
@@ -881,20 +1355,56 @@
 
   function saveProduct() {
     const name = document.getElementById('f_name').value.trim();
-    if (!name) { showToast('请填写商品名称', 'warning'); return; }
-    showToast(editingId ? '商品已更新' : '商品已创建', 'success');
-    closeModal('productModal');
-    if (!editingId) {
-      const newId = Math.max(...allProducts.map(p => p.id)) + 1;
-      allProducts.push({
-        id: newId, name, desc: document.getElementById('f_desc').value,
-        sku: document.getElementById('f_sku').value || 'EX-NEW-' + String(newId).padStart(3, '0'),
-        category: document.getElementById('f_category').value,
-        tag: document.getElementById('f_tag').value,
-        type: document.getElementById('f_type').value || '实物',
-        original: parseInt(document.getElementById('f_original').value) || 0
-      });
+    if (!name) { showToast('请填写奖品名称', 'warning'); return; }
+    const prizeType = document.getElementById('f_prizeType').value;
+    const payType = document.querySelector('input[name="f_payType"]:checked').value;
+    const cost = parseInt(document.getElementById('f_cost').value) || 0;
+    if (!cost && cost !== 0) { showToast('请填写消耗福利值', 'warning'); return; }
+    const stockVal = document.getElementById('f_stock').value;
+    const stock = stockVal === '' ? 0 : parseInt(stockVal);
+
+    const payload = {
+      name,
+      prizeId: 'PRIZE-' + String(editingId || (allProducts.length + 1)).padStart(4, '0'),
+      prizeType,
+      relatedPrize: document.getElementById('f_relatedPrize').value.trim(),
+      prizeTag: document.getElementById('f_label').value,
+      value: parseInt(document.getElementById('f_value').value) || 0,
+      desc: document.getElementById('f_desc').value,
+      exchangeRule: document.getElementById('f_exchangeRule').value,
+      payType,
+      cost,
+      stock,
+      totalStock: stock,
+      status: document.getElementById('f_status').value,
+      discount: {
+        normal: parseInt(document.getElementById('f_discount_normal').value) || 100,
+        silver: parseInt(document.getElementById('f_discount_silver').value) || 95,
+        gold: parseInt(document.getElementById('f_discount_gold').value) || 90,
+        diamond: parseInt(document.getElementById('f_discount_diamond').value) || 85
+      },
+      store: document.getElementById('f_store').value,
+      monthLimit: parseInt(document.getElementById('f_monthLimit').value) || -1,
+      dayLimit: parseInt(document.getElementById('f_dayLimit').value) || -1,
+      deadlineType: document.querySelector('input[name="f_deadlineType"]:checked')?.value || 'days',
+      deadlineValue: document.querySelector('input[name="f_deadlineType"]:checked')?.value === 'date' ? document.getElementById('f_deadlineDate').value : document.getElementById('f_deadlineDays').value,
+      dailyStock: parseInt(document.getElementById('f_dailyStock').value) || -1,
+      usageScene: document.getElementById('f_usageScene').value,
+      remark: document.getElementById('f_remark').value
+    };
+
+    if (editingId) {
+      const p = allProducts.find(x => x.id === editingId);
+      if (p) {
+        Object.assign(p, payload);
+      }
+      showToast('奖品已更新', 'success');
+    } else {
+      const newId = allProducts.length > 0 ? Math.max(...allProducts.map(p => p.id)) + 1 : 1;
+      allProducts.push({ id: newId, sku: 'EX-NEW-' + String(newId).padStart(3, '0'), img: 'assets/product-default.jpg', ...payload });
+      showToast('奖品已创建', 'success');
     }
+    closeModal('productModal');
     renderProducts();
   }
 
@@ -909,22 +1419,6 @@
 
   // ===== 订单详情（已移除） =====
 
-  // ===== 分类管理 =====
-  function openCategoryModal(name, sort) {
-    document.getElementById('categoryModalTitle').textContent = (name ? '编辑分类' : '新增分类');
-    document.getElementById('cat_name').value = name || '';
-    document.getElementById('cat_sort').value = sort || '';
-    document.getElementById('categoryModal').classList.add('show');
-  }
-
-  function saveCategory() {
-    const name = document.getElementById('cat_name').value.trim();
-    if (!name) { showToast('请填写分类名称', 'warning'); return; }
-    showToast(document.getElementById('categoryModalTitle').textContent === '编辑分类' ? '分类已更新' : '分类已创建', 'success');
-    closeModal('categoryModal');
-  }
-
-
   // ===== 搜索/筛选事件 =====
   document.getElementById('searchProduct')?.addEventListener('input', renderProducts);
   document.getElementById('filterCategory')?.addEventListener('change', renderProducts);
@@ -932,27 +1426,27 @@
 
   // ===== 活动管理 =====
   const allActivities = [
-    { id: 1, date: '2026-07-19', time: '10:00', payType: 'points', status: 'active', rule: '每人每场限兑2件',
+    { id: 1, name: '夏日狂欢兑换活动', timeRange: { start: '2026-07-19 10:00', end: '2026-07-25 23:59' }, createdAt: '2026-07-18 14:30', createdBy: '管理员', status: 'active', rule: '每人每场限兑2件',
       items: [
         { name: '雅诗兰黛粉底液 30ml', type: '商品', price: 8800, stock: 50, exchanged: 12 },
         { name: 'CDF 100元代金券', type: '优惠券', price: 500, stock: 200, exchanged: 67 },
         { name: '海南免税95折券', type: '优惠券', price: 350, stock: 300, exchanged: 120 },
       ]
     },
-    { id: 2, date: '2026-07-20', time: '10:00', payType: 'shell', status: 'upcoming', rule: '',
+    { id: 2, name: '会员专属兑换活动', timeRange: { start: '2026-07-20 10:00', end: '2026-07-27 23:59' }, createdAt: '2026-07-19 09:00', createdBy: '管理员', status: 'upcoming', rule: '仅限银卡及以上会员参与',
       items: [
         { name: 'SK-II 神仙水 230ml', type: '商品', price: 12000, stock: 40, exchanged: 0 },
         { name: 'CDF 200元代金券', type: '优惠券', price: 1000, stock: 100, exchanged: 0 },
         { name: '免税店专属折扣券', type: '优惠券', price: 80, stock: 500, exchanged: 0 },
       ]
     },
-    { id: 3, date: '2026-07-21', time: '10:00', payType: 'points', status: 'upcoming', rule: '每人每场限兑3件',
+    { id: 3, name: '限时闪购活动', timeRange: { start: '2026-07-21 10:00', end: '2026-07-23 23:59' }, createdAt: '2026-07-20 11:00', createdBy: '运营专员', status: 'upcoming', rule: '每人每场限兑3件',
       items: [
         { name: '资生堂红腰子 75ml', type: '商品', price: 9500, stock: 60, exchanged: 0 },
         { name: '迪奥口红套装', type: '商品', price: 3500, stock: 25, exchanged: 0 },
       ]
     },
-    { id: 4, date: '2026-07-18', time: '10:00', payType: 'points', status: 'ended', rule: '',
+    { id: 4, name: '年中大促活动', timeRange: { start: '2026-07-18 10:00', end: '2026-07-18 23:59' }, createdAt: '2026-07-17 16:00', createdBy: '管理员', status: 'ended', rule: '',
       items: [
         { name: '海蓝之谜面霜 30ml', type: '商品', price: 15000, stock: 20, exchanged: 20 },
         { name: 'CDF 50元无门槛券', type: '优惠券', price: 300, stock: 500, exchanged: 489 },
@@ -962,26 +1456,30 @@
 
   let editingActivityId = null;
   let currentConfigActivityId = null;
-  let editingItemIndex = null;
+  
 
   function renderActivities() {
     const tbody = document.getElementById('activityTableBody');
     tbody.innerHTML = allActivities.map(a => {
-      const totalStock = a.items.reduce((s, i) => s + i.stock, 0);
-      const statusMap = { active: ['进行中', 'on'], upcoming: ['未开始', 'off'], ended: ['已结束', 'off'] };
+      const statusMap = { active: ['进行中', 'on'], upcoming: ['未开始', 'off'], ended: ['已结束', 'off'], terminated: ['已终止', 'terminated'] };
       const [statusText, statusDot] = statusMap[a.status] || ['未知', 'off'];
-      const payLabel = a.payType === 'points' ? '积分' : '贝壳';
-      const payTag = a.payType === 'points' ? 'tag-red' : 'tag-gold';
+      const isTerminated = a.status === 'terminated';
+      const statusHtml = isTerminated
+        ? '<span class="status-terminated">已终止</span>'
+        : '<span class="status-dot ' + statusDot + '"></span>' + statusText;
+      const timeRange = a.timeRange ? (a.timeRange.start + ' ~ ' + a.timeRange.end) : '-';
       return `<tr>
-        <td style="font-weight:500;">${a.date}</td>
-        <td>${a.time}</td>
-        <td>${a.items.length} 件</td>
-        <td>${totalStock}</td>
-        <td><span class="tag ${payTag}">${payLabel}</span></td>
-        <td><span class="status-dot ${statusDot}"></span>${statusText}</td>
+        <td style="font-family:monospace;font-size:12px;color:var(--ink-2);">${a.id}</td>
+        <td style="font-weight:500;">${a.name || '未命名活动'}</td>
+        <td style="font-size:12px;color:var(--ink-2);">${timeRange}</td>
+        <td style="font-size:12px;color:var(--ink-2);">${a.createdAt || '-'}</td>
+        <td style="font-size:12px;color:var(--ink-2);">${a.createdBy || '-'}</td>
+        <td>${statusHtml}</td>
         <td class="td-actions">
           <button class="btn btn-text btn-sm" onclick="openActivityConfig(${a.id})">配置</button>
-          <button class="btn btn-text btn-sm" onclick="openActivityModal(${a.id})">编辑</button>
+          ${!isTerminated ? '<button class="btn btn-text btn-sm" onclick="openActivityModal(' + a.id + ')">编辑</button>' : ''}
+          ${!isTerminated ? '<button class="btn btn-text btn-sm" onclick="copyActivity(' + a.id + ')">复制</button>' : ''}
+          ${(a.status === 'active' || a.status === 'upcoming') ? '<button class="btn btn-danger btn-sm" onclick="terminateActivity(' + a.id + ')">终止</button>' : ''}
           ${a.status === 'upcoming' ? '<button class="btn btn-danger btn-sm" onclick="deleteActivity(' + a.id + ')">删除</button>' : ''}
         </td>
       </tr>`;
@@ -995,38 +1493,45 @@
     if (id) {
       const a = allActivities.find(x => x.id === id);
       if (!a) return;
-      document.getElementById('act_date').value = a.date;
-      document.getElementById('act_time').value = a.time;
-      document.querySelector('input[name="act_payType"][value="' + a.payType + '"]').checked = true;
-      document.getElementById('act_status').value = a.status;
+      document.getElementById('act_name').value = a.name || '';
+      if (a.timeRange) {
+        document.getElementById('act_start').value = a.timeRange.start;
+        document.getElementById('act_end').value = a.timeRange.end;
+      } else {
+        document.getElementById('act_start').value = '';
+        document.getElementById('act_end').value = '';
+      }
       document.getElementById('act_rule').value = a.rule || '';
     } else {
-      document.getElementById('act_date').value = '';
-      document.getElementById('act_time').value = '10:00';
-      document.querySelector('input[name="act_payType"][value="points"]').checked = true;
-      document.getElementById('act_status').value = 'upcoming';
+      document.getElementById('act_name').value = '';
+      document.getElementById('act_start').value = '';
+      document.getElementById('act_end').value = '';
       document.getElementById('act_rule').value = '';
     }
     document.getElementById('activityModal').classList.add('show');
   }
 
   function saveActivity() {
-    const date = document.getElementById('act_date').value;
-    if (!date) { showToast('请选择活动日期', 'warning'); return; }
-    const payType = document.querySelector('input[name="act_payType"]:checked').value;
-    const time = document.getElementById('act_time').value || '10:00';
-    const status = document.getElementById('act_status').value;
+    const name = document.getElementById('act_name').value.trim();
+    if (!name) { showToast('请填写兑换活动名称', 'warning'); return; }
+    const start = document.getElementById('act_start').value;
+    const end = document.getElementById('act_end').value;
+    if (!start || !end) { showToast('请选择活动时间范围', 'warning'); return; }
     const rule = document.getElementById('act_rule').value.trim();
 
     if (editingActivityId) {
       const a = allActivities.find(x => x.id === editingActivityId);
       if (a) {
-        a.date = date; a.time = time; a.payType = payType; a.status = status; a.rule = rule;
+        a.name = name;
+        a.timeRange = { start, end };
+        a.rule = rule;
       }
       showToast('活动已更新', 'success');
     } else {
       const newId = allActivities.length > 0 ? Math.max(...allActivities.map(a => a.id)) + 1 : 1;
-      allActivities.push({ id: newId, date, time, payType, status, rule, items: [] });
+      const now = new Date();
+      const createdAt = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0') + ' ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+      allActivities.push({ id: newId, name, timeRange: { start, end }, createdAt, createdBy: '管理员', status: 'upcoming', rule, items: [] });
       showToast('活动已创建', 'success');
     }
     closeModal('activityModal');
@@ -1038,136 +1543,39 @@
     if (idx >= 0) { allActivities.splice(idx, 1); renderActivities(); showToast('活动已删除', 'success'); }
   }
 
-  // ===== 活动商品配置弹窗 =====
+  // ===== 活动奖品配置弹窗（只读） =====
   function openActivityConfig(activityId) {
     currentConfigActivityId = activityId;
     const a = allActivities.find(x => x.id === activityId);
     if (!a) return;
-    const payLabel = a.payType === 'points' ? '积分' : '贝壳';
-    document.getElementById('configActDate').textContent = a.date;
-    document.getElementById('configActPayType').textContent = payLabel;
-    document.getElementById('activityConfigTitle').textContent = a.date + ' 商品配置';
+    document.getElementById('configActName').textContent = a.name || '-';
+    const timeRange = a.timeRange ? (a.timeRange.start + ' ~ ' + a.timeRange.end) : '-';
+    document.getElementById('configActTimeRange').textContent = timeRange;
+    document.getElementById('activityConfigTitle').textContent = (a.name || '活动') + ' - 奖品配置';
     renderConfigItems(a);
     document.getElementById('activityConfigModal').classList.add('show');
   }
 
   function renderConfigItems(a) {
     const tbody = document.getElementById('configItemBody');
-    const payLabel = a.payType === 'points' ? '积分' : '贝壳';
-    const payTag = a.payType === 'points' ? 'tag-red' : 'tag-gold';
     tbody.innerHTML = a.items.map((item, idx) => {
+      const stockDisplay = item.stock === -1 ? '不限' : (item.stock - item.exchanged) + '/' + item.stock;
+      const typeColor = item.type === '优惠券' ? '#fff3e0;color:#e65100' : '#f0f0f0;color:var(--ink-2)';
       return `<tr>
         <td>
           <div style="display:flex;align-items:center;gap:8px;">
-            <span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:6px;font-size:11px;font-weight:600;background:${item.type === '优惠券' ? '#fff3e0' : '#f0f0f0'};color:${item.type === '优惠券' ? '#e65100' : 'var(--ink-2)'};">${item.type === '优惠券' ? '券' : '品'}</span>
+            <span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:6px;font-size:11px;font-weight:600;background:${typeColor}">${item.type === '优惠券' ? '券' : '品'}</span>
             <span style="font-weight:500;font-size:13px;">${item.name}</span>
           </div>
         </td>
-        <td><span class="tag" style="background:${item.type === '优惠券' ? '#fff3e0' : '#f0f0f0'};color:${item.type === '优惠券' ? '#e65100' : 'var(--ink-2)'};">${item.type}</span></td>
-        <td><span class="tag ${payTag}">${item.price.toLocaleString()} ${payLabel}</span></td>
-        <td>
-          <input type="number" value="${item.stock}" data-idx="${idx}" onchange="updateConfigStock(${currentConfigActivityId}, this)" style="width:70px;height:30px;border:1px solid var(--border);border-radius:6px;padding:0 8px;text-align:center;font-size:13px;">
-        </td>
-        <td style="font-size:12px;color:var(--ink-3);">${item.exchanged}</td>
+        <td><span style="font-size:13px;color:var(--ink-2);">${item.type}</span></td>
+        <td><span style="font-size:13px;font-weight:500;">${item.price.toLocaleString()}</span></td>
+        <td style="font-size:13px;color:var(--ink-2);">${stockDisplay}</td>
         <td class="td-actions">
-          <button class="btn btn-text btn-sm" onclick="openActivityItemModal(${currentConfigActivityId}, ${idx})">编辑</button>
           <button class="btn btn-danger btn-sm" onclick="removeActivityItem(${currentConfigActivityId}, ${idx})">移除</button>
         </td>
       </tr>`;
     }).join('');
-  }
-
-  function updateConfigStock(activityId, input) {
-    const a = allActivities.find(x => x.id === activityId);
-    if (!a) return;
-    const idx = parseInt(input.dataset.idx);
-    if (a.items[idx]) {
-      a.items[idx].stock = parseInt(input.value) || 0;
-    }
-  }
-
-  function saveActivityConfig() {
-    renderActivities();
-    closeModal('activityConfigModal');
-    showToast('商品配置已保存', 'success');
-  }
-
-  // ===== 新增/编辑活动商品弹窗 =====
-  function onItemTypeChange() {
-    const type = document.querySelector('input[name="item_type"]:checked').value;
-    document.getElementById('itemProductGroup').style.display = type === 'product' ? '' : 'none';
-    document.getElementById('itemCouponGroup').style.display = type === 'coupon' ? '' : 'none';
-  }
-
-  function openActivityItemModal(activityId, itemIndex) {
-    editingItemIndex = itemIndex;
-    document.getElementById('activityItemModalTitle').textContent = itemIndex !== null ? '编辑商品/优惠券' : '添加商品/优惠券';
-
-    // 填充商品下拉
-    const productSelect = document.getElementById('item_product');
-    productSelect.innerHTML = '<option value="">请选择商品</option>' + allProducts.map(p => '<option value="' + p.name + '">' + p.name + '</option>').join('');
-
-    const a = allActivities.find(x => x.id === activityId);
-    if (!a) return;
-
-    if (itemIndex !== null && a.items[itemIndex]) {
-      const item = a.items[itemIndex];
-      const typeVal = item.type === '商品' ? 'product' : 'coupon';
-      document.querySelector('input[name="item_type"][value="' + typeVal + '"]').checked = true;
-      onItemTypeChange();
-      if (typeVal === 'product') {
-        document.getElementById('item_product').value = item.name;
-        document.getElementById('item_coupon').value = '';
-      } else {
-        document.getElementById('item_coupon').value = item.name;
-        document.getElementById('item_product').value = '';
-      }
-      document.getElementById('item_price').value = item.price;
-      document.getElementById('item_stock').value = item.stock;
-    } else {
-      document.querySelector('input[name="item_type"][value="product"]').checked = true;
-      onItemTypeChange();
-      document.getElementById('item_product').value = '';
-      document.getElementById('item_coupon').value = '';
-      document.getElementById('item_price').value = '';
-      document.getElementById('item_stock').value = '';
-    }
-
-    document.getElementById('activityItemModal').classList.add('show');
-  }
-
-  function saveActivityItem() {
-    const typeVal = document.querySelector('input[name="item_type"]:checked').value;
-    const name = typeVal === 'product' ? document.getElementById('item_product').value : document.getElementById('item_coupon').value;
-    if (!name) { showToast(typeVal === 'product' ? '请选择商品' : '请选择优惠券', 'warning'); return; }
-    const price = parseInt(document.getElementById('item_price').value);
-    const stock = parseInt(document.getElementById('item_stock').value);
-    if (isNaN(price) || price <= 0) { showToast('请填写兑换价格', 'warning'); return; }
-    if (isNaN(stock) || stock <= 0) { showToast('请填写活动库存', 'warning'); return; }
-
-    const a = allActivities.find(x => x.id === currentConfigActivityId);
-    if (!a) return;
-
-    const newItem = {
-      name: name,
-      type: typeVal === 'product' ? '商品' : '优惠券',
-      price: price,
-      stock: stock,
-      exchanged: 0
-    };
-
-    if (editingItemIndex !== null && a.items[editingItemIndex]) {
-      newItem.exchanged = a.items[editingItemIndex].exchanged;
-      a.items[editingItemIndex] = newItem;
-      showToast('商品已更新', 'success');
-    } else {
-      a.items.push(newItem);
-      showToast('商品已添加', 'success');
-    }
-
-    closeModal('activityItemModal');
-    renderConfigItems(a);
-    renderActivities();
   }
 
   function removeActivityItem(activityId, index) {
@@ -1176,7 +1584,34 @@
     a.items.splice(index, 1);
     renderConfigItems(a);
     renderActivities();
-    showToast('商品已移除', 'success');
+    showToast('奖品已移除', 'success');
+  }
+
+  function terminateActivity(id) {
+    const a = allActivities.find(x => x.id === id);
+    if (!a) return;
+    if (!confirm('确定要终止该活动吗？终止后无法恢复。')) return;
+    a.status = 'terminated';
+    renderActivities();
+    showToast('活动已终止', 'success');
+  }
+
+  function copyActivity(id) {
+    const a = allActivities.find(x => x.id === id);
+    if (!a) return;
+    const newId = allActivities.length > 0 ? Math.max(...allActivities.map(x => x.id)) + 1 : 1;
+    const now = new Date();
+    const createdAt = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0') + ' ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+    const newAct = JSON.parse(JSON.stringify(a));
+    newAct.id = newId;
+    newAct.name = a.name + ' - 副本';
+    newAct.createdAt = createdAt;
+    newAct.createdBy = '管理员';
+    newAct.status = 'upcoming';
+    newAct.items = [];
+    allActivities.push(newAct);
+    renderActivities();
+    showToast('活动已复制', 'success');
   }
 
   // 初始化活动列表
