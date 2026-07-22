@@ -1,0 +1,1789 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>兑换中心 · 运营管理后台 (B-Plan)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #b7141b;
+    --red-deep: #8a0f15;
+    --red-light: #fef0f0;
+    --gold: #c8a36a;
+    --gold-bg: #fdf6ec;
+    --ink: #1a1a1a;
+    --ink-2: #4a4a4a;
+    --ink-3: #8a8a8a;
+    --ink-4: #b8b8b8;
+    --bg: #f5f6fa;
+    --card: #ffffff;
+    --border: #e8e8ec;
+    --success: #19be6b;
+    --warning: #f29100;
+    --danger: #e8363e;
+    --info: #3b82f6;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+    --radius: 8px;
+    --sidebar-w: 220px;
+    --header-h: 56px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { font-family: 'Noto Sans SC', -apple-system, sans-serif; color: var(--ink); background: var(--bg); font-size: 14px; line-height: 1.5; }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; font-size: inherit; }
+  input, select, textarea { font-family: inherit; font-size: 13px; }
+
+  /* Layout */
+  .layout { display: flex; min-height: 100vh; }
+  .sidebar {
+    width: var(--sidebar-w); background: #1a1a2e; color: #fff; position: fixed; top: 0; left: 0; bottom: 0;
+    display: flex; flex-direction: column; z-index: 100; transition: transform .3s;
+  }
+  .sidebar-brand { padding: 20px 18px 16px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .sidebar-brand h1 { font-size: 15px; font-weight: 600; letter-spacing: 1px; }
+  .sidebar-brand small { font-size: 11px; color: rgba(255,255,255,0.45); display: block; margin-top: 2px; }
+  .sidebar-nav { flex: 1; overflow-y: auto; padding: 12px 0; }
+  .nav-group { margin-bottom: 4px; }
+  .nav-group-title { padding: 8px 18px 4px; font-size: 11px; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 1px; }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px; padding: 10px 18px; color: rgba(255,255,255,0.65);
+    transition: all .15s; cursor: pointer; font-size: 13px; border-left: 3px solid transparent;
+  }
+  .nav-item:hover { color: #fff; background: rgba(255,255,255,0.06); }
+  .nav-item.active { color: #fff; background: rgba(183,20,27,0.15); border-left-color: var(--red); }
+  .nav-item svg { width: 18px; height: 18px; flex-shrink: 0; opacity: .7; }
+  .nav-item.active svg { opacity: 1; }
+  .nav-badge { margin-left: auto; background: var(--red); color: #fff; font-size: 10px; padding: 1px 6px; border-radius: 10px; }
+
+  .main { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
+  .header {
+    height: var(--header-h); background: #fff; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between; padding: 0 24px;
+    position: sticky; top: 0; z-index: 50;
+  }
+  .header-left { display: flex; align-items: center; gap: 16px; }
+  .header-title { font-size: 16px; font-weight: 600; }
+  .header-breadcrumb { font-size: 12px; color: var(--ink-3); }
+  .header-breadcrumb span { color: var(--ink-2); }
+  .header-right { display: flex; align-items: center; gap: 16px; }
+  .header-avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--red), var(--red-deep)); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 13px; font-weight: 600; }
+
+  .content { flex: 1; padding: 24px; }
+
+  /* Page panels */
+  .panel { display: none; }
+  .panel.active { display: block; animation: fadeIn .2s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* Stat cards */
+  .stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+  .stat-card { background: #fff; border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); }
+  .stat-label { font-size: 13px; color: var(--ink-3); margin-bottom: 8px; }
+  .stat-value { font-size: 28px; font-weight: 700; line-height: 1; }
+  .stat-value.red { color: var(--red); }
+  .stat-value.gold { color: var(--gold); }
+  .stat-value.green { color: var(--success); }
+  .stat-change { font-size: 12px; margin-top: 8px; display: flex; align-items: center; gap: 4px; }
+  .stat-change.up { color: var(--success); }
+  .stat-change.down { color: var(--danger); }
+
+  /* Toolbar */
+  .toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 12px; }
+  .toolbar-left { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .toolbar-right { display: flex; align-items: center; gap: 8px; }
+
+  /* Form controls */
+  .form-input {
+    height: 34px; padding: 0 12px; border: 1px solid var(--border); border-radius: 6px;
+    background: #fff; color: var(--ink); outline: none; transition: border-color .2s;
+  }
+  .form-input:focus { border-color: var(--red); }
+  .form-input::placeholder { color: var(--ink-4); }
+  .form-select { appearance: none; padding-right: 32px; background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5l5 5 5-5' stroke='%234a4a4a' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; cursor: pointer; }
+
+  /* Buttons */
+  .btn { display: inline-flex; align-items: center; gap: 6px; padding: 0 16px; height: 34px; border-radius: 6px; font-size: 13px; font-weight: 500; transition: all .15s; white-space: nowrap; }
+  .btn svg { width: 16px; height: 16px; }
+  .btn-primary { background: var(--red); color: #fff; }
+  .btn-primary:hover { background: var(--red-deep); }
+  .btn-outline { border: 1px solid var(--border); color: var(--ink-2); background: #fff; }
+  .btn-outline:hover { border-color: var(--red); color: var(--red); }
+  .btn-text { color: var(--red); padding: 0 8px; }
+  .btn-text:hover { background: var(--red-light); }
+  .btn-danger { color: var(--danger); }
+  .btn-danger:hover { background: #fef0f0; }
+  .btn-sm { height: 24px; padding: 0 6px; font-size: 11px; }
+  .btn-ghost { background: transparent; color: var(--ink-3); }
+  .btn-ghost:hover { color: var(--ink); background: rgba(0,0,0,0.04); }
+
+  /* Table */
+  .table-wrap { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+  .table-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; }
+  thead { background: #fafafa; }
+  th { padding: 12px 16px; text-align: left; font-size: 12px; font-weight: 600; color: var(--ink-3); border-bottom: 1px solid var(--border); white-space: nowrap; }
+  td { padding: 10px 16px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #fafafa; }
+    .td-img { width: 36px; height: 36px; border-radius: 6px; object-fit: cover; background: #f4f4f5; flex-shrink: 0; }
+  .td-actions { white-space: nowrap; }
+  .td-actions-inner { display: inline-flex; gap: 2px; align-items: center; vertical-align: middle; }
+  td .toggle { flex-shrink: 0; }
+
+  /* Tags */
+  .tag { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; }
+  .tag-red { background: var(--red-light); color: var(--red); }
+  .tag-gold { background: var(--gold-bg); color: var(--gold); }
+  .type-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 500; }
+  .tag-green { background: #edf9f0; color: var(--success); }
+  .tag-gray { background: #f4f4f5; color: var(--ink-3); }
+  .tag-blue { background: #eff6ff; color: var(--info); }
+
+  /* Pagination */
+  .pagination { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-top: 1px solid var(--border); }
+  .page-info { font-size: 12px; color: var(--ink-3); }
+  .page-btns { display: flex; gap: 4px; }
+  .page-btn { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 6px; font-size: 13px; color: var(--ink-2); border: 1px solid var(--border); background: #fff; }
+  .page-btn:hover { border-color: var(--red); color: var(--red); }
+  .page-btn.active { background: var(--red); color: #fff; border-color: var(--red); }
+
+  /* Modal */
+  .modal-mask {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 200;
+    display: none; align-items: center; justify-content: center;
+    animation: fadeIn .2s;
+  }
+  .modal-mask.show { display: flex; }
+  .modal {
+    background: #fff; border-radius: 12px; width: 800px; max-width: 92vw; max-height: 85vh;
+    display: flex; flex-direction: column; box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    animation: modalIn .25s ease;
+  }
+  @keyframes modalIn { from { opacity: 0; transform: scale(.96) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+  .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px 16px; border-bottom: 1px solid var(--border); }
+  .modal-title { font-size: 16px; font-weight: 600; }
+  .modal-close { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 6px; color: var(--ink-3); }
+  .modal-close:hover { background: #f4f4f5; color: var(--ink); }
+  .modal-body { padding: 20px 24px; overflow-y: auto; flex: 1; }
+  .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 8px; }
+
+  /* Form layout */
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-grid .full { grid-column: 1 / -1; }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-label { font-size: 13px; font-weight: 500; color: var(--ink-2); }
+  .form-label .required { color: var(--red); margin-left: 2px; }
+  .form-control { height: 36px; padding: 0 12px; border: 1px solid var(--border); border-radius: 6px; background-color: #fff; outline: none; transition: border-color .2s; width: 100%; }
+  .form-control:focus { border-color: var(--red); box-shadow: 0 0 0 3px rgba(183,20,27,0.08); }
+  textarea.form-control { height: auto; padding: 10px 12px; resize: vertical; min-height: 80px; }
+  .form-hint { font-size: 11px; color: var(--ink-4); }
+  .form-section { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); }
+  .form-section-title {
+    font-size: 13px; font-weight: 600; margin-bottom: 12px; margin-top: 20px; display: flex; align-items: center; gap: 8px;
+    background: #f4f4f5; padding: 8px 12px; border-radius: 6px; color: var(--ink-2);
+  }
+  .form-section-title:first-of-type { margin-top: 0; }
+  .form-section-title::before { content: ''; width: 3px; height: 14px; background: var(--red); border-radius: 2px; }
+  .upload-area {
+    border: 2px dashed var(--border); border-radius: 8px; padding: 20px; text-align: center; cursor: pointer;
+    transition: border-color .2s; background: #fafafa;
+  }
+  .upload-area:hover { border-color: var(--red); }
+  .upload-area.square { width: 120px; height: 120px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 12px; }
+  .upload-area.square svg { width: 20px; height: 20px; }
+  .upload-area.square .upload-hint { font-size: 11px; }
+  .radio-group { display: flex; gap: 16px; margin-top: 4px; }
+  .radio-group label { display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 13px; }
+  .dynamic-section { display: none; }
+  .dynamic-section.show { display: block; }
+
+  /* Validity box */
+  .validity-box { display: flex; align-items: center; gap: 10px; }
+  .validity-tabs { display: flex; gap: 2px; background: #f4f4f5; border-radius: 6px; padding: 2px; flex-shrink: 0; }
+  .validity-tab { padding: 5px 12px; border-radius: 4px; font-size: 12px; color: var(--ink-3); cursor: pointer; display: flex; align-items: center; gap: 4px; }
+  .validity-tab input { display: none; }
+  .validity-tab.active { background: #fff; color: var(--ink-2); font-weight: 500; box-shadow: 0 1px 2px rgba(0,0,0,0.08); }
+  .validity-box .form-control { flex: 1; min-width: 100px; margin-top: 0 !important; }
+
+  /* Share row */
+  .share-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .share-row:last-child { margin-bottom: 0; }
+  .share-label { width: 70px; font-size: 13px; color: var(--ink-2); flex-shrink: 0; }
+  .share-input { width: 100px; flex: none !important; }
+
+  /* Rich text toolbar */
+  .rte-toolbar {
+    display: flex; align-items: center; gap: 4px; padding: 6px 8px;
+    border: 1px solid var(--border); border-bottom: none; border-radius: 6px 6px 0 0;
+    background: #fafbfc; flex-wrap: wrap;
+  }
+  .rte-toolbar button {
+    width: 28px; height: 26px; border-radius: 4px; display: flex; align-items: center; justify-content: center;
+    font-size: 13px; color: var(--ink-2); transition: all .15s; cursor: pointer; border: 1px solid transparent;
+  }
+  .rte-toolbar button:hover { background: #e8e8ec; color: var(--ink); }
+  .rte-toolbar button.active { background: #e8e8ec; color: var(--red); border-color: var(--border); }
+  .rte-toolbar .rte-sep { width: 1px; height: 18px; background: var(--border); margin: 0 4px; }
+  .rte-toolbar + textarea.form-control {
+    border-radius: 0 0 6px 6px; border-top: 1px solid var(--border);
+  }
+
+  /* Inline edit table */
+  .level-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .level-card { background: #fafafa; border-radius: 8px; padding: 12px; border: 1px solid var(--border); }
+  .level-card-title { font-size: 12px; color: var(--ink-3); margin-bottom: 6px; }
+  .level-card input { width: 100%; height: 34px; border: 1px solid var(--border); border-radius: 6px; padding: 0 10px; text-align: center; font-weight: 600; }
+
+  /* Toggle switch */
+  .toggle { position: relative; width: 40px; height: 22px; cursor: pointer; }
+  .toggle input { opacity: 0; width: 0; height: 0; }
+  .toggle-slider {
+    position: absolute; inset: 0; background: var(--ink-4); border-radius: 11px; transition: .25s;
+  }
+  .toggle-slider::before {
+    content: ''; position: absolute; left: 3px; top: 3px; width: 16px; height: 16px;
+    background: #fff; border-radius: 50%; transition: .25s;
+  }
+  .toggle input:checked + .toggle-slider { background: var(--red); }
+  .toggle input:checked + .toggle-slider::before { transform: translateX(18px); }
+
+  /* Status dot */
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+  .status-dot.on { background: var(--success); }
+  .status-dot.off { background: var(--ink-4); }
+
+  /* Toast */
+  .toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; }
+  .toast-item { background: #fff; padding: 12px 20px; border-radius: 8px; box-shadow: 0 8px 30px rgba(0,0,0,0.12); display: flex; align-items: center; gap: 10px; font-size: 13px; animation: toastIn .3s ease; }
+  .toast-item.out { animation: toastOut .3s ease forwards; }
+  @keyframes toastIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+  @keyframes toastOut { to { opacity: 0; transform: translateX(20px); } }
+  .toast-icon { width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .toast-success .toast-icon { background: #edf9f0; color: var(--success); }
+  .toast-error .toast-icon { background: #fef0f0; color: var(--danger); }
+  .toast-warning .toast-icon { background: var(--gold-bg); color: var(--warning); }
+
+  /* Config sections */
+  .config-card { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px; margin-bottom: 16px; }
+  .config-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+  .config-card-title { font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+  .config-card-title svg { width: 18px; height: 18px; color: var(--red); }
+  .config-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--border); }
+  .config-row:last-child { border-bottom: none; }
+  .config-row-label { font-size: 13px; color: var(--ink-2); }
+  .config-row-label small { display: block; font-size: 11px; color: var(--ink-4); margin-top: 2px; }
+  .config-row-value { display: flex; align-items: center; gap: 8px; }
+  .config-input-sm { width: 80px; height: 30px; border: 1px solid var(--border); border-radius: 6px; padding: 0 8px; text-align: center; font-size: 13px; }
+
+  /* Entry config cards */
+  .entry-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .entry-card { border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; transition: all .2s; }
+  .entry-card:hover { border-color: var(--red); box-shadow: 0 4px 16px rgba(183,20,27,0.08); }
+  .entry-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .entry-card-icon { width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+  .entry-card-name { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .entry-card-desc { font-size: 12px; color: var(--ink-3); margin-bottom: 12px; }
+  .entry-card-meta { display: flex; align-items: center; justify-content: space-between; padding-top: 12px; border-top: 1px solid var(--border); font-size: 12px; color: var(--ink-3); }
+
+  /* Rule editor */
+  .rule-list { display: flex; flex-direction: column; gap: 10px; }
+  .rule-item { display: flex; align-items: flex-start; gap: 10px; padding: 12px 16px; background: #fafafa; border-radius: 8px; border: 1px solid var(--border); }
+  .rule-item-num { width: 24px; height: 24px; background: var(--red); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; flex-shrink: 0; margin-top: 2px; }
+  .rule-item-content { flex: 1; }
+  .rule-item-content input { width: 100%; height: 32px; border: 1px solid transparent; background: transparent; padding: 0 6px; border-radius: 4px; font-size: 13px; }
+  .rule-item-content input:focus { border-color: var(--red); background: #fff; outline: none; }
+  .rule-item-actions { display: flex; gap: 4px; }
+
+  /* Order status timeline */
+  .order-timeline { display: flex; flex-direction: column; gap: 0; padding-left: 20px; border-left: 2px solid var(--border); }
+  .timeline-item { position: relative; padding: 0 0 20px 20px; }
+  .timeline-item::before { content: ''; position: absolute; left: -26px; top: 2px; width: 10px; height: 10px; border-radius: 50%; background: var(--ink-4); border: 2px solid #fff; }
+  .timeline-item.active::before { background: var(--red); box-shadow: 0 0 0 4px rgba(183,20,27,0.15); }
+  .timeline-item:last-child { padding-bottom: 0; }
+  .timeline-text { font-size: 13px; color: var(--ink-2); }
+  .timeline-text strong { color: var(--ink); }
+  .timeline-time { font-size: 11px; color: var(--ink-4); margin-top: 2px; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-thumb { background: #d0d0d5; border-radius: 3px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+
+  /* Tag management */
+  .tag-list { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag-item { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 4px; background: #f4f4f5; font-size: 13px; }
+  .tag-item .tag-del { cursor: pointer; color: var(--ink-4); }
+  .tag-item .tag-del:hover { color: var(--danger); }
+  .status-terminated { color: var(--ink-4); }
+
+  /* Checkbox group */
+  .checkbox-group { display: flex; flex-wrap: wrap; gap: 12px; }
+  .checkbox-group label { display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 13px; }
+  #channelGroup { margin-top: 0; padding-top: 12px; }
+
+  /* ===== B-Plan Extra Styles ===== */
+  .sub-tabs { display: flex; gap: 0; border-bottom: 2px solid var(--border); margin-bottom: 16px; }
+  .sub-tab { padding: 10px 24px; font-size: 14px; font-weight: 500; border: none; background: transparent; cursor: pointer; border-bottom: 2px solid transparent; color: var(--ink-3); margin-bottom: -2px; transition: all .15s; }
+  .sub-tab:hover { color: var(--ink-2); }
+  .sub-tab.active { color: var(--red); border-bottom-color: var(--red); font-weight: 600; }
+  .sub-tab-panel { display: none; }
+  .sub-tab-panel.active { display: block; }
+
+  .cat-tree { width: 200px; background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 8px 0; flex-shrink: 0; overflow-y: auto; max-height: calc(100vh - 200px); }
+  .cat-tree-item { display: flex; align-items: center; padding: 9px 16px; font-size: 13px; color: var(--ink-2); cursor: pointer; transition: all .15s; gap: 8px; }
+  .cat-tree-item:hover { background: #fafafa; }
+  .cat-tree-item.active { background: var(--red-light); color: var(--red); font-weight: 600; }
+  .cat-tree-item .tree-icon { width: 16px; height: 16px; flex-shrink: 0; color: var(--ink-4); }
+  .cat-tree-item.active .tree-icon { color: var(--red); }
+  .cat-tree-group { padding-left: 16px; }
+  .cat-tree-item.indent { padding-left: 40px; }
+
+  .shelf-layout { display: flex; gap: 16px; }
+  .shelf-main { flex: 1; min-width: 0; }
+
+  .slot-card { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px 20px; display: flex; align-items: center; gap: 16px; margin-bottom: 10px; border: 1px solid var(--border); cursor: pointer; transition: all .15s; }
+  .slot-card:hover { border-color: var(--red); box-shadow: 0 4px 16px rgba(183,20,27,0.08); }
+  .slot-card.disabled { opacity: 0.5; }
+  .slot-type-icon { width: 42px; height: 42px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .slot-info { flex: 1; min-width: 0; }
+  .slot-name { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+  .slot-meta { font-size: 12px; color: var(--ink-3); display: flex; align-items: center; gap: 12px; }
+  .slot-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+
+  .drag-handle { cursor: grab; color: var(--ink-4); display: flex; align-items: center; }
+  .drag-handle:hover { color: var(--ink-2); }
+</style>
+</head>
+<body>
+<div class="layout">
+
+  <!-- ===== Sidebar ===== -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <h1>CDF Exchange</h1>
+      <small>兑换中心运营后台</small>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-group">
+        <div class="nav-group-title">功能模块</div>
+        <div class="nav-item active" onclick="switchPanel('prizes', this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+          奖品库
+          <span class="nav-badge">10</span>
+        </div>
+        <div class="nav-item" onclick="switchPanel('activities', this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          活动配置
+        </div>
+        <div class="nav-item" onclick="switchPanel('orders', this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+          兑换订单
+          <span class="nav-badge">23</span>
+        </div>
+        <div class="nav-item" onclick="switchPanel('pageOps', this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          页面运营
+        </div>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- ===== Main ===== -->
+  <div class="main">
+    <header class="header">
+      <div class="header-left">
+        <div>
+          <div class="header-title" id="pageTitle">奖品库</div>
+          <div class="header-breadcrumb">兑换中心 / <span id="breadcrumb">奖品库</span></div>
+        </div>
+      </div>
+      <div class="header-right">
+        <button class="btn btn-ghost btn-sm" onclick="showToast('已刷新数据', 'success')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+          刷新
+        </button>
+        <div class="header-avatar" title="运营管理员">陈</div>
+      </div>
+    </header>
+
+    <div class="content">
+
+      <!-- ========== Panel 1: 奖品库 ========== -->
+      <div class="panel active" id="panel-prizes">
+        <div class="toolbar">
+          <div class="toolbar-left">
+            <input class="form-input" style="width:180px;" placeholder="搜索奖品名称 / ID" id="searchProduct">
+            <select class="form-input form-select" style="width:140px;" id="filterPrizeType">
+              <option value="">全部类型</option>
+              <option value="实物礼品">实物礼品</option>
+              <option value="优惠券-优选单券">优惠券-优选单券</option>
+              <option value="优惠券-券中心">优惠券-券中心</option>
+              <option value="福利值">福利值</option>
+              <option value="预约抽奖">预约抽奖</option>
+              <option value="转盘抽奖">转盘抽奖</option>
+            </select>
+            <select class="form-input form-select" style="width:120px;" id="filterStatus">
+              <option value="">全部状态</option>
+              <option value="启用">启用</option>
+              <option value="停用">停用</option>
+            </select>
+          </div>
+          <div class="toolbar-right">
+            <button class="btn btn-primary" onclick="showToast('新增奖品功能与A-plan一致', 'success')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              新增商品
+            </button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width:50px;">序号</th>
+                  <th style="min-width:220px;">奖品信息</th>
+                  <th style="width:140px;">关联奖品</th>
+                  <th style="width:120px;">使用场景</th>
+                  <th style="width:110px;">适用渠道</th>
+                  <th style="width:110px;">剩余/总库存</th>
+                  <th style="width:80px;">每日库存</th>
+                  <th style="width:100px;">月限/日限</th>
+                  <th style="width:100px;">有效期</th>
+                  <th style="width:110px;">分摊方式</th>
+                  <th style="width:80px;">状态</th>
+                  <th style="width:230px;">操作</th>
+                </tr>
+              </thead>
+              <tbody id="productTableBody"></tbody>
+            </table>
+          </div>
+          <div class="pagination">
+            <div class="page-info">共 <strong id="productCount">0</strong> 条记录</div>
+            <div class="page-btns">
+              <button class="page-btn" disabled>&lt;</button>
+              <button class="page-btn active">1</button>
+              <button class="page-btn">&gt;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== Panel 2: 活动配置 ========== -->
+      <div class="panel" id="panel-activities">
+        <div class="toolbar">
+          <div class="toolbar-left">
+            <input class="form-input" style="width:180px;" placeholder="搜索活动名称 / ID" id="searchActivity">
+            <select class="form-input form-select" style="width:120px;" id="filterActStatus">
+              <option value="">全部状态</option>
+              <option value="active">进行中</option>
+              <option value="terminated">已终止</option>
+            </select>
+          </div>
+          <div class="toolbar-right">
+            <button class="btn btn-primary" onclick="showToast('新建活动功能与A-plan一致', 'success')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              新建活动
+            </button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>活动ID</th>
+                  <th>兑换活动名称</th>
+                  <th>活动时间</th>
+                  <th>活动渠道</th>
+                  <th>支付方式</th>
+                  <th style="width:80px;">奖品数量</th>
+                  <th>创建时间</th>
+                  <th>创建人</th>
+                  <th>状态</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="activityTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== Panel 3: 兑换订单 ========== -->
+      <div class="panel" id="panel-orders">
+        <div class="toolbar">
+          <div class="toolbar-left">
+            <input class="form-input" style="width:200px;" placeholder="搜索订单号 / 券编号">
+            <select class="form-input form-select" style="width:120px;"><option value="">全部状态</option><option>待核销</option><option>已核销</option><option>已过期</option><option>已退款</option></select>
+            <select class="form-input form-select" style="width:120px;"><option value="">全部类型</option><option>到店核销</option><option>实物邮寄</option></select>
+            <input class="form-input" type="date" style="width:150px;" value="2026-07-13">
+            <span style="color:var(--ink-4);">至</span>
+            <input class="form-input" type="date" style="width:150px;" value="2026-07-19">
+          </div>
+          <div class="toolbar-right">
+            <button class="btn btn-outline" onclick="showToast('已导出订单', 'success')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              导出
+            </button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <div class="table-scroll">
+            <table>
+              <thead><tr><th>订单号</th><th>商品</th><th>用户</th><th>兑换方式</th><th>消耗</th><th>状态</th><th>时间</th><th>操作</th></tr></thead>
+              <tbody id="orderTableBody"></tbody>
+            </table>
+          </div>
+          <div class="pagination">
+            <div class="page-info">共 <strong>156</strong> 条记录</div>
+            <div class="page-btns">
+              <button class="page-btn">&lt;</button>
+              <button class="page-btn active">1</button>
+              <button class="page-btn">2</button>
+              <button class="page-btn">3</button>
+              <button class="page-btn">...</button>
+              <button class="page-btn">16</button>
+              <button class="page-btn">&gt;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== Panel 4: 页面运营 ========== -->
+      <div class="panel" id="panel-pageOps">
+        <div class="sub-tabs" id="pageOpsTabs">
+          <button class="sub-tab active" onclick="switchPageOpsTab('slots', this)">展位管理</button>
+          <button class="sub-tab" onclick="switchPageOpsTab('listing', this)">奖品上架</button>
+          <button class="sub-tab" onclick="switchPageOpsTab('pageconfig', this)">页面配置</button>
+        </div>
+
+        <!-- Sub-tab 1: 展位管理 -->
+        <div class="sub-tab-panel active" id="poTab-slots">
+          <div class="toolbar">
+            <div class="toolbar-left">
+              <span style="font-size:13px;color:var(--ink-3);">管理用户端兑换中心页面的各个展示区域，支持拖拽排序和启用/停用</span>
+            </div>
+            <div class="toolbar-right">
+              <button class="btn btn-primary" onclick="openAddSlotModal()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                新增展位
+              </button>
+            </div>
+          </div>
+          <div id="displaySlotsList"></div>
+        </div>
+
+        <!-- Sub-tab 2: 奖品上架 -->
+        <div class="sub-tab-panel" id="poTab-listing">
+          <div class="shelf-layout">
+            <!-- Left: Category tree -->
+            <div class="cat-tree" id="categoryTree"></div>
+            <!-- Right: Prize listing -->
+            <div class="shelf-main">
+              <div class="toolbar">
+                <div class="toolbar-left">
+                  <input class="form-input" style="width:180px;" placeholder="搜索奖品名称" id="searchShelfPrize" oninput="renderShelfPrizes()">
+                  <select class="form-input form-select" style="width:130px;" id="filterExchangeMethod" onchange="renderShelfPrizes()">
+                    <option value="">全部方式</option>
+                    <option value="全积分">全积分</option>
+                    <option value="全贝壳">全贝壳</option>
+                    <option value="积分+现金">积分+现金</option>
+                  </select>
+                  <select class="form-input form-select" style="width:130px;" id="filterMerchant" onchange="renderShelfPrizes()">
+                    <option value="">全部门店</option>
+                  </select>
+                  <select class="form-input form-select" style="width:120px;" id="filterStockStatus" onchange="renderShelfPrizes()">
+                    <option value="">库存状态</option>
+                    <option value="inStock">有库存</option>
+                    <option value="outStock">已售罄</option>
+                    <option value="unlimited">不限库存</option>
+                  </select>
+                  <select class="form-input form-select" style="width:120px;" id="filterShelfStatus" onchange="renderShelfPrizes()">
+                    <option value="on">已上架</option>
+                    <option value="all">全部</option>
+                    <option value="off">已下架</option>
+                  </select>
+                </div>
+                <div class="toolbar-right">
+                  <button class="btn btn-outline btn-sm" onclick="batchShelfAction('off')">批量下架</button>
+                  <button class="btn btn-outline btn-sm" onclick="batchShelfAction('on')">批量上架</button>
+                  <button class="btn btn-outline btn-sm" onclick="showToast('排序调整功能开发中', 'warning')">批量调序</button>
+                </div>
+              </div>
+              <div class="table-wrap">
+                <div class="table-scroll">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th style="width:40px;"><input type="checkbox" id="shelfCheckAll" onchange="toggleShelfCheckAll(this)"></th>
+                        <th style="width:60px;">排序</th>
+                        <th style="min-width:200px;">奖品信息</th>
+                        <th style="width:100px;">奖品类型</th>
+                        <th style="width:140px;">兑换方式</th>
+                        <th style="width:160px;">适用门店/商户</th>
+                        <th style="width:110px;">库存</th>
+                        <th style="width:80px;">上架状态</th>
+                        <th style="width:130px;">来源活动</th>
+                        <th style="width:140px;">操作</th>
+                      </tr>
+                    </thead>
+                    <tbody id="shelfPrizeBody"></tbody>
+                  </table>
+                </div>
+                <div class="pagination">
+                  <div class="page-info">共 <strong id="shelfPrizeCount">0</strong> 条奖品</div>
+                  <div class="page-btns">
+                    <button class="page-btn">&lt;</button>
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn">&gt;</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sub-tab 3: 页面配置 -->
+        <div class="sub-tab-panel" id="poTab-pageconfig">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+            <!-- Banner图配置 -->
+            <div style="background:#fff;border-radius:12px;padding:24px;border:1px solid var(--border);">
+              <div style="font-weight:600;font-size:15px;margin-bottom:4px;">Banner图配置</div>
+              <div style="font-size:12px;color:var(--ink-4);margin-bottom:16px;">配置用户端兑换中心顶部Banner，建议尺寸 750x300px</div>
+              <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+                <div id="bannerPreviewThumb" style="width:160px;height:80px;background:linear-gradient(135deg,#f5d547,#e8a735);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff;font-weight:500;flex-shrink:0;overflow:hidden;">Banner预览</div>
+                <div style="flex:1;">
+                  <div style="margin-bottom:8px;">
+                    <label style="font-size:12px;color:var(--ink-3);display:block;margin-bottom:4px;">标题</label>
+                    <input class="form-control" id="bannerTitle" placeholder="请输入Banner标题" value="" style="font-size:13px;">
+                  </div>
+                  <div>
+                    <label style="font-size:12px;color:var(--ink-3);display:block;margin-bottom:4px;">跳转链接（选填）</label>
+                    <input class="form-control" id="bannerLink" placeholder="https://" value="" style="font-size:13px;">
+                  </div>
+                </div>
+              </div>
+              <div>
+                <label class="btn btn-outline btn-sm" style="cursor:pointer;">
+                  上传图片
+                  <input type="file" accept="image/*" style="display:none;" onchange="handleBannerUpload(this)">
+                </label>
+              </div>
+            </div>
+
+            <!-- 卡通形象配置 -->
+            <div style="background:#fff;border-radius:12px;padding:24px;border:1px solid var(--border);">
+              <div style="font-weight:600;font-size:15px;margin-bottom:4px;">卡通形象配置</div>
+              <div style="font-size:12px;color:var(--ink-4);margin-bottom:16px;">配置用户端兑换中心展示的卡通形象/吉祥物，分别配置积分和贝壳模式</div>
+              <div style="display:flex;align-items:flex-start;gap:16px;margin-bottom:16px;">
+                <div style="text-align:center;">
+                  <div id="mascotPreviewPoints" style="width:80px;height:80px;background:linear-gradient(135deg,#ffecd2,#fcb69f);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;overflow:hidden;margin-bottom:6px;">&#x1F31F;</div>
+                  <div style="font-size:11px;color:var(--ink-3);">积分模式</div>
+                </div>
+                <div style="flex:1;">
+                  <div style="margin-bottom:8px;">
+                    <label style="font-size:12px;color:var(--ink-3);display:block;margin-bottom:4px;">形象名称</label>
+                    <input class="form-control" id="mascotName" placeholder="如：CDF小免" value="" style="font-size:13px;">
+                  </div>
+                  <div>
+                    <label class="btn btn-outline btn-sm" style="cursor:pointer;">
+                      上传图片
+                      <input type="file" accept="image/*" style="display:none;" onchange="handleMascotUpload(this, 'points')">
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div style="display:flex;align-items:flex-start;gap:16px;">
+                <div style="text-align:center;">
+                  <div id="mascotPreviewShells" style="width:80px;height:80px;background:linear-gradient(135deg,#d4edff,#a8d8ff);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;overflow:hidden;margin-bottom:6px;">&#x1F41A;</div>
+                  <div style="font-size:11px;color:var(--ink-3);">贝壳模式</div>
+                </div>
+                <div style="flex:1;">
+                  <div style="margin-bottom:8px;">
+                    <label style="font-size:12px;color:var(--ink-3);display:block;margin-bottom:4px;">形象名称</label>
+                    <input class="form-control" id="mascotNameShells" placeholder="如：贝壳小助手" value="" style="font-size:13px;">
+                  </div>
+                  <div>
+                    <label class="btn btn-outline btn-sm" style="cursor:pointer;">
+                      上传图片
+                      <input type="file" accept="image/*" style="display:none;" onchange="handleMascotUpload(this, 'shells')">
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /layout -->
+
+
+<!-- ===== 展位配置弹窗 ===== -->
+<div class="modal-mask" id="slotConfigModal">
+  <div class="modal" style="width:640px;">
+    <div class="modal-header">
+      <div class="modal-title" id="slotModalTitle">配置展位</div>
+      <button class="modal-close" onclick="closeModal('slotConfigModal')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body" id="slotConfigBody">
+      <!-- Dynamic content -->
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('slotConfigModal')">取消</button>
+      <button class="btn btn-primary" onclick="saveSlotConfig()">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 上架信息编辑弹窗 ===== -->
+<div class="modal-mask" id="shelfEditModal">
+  <div class="modal" style="width:640px;">
+    <div class="modal-header">
+      <div class="modal-title" id="shelfEditTitle">编辑上架信息</div>
+      <button class="modal-close" onclick="closeModal('shelfEditModal')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body" id="shelfEditBody">
+      <!-- Dynamic content -->
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('shelfEditModal')">取消</button>
+      <button class="btn btn-primary" onclick="saveShelfEdit()">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 确认弹窗 ===== -->
+<div class="modal-mask" id="confirmModal" style="z-index:9999;">
+  <div class="modal" style="max-width:400px;" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <div class="modal-title" id="confirmTitle">提示</div>
+      <button class="modal-close" onclick="closeModal('confirmModal')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p id="confirmMessage" style="font-size:14px;color:var(--ink-2);line-height:1.6;"></p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('confirmModal')">取消</button>
+      <button class="btn btn-danger" id="confirmOkBtn">确定</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast 容器 -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+// ===================================================================
+// B-PLAN: CDF Exchange Center Admin - Page Operations Architecture
+// ===================================================================
+
+// ===== 奖品库数据 (same as A-plan) =====
+var allProducts = [
+  { id: 1, prizeId: 'PRIZE-0001', name: '雅诗兰黛持妆粉底液 30ml', desc: '到店兑换券', sku: 'EX-CDF-001', category: '香水化妆品', tag: '香水化妆品', type: '实物', original: 880, img: 'assets/product-1.jpg', channel: '三亚国际免税城', relatedPrize: '', stock: 25, totalStock: 100, dailyStock: 5, monthLimit: 2, dayLimit: 1, deadlineType: 'days', deadlineValue: 30, status: '启用', prizeType: '实物礼品', usageScene: ['兑换中心'], shareType: '平台统一承担', exchangeRule: '到店出示兑换码即可领取', sharePercentages: null },
+  { id: 2, prizeId: 'PRIZE-0002', name: '兰蔻小黑瓶精华肌底液 20ml', desc: '到店核销券', sku: 'EX-CDF-002', category: '香水化妆品', tag: '香水化妆品', type: '实物', original: 1280, img: 'assets/product-2.jpg', channel: '海口国际免税城', relatedPrize: '', stock: 12, totalStock: 50, dailyStock: 2, monthLimit: 1, dayLimit: 1, deadlineType: 'days', deadlineValue: 15, status: '启用', prizeType: '实物礼品', usageScene: ['兑换中心'], shareType: '门店全额承担', exchangeRule: '限海口国际免税城门店兑换', sharePercentages: null },
+  { id: 3, prizeId: 'PRIZE-0003', name: '三亚免税城 SPA 美容服务体验券', desc: '到店核销', sku: 'EX-CDF-003', category: '电子券', tag: '电子券', type: 'virtual', original: 680, img: 'assets/product-3.jpg', channel: '兑换中心', relatedPrize: '夏日狂欢预约抽奖活动', stock: 100, totalStock: 200, dailyStock: 10, monthLimit: -1, dayLimit: -1, deadlineType: 'days', deadlineValue: 90, status: '启用', prizeType: '预约抽奖', usageScene: ['兑换中心', '签到'], shareType: '', exchangeRule: '预约后到店体验', sharePercentages: null },
+  { id: 4, prizeId: 'PRIZE-0004', name: '资生堂红腰子精华 50ml', desc: '到店核销券', sku: 'EX-CDF-004', category: '香水化妆品', tag: '香水化妆品', type: '实物', original: 980, img: 'assets/product-4.jpg', channel: '博鳌免税店', relatedPrize: '', stock: 8, totalStock: 60, dailyStock: 1, monthLimit: 2, dayLimit: 1, deadlineType: 'date', deadlineValue: '2026-12-31', status: '停用', prizeType: '实物礼品', usageScene: ['兑换中心'], shareType: '混合分摊', exchangeRule: '博鳌免税店专属兑换', sharePercentages: { brand: 50, store: 50, tax: 0 } },
+  { id: 5, prizeId: 'PRIZE-0005', name: '转盘抽奖机会 x 3', desc: '三亚国免', sku: 'EX-CDF-005', category: '虚拟权益', tag: '虚拟权益', type: 'virtual', original: 0, img: 'assets/product-5.jpg', channel: '兑换中心', relatedPrize: '每日签到转盘抽奖活动', stock: 500, totalStock: 1000, dailyStock: 50, monthLimit: -1, dayLimit: -1, deadlineType: 'days', deadlineValue: 7, status: '启用', prizeType: '转盘抽奖', usageScene: ['转盘抽奖'], shareType: '', exchangeRule: '转盘抽奖获得，自动发放至账户', sharePercentages: null },
+  { id: 6, prizeId: 'PRIZE-0006', name: 'SK-II 神仙水 230ml', desc: '门店兑换券', sku: 'EX-CDF-006', category: '香水化妆品', tag: '香水化妆品', type: '实物', original: 1880, img: 'assets/product-6.jpg', channel: '海口国际免税城', relatedPrize: '', stock: 3, totalStock: 30, dailyStock: 1, monthLimit: 1, dayLimit: 1, deadlineType: 'days', deadlineValue: 60, status: '启用', prizeType: '实物礼品', usageScene: ['兑换中心'], shareType: '品牌方全额承担', exchangeRule: '限量兑换，每人限1份', sharePercentages: null },
+  { id: 7, prizeId: 'PRIZE-0007', name: '迪奥口红礼盒套装', desc: '限量典藏版', sku: 'EX-CDF-007', category: '香水化妆品', tag: '香水化妆品', type: '实物', original: 480, img: 'assets/product-7.jpg', channel: '三亚凤凰机场店', relatedPrize: '', stock: 15, totalStock: 80, dailyStock: 3, monthLimit: 3, dayLimit: 1, deadlineType: 'days', deadlineValue: 45, status: '启用', prizeType: '实物礼品', usageScene: ['兑换中心'], shareType: '平台统一承担', exchangeRule: '机场店离岛前兑换', sharePercentages: null },
+  { id: 8, prizeId: 'PRIZE-0008', name: '中免海南限定化妆包', desc: '海星主题', sku: 'EX-CDF-008', category: '香水化妆品', tag: '香水化妆品', type: '实物', original: 280, img: 'assets/product-8.jpg', channel: '海口美兰机场店', relatedPrize: '', stock: 60, totalStock: 150, dailyStock: 10, monthLimit: -1, dayLimit: 2, deadlineType: 'days', deadlineValue: -1, status: '启用', prizeType: '实物礼品', usageScene: ['兑换中心'], shareType: '门店全额承担', exchangeRule: '不限期兑换', sharePercentages: null },
+  { id: 9, prizeId: 'PRIZE-0009', name: '三亚机场贵宾室服务券', desc: '电子权益', sku: 'EX-CDF-009', category: '电子券', tag: '电子券', type: 'virtual', original: 350, img: 'assets/product-9.jpg', channel: '兑换中心', relatedPrize: '会员专属预约抽奖活动', stock: 40, totalStock: 80, dailyStock: 5, monthLimit: 2, dayLimit: 1, deadlineType: 'days', deadlineValue: 30, status: '停用', prizeType: '预约抽奖', usageScene: ['兑换中心', '签到'], shareType: '', exchangeRule: '预约成功后凭券进入贵宾室', sharePercentages: null },
+  { id: 10, prizeId: 'PRIZE-0010', name: '转盘抽奖机会 x 5', desc: '福利转盘', sku: 'EX-CDF-010', category: '虚拟权益', tag: '虚拟权益', type: 'virtual', original: 0, img: 'assets/product-10.jpg', channel: '兑换中心', relatedPrize: '周年庆转盘抽奖活动', stock: -1, totalStock: -1, dailyStock: -1, monthLimit: -1, dayLimit: -1, deadlineType: 'days', deadlineValue: -1, status: '启用', prizeType: '转盘抽奖', usageScene: ['转盘抽奖'], shareType: '', exchangeRule: '每日签到可获得转盘机会', sharePercentages: null },
+  { id: 11, prizeId: 'PRIZE-0011', name: '每日签到福利值 50', desc: '签到奖励', sku: 'EX-CDF-011', category: '虚拟权益', tag: '虚拟权益', type: 'virtual', original: 0, img: 'assets/product-10.jpg', channel: '兑换中心', relatedPrize: '', stock: -1, totalStock: -1, dailyStock: -1, monthLimit: -1, dayLimit: -1, deadlineType: 'days', deadlineValue: -1, status: '启用', prizeType: '福利值', usageScene: ['签到', '任务'], shareType: '', exchangeRule: '每日签到自动发放', sharePercentages: null },
+  { id: 12, prizeId: 'PRIZE-0012', name: 'CDF 50元无门槛券', desc: '优选单券', sku: 'EX-CDF-012', category: '电子券', tag: '电子券', type: 'virtual', original: 50, img: 'assets/product-3.jpg', channel: '兑换中心', relatedPrize: 'CDF 50元无门槛券', stock: 200, totalStock: 500, dailyStock: 20, monthLimit: 2, dayLimit: 1, deadlineType: 'days', deadlineValue: 30, status: '启用', prizeType: '优惠券-优选单券', usageScene: ['兑换中心', '签到'], shareType: '', exchangeRule: '兑换后自动发放至账户', sharePercentages: null },
+  { id: 13, prizeId: 'PRIZE-0013', name: '全场通用88折券', desc: '券中心', sku: 'EX-CDF-013', category: '电子券', tag: '电子券', type: 'virtual', original: 0, img: 'assets/product-3.jpg', channel: '兑换中心', relatedPrize: '全场通用88折券', stock: 100, totalStock: 300, dailyStock: 10, monthLimit: 1, dayLimit: 1, deadlineType: 'days', deadlineValue: 7, status: '启用', prizeType: '优惠券-券中心', usageScene: ['兑换中心', '签到'], shareType: '', exchangeRule: '券中心领取，限指定品牌使用', sharePercentages: null },
+  { id: 14, prizeId: 'PRIZE-0014', name: '新人任务福利值 200', desc: '新人任务', sku: 'EX-CDF-014', category: '虚拟权益', tag: '虚拟权益', type: 'virtual', original: 0, img: 'assets/product-10.jpg', channel: '兑换中心', relatedPrize: '', stock: 1000, totalStock: 5000, dailyStock: 100, monthLimit: 1, dayLimit: 1, deadlineType: 'days', deadlineValue: -1, status: '启用', prizeType: '福利值', usageScene: ['任务'], shareType: '', exchangeRule: '完成新人任务后一次性发放', sharePercentages: null }
+];
+
+// ===== 活动数据 (same as A-plan) =====
+var allActivities = [
+  { id: 1, name: '夏日狂欢兑换活动', timeRange: { start: '2026-07-19 10:00', end: '2026-07-25 23:59' }, createdAt: '2026-07-18 14:30', createdBy: '管理员', status: 'active', rule: '每人每场限兑2件', channel: ['APP', '微信小程序'], payType: '积分',
+    items: [
+      { name: '雅诗兰黛粉底液 30ml', type: '实物礼品', price: 8800, stock: 50, exchanged: 12, tags: ['限时', '会员专属'] },
+      { name: 'CDF 100元代金券', type: '优惠券-优选单券', price: 500, stock: -1, exchanged: 67, tags: ['限时'] },
+      { name: '海南免税95折券', type: '优惠券-券中心', price: 350, stock: 300, exchanged: 120, tags: ['节日活动'] },
+      { name: '中免海南限定化妆包', type: '实物礼品', price: 2800, stock: -1, exchanged: 0, tags: ['品牌联合'] },
+    ]
+  },
+  { id: 2, name: '会员专属兑换活动', timeRange: { start: '2026-07-20 10:00', end: '2026-07-27 23:59' }, createdAt: '2026-07-19 09:00', createdBy: '管理员', status: 'active', rule: '仅限银卡及以上会员参与', channel: ['APP', 'H5'], payType: '贝壳',
+    items: [
+      { name: 'SK-II 神仙水 230ml', type: '实物礼品', price: 12000, stock: 40, exchanged: 0, tags: ['会员专属'] },
+      { name: 'CDF 200元代金券', type: '优惠券-优选单券', price: 1000, stock: -1, exchanged: 0, tags: ['会员专属', '满减活动'] },
+      { name: '免税店专属折扣券', type: '优惠券-券中心', price: 80, stock: 500, exchanged: 0, tags: ['满减活动'] },
+    ]
+  },
+  { id: 3, name: '限时闪购活动', timeRange: { start: '2026-07-21 10:00', end: '2026-07-23 23:59' }, createdAt: '2026-07-20 11:00', createdBy: '运营专员', status: 'active', rule: '每人每场限兑3件', channel: ['APP'], payType: '积分',
+    items: [
+      { name: '资生堂红腰子 75ml', type: '实物礼品', price: 9500, stock: 60, exchanged: 0, tags: ['限时', '品牌联合'] },
+      { name: '迪奥口红套装', type: '实物礼品', price: 3500, stock: -1, exchanged: 0, tags: ['限时'] },
+      { name: '全场通用88折券', type: '优惠券-券中心', price: 200, stock: -1, exchanged: 0, tags: ['限时', '满减活动'] },
+    ]
+  },
+  { id: 4, name: '年中大促活动', timeRange: { start: '2026-07-18 10:00', end: '2026-07-18 23:59' }, createdAt: '2026-07-17 16:00', createdBy: '管理员', status: 'active', rule: '', channel: ['微信小程序', '支付宝小程序', 'H5'], payType: '贝壳',
+    items: [
+      { name: '海蓝之谜面霜 30ml', type: '实物礼品', price: 15000, stock: 20, exchanged: 20, tags: ['节日活动'] },
+      { name: 'CDF 50元无门槛券', type: '优惠券-优选单券', price: 300, stock: -1, exchanged: 489, tags: ['新人专享'] },
+    ]
+  },
+  { id: 5, name: '春节限时兑换活动', timeRange: { start: '2026-01-20 10:00', end: '2026-02-10 23:59' }, createdAt: '2026-01-15 09:00', createdBy: '管理员', status: 'terminated', rule: '每人每场限兑2件', channel: ['APP', '微信小程序', 'H5'], payType: '积分',
+    items: [
+      { name: '雅诗兰黛持妆粉底液 30ml', type: '实物礼品', price: 8800, stock: 100, exchanged: 95, tags: [] },
+      { name: '兰蔻小黑瓶精华肌底液 20ml', type: '实物礼品', price: 12800, stock: 50, exchanged: 48, tags: [] },
+      { name: 'CDF 100元代金券', type: '优惠券-优选单券', price: 500, stock: 200, exchanged: 200, tags: [] },
+    ]
+  }
+];
+
+// ===== 订单数据 (static) =====
+var orders = [
+  { id: 'EX20260719001', product: '雅诗兰黛粉底液', user: '王** (138****8888)', method: '全积分', cost: '7,600 积分', status: '待核销', statusClass: 'tag-gold', time: '07-19 14:32' },
+  { id: 'EX20260719002', product: '兰蔻小黑瓶', user: '李** (186****6677)', method: '全积分', cost: '10,200 积分', status: '已核销', statusClass: 'tag-green', time: '07-19 11:08' },
+  { id: 'EX20260718015', product: '迪奥口红礼盒', user: '张** (159****3344)', method: '全贝壳', cost: '288 贝壳', status: '配送中', statusClass: 'tag-blue', time: '07-18 16:45' },
+  { id: 'EX20260717008', product: 'SPA 体验券', user: '陈** (177****2211)', method: '全积分', cost: '6,500 积分', status: '已核销', statusClass: 'tag-green', time: '07-17 10:22' },
+  { id: 'EX20260715003', product: 'SK-II 神仙水', user: '赵** (135****9900)', method: '全积分', cost: '11,160 积分', status: '已过期', statusClass: 'tag-gray', time: '07-15 09:18' },
+  { id: 'EX20260714007', product: 'CDF 100元代金券', user: '刘** (188****4455)', method: '积分+现金', cost: '500 积分 + 0.01元', status: '已核销', statusClass: 'tag-green', time: '07-14 15:20' },
+  { id: 'EX20260713012', product: '有税商户85折券', user: '周** (176****7788)', method: '积分+现金', cost: '80 积分 + 0.01元', status: '已核销', statusClass: 'tag-green', time: '07-13 13:55' }
+];
+
+// ===== B-PLAN: 展位数据 =====
+var displaySlots = [
+  { id: 1, name: '首页轮播Banner', type: '轮播Banner', sort: 1, enabled: true, config: { images: [{ title: '夏日狂欢兑换季', link: '' }] } },
+  { id: 2, name: '卡通形象', type: '卡通形象', sort: 2, enabled: true, config: { payType: '积分', image: '' } },
+  { id: 3, name: '限时抢兑专区', type: '活动专区', sort: 3, enabled: true, config: { tag: '限时', layout: 'scroll' } },
+  { id: 4, name: '会员尊享推荐', type: '推荐位', sort: 4, enabled: true, config: { maxItems: 8 } },
+  { id: 5, name: '分类Tab', type: '标签导航', sort: 5, enabled: true, config: { tabs: ['全部', '实物礼品', '优惠券/权益', '虚拟权益'] } }
+];
+
+// ===== B-PLAN: 上架奖品数据 =====
+var shelfPrizes = [
+  { id: 'sp1', name: '雅诗兰黛持妆粉底液 30ml', type: '实物礼品', subType: '', exchangeMethod: '全贝壳', price: 500, cashPrice: 0, merchant: '三亚国际免税城', stock: 38, totalStock: 50, shelfStatus: 'on', sort: 1, sourceActivity: '夏日狂欢兑换活动', category: '实物礼品', tags: ['限时', '会员专属'] },
+  { id: 'sp2', name: 'CDF 100元代金券', type: '优惠券/权益', subType: '门店兑换券', exchangeMethod: '全积分', price: 500, cashPrice: 0, merchant: 'CDF官方', stock: -1, totalStock: -1, shelfStatus: 'on', sort: 2, sourceActivity: '夏日狂欢兑换活动', category: '优惠券/权益', tags: ['限时'] },
+  { id: 'sp3', name: '有税商户85折券', type: '优惠券/权益', subType: '有税商户代金券', exchangeMethod: '积分+现金', price: 80, cashPrice: 0.01, merchant: '海口国际免税城-有税区', stock: 200, totalStock: 500, shelfStatus: 'on', sort: 3, sourceActivity: '会员专属兑换活动', category: '优惠券/权益', tags: ['满减活动'] },
+  { id: 'sp4', name: 'SK-II 神仙水 230ml', type: '实物礼品', subType: '', exchangeMethod: '全贝壳', price: 800, cashPrice: 0, merchant: '海口国际免税城', stock: 40, totalStock: 40, shelfStatus: 'on', sort: 4, sourceActivity: '会员专属兑换活动', category: '实物礼品', tags: ['会员专属'] },
+  { id: 'sp5', name: 'CDF 200元代金券', type: '优惠券/权益', subType: '门店兑换券', exchangeMethod: '全贝壳', price: 200, cashPrice: 0, merchant: 'CDF官方', stock: -1, totalStock: -1, shelfStatus: 'on', sort: 5, sourceActivity: '会员专属兑换活动', category: '优惠券/权益', tags: ['会员专属', '满减活动'] },
+  { id: 'sp6', name: '资生堂红腰子精华 75ml', type: '实物礼品', subType: '', exchangeMethod: '全积分', price: 9500, cashPrice: 0, merchant: '博鳌免税店', stock: 60, totalStock: 60, shelfStatus: 'on', sort: 6, sourceActivity: '限时闪购活动', category: '实物礼品', tags: ['限时', '品牌联合'] },
+  { id: 'sp7', name: '迪奥口红套装', type: '实物礼品', subType: '', exchangeMethod: '全积分', price: 3500, cashPrice: 0, merchant: '三亚凤凰机场店', stock: -1, totalStock: -1, shelfStatus: 'on', sort: 7, sourceActivity: '限时闪购活动', category: '实物礼品', tags: ['限时'] },
+  { id: 'sp8', name: '全场通用88折券', type: '优惠券/权益', subType: '有税商户代金券', exchangeMethod: '全积分', price: 200, cashPrice: 0, merchant: '全部门店', stock: -1, totalStock: -1, shelfStatus: 'on', sort: 8, sourceActivity: '限时闪购活动', category: '优惠券/权益', tags: ['限时', '满减活动'] },
+  { id: 'sp9', name: '海蓝之谜面霜 30ml', type: '实物礼品', subType: '', exchangeMethod: '全贝壳', price: 1200, cashPrice: 0, merchant: '三亚国际免税城', stock: 0, totalStock: 20, shelfStatus: 'on', sort: 9, sourceActivity: '年中大促活动', category: '实物礼品', tags: ['节日活动'] },
+  { id: 'sp10', name: 'CDF 50元无门槛券', type: '优惠券/权益', subType: '门店兑换券', exchangeMethod: '全贝壳', price: 50, cashPrice: 0, merchant: 'CDF官方', stock: -1, totalStock: -1, shelfStatus: 'on', sort: 10, sourceActivity: '年中大促活动', category: '优惠券/权益', tags: ['新人专享'] },
+  { id: 'sp11', name: '海南免税95折券', type: '优惠券/权益', subType: '门店兑换券', exchangeMethod: '全积分', price: 350, cashPrice: 0, merchant: 'CDF官方', stock: 180, totalStock: 300, shelfStatus: 'on', sort: 11, sourceActivity: '夏日狂欢兑换活动', category: '优惠券/权益', tags: ['节日活动'] },
+  { id: 'sp12', name: '中免海南限定化妆包', type: '实物礼品', subType: '', exchangeMethod: '全积分', price: 2800, cashPrice: 0, merchant: '海口美兰机场店', stock: -1, totalStock: -1, shelfStatus: 'on', sort: 12, sourceActivity: '夏日狂欢兑换活动', category: '实物礼品', tags: ['品牌联合'] },
+  { id: 'sp13', name: '转盘抽奖机会 x 3', type: '虚拟权益', subType: '抽奖次数', exchangeMethod: '全积分', price: 100, cashPrice: 0, merchant: '全部', stock: 500, totalStock: 1000, shelfStatus: 'on', sort: 13, sourceActivity: '每日签到转盘抽奖活动', category: '虚拟权益', tags: [] },
+  { id: 'sp14', name: 'SPA 美容服务体验券', type: '虚拟权益', subType: '其他虚拟权益', exchangeMethod: '全积分', price: 6500, cashPrice: 0, merchant: '三亚国际免税城', stock: 100, totalStock: 200, shelfStatus: 'on', sort: 14, sourceActivity: '夏日狂欢兑换活动', category: '虚拟权益', tags: [] },
+  { id: 'sp15', name: '兰蔻小黑瓶精华肌底液 20ml', type: '实物礼品', subType: '', exchangeMethod: '全贝壳', price: 600, cashPrice: 0, merchant: '海口国际免税城', stock: 2, totalStock: 50, shelfStatus: 'off', sort: 15, sourceActivity: '春节限时兑换活动', category: '实物礼品', tags: [] },
+  { id: 'sp16', name: '免税店专属折扣券', type: '优惠券/权益', subType: '有税商户代金券', exchangeMethod: '全贝壳', price: 80, cashPrice: 0, merchant: '全部门店', stock: 500, totalStock: 500, shelfStatus: 'on', sort: 16, sourceActivity: '会员专属兑换活动', category: '优惠券/权益', tags: ['满减活动'] },
+  { id: 'sp17', name: '三亚机场贵宾室服务券', type: '虚拟权益', subType: '其他虚拟权益', exchangeMethod: '积分+现金', price: 300, cashPrice: 0.01, merchant: '三亚凤凰机场店', stock: 40, totalStock: 80, shelfStatus: 'off', sort: 17, sourceActivity: '会员专属兑换活动', category: '虚拟权益', tags: [] }
+];
+
+// ===== Category tree data =====
+var categoryTree = [
+  { key: 'all', label: '全部奖品', icon: 'grid', children: [] },
+  { key: '实物礼品', label: '实物礼品', icon: 'box', children: [] },
+  { key: '优惠券/权益', label: '优惠券/权益', icon: 'ticket', children: [
+    { key: '门店兑换券', label: '门店兑换券' },
+    { key: '有税商户代金券', label: '有税商户代金券' }
+  ]},
+  { key: '虚拟权益', label: '虚拟权益', icon: 'zap', children: [
+    { key: '抽奖次数', label: '抽奖次数' },
+    { key: '其他虚拟权益', label: '其他虚拟权益' }
+  ]}
+];
+
+var currentCategory = 'all';
+var editingSlotId = null;
+var editingShelfId = null;
+
+// ===================================================================
+// Panel Switching
+// ===================================================================
+function switchPanel(panelId, navEl) {
+  var panels = document.querySelectorAll('.panel');
+  for (var i = 0; i < panels.length; i++) { panels[i].classList.remove('active'); }
+  var navItems = document.querySelectorAll('.nav-item');
+  for (var i = 0; i < navItems.length; i++) { navItems[i].classList.remove('active'); }
+  document.getElementById('panel-' + panelId).classList.add('active');
+  if (navEl) {
+    navEl.classList.add('active');
+  } else {
+    for (var i = 0; i < navItems.length; i++) {
+      var onclickAttr = navItems[i].getAttribute('onclick');
+      if (onclickAttr && onclickAttr.indexOf("'" + panelId + "'") !== -1) {
+        navItems[i].classList.add('active');
+      }
+    }
+  }
+  var titles = { prizes: '奖品库', activities: '活动配置', orders: '兑换订单', pageOps: '页面运营' };
+  var breadcrumbs = { prizes: '奖品库', activities: '活动配置', orders: '兑换订单', pageOps: '兑换中心 / 页面运营' };
+  document.getElementById('pageTitle').textContent = titles[panelId] || panelId;
+  document.getElementById('breadcrumb').textContent = breadcrumbs[panelId] || panelId;
+
+  if (panelId === 'prizes') renderProducts();
+  if (panelId === 'activities') renderActivities();
+  if (panelId === 'orders') renderOrders();
+  if (panelId === 'pageOps') { renderDisplaySlots(); renderCategoryTree(); renderShelfPrizes(); }
+}
+
+// ===================================================================
+// Render Products (simplified from A-plan)
+// ===================================================================
+var typeStyleMap = {
+  '实物礼品': 'background:#e8f5e9;color:#2e7d32;',
+  '优惠券-优选单券': 'background:#e3f2fd;color:#1565c0;',
+  '优惠券-券中心': 'background:#e8f0fe;color:#1a73e8;',
+  '福利值': 'background:#fff3e0;color:#e65100;',
+  '预约抽奖': 'background:#f3e5f5;color:#7b1fa2;',
+  '转盘抽奖': 'background:#fce4ec;color:#c62828;'
+};
+
+function renderProducts() {
+  var search = '';
+  var searchEl = document.getElementById('searchProduct');
+  if (searchEl) search = searchEl.value.toLowerCase();
+  var prizeTypeFilter = '';
+  var ptEl = document.getElementById('filterPrizeType');
+  if (ptEl) prizeTypeFilter = ptEl.value;
+  var statusFilter = '';
+  var stEl = document.getElementById('filterStatus');
+  if (stEl) statusFilter = stEl.value;
+
+  var list = [];
+  for (var i = 0; i < allProducts.length; i++) {
+    var p = allProducts[i];
+    if (search && p.name.toLowerCase().indexOf(search) === -1 && p.sku.toLowerCase().indexOf(search) === -1) continue;
+    if (prizeTypeFilter && p.prizeType !== prizeTypeFilter) continue;
+    if (statusFilter && p.status !== statusFilter) continue;
+    list.push(p);
+  }
+
+  document.getElementById('productCount').textContent = list.length;
+
+  var tbody = document.getElementById('productTableBody');
+  if (list.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="12" style="text-align:center;color:var(--ink-4);padding:40px 0;">暂无数据</td></tr>';
+    return;
+  }
+
+  var html = '';
+  for (var i = 0; i < list.length; i++) {
+    var p = list[i];
+    var stockText = (p.stock === -1 ? '不限' : p.stock) + ' / ' + (p.totalStock === -1 ? '不限' : p.totalStock);
+    var dailyStockText = p.dailyStock === -1 ? '不限' : p.dailyStock;
+    var limitText = (p.monthLimit === -1 ? '不限' : p.monthLimit) + ' / ' + (p.dayLimit === -1 ? '不限' : p.dayLimit);
+    var validityText = '-';
+    if (p.prizeType === '实物礼品') {
+      if (p.deadlineType === 'date') validityText = p.deadlineValue || '-';
+      else if (p.deadlineValue === -1) validityText = '不限';
+      else validityText = p.deadlineValue + '天';
+    }
+    var statusDot = p.status === '启用' ? 'on' : 'off';
+    var ts = typeStyleMap[p.prizeType] || 'background:#e3f2fd;color:#1565c0;';
+    var toggleBtn = p.status === '启用'
+      ? '<button class="btn btn-danger btn-sm" onclick="toggleProductStatus(' + p.id + ')">停用</button>'
+      : '<button class="btn btn-text btn-sm" onclick="toggleProductStatus(' + p.id + ')">启用</button>';
+    var channelText = p.channel || '-';
+    var relatedText = p.relatedPrize || '-';
+    var sceneHtml = '';
+    for (var j = 0; j < (p.usageScene || []).length; j++) { sceneHtml += '<div>' + p.usageScene[j] + '</div>'; }
+    if (!sceneHtml) sceneHtml = '-';
+    var shareText = p.shareType || '-';
+
+    html += '<tr>'
+      + '<td style="color:var(--ink-4);font-size:12px;">' + (i + 1) + '</td>'
+      + '<td><div style="display:flex;align-items:center;gap:10px;"><img class="td-img" src="' + p.img + '" alt="" onerror="this.style.background=\'#f0e6d6\'">'
+      + '<div><div style="font-weight:500;font-size:13px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + p.name + '</div>'
+      + '<div style="font-size:11px;color:var(--ink-4);font-family:monospace;margin-top:2px;">' + (p.prizeId || '') + '</div>'
+      + '<div style="margin-top:3px;"><span class="type-badge" style="' + ts + 'font-size:11px;">' + (p.prizeType || p.type) + '</span></div>'
+      + '</div></div></td>'
+      + '<td style="font-size:12px;color:var(--ink-2);max-width:140px;line-height:1.4;">' + relatedText + '</td>'
+      + '<td style="font-size:12px;color:var(--ink-2);line-height:1.6;">' + sceneHtml + '</td>'
+      + '<td style="font-size:12px;color:var(--ink-2);">' + channelText + '</td>'
+      + '<td style="font-size:12px;">' + stockText + '</td>'
+      + '<td style="font-size:12px;">' + dailyStockText + '</td>'
+      + '<td style="font-size:12px;">' + limitText + '</td>'
+      + '<td style="font-size:12px;">' + validityText + '</td>'
+      + '<td style="font-size:12px;color:var(--ink-2);">' + shareText + '</td>'
+      + '<td><span class="status-dot ' + statusDot + '"></span>' + p.status + '</td>'
+      + '<td class="td-actions"><div class="td-actions-inner">' + toggleBtn
+      + '<button class="btn btn-text btn-sm" onclick="showToast(\'编辑功能与A-plan一致\', \'success\')">编辑</button>'
+      + '<button class="btn btn-text btn-sm" onclick="showToast(\'操作日志\', \'success\')">日志</button>'
+      + '<button class="btn btn-danger btn-sm" onclick="deleteProduct(' + p.id + ')">删除</button>'
+      + '</div></td></tr>';
+  }
+  tbody.innerHTML = html;
+}
+
+function toggleProductStatus(id) {
+  for (var i = 0; i < allProducts.length; i++) {
+    if (allProducts[i].id === id) {
+      allProducts[i].status = allProducts[i].status === '启用' ? '停用' : '启用';
+      showToast('奖品已' + allProducts[i].status, 'success');
+      break;
+    }
+  }
+  renderProducts();
+}
+
+function deleteProduct(id) {
+  showConfirm('删除奖品', '确认删除该奖品吗？此操作不可恢复。', function() {
+    for (var i = 0; i < allProducts.length; i++) {
+      if (allProducts[i].id === id) { allProducts.splice(i, 1); break; }
+    }
+    showToast('奖品已删除', 'success');
+    renderProducts();
+  });
+}
+
+// ===================================================================
+// Render Activities (simplified from A-plan)
+// ===================================================================
+function renderActivities() {
+  var search = '';
+  var searchEl = document.getElementById('searchActivity');
+  if (searchEl) search = searchEl.value.toLowerCase();
+  var statusFilter = '';
+  var stEl = document.getElementById('filterActStatus');
+  if (stEl) statusFilter = stEl.value;
+
+  var filtered = [];
+  for (var i = 0; i < allActivities.length; i++) {
+    var a = allActivities[i];
+    if (search && a.name.toLowerCase().indexOf(search) === -1 && String(a.id).indexOf(search) === -1) continue;
+    if (statusFilter && a.status !== statusFilter) continue;
+    filtered.push(a);
+  }
+
+  var tbody = document.getElementById('activityTableBody');
+  var html = '';
+  for (var i = 0; i < filtered.length; i++) {
+    var a = filtered[i];
+    var isTerminated = a.status === 'terminated';
+    var statusHtml = isTerminated
+      ? '<span class="status-dot off"></span><span style="color:var(--ink-4);">已终止</span>'
+      : '<span class="status-dot on"></span>进行中';
+    var timeRange = a.timeRange ? (a.timeRange.start + ' ~ ' + a.timeRange.end) : '-';
+    var channelText = '';
+    for (var j = 0; j < (a.channel || []).length; j++) {
+      if (j > 0) channelText += '、';
+      channelText += a.channel[j];
+    }
+    if (!channelText) channelText = '-';
+    var payTypeBadge = a.payType === '贝壳'
+      ? '<span class="tag tag-gold">贝壳</span>'
+      : '<span class="tag tag-blue">积分</span>';
+    var prizeCount = (a.items || []).length;
+    var actions = '<button class="btn btn-text btn-sm" onclick="showToast(\'奖品配置\', \'success\')">奖品配置</button>'
+      + '<button class="btn btn-text btn-sm" onclick="showToast(\'编辑活动\', \'success\')">编辑</button>'
+      + '<button class="btn btn-text btn-sm" onclick="showToast(\'活动已复制\', \'success\')">复制</button>';
+    if (!isTerminated) {
+      actions += '<button class="btn btn-danger btn-sm" onclick="terminateActivity(' + a.id + ')">终止</button>';
+    }
+
+    html += '<tr>'
+      + '<td style="font-family:monospace;font-size:12px;color:var(--ink-2);">' + a.id + '</td>'
+      + '<td style="font-weight:500;">' + (a.name || '未命名活动') + '</td>'
+      + '<td style="font-size:12px;color:var(--ink-2);">' + timeRange + '</td>'
+      + '<td style="font-size:12px;color:var(--ink-2);">' + channelText + '</td>'
+      + '<td>' + payTypeBadge + '</td>'
+      + '<td style="font-size:13px;font-weight:500;text-align:center;">' + prizeCount + '</td>'
+      + '<td style="font-size:12px;color:var(--ink-2);">' + (a.createdAt || '-') + '</td>'
+      + '<td style="font-size:12px;color:var(--ink-2);">' + (a.createdBy || '-') + '</td>'
+      + '<td>' + statusHtml + '</td>'
+      + '<td class="td-actions"><div class="td-actions-inner">' + actions + '</div></td>'
+      + '</tr>';
+  }
+  tbody.innerHTML = html;
+}
+
+function terminateActivity(id) {
+  showConfirm('终止活动', '活动终止后不可恢复，确定要终止该活动吗？', function() {
+    for (var i = 0; i < allActivities.length; i++) {
+      if (allActivities[i].id === id) { allActivities[i].status = 'terminated'; break; }
+    }
+    renderActivities();
+    showToast('活动已终止', 'success');
+  });
+}
+
+// ===================================================================
+// Render Orders (static)
+// ===================================================================
+function renderOrders() {
+  var tbody = document.getElementById('orderTableBody');
+  var html = '';
+  for (var i = 0; i < orders.length; i++) {
+    var o = orders[i];
+    html += '<tr>'
+      + '<td style="font-family:monospace;font-size:12px;">' + o.id + '</td>'
+      + '<td>' + o.product + '</td>'
+      + '<td>' + o.user + '</td>'
+      + '<td><span class="tag ' + (o.method === '全贝壳' ? 'tag-gold' : o.method === '积分+现金' ? 'tag-blue' : 'tag-red') + '">' + o.method + '</span></td>'
+      + '<td style="font-weight:600;">' + o.cost + '</td>'
+      + '<td><span class="tag ' + o.statusClass + '">' + o.status + '</span></td>'
+      + '<td style="font-size:12px;color:var(--ink-3);">' + o.time + '</td>'
+      + '<td class="td-actions"><button class="btn btn-text btn-sm" onclick="showToast(\'订单详情\', \'success\')">详情</button></td>'
+      + '</tr>';
+  }
+  tbody.innerHTML = html;
+}
+
+// ===================================================================
+// Page Operations - Tab Switching
+// ===================================================================
+function switchPageOpsTab(tab, btn) {
+  var panels = document.querySelectorAll('.sub-tab-panel');
+  for (var i = 0; i < panels.length; i++) { panels[i].classList.remove('active'); }
+  var tabs = document.querySelectorAll('#pageOpsTabs .sub-tab');
+  for (var i = 0; i < tabs.length; i++) { tabs[i].classList.remove('active'); }
+  document.getElementById('poTab-' + tab).classList.add('active');
+  btn.classList.add('active');
+  if (tab === 'slots') renderDisplaySlots();
+  if (tab === 'listing') { renderCategoryTree(); renderShelfPrizes(); }
+}
+
+// ===================================================================
+// Tab 1: Display Slots Management
+// ===================================================================
+var slotTypeColors = {
+  '轮播Banner': 'background:linear-gradient(135deg,#f5d547,#e8a735);color:#fff;',
+  '卡通形象': 'background:linear-gradient(135deg,#ffecd2,#fcb69f);color:#8a5a2a;',
+  '活动专区': 'background:linear-gradient(135deg,#a8edea,#fed6e3);color:#2d6a6a;',
+  '推荐位': 'background:linear-gradient(135deg,#d4fc79,#96e6a1);color:#1a5c1a;',
+  '标签导航': 'background:linear-gradient(135deg,#c2e9fb,#a1c4fd);color:#1a3f6f;'
+};
+
+function renderDisplaySlots() {
+  var container = document.getElementById('displaySlotsList');
+  // sort by sort field
+  var sorted = displaySlots.slice().sort(function(a, b) { return a.sort - b.sort; });
+
+  var html = '';
+  for (var i = 0; i < sorted.length; i++) {
+    var slot = sorted[i];
+    var colorStyle = slotTypeColors[slot.type] || 'background:#f4f4f5;color:var(--ink-2);';
+    var iconText = '';
+    if (slot.type === '轮播Banner') iconText = '&#x1F3A8;';
+    else if (slot.type === '卡通形象') iconText = '&#x1F31F;';
+    else if (slot.type === '活动专区') iconText = '&#x26A1;';
+    else if (slot.type === '推荐位') iconText = '&#x2B50;';
+    else if (slot.type === '标签导航') iconText = '&#x1F4CC;';
+    else iconText = '&#x25A0;';
+
+    var configHint = '';
+    if (slot.type === '轮播Banner') configHint = (slot.config.images || []).length + ' 张图片';
+    else if (slot.type === '卡通形象') configHint = '支付方式: ' + (slot.config.payType || '积分');
+    else if (slot.type === '活动专区') configHint = '标签: ' + (slot.config.tag || '-') + ' / 布局: ' + (slot.config.layout || '-');
+    else if (slot.type === '推荐位') configHint = '最多展示 ' + (slot.config.maxItems || 8) + ' 个奖品';
+    else if (slot.type === '标签导航') configHint = (slot.config.tabs || []).join('、');
+
+    html += '<div class="slot-card' + (slot.enabled ? '' : ' disabled') + '" onclick="openSlotConfig(' + slot.id + ')">'
+      + '<div class="drag-handle" onclick="event.stopPropagation();showToast(\'拖拽排序\', \'warning\')">'
+      + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>'
+      + '</div>'
+      + '<div class="slot-type-icon" style="' + colorStyle + '">' + iconText + '</div>'
+      + '<div class="slot-info">'
+      + '<div class="slot-name">' + slot.name + '</div>'
+      + '<div class="slot-meta"><span>类型: ' + slot.type + '</span><span>排序: ' + slot.sort + '</span><span>' + configHint + '</span></div>'
+      + '</div>'
+      + '<div class="slot-actions" onclick="event.stopPropagation();">'
+      + '<label class="toggle" title="' + (slot.enabled ? '点击停用' : '点击启用') + '">'
+      + '<input type="checkbox"' + (slot.enabled ? ' checked' : '') + ' onchange="toggleSlotEnabled(' + slot.id + ', this.checked)">'
+      + '<span class="toggle-slider"></span></label>'
+      + '<button class="btn btn-outline btn-sm" onclick="moveSlot(' + slot.id + ', -1)">&#x25B2;</button>'
+      + '<button class="btn btn-outline btn-sm" onclick="moveSlot(' + slot.id + ', 1)">&#x25BC;</button>'
+      + '<button class="btn btn-danger btn-sm" onclick="removeSlot(' + slot.id + ')">删除</button>'
+      + '</div></div>';
+  }
+  container.innerHTML = html;
+}
+
+function toggleSlotEnabled(id, enabled) {
+  for (var i = 0; i < displaySlots.length; i++) {
+    if (displaySlots[i].id === id) {
+      displaySlots[i].enabled = enabled;
+      showToast(enabled ? '展位已启用' : '展位已停用', 'success');
+      break;
+    }
+  }
+}
+
+function moveSlot(id, direction) {
+  var sorted = displaySlots.slice().sort(function(a, b) { return a.sort - b.sort; });
+  var idx = -1;
+  for (var i = 0; i < sorted.length; i++) {
+    if (sorted[i].id === id) { idx = i; break; }
+  }
+  if (idx === -1) return;
+  var newIdx = idx + direction;
+  if (newIdx < 0 || newIdx >= sorted.length) return;
+  var tmpSort = sorted[idx].sort;
+  sorted[idx].sort = sorted[newIdx].sort;
+  sorted[newIdx].sort = tmpSort;
+  renderDisplaySlots();
+  showToast('排序已调整', 'success');
+}
+
+function removeSlot(id) {
+  showConfirm('删除展位', '确认删除该展位吗？删除后用户端将不再显示此区域。', function() {
+    for (var i = 0; i < displaySlots.length; i++) {
+      if (displaySlots[i].id === id) { displaySlots.splice(i, 1); break; }
+    }
+    renderDisplaySlots();
+    showToast('展位已删除', 'success');
+  });
+}
+
+function openAddSlotModal() {
+  editingSlotId = null;
+  document.getElementById('slotModalTitle').textContent = '新增展位';
+  var body = '<div class="form-grid">'
+    + '<div class="form-group"><label class="form-label">展位名称<span class="required">*</span></label><input class="form-control" id="slotName" placeholder="如：首页轮播Banner"></div>'
+    + '<div class="form-group"><label class="form-label">展位类型<span class="required">*</span></label>'
+    + '<select class="form-control form-select" id="slotType" onchange="onSlotTypeChange()">'
+    + '<option value="轮播Banner">轮播Banner</option><option value="卡通形象">卡通形象</option>'
+    + '<option value="活动专区">活动专区</option><option value="推荐位">推荐位</option>'
+    + '<option value="标签导航">标签导航</option></select></div>'
+    + '</div>'
+    + '<div class="form-section-title">展位配置</div>'
+    + '<div id="slotConfigFields"></div>';
+  document.getElementById('slotConfigBody').innerHTML = body;
+  onSlotTypeChange();
+  document.getElementById('slotConfigModal').classList.add('show');
+}
+
+function openSlotConfig(id) {
+  editingSlotId = id;
+  var slot = null;
+  for (var i = 0; i < displaySlots.length; i++) {
+    if (displaySlots[i].id === id) { slot = displaySlots[i]; break; }
+  }
+  if (!slot) return;
+  document.getElementById('slotModalTitle').textContent = '配置展位 - ' + slot.name;
+  var body = '<div class="form-grid">'
+    + '<div class="form-group"><label class="form-label">展位名称<span class="required">*</span></label><input class="form-control" id="slotName" value="' + slot.name + '"></div>'
+    + '<div class="form-group"><label class="form-label">展位类型</label>'
+    + '<select class="form-control form-select" id="slotType" onchange="onSlotTypeChange()">'
+    + '<option value="轮播Banner"' + (slot.type === '轮播Banner' ? ' selected' : '') + '>轮播Banner</option>'
+    + '<option value="卡通形象"' + (slot.type === '卡通形象' ? ' selected' : '') + '>卡通形象</option>'
+    + '<option value="活动专区"' + (slot.type === '活动专区' ? ' selected' : '') + '>活动专区</option>'
+    + '<option value="推荐位"' + (slot.type === '推荐位' ? ' selected' : '') + '>推荐位</option>'
+    + '<option value="标签导航"' + (slot.type === '标签导航' ? ' selected' : '') + '>标签导航</option>'
+    + '</select></div></div>'
+    + '<div class="form-section-title">展位配置</div>'
+    + '<div id="slotConfigFields"></div>';
+  document.getElementById('slotConfigBody').innerHTML = body;
+  populateSlotConfigFields(slot);
+  document.getElementById('slotConfigModal').classList.add('show');
+}
+
+function onSlotTypeChange() {
+  var type = '';
+  var el = document.getElementById('slotType');
+  if (el) type = el.value;
+  var fields = document.getElementById('slotConfigFields');
+  if (!fields) return;
+  var html = '';
+  if (type === '轮播Banner') {
+    html += '<div class="form-group full"><label class="form-label">Banner图片</label>'
+      + '<div class="upload-area square" style="width:200px;height:100px;" onclick="showToast(\'上传Banner图片\', \'success\')">'
+      + '<div style="color:var(--ink-3);font-size:13px;">点击上传<br><span style="font-size:11px;color:var(--ink-4);">建议 750x300px</span></div></div></div>'
+      + '<div class="form-grid"><div class="form-group"><label class="form-label">图片标题</label><input class="form-control" id="slotBannerTitle" placeholder="Banner标题"></div>'
+      + '<div class="form-group"><label class="form-label">跳转链接</label><input class="form-control" id="slotBannerLink" placeholder="https://"></div></div>';
+  } else if (type === '卡通形象') {
+    html += '<div class="form-group"><label class="form-label">支付方式</label>'
+      + '<div class="radio-group"><label><input type="radio" name="slotPayType" value="积分" checked> 积分</label>'
+      + '<label><input type="radio" name="slotPayType" value="贝壳"> 贝壳</label></div></div>'
+      + '<div class="form-group"><label class="form-label">形象图片</label>'
+      + '<div class="upload-area square" style="width:100px;height:100px;" onclick="showToast(\'上传形象图片\', \'success\')">'
+      + '<div style="color:var(--ink-3);font-size:13px;">上传图片</div></div></div>';
+  } else if (type === '活动专区') {
+    html += '<div class="form-grid"><div class="form-group"><label class="form-label">专区标签</label><input class="form-control" id="slotZoneTag" placeholder="如：限时"></div>'
+      + '<div class="form-group"><label class="form-label">展示布局</label>'
+      + '<select class="form-control form-select" id="slotZoneLayout"><option value="scroll">横向滚动</option><option value="grid">两列网格</option><option value="list">列表</option></select></div></div>';
+  } else if (type === '推荐位') {
+    html += '<div class="form-group"><label class="form-label">最大展示数量</label>'
+      + '<input class="form-control" type="number" id="slotRecMax" value="8" style="width:120px;"></div>';
+  } else if (type === '标签导航') {
+    html += '<div class="form-group full"><label class="form-label">Tab标签（逗号分隔）</label>'
+      + '<input class="form-control" id="slotTabs" value="全部,实物礼品,优惠券/权益,虚拟权益" placeholder="用英文逗号分隔"></div>';
+  }
+  fields.innerHTML = html;
+}
+
+function populateSlotConfigFields(slot) {
+  onSlotTypeChange();
+  setTimeout(function() {
+    if (slot.type === '轮播Banner') {
+      var titleEl = document.getElementById('slotBannerTitle');
+      var linkEl = document.getElementById('slotBannerLink');
+      if (titleEl && slot.config.images && slot.config.images.length > 0) titleEl.value = slot.config.images[0].title || '';
+      if (linkEl && slot.config.images && slot.config.images.length > 0) linkEl.value = slot.config.images[0].link || '';
+    } else if (slot.type === '卡通形象') {
+      var radios = document.querySelectorAll('input[name="slotPayType"]');
+      for (var i = 0; i < radios.length; i++) {
+        if (radios[i].value === slot.config.payType) radios[i].checked = true;
+      }
+    } else if (slot.type === '活动专区') {
+      var tagEl = document.getElementById('slotZoneTag');
+      var layoutEl = document.getElementById('slotZoneLayout');
+      if (tagEl) tagEl.value = slot.config.tag || '';
+      if (layoutEl) layoutEl.value = slot.config.layout || 'scroll';
+    } else if (slot.type === '推荐位') {
+      var maxEl = document.getElementById('slotRecMax');
+      if (maxEl) maxEl.value = slot.config.maxItems || 8;
+    } else if (slot.type === '标签导航') {
+      var tabsEl = document.getElementById('slotTabs');
+      if (tabsEl && slot.config.tabs) tabsEl.value = slot.config.tabs.join(',');
+    }
+  }, 50);
+}
+
+function saveSlotConfig() {
+  var name = '';
+  var nameEl = document.getElementById('slotName');
+  if (nameEl) name = nameEl.value.trim();
+  if (!name) { showToast('请填写展位名称', 'warning'); return; }
+  var type = '';
+  var typeEl = document.getElementById('slotType');
+  if (typeEl) type = typeEl.value;
+
+  var config = {};
+  if (type === '轮播Banner') {
+    var bt = document.getElementById('slotBannerTitle');
+    var bl = document.getElementById('slotBannerLink');
+    config.images = [{ title: bt ? bt.value : '', link: bl ? bl.value : '' }];
+  } else if (type === '卡通形象') {
+    var pt = document.querySelector('input[name="slotPayType"]:checked');
+    config.payType = pt ? pt.value : '积分';
+    config.image = '';
+  } else if (type === '活动专区') {
+    var zt = document.getElementById('slotZoneTag');
+    var zl = document.getElementById('slotZoneLayout');
+    config.tag = zt ? zt.value : '';
+    config.layout = zl ? zl.value : 'scroll';
+  } else if (type === '推荐位') {
+    var mx = document.getElementById('slotRecMax');
+    config.maxItems = mx ? parseInt(mx.value) || 8 : 8;
+  } else if (type === '标签导航') {
+    var tb = document.getElementById('slotTabs');
+    config.tabs = tb ? tb.value.split(',').map(function(s) { return s.trim(); }).filter(function(s) { return s; }) : [];
+  }
+
+  if (editingSlotId) {
+    for (var i = 0; i < displaySlots.length; i++) {
+      if (displaySlots[i].id === editingSlotId) {
+        displaySlots[i].name = name;
+        displaySlots[i].type = type;
+        displaySlots[i].config = config;
+        break;
+      }
+    }
+    showToast('展位配置已更新', 'success');
+  } else {
+    var maxSort = 0;
+    for (var i = 0; i < displaySlots.length; i++) {
+      if (displaySlots[i].sort > maxSort) maxSort = displaySlots[i].sort;
+    }
+    displaySlots.push({ id: Date.now(), name: name, type: type, sort: maxSort + 1, enabled: true, config: config });
+    showToast('展位已添加', 'success');
+  }
+  closeModal('slotConfigModal');
+  renderDisplaySlots();
+}
+
+// ===================================================================
+// Tab 2: Shelf Prize Listing
+// ===================================================================
+function renderCategoryTree() {
+  var container = document.getElementById('categoryTree');
+  var html = '';
+  for (var i = 0; i < categoryTree.length; i++) {
+    var cat = categoryTree[i];
+    var isActive = (currentCategory === cat.key);
+    var svgIcon = '<svg class="tree-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">'
+      + (cat.icon === 'grid' ? '<rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>'
+      : cat.icon === 'box' ? '<path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>'
+      : cat.icon === 'ticket' ? '<path d="M2 9a3 3 0 013-3h14a3 3 0 013 3v0a3 3 0 01-3 3H5a3 3 0 01-3-3z"/><path d="M2 9v10a2 2 0 002 2h16a2 2 0 002-2V9"/>'
+      : '<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>')
+      + '</svg>';
+
+    html += '<div class="cat-tree-item' + (isActive ? ' active' : '') + '" onclick="selectCategory(\'' + cat.key + '\')">'
+      + svgIcon + '<span>' + cat.label + '</span></div>';
+
+    if (cat.children && cat.children.length > 0) {
+      for (var j = 0; j < cat.children.length; j++) {
+        var child = cat.children[j];
+        var childActive = (currentCategory === child.key);
+        html += '<div class="cat-tree-item indent' + (childActive ? ' active' : '') + '" onclick="selectCategory(\'' + child.key + '\')">'
+          + '<span style="width:16px;display:inline-block;"></span><span>' + child.label + '</span></div>';
+      }
+    }
+  }
+  container.innerHTML = html;
+}
+
+function selectCategory(key) {
+  currentCategory = key;
+  renderCategoryTree();
+  renderShelfPrizes();
+}
+
+function getFilteredShelfPrizes() {
+  var search = '';
+  var searchEl = document.getElementById('searchShelfPrize');
+  if (searchEl) search = searchEl.value.toLowerCase();
+
+  var methodFilter = '';
+  var methodEl = document.getElementById('filterExchangeMethod');
+  if (methodEl) methodFilter = methodEl.value;
+
+  var merchantFilter = '';
+  var merchantEl = document.getElementById('filterMerchant');
+  if (merchantEl) merchantFilter = merchantEl.value;
+
+  var stockFilter = '';
+  var stockEl = document.getElementById('filterStockStatus');
+  if (stockEl) stockFilter = stockEl.value;
+
+  var shelfFilter = '';
+  var shelfEl = document.getElementById('filterShelfStatus');
+  if (shelfEl) shelfFilter = shelfEl.value;
+
+  var list = [];
+  for (var i = 0; i < shelfPrizes.length; i++) {
+    var p = shelfPrizes[i];
+
+    // Category filter
+    if (currentCategory === 'all') {
+      // show all
+    } else if (p.category !== currentCategory && p.subType !== currentCategory) {
+      continue;
+    }
+
+    if (search && p.name.toLowerCase().indexOf(search) === -1) continue;
+    if (methodFilter && p.exchangeMethod !== methodFilter) continue;
+    if (merchantFilter && p.merchant !== merchantFilter) continue;
+    if (stockFilter === 'inStock' && (p.stock <= 0 && p.stock !== -1)) continue;
+    if (stockFilter === 'outStock' && p.stock !== 0) continue;
+    if (stockFilter === 'unlimited' && p.stock !== -1) continue;
+    if (shelfFilter === 'on' && p.shelfStatus !== 'on') continue;
+    if (shelfFilter === 'off' && p.shelfStatus !== 'off') continue;
+
+    list.push(p);
+  }
+
+  return list.sort(function(a, b) { return a.sort - b.sort; });
+}
+
+function populateMerchantFilter() {
+  var select = document.getElementById('filterMerchant');
+  if (!select) return;
+  var merchants = {};
+  for (var i = 0; i < shelfPrizes.length; i++) {
+    var m = shelfPrizes[i].merchant;
+    if (m && !merchants[m]) merchants[m] = true;
+  }
+  var currentVal = select.value;
+  var html = '<option value="">全部门店</option>';
+  var keys = Object.keys(merchants);
+  for (var i = 0; i < keys.length; i++) {
+    html += '<option value="' + keys[i] + '">' + keys[i] + '</option>';
+  }
+  select.innerHTML = html;
+  select.value = currentVal;
+}
+
+function renderShelfPrizes() {
+  populateMerchantFilter();
+  var list = getFilteredShelfPrizes();
+  document.getElementById('shelfPrizeCount').textContent = list.length;
+
+  var tbody = document.getElementById('shelfPrizeBody');
+  if (list.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;color:var(--ink-4);padding:40px 0;">暂无数据</td></tr>';
+    return;
+  }
+
+  var shelfTypeColors = {
+    '实物礼品': 'background:#e8f5e9;color:#2e7d32;',
+    '优惠券/权益': 'background:#e3f2fd;color:#1565c0;',
+    '虚拟权益': 'background:#f3e5f5;color:#7b1fa2;'
+  };
+
+  var methodBadgeColors = {
+    '全积分': 'tag-red',
+    '全贝壳': 'tag-gold',
+    '积分+现金': 'tag-blue'
+  };
+
+  var html = '';
+  for (var i = 0; i < list.length; i++) {
+    var p = list[i];
+    var checkAttr = p.checked ? 'checked' : '';
+    var typeColor = shelfTypeColors[p.type] || 'background:#f4f4f5;color:var(--ink-2);';
+    var methodBadge = methodBadgeColors[p.exchangeMethod] || 'tag-gray';
+    var priceDisplay = '';
+    if (p.exchangeMethod === '全积分') priceDisplay = p.price.toLocaleString() + ' 积分';
+    else if (p.exchangeMethod === '全贝壳') priceDisplay = p.price.toLocaleString() + ' 贝壳';
+    else if (p.exchangeMethod === '积分+现金') priceDisplay = p.price.toLocaleString() + ' 积分 + ' + p.cashPrice + '元';
+
+    var stockDisplay = '';
+    if (p.stock === -1) stockDisplay = '不限';
+    else if (p.stock === 0) stockDisplay = '<span style="color:var(--danger);font-weight:600;">已售罄 (0/' + p.totalStock + ')</span>';
+    else stockDisplay = p.stock + ' / ' + p.totalStock;
+
+    var statusDot = p.shelfStatus === 'on' ? 'on' : 'off';
+    var statusText = p.shelfStatus === 'on' ? '已上架' : '已下架';
+
+    var tagsHtml = '';
+    if (p.tags && p.tags.length > 0) {
+      for (var j = 0; j < p.tags.length; j++) {
+        tagsHtml += '<span style="display:inline-block;padding:1px 6px;border-radius:4px;font-size:11px;background:#e8f0fe;color:#1a73e8;margin-right:4px;">' + p.tags[j] + '</span>';
+      }
+    }
+
+    html += '<tr>'
+      + '<td><input type="checkbox" ' + checkAttr + ' onchange="toggleShelfCheck(\'' + p.id + '\', this.checked)"></td>'
+      + '<td><input class="form-control" type="number" value="' + p.sort + '" style="font-size:12px;padding:2px 6px;height:28px;width:60px;text-align:center;" onblur="updateShelfSort(\'' + p.id + '\', this.value)"></td>'
+      + '<td><div style="display:flex;align-items:center;gap:10px;">'
+      + '<div style="width:36px;height:36px;border-radius:6px;background:#f0e6d6;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--ink-3);">'
+      + (p.type === '实物礼品' ? '品' : p.type === '优惠券/权益' ? '券' : '虚') + '</div>'
+      + '<div><div style="font-weight:500;font-size:13px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + p.name + '</div>'
+      + (tagsHtml ? '<div style="margin-top:3px;">' + tagsHtml + '</div>' : '')
+      + '</div></div></td>'
+      + '<td><span class="type-badge" style="' + typeColor + 'font-size:11px;">' + p.type + '</span>'
+      + (p.subType ? '<div style="font-size:11px;color:var(--ink-4);margin-top:2px;">' + p.subType + '</div>' : '') + '</td>'
+      + '<td><span class="tag ' + methodBadge + '">' + p.exchangeMethod + '</span>'
+      + '<div style="font-size:12px;font-weight:600;margin-top:3px;color:var(--ink);">' + priceDisplay + '</div></td>'
+      + '<td style="font-size:12px;color:var(--ink-2);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + p.merchant + '</td>'
+      + '<td style="font-size:12px;">' + stockDisplay + '</td>'
+      + '<td><span class="status-dot ' + statusDot + '"></span>' + statusText + '</td>'
+      + '<td style="font-size:12px;color:var(--ink-3);max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + p.sourceActivity + '</td>'
+      + '<td class="td-actions"><div class="td-actions-inner">'
+      + '<button class="btn btn-text btn-sm" onclick="openShelfEdit(\'' + p.id + '\')">编辑</button>'
+      + '<button class="btn btn-text btn-sm" onclick="toggleShelfStatus(\'' + p.id + '\')">' + (p.shelfStatus === 'on' ? '下架' : '上架') + '</button>'
+      + '</div></td></tr>';
+  }
+  tbody.innerHTML = html;
+}
+
+function toggleShelfCheck(id, checked) {
+  for (var i = 0; i < shelfPrizes.length; i++) {
+    if (shelfPrizes[i].id === id) { shelfPrizes[i].checked = checked; break; }
+  }
+}
+
+function toggleShelfCheckAll(cb) {
+  for (var i = 0; i < shelfPrizes.length; i++) {
+    shelfPrizes[i].checked = cb.checked;
+  }
+  renderShelfPrizes();
+}
+
+function updateShelfSort(id, value) {
+  for (var i = 0; i < shelfPrizes.length; i++) {
+    if (shelfPrizes[i].id === id) { shelfPrizes[i].sort = parseInt(value) || 0; break; }
+  }
+}
+
+function toggleShelfStatus(id) {
+  for (var i = 0; i < shelfPrizes.length; i++) {
+    if (shelfPrizes[i].id === id) {
+      shelfPrizes[i].shelfStatus = shelfPrizes[i].shelfStatus === 'on' ? 'off' : 'on';
+      showToast(shelfPrizes[i].shelfStatus === 'on' ? '已上架' : '已下架', 'success');
+      break;
+    }
+  }
+  renderShelfPrizes();
+}
+
+function batchShelfAction(action) {
+  var selected = [];
+  for (var i = 0; i < shelfPrizes.length; i++) {
+    if (shelfPrizes[i].checked) selected.push(shelfPrizes[i]);
+  }
+  if (selected.length === 0) { showToast('请先勾选奖品', 'warning'); return; }
+  for (var i = 0; i < selected.length; i++) {
+    selected[i].shelfStatus = action;
+    selected[i].checked = false;
+  }
+  renderShelfPrizes();
+  showToast('已' + (action === 'on' ? '上架' : '下架') + ' ' + selected.length + ' 个奖品', 'success');
+}
+
+// ===== Shelf Edit Modal =====
+function openShelfEdit(id) {
+  editingShelfId = id;
+  var prize = null;
+  for (var i = 0; i < shelfPrizes.length; i++) {
+    if (shelfPrizes[i].id === id) { prize = shelfPrizes[i]; break; }
+  }
+  if (!prize) return;
+
+  document.getElementById('shelfEditTitle').textContent = '编辑上架信息 - ' + prize.name;
+
+  var categoryOptions = '';
+  var cats = ['全部', '实物礼品', '优惠券/权益', '虚拟权益'];
+  for (var i = 0; i < cats.length; i++) {
+    categoryOptions += '<option value="' + cats[i] + '"' + (prize.category === cats[i] ? ' selected' : '') + '>' + cats[i] + '</option>';
+  }
+
+  var subTypeOptions = '';
+  var subTypes = ['', '门店兑换券', '有税商户代金券', '抽奖次数', '其他虚拟权益'];
+  for (var i = 0; i < subTypes.length; i++) {
+    var label = subTypes[i] || '无';
+    subTypeOptions += '<option value="' + subTypes[i] + '"' + (prize.subType === subTypes[i] ? ' selected' : '') + '>' + label + '</option>';
+  }
+
+  var tagsHtml = '';
+  var allTags = ['限时', '会员专属', '新人专享', '节日活动', '品牌联合', '满减活动'];
+  for (var i = 0; i < allTags.length; i++) {
+    var checked = (prize.tags || []).indexOf(allTags[i]) !== -1 ? 'checked' : '';
+    tagsHtml += '<label><input type="checkbox" name="shelfTags" value="' + allTags[i] + '" ' + checked + '> ' + allTags[i] + '</label>';
+  }
+
+  var html = '<div class="form-grid">'
+    + '<div class="form-group"><label class="form-label">排序值</label><input class="form-control" type="number" id="shelfEditSort" value="' + prize.sort + '"></div>'
+    + '<div class="form-group"><label class="form-label">分类</label><select class="form-control form-select" id="shelfEditCategory">' + categoryOptions + '</select></div>'
+    + '<div class="form-group"><label class="form-label">子分类</label><select class="form-control form-select" id="shelfEditSubType">' + subTypeOptions + '</select></div>'
+    + '<div class="form-group"><label class="form-label">适用门店</label><input class="form-control" id="shelfEditMerchant" value="' + prize.merchant + '"></div>'
+    + '</div>'
+    + '<div class="form-section-title">标签设置</div>'
+    + '<div class="checkbox-group">' + tagsHtml + '</div>'
+    + '<div class="form-section-title">展示规则</div>'
+    + '<div class="form-grid">'
+    + '<div class="form-group"><label class="form-label">可见域</label>'
+    + '<select class="form-control form-select" id="shelfEditDomain"><option value="public"' + (!prize.domain || prize.domain === 'public' ? ' selected' : '') + '>公开域（全部用户可见）</option>'
+    + '<option value="private"' + (prize.domain === 'private' ? ' selected' : '') + '>私域（仅特定门店用户可见）</option></select></div>'
+    + '<div class="form-group"><label class="form-label">可见门店</label><input class="form-control" id="shelfEditVisibleStores" placeholder="留空则全部可见" value="' + (prize.visibleStores || '') + '"></div>'
+    + '</div>';
+
+  document.getElementById('shelfEditBody').innerHTML = html;
+  document.getElementById('shelfEditModal').classList.add('show');
+}
+
+function saveShelfEdit() {
+  if (!editingShelfId) return;
+  for (var i = 0; i < shelfPrizes.length; i++) {
+    if (shelfPrizes[i].id === editingShelfId) {
+      var sortEl = document.getElementById('shelfEditSort');
+      var catEl = document.getElementById('shelfEditCategory');
+      var subEl = document.getElementById('shelfEditSubType');
+      var merchantEl = document.getElementById('shelfEditMerchant');
+      var domainEl = document.getElementById('shelfEditDomain');
+      var storesEl = document.getElementById('shelfEditVisibleStores');
+
+      if (sortEl) shelfPrizes[i].sort = parseInt(sortEl.value) || 0;
+      if (catEl) shelfPrizes[i].category = catEl.value;
+      if (subEl) shelfPrizes[i].subType = subEl.value;
+      if (merchantEl) shelfPrizes[i].merchant = merchantEl.value;
+      if (domainEl) shelfPrizes[i].domain = domainEl.value;
+      if (storesEl) shelfPrizes[i].visibleStores = storesEl.value;
+
+      var tagCbs = document.querySelectorAll('input[name="shelfTags"]:checked');
+      var tags = [];
+      for (var j = 0; j < tagCbs.length; j++) { tags.push(tagCbs[j].value); }
+      shelfPrizes[i].tags = tags;
+      break;
+    }
+  }
+  closeModal('shelfEditModal');
+  renderShelfPrizes();
+  showToast('上架信息已更新', 'success');
+}
+
+// ===================================================================
+// Tab 3: Page Config
+// ===================================================================
+function handleBannerUpload(input) {
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var thumbEl = document.getElementById('bannerPreviewThumb');
+      thumbEl.innerHTML = '<img src="' + e.target.result + '" style="width:100%;height:100%;object-fit:cover;border-radius:8px;">';
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+function handleMascotUpload(input, mode) {
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var targetId = mode === 'shells' ? 'mascotPreviewShells' : 'mascotPreviewPoints';
+      var thumbEl = document.getElementById(targetId);
+      if (thumbEl) {
+        thumbEl.innerHTML = '<img src="' + e.target.result + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">';
+      }
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+// ===================================================================
+// Common Utilities
+// ===================================================================
+function closeModal(id) {
+  var el = document.getElementById(id);
+  if (el) el.classList.remove('show');
+}
+
+function showConfirm(title, message, onOk) {
+  document.getElementById('confirmTitle').textContent = title || '提示';
+  document.getElementById('confirmMessage').textContent = message;
+  document.getElementById('confirmModal').classList.add('show');
+  document.getElementById('confirmOkBtn').onclick = function() {
+    closeModal('confirmModal');
+    if (onOk) onOk();
+  };
+}
+
+function showToast(msg, type) {
+  var container = document.getElementById('toastContainer');
+  var icons = { success: '\u2713', error: '\u2715', warning: '!' };
+  var el = document.createElement('div');
+  el.className = 'toast-item toast-' + (type || 'success');
+  el.innerHTML = '<div class="toast-icon">' + (icons[type] || '\u2713') + '</div><span>' + msg + '</span>';
+  container.appendChild(el);
+  setTimeout(function() { el.classList.add('out'); setTimeout(function() { if (el.parentNode) el.parentNode.removeChild(el); }, 300); }, 2200);
+}
+
+// Close modals on mask click
+var masks = document.querySelectorAll('.modal-mask');
+for (var i = 0; i < masks.length; i++) {
+  (function(mask) {
+    mask.addEventListener('click', function(e) { if (e.target === mask) mask.classList.remove('show'); });
+  })(masks[i]);
+}
+
+// Search/filter event bindings
+var searchProductEl = document.getElementById('searchProduct');
+if (searchProductEl) searchProductEl.addEventListener('input', renderProducts);
+var filterPrizeTypeEl = document.getElementById('filterPrizeType');
+if (filterPrizeTypeEl) filterPrizeTypeEl.addEventListener('change', renderProducts);
+var filterStatusEl = document.getElementById('filterStatus');
+if (filterStatusEl) filterStatusEl.addEventListener('change', renderProducts);
+var searchActivityEl = document.getElementById('searchActivity');
+if (searchActivityEl) searchActivityEl.addEventListener('input', renderActivities);
+var filterActStatusEl = document.getElementById('filterActStatus');
+if (filterActStatusEl) filterActStatusEl.addEventListener('change', renderActivities);
+
+// ===================================================================
+// Initial Render
+// ===================================================================
+renderProducts();
+renderActivities();
+renderOrders();
+</script>
+</body>
+</html>
