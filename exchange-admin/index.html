@@ -72,7 +72,7 @@
   .nav-item.active svg { opacity: 1; }
   .nav-badge { margin-left: auto; background: var(--red); color: #fff; font-size: 10px; padding: 1px 6px; border-radius: 10px; }
 
-  .main { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
+  .main { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; min-height: 100vh; min-width: 0; }
   .header {
     height: var(--header-h); background: #fff; border-bottom: 1px solid var(--border);
     display: flex; align-items: center; justify-content: space-between; padding: 0 24px;
@@ -85,7 +85,7 @@
   .header-right { display: flex; align-items: center; gap: 16px; }
   .header-avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--red), var(--red-deep)); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 13px; font-weight: 600; }
 
-  .content { flex: 1; padding: 24px; overflow-x: auto; }
+  .content { flex: 1; padding: 24px; overflow-x: auto; min-width: 0; }
 
   /* Page panels */
   .panel { display: none; }
@@ -377,7 +377,6 @@
             兑换对账单
           </div>
         </div>
-        </div>
       </div>
     </nav>
   </aside>
@@ -572,7 +571,7 @@
                 <option value="待收货/待使用">待收货/待使用</option>
                 <option value="已完成">已完成</option>
                 <option value="退款中">退款中</option>
-                <option value="已取消">已取消</option>
+                <option value="已退款">已退款</option>
               </select>
               <select class="form-input form-select" style="width:120px;" id="filterOrderPayType" onchange="renderOrders()">
                 <option value="">全部支付方式</option>
@@ -631,7 +630,7 @@
                   <th style="width:110px;">下单入口</th>
                   <th style="width:70px;">支付方式</th>
                   <th style="width:80px;">订单渠道</th>
-                  <th style="width:100px;">应付/实付福利值</th>
+                  <th style="width:100px;">应付/实付</th>
                   <th style="width:90px;">记账方式</th>
                   <th style="width:80px;">订单来源</th>
                   <th style="width:90px;">状态</th>
@@ -704,7 +703,7 @@
                   <th style="min-width:120px;">下单入口</th>
                   <th style="min-width:120px;">用户信息</th>
                   <th style="width:70px;">支付方式</th>
-                  <th style="width:80px;">支付福利值</th>
+                  <th style="width:80px;">退款额</th>
                   <th style="width:80px;">订单渠道</th>
                   <th style="width:80px;">订单来源</th>
                   <th style="width:90px;">退款状态</th>
@@ -1167,9 +1166,9 @@
         <div id="bill2IncomeMonth">
           <div class="toolbar" style="margin-bottom:12px;">
             <div class="toolbar-left">
-              <input type="date" class="form-input" style="width:130px;" id="bill2IncMonthDateStart" onchange="renderBill2Income()">
+              <input type="month" class="form-input" style="width:130px;" id="bill2IncMonthDateStart" onchange="renderBill2Income()">
               <span style="color:var(--ink-4);font-size:12px;">~</span>
-              <input type="date" class="form-input" style="width:130px;" id="bill2IncMonthDateEnd" onchange="renderBill2Income()">
+              <input type="month" class="form-input" style="width:130px;" id="bill2IncMonthDateEnd" onchange="renderBill2Income()">
               <select class="form-input form-select" style="width:160px;" id="bill2IncMonthPrizeType" onchange="renderBill2Income()">
                 <option value="">全部奖品类型</option>
                 <option value="实物礼品">实物礼品</option>
@@ -1179,7 +1178,7 @@
               </select>
             </div>
             <div class="toolbar-right">
-              <button class="btn btn-outline btn-sm" onclick="batchDownloadBill2('income-month')">批量下载</button>
+              <button class="btn btn-outline btn-sm" onclick="exportBill2('income-month')">导出</button>
             </div>
           </div>
           <div class="table-wrap">
@@ -1229,7 +1228,7 @@
               </select>
             </div>
             <div class="toolbar-right">
-              <button class="btn btn-outline btn-sm" onclick="batchDownloadBill2('income-day')">批量下载</button>
+              <button class="btn btn-outline btn-sm" onclick="exportBill2('income-day')">导出</button>
             </div>
           </div>
           <div class="table-wrap">
@@ -1298,7 +1297,7 @@
                 <option value="积分">积分</option>
                 <option value="贝壳">贝壳</option>
               </select>
-              <input type="text" class="form-input" style="width:160px;" placeholder="搜索订单号" id="bill2IncDetailOrderNo" oninput="renderBill2Income()">
+              <input type="text" class="form-input" style="width:160px;" placeholder="搜索来源单号" id="bill2IncDetailOrderNo" oninput="renderBill2Income()">
             </div>
             <div class="toolbar-right">
               <button class="btn btn-outline btn-sm" onclick="showToast('已导出收入明细', 'success')">导出</button>
@@ -1309,15 +1308,15 @@
               <table>
                 <thead>
                   <tr>
-                    <th>订单号</th>
+                    <th>来源单号</th>
                     <th>奖品名称</th>
                     <th>奖品类型</th>
                     <th>订单渠道</th>
                     <th>记账方式</th>
                     <th>活动来源</th>
                     <th>支付方式</th>
-                    <th style="text-align:right;">应收福利值</th>
-                    <th style="text-align:right;">实收福利值</th>
+                    <th style="text-align:right;">应收</th>
+                    <th style="text-align:right;">实收</th>
                     <th style="text-align:right;">平台分成</th>
                     <th style="text-align:right;">门店分成</th>
                     <th style="text-align:right;">品牌分成</th>
@@ -1344,7 +1343,7 @@
         <div style="display:flex;gap:4px;background:var(--bg-2);padding:3px;border-radius:8px;margin-bottom:12px;width:fit-content;">
           <button class="bill2-exp-sub-tab" onclick="switchBill2ExpenseTab('month', this)" style="display:inline-flex;align-items:center;padding:6px 16px;font-size:13px;border-radius:6px;cursor:pointer;border:none;background:var(--primary);color:#fff;">月汇总</button>
           <button class="bill2-exp-sub-tab" onclick="switchBill2ExpenseTab('day', this)" style="display:inline-flex;align-items:center;padding:6px 16px;font-size:13px;border-radius:6px;cursor:pointer;border:none;background:transparent;color:var(--ink-3);">日汇总</button>
-          <button class="bill2-exp-sub-tab" onclick="switchBill2ExpenseTab('detail', this)" style="display:inline-flex;align-items:center;padding:6px 16px;font-size:13px;border-radius:6px;cursor:pointer;border:none;background:transparent;color:var(--ink-3);">成本明细</button>
+          <button class="bill2-exp-sub-tab" onclick="switchBill2ExpenseTab('detail', this)" style="display:inline-flex;align-items:center;padding:6px 16px;font-size:13px;border-radius:6px;cursor:pointer;border:none;background:transparent;color:var(--ink-3);">分摊明细</button>
         </div>
         <!-- 成本月/日汇总 3级Tab: 使用场景 -->
         <div id="bill2ExpenseSceneTabs" style="display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:12px;">
@@ -1353,18 +1352,25 @@
           <button class="tab-btn" onclick="switchBill2ExpenseScene('签到', this)" style="padding:6px 16px;font-size:13px;font-weight:500;border:none;background:transparent;cursor:pointer;border-bottom:2px solid transparent;color:var(--ink-3);">签到</button>
           <button class="tab-btn" onclick="switchBill2ExpenseScene('任务', this)" style="padding:6px 16px;font-size:13px;font-weight:500;border:none;background:transparent;cursor:pointer;border-bottom:2px solid transparent;color:var(--ink-3);">任务</button>
           <button class="tab-btn" onclick="switchBill2ExpenseScene('转盘抽奖', this)" style="padding:6px 16px;font-size:13px;font-weight:500;border:none;background:transparent;cursor:pointer;border-bottom:2px solid transparent;color:var(--ink-3);">转盘抽奖</button>
-          <button class="tab-btn" onclick="switchBill2ExpenseScene('预约抽奖', this)" style="padding:6px 16px;font-size:13px;font-weight:500;border:none;background:transparent;cursor:pointer;border-bottom:2px solid transparent;color:var(--ink-3);">预约抽奖</button>
         </div>
         <!-- 成本月汇总 -->
         <div id="bill2ExpenseMonth">
           <div class="toolbar" style="margin-bottom:12px;">
             <div class="toolbar-left">
-              <input type="date" class="form-input" style="width:130px;" id="bill2ExpMonthDateStart" onchange="renderBill2Expense()">
+              <input type="month" class="form-input" style="width:130px;" id="bill2ExpMonthDateStart" onchange="renderBill2Expense()">
               <span style="color:var(--ink-4);font-size:12px;">~</span>
-              <input type="date" class="form-input" style="width:130px;" id="bill2ExpMonthDateEnd" onchange="renderBill2Expense()">
+              <input type="month" class="form-input" style="width:130px;" id="bill2ExpMonthDateEnd" onchange="renderBill2Expense()">
+              <select class="form-input form-select" style="width:160px;" id="bill2ExpMonthPrizeType" onchange="renderBill2Expense()">
+                <option value="">全部奖品类型</option>
+                <option value="实物礼品">实物礼品</option>
+                <option value="优惠券-优选单券">优惠券-优选单券</option>
+                <option value="优惠券-券中心">优惠券-券中心</option>
+                <option value="转盘抽奖">转盘抽奖</option>
+                <option value="福利值">福利值</option>
+              </select>
             </div>
             <div class="toolbar-right">
-              <button class="btn btn-outline btn-sm" onclick="batchDownloadBill2('expense-month')">批量下载</button>
+              <button class="btn btn-outline btn-sm" onclick="exportBill2('expense-month')">导出</button>
             </div>
           </div>
           <div class="table-wrap">
@@ -1401,9 +1407,17 @@
               <input type="date" class="form-input" style="width:130px;" id="bill2ExpDayDateStart" onchange="renderBill2Expense()">
               <span style="color:var(--ink-4);font-size:12px;">~</span>
               <input type="date" class="form-input" style="width:130px;" id="bill2ExpDayDateEnd" onchange="renderBill2Expense()">
+              <select class="form-input form-select" style="width:160px;" id="bill2ExpDayPrizeType" onchange="renderBill2Expense()">
+                <option value="">全部奖品类型</option>
+                <option value="实物礼品">实物礼品</option>
+                <option value="优惠券-优选单券">优惠券-优选单券</option>
+                <option value="优惠券-券中心">优惠券-券中心</option>
+                <option value="转盘抽奖">转盘抽奖</option>
+                <option value="福利值">福利值</option>
+              </select>
             </div>
             <div class="toolbar-right">
-              <button class="btn btn-outline btn-sm" onclick="batchDownloadBill2('expense-day')">批量下载</button>
+              <button class="btn btn-outline btn-sm" onclick="exportBill2('expense-day')">导出</button>
             </div>
           </div>
           <div class="table-wrap">
@@ -1433,7 +1447,7 @@
             </div>
           </div>
         </div>
-        <!-- 成本明细 -->
+        <!-- 分摊明细 -->
         <div id="bill2ExpenseDetail" style="display:none;">
           <div class="toolbar" style="margin-bottom:12px;">
             <div class="toolbar-left">
@@ -1446,7 +1460,6 @@
                 <option value="签到">签到</option>
                 <option value="任务">任务</option>
                 <option value="转盘抽奖">转盘抽奖</option>
-                <option value="预约抽奖">预约抽奖</option>
               </select>
               <select class="form-input form-select" style="width:120px;" id="bill2ExpDetailChannel" onchange="renderBill2Expense()">
                 <option value="">全部渠道</option>
@@ -1470,12 +1483,13 @@
                 <option value="优惠券-优选单券">优惠券-优选单券</option>
                 <option value="优惠券-券中心">优惠券-券中心</option>
                 <option value="转盘抽奖">转盘抽奖</option>
+                <option value="福利值">福利值</option>
                 <option value="预约抽奖">预约抽奖</option>
               </select>
-              <input type="text" class="form-input" style="width:160px;" placeholder="搜索订单号" id="bill2ExpDetailOrderNo" oninput="renderBill2Expense()">
+              <input type="text" class="form-input" style="width:160px;" placeholder="搜索来源单号" id="bill2ExpDetailOrderNo" oninput="renderBill2Expense()">
             </div>
             <div class="toolbar-right">
-              <button class="btn btn-outline btn-sm" onclick="showToast('已导出成本明细', 'success')">导出</button>
+              <button class="btn btn-outline btn-sm" onclick="showToast('已导出分摊明细', 'success')">导出</button>
             </div>
           </div>
           <div class="table-wrap">
@@ -1483,7 +1497,7 @@
               <table>
                 <thead>
                   <tr>
-                    <th>订单号</th>
+                    <th>来源单号</th>
                     <th>奖品名称</th>
                     <th>奖品类型</th>
                     <th>使用场景</th>
@@ -1507,43 +1521,6 @@
               <button class="btn btn-outline btn-sm" onclick="prevBill2Page('expense-detail')">上一页</button>
               <span id="bill2PageInfo-expense-detail" style="font-size:13px;color:var(--ink-3);">第 1 页 / 共 1 页</span>
               <button class="btn btn-outline btn-sm" onclick="nextBill2Page('expense-detail')">下一页</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 明细弹窗 -->
-      <div id="bill2DetailModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.4);z-index:1000;">
-        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:700px;max-height:80vh;background:#fff;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,0.2);display:flex;flex-direction:column;">
-          <div style="padding:16px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
-            <h3 id="bill2DetailModalTitle" style="margin:0;font-size:15px;font-weight:600;">明细</h3>
-            <button onclick="closeBill2DetailModal()" style="border:none;background:transparent;font-size:20px;cursor:pointer;color:var(--ink-3);">×</button>
-          </div>
-          <!-- 弹窗内二级tab：按门店 / 商户名称 -->
-          <div style="display:flex;gap:4px;background:var(--bg-2);border-radius:8px;padding:3px;margin:12px 20px 0;">
-            <button id="bill2ModalTabStore" class="bill2-modal-tab" onclick="switchBill2ModalTab('store')" style="flex:1;padding:6px;text-align:center;font-size:13px;border-radius:6px;border:none;cursor:pointer;background:var(--primary);color:#fff;">按门店</button>
-            <button id="bill2ModalTabBrand" class="bill2-modal-tab" onclick="switchBill2ModalTab('brand')" style="flex:1;padding:6px;text-align:center;font-size:13px;border-radius:6px;border:none;cursor:pointer;background:transparent;color:var(--ink-3);">商户名称</button>
-          </div>
-          <div style="padding:16px 20px;overflow-y:auto;flex:1;">
-            <div id="bill2ModalStoreView">
-              <table style="width:100%;border-collapse:collapse;">
-                <thead><tr>
-                  <th style="text-align:left;padding:8px;border-bottom:1px solid var(--border);font-weight:500;font-size:13px;">门店</th>
-                  <th style="text-align:right;padding:8px;border-bottom:1px solid var(--border);font-weight:500;font-size:13px;">积分收入</th>
-                  <th style="text-align:right;padding:8px;border-bottom:1px solid var(--border);font-weight:500;font-size:13px;">贝壳收入</th>
-                </tr></thead>
-                <tbody id="bill2ModalStoreBody"></tbody>
-              </table>
-            </div>
-            <div id="bill2ModalBrandView" style="display:none;">
-              <table style="width:100%;border-collapse:collapse;">
-                <thead><tr>
-                  <th style="text-align:left;padding:8px;border-bottom:1px solid var(--border);font-weight:500;font-size:13px;">商户名称</th>
-                  <th style="text-align:right;padding:8px;border-bottom:1px solid var(--border);font-weight:500;font-size:13px;">积分收入</th>
-                  <th style="text-align:right;padding:8px;border-bottom:1px solid var(--border);font-weight:500;font-size:13px;">贝壳收入</th>
-                </tr></thead>
-                <tbody id="bill2ModalBrandBody"></tbody>
-              </table>
             </div>
           </div>
         </div>
@@ -1617,7 +1594,7 @@
       <div id="centerTabConfig" style="display:none;">
         <!-- 图片配置（合并卡片） -->
         <div style="background:#fff;border-radius:12px;padding:20px;border:1px solid var(--border);margin-bottom:16px;overflow-x:auto;">
-          <div style="display:flex;gap:20px;min-width:fit-content;">
+          <div style="display:flex;gap:20px;min-width:1080px;">
           <!-- 左侧：配置区 -->
           <div style="flex:1;min-width:360px;">
             <div style="font-weight:600;font-size:15px;margin-bottom:2px;">图片配置</div>
@@ -1679,7 +1656,7 @@
           </div>
 
           <!-- 右侧：参考效果图 -->
-          <div style="width:500px;flex-shrink:0;">
+          <div style="width:700px;flex-shrink:0;">
             <div style="font-size:12px;font-weight:500;color:var(--ink-2);margin-bottom:6px;">参考效果图</div>
             <div style="font-size:11px;color:var(--ink-4);margin-bottom:8px;">序号对应左侧配置项</div>
             <img src="ref-image.png" style="width:100%;border-radius:8px;border:1px solid var(--border);" alt="参考效果图">
@@ -2436,7 +2413,7 @@
     document.getElementById('breadcrumb').textContent = titles[panelId] || panelId;
     if (panelId === 'products') renderProducts();
     if (panelId === 'orders') renderOrders();
-    if (panelId === 'reconciliation2') { renderBill2Income(); }
+    if (panelId === 'reconciliation2') { initBill2DefaultDates(); renderBill2Income(); }
     if (panelId === 'exchangeCenter') {
       buildCenterPrizeItems();
       renderCenterPrizes();
@@ -2896,7 +2873,7 @@
 
   // ===== 活动管理 =====
   const allActivities = [
-    { id: 1, name: '夏日狂欢兑换活动', timeRange: { start: '2026-07-19 10:00', end: '2026-07-25 23:59' }, createdAt: '2026-07-18 14:30', createdBy: '管理员', status: 'active', rule: '每人每场限兑2件', channel: ['APP', '微信小程序'], payType: '积分', costShare: { type: '混合分摊', brand: 30, store: 50, tax: 20 }, revenueShare: { type: '平台全额' }, memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 500000, actualCost: 149600, actualRevenue: 149600,
+    { id: 1, name: '夏日狂欢兑换活动', timeRange: { start: '2026-07-19 10:00', end: '2026-07-25 23:59' }, createdAt: '2026-07-18 14:30', createdBy: '管理员', status: 'active', rule: '每人每场限兑2件', channel: ['APP', '微信小程序'], payType: '积分', source: '千帆', costShare: { type: '混合分摊', brand: 30, store: 50, tax: 20 }, revenueShare: { type: '平台全额' }, memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 500000, actualCost: 149600, actualRevenue: 149600,
       items: [
         { name: '雅诗兰黛粉底液 30ml', type: '实物礼品', price: 8800, stock: 50, exchanged: 12, monthLimit: -1, dayLimit: -1, tags: ['限时', '会员专属'] },
         { name: 'CDF 100元代金券', type: '优惠券-优选单券', price: 500, stock: -1, exchanged: 67, monthLimit: -1, dayLimit: -1, tags: ['限时'] },
@@ -2904,27 +2881,27 @@
         { name: '中免海南限定化妆包', type: '实物礼品', price: 2800, stock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['品牌联合'] },
       ]
     },
-    { id: 2, name: '会员专属兑换活动', timeRange: { start: '2026-07-20 10:00', end: '2026-07-27 23:59' }, createdAt: '2026-07-19 09:00', createdBy: '管理员', status: 'active', rule: '仅限银卡及以上会员参与', channel: ['APP', 'H5'], payType: '贝壳', costShare: { type: '平台全额' }, revenueShare: { type: '平台全额' }, memberDiscount: { normal: 100, silver: 90, gold: 85, platinum: 80, diamond: 75 }, accountType: '主营业务', budgetLimit: 300000, actualCost: 0, actualRevenue: 0,
+    { id: 2, name: '会员专属兑换活动', timeRange: { start: '2026-07-20 10:00', end: '2026-07-27 23:59' }, createdAt: '2026-07-19 09:00', createdBy: '管理员', status: 'active', rule: '仅限银卡及以上会员参与', channel: ['APP', 'H5'], payType: '贝壳', source: '千帆', costShare: { type: '平台全额' }, revenueShare: { type: '平台全额' }, memberDiscount: { normal: 100, silver: 90, gold: 85, platinum: 80, diamond: 75 }, accountType: '主营业务', budgetLimit: 300000, actualCost: 0, actualRevenue: 0,
       items: [
         { name: 'SK-II 神仙水 230ml', type: '实物礼品', price: 12000, stock: 40, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['会员专属'] },
         { name: 'CDF 200元代金券', type: '优惠券-优选单券', price: 1000, stock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['会员专属', '满减活动'] },
         { name: '免税店专属折扣券', type: '优惠券-券中心', price: 80, stock: 500, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['满减活动'] },
       ]
     },
-    { id: 3, name: '限时闪购活动', timeRange: { start: '2026-07-21 10:00', end: '2026-07-23 23:59' }, createdAt: '2026-07-20 11:00', createdBy: '运营专员', status: 'active', rule: '每人每场限兑3件', channel: ['APP'], payType: '积分', costShare: { type: '门店全额' }, revenueShare: { type: '门店全额' }, memberDiscount: { normal: 100, silver: 100, gold: 100, platinum: 100, diamond: 100 }, accountType: '非主营业务', budgetLimit: 200000, actualCost: 0, actualRevenue: 0,
+    { id: 3, name: '限时闪购活动', timeRange: { start: '2026-07-21 10:00', end: '2026-07-23 23:59' }, createdAt: '2026-07-20 11:00', createdBy: '运营专员', status: 'active', rule: '每人每场限兑3件', channel: ['APP'], payType: '积分', source: '繁星-三亚国际免税城', costShare: { type: '门店全额' }, revenueShare: { type: '门店全额' }, memberDiscount: { normal: 100, silver: 100, gold: 100, platinum: 100, diamond: 100 }, accountType: '非主营业务', budgetLimit: 200000, actualCost: 0, actualRevenue: 0,
       items: [
         { name: '资生堂红腰子 75ml', type: '实物礼品', price: 9500, stock: 60, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['限时', '品牌联合'] },
         { name: '迪奥口红套装', type: '实物礼品', price: 3500, stock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['限时'] },
         { name: '全场通用88折券', type: '优惠券-券中心', price: 200, stock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['限时', '满减活动'] },
       ]
     },
-    { id: 4, name: '年中大促活动', timeRange: { start: '2026-07-18 10:00', end: '2026-07-18 23:59' }, createdAt: '2026-07-17 16:00', createdBy: '管理员', status: 'active', rule: '', channel: ['微信小程序', '支付宝小程序', 'H5'], payType: '贝壳', costShare: { type: '品牌全额' }, revenueShare: { type: '品牌全额' }, memberDiscount: { normal: 100, silver: 100, gold: 100, platinum: 100, diamond: 100 }, accountType: '主营业务', budgetLimit: 800000, actualCost: 446700, actualRevenue: 446700,
+    { id: 4, name: '年中大促活动', timeRange: { start: '2026-07-18 10:00', end: '2026-07-18 23:59' }, createdAt: '2026-07-17 16:00', createdBy: '管理员', status: 'active', rule: '', channel: ['微信小程序', '支付宝小程序', 'H5'], payType: '贝壳', source: '千帆', costShare: { type: '品牌全额' }, revenueShare: { type: '品牌全额' }, memberDiscount: { normal: 100, silver: 100, gold: 100, platinum: 100, diamond: 100 }, accountType: '主营业务', budgetLimit: 800000, actualCost: 446700, actualRevenue: 446700,
       items: [
         { name: '海蓝之谜面霜 30ml', type: '实物礼品', price: 15000, stock: 20, exchanged: 20, monthLimit: -1, dayLimit: -1, tags: ['节日活动'] },
         { name: 'CDF 50元无门槛券', type: '优惠券-优选单券', price: 300, stock: -1, exchanged: 489, monthLimit: -1, dayLimit: -1, tags: ['新人专享'] },
       ]
     },
-    { id: 5, name: '春节限时兑换活动', timeRange: { start: '2026-01-20 10:00', end: '2026-02-10 23:59' }, createdAt: '2026-01-15 09:00', createdBy: '管理员', status: 'terminated', rule: '每人每场限兑2件', channel: ['APP', '微信小程序', 'H5'], payType: '积分', costShare: { type: '混合分摊', brand: 40, store: 40, tax: 20 }, revenueShare: { type: '混合分摊', brand: 40, store: 40, tax: 20 }, memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 600000, actualCost: 2070000, actualRevenue: 2070000,
+    { id: 5, name: '春节限时兑换活动', timeRange: { start: '2026-01-20 10:00', end: '2026-02-10 23:59' }, createdAt: '2026-01-15 09:00', createdBy: '管理员', status: 'terminated', rule: '每人每场限兑2件', channel: ['APP', '微信小程序', 'H5'], payType: '积分', source: '千帆', costShare: { type: '混合分摊', brand: 40, store: 40, tax: 20 }, revenueShare: { type: '混合分摊', brand: 40, store: 40, tax: 20 }, memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 600000, actualCost: 2070000, actualRevenue: 2070000,
       items: [
         { name: '雅诗兰黛持妆粉底液 30ml', type: '实物礼品', price: 8800, stock: 100, exchanged: 95, monthLimit: -1, dayLimit: -1 },
         { name: '兰蔻小黑瓶精华肌底液 20ml', type: '实物礼品', price: 12800, stock: 50, exchanged: 48, monthLimit: -1, dayLimit: -1 },
@@ -3433,6 +3410,7 @@
           activityTimeEnd: timeEnd,
           channel: matchedProduct ? matchedProduct.channel : 'cdf中免海南',
           payType: a.payType || '积分',
+          source: a.source || '千帆',
           name: item.name,
           type: item.type || '实物礼品',
           price: item.price || 0,
@@ -3540,7 +3518,7 @@
         '<td><button class="btn btn-text btn-sm" onclick="openWeightModal(\'' + p.id + '\')">权重' + (p.sort ? ' ' + p.sort : '') + '</button></td>' +
         '<td style="font-weight:500;font-size:13px;">' + p.name + '</td>' +
         '<td><span class="type-badge" style="' + typeStyle + '">' + p.type + '</span></td>' +
-        '<td style="font-size:12px;color:var(--ink-2);">' + p.activityName + '</td>' +
+        '<td style="font-size:12px;color:var(--ink-2);line-height:1.5;">' + (p.source ? '<div style="margin-bottom:2px;"><span style="display:inline-block;padding:1px 5px;border-radius:4px;font-size:10px;' + (p.source.indexOf('繁星') >= 0 ? 'background:#fff3e0;color:#f57c00;' : 'background:#e3f2fd;color:#1565c0;') + '">' + p.source + '</span></div>' : '') + '<div>' + p.activityName + '</div></td>' +
         '<td style="font-size:11px;color:var(--ink-3);">' + (p.channel || 'cdf中免海南') + '</td>' +
         '<td><span style="display:inline-block;padding:1px 6px;border-radius:4px;font-size:11px;background:' + (p.payType === '贝壳' ? '#fdf6ec;color:#c8a36a;' : '#e8f0fe;color:#1a73e8;') + '">' + p.payType + '</span></td>' +
         '<td style="font-weight:500;">' + p.price.toLocaleString() + '</td>' +
@@ -3730,14 +3708,14 @@
 
   // ===== 兑换订单 =====
   var allOrders = [
-    { orderId: 'EX20260721001', prizeId: 'PRIZE-0001', prizeName: '雅诗兰黛持妆粉底液 30ml', prizeImg: '', prizeType: '实物礼品', quantity: 1, relatedPrize: '', relatedPrizeId: '', sourceType: '兑换中心', sourceActivityName: '夏日狂欢兑换活动', sourceActivityId: 'ACT-001', userName: '王梦琪', userId: 'UID-10001', userPhone: '13812348888', userAddress: '海南省三亚市天涯区海棠北路118号 中免海棠湾国际免税城', memberLevel: '金卡会员', payType: '积分', payPoints: 8800, status: '待支付', time: '2026-07-21 10:30', completeTime: '', expressNo: '', expressCompany: '', accountType: '主营业务', usageScene: '兑换中心', channel: 'APP', store: '三亚国际免税城', entryType: '公域' },
+    { orderId: 'EX20260721001', prizeId: 'PRIZE-0001', prizeName: '雅诗兰黛持妆粉底液 30ml', prizeImg: '', prizeType: '实物礼品', quantity: 1, relatedPrize: '', relatedPrizeId: '', sourceType: '兑换中心', sourceActivityName: '夏日狂欢兑换活动', sourceActivityId: 'ACT-001', userName: '王梦琪', userId: 'UID-10001', userPhone: '13812348888', userAddress: '海南省三亚市天涯区海棠北路118号 中免海棠湾国际免税城', memberLevel: '金卡会员', payType: '积分', payPoints: 8800, status: '待发货', time: '2026-07-21 10:30', completeTime: '', expressNo: '', expressCompany: '', accountType: '主营业务', usageScene: '兑换中心', channel: 'APP', store: '三亚国际免税城', entryType: '公域' },
     { orderId: 'EX20260720015', prizeId: 'PRIZE-0002', prizeName: '兰蔻小黑瓶精华肌底液 20ml', prizeImg: '', prizeType: '实物礼品', quantity: 1, relatedPrize: '', relatedPrizeId: '', sourceType: '兑换中心', sourceActivityName: '会员专属兑换活动', sourceActivityId: 'ACT-002', userName: '李思涵', userId: 'UID-10002', userPhone: '18612346677', userAddress: '海南省海口市龙华区国贸路68号', memberLevel: '铂金VIP', payType: '贝壳', payPoints: 1000, status: '待发货', time: '2026-07-20 14:22', completeTime: '', expressNo: '', expressCompany: '', accountType: '主营业务', usageScene: '兑换中心', channel: 'APP', store: '海口国际免税城', entryType: '私域' },
     { orderId: 'EX20260720012', prizeId: 'PRIZE-0003', prizeName: 'CDF 100元代金券', prizeImg: '', prizeType: '优惠券-优选单券', quantity: 2, relatedPrize: '', relatedPrizeId: '', sourceType: '兑换中心', sourceActivityName: '夏日狂欢兑换活动', sourceActivityId: 'ACT-001', userName: '张雅婷', userId: 'UID-10003', userPhone: '15912343344', userAddress: '', memberLevel: '银卡会员', payType: '积分', payPoints: 1000, status: '待收货/待使用', time: '2026-07-20 11:08', completeTime: '', expressNo: '', expressCompany: '', accountType: '主营业务', usageScene: '预约抽奖', channel: 'APP', store: '博鳌免税店', entryType: '公域' },
     { orderId: 'EX20260719008', prizeId: 'PRIZE-0005', prizeName: 'SK-II 神仙水 230ml', prizeImg: '', prizeType: '预约抽奖', quantity: 1, relatedPrize: '', relatedPrizeId: '', sourceType: '预约抽奖', sourceActivityName: '七月预约抽奖', sourceActivityId: 'LOT-003', userName: '陈佳琪', userId: 'UID-10004', userPhone: '17712342211', userAddress: '广东省广州市天河区珠江新城花城大道68号', memberLevel: '钻石VIP', payType: '贝壳', payPoints: 1200, status: '待收货/待使用', time: '2026-07-19 16:45', completeTime: '', expressNo: 'SF1234567890', expressCompany: '顺丰速运', accountType: '非主营业务', usageScene: '预约抽奖', channel: '微信小程序', store: '三亚凤凰机场店', entryType: '私域' },
     { orderId: 'EX20260719003', prizeId: 'PRIZE-0006', prizeName: '海蓝之谜面霜 30ml', prizeImg: '', prizeType: '转盘抽奖', quantity: 1, relatedPrize: '兰蔻小黑瓶精华肌底液 20ml', relatedPrizeId: 'PRIZE-0002', sourceType: '转盘抽奖', sourceActivityName: '年中大促转盘', sourceActivityId: 'LOT-001', userName: '赵晓晨', userId: 'UID-10005', userPhone: '13512349900', userAddress: '北京市朝阳区建国门外大街1号', memberLevel: '金卡会员', payType: '贝壳', payPoints: 1500, status: '已完成', time: '2026-07-19 09:18', completeTime: '2026-07-22 14:00', expressNo: 'YT9876543210', expressCompany: '圆通速递', accountType: '非主营业务', usageScene: '转盘抽奖', channel: 'H5', store: '海口美兰机场店', entryType: '公域' },
     { orderId: 'EX20260718005', prizeId: 'PRIZE-0004', prizeName: '三亚免税城 SPA 体验券', prizeImg: '', prizeType: '优惠券-券中心', quantity: 1, relatedPrize: '', relatedPrizeId: '', sourceType: '兑换中心', sourceActivityName: '限时闪购活动', sourceActivityId: 'ACT-003', userName: '刘婉清', userId: 'UID-10006', userPhone: '13212345566', userAddress: '', memberLevel: '银卡会员', payType: '积分', payPoints: 9500, status: '已完成', time: '2026-07-18 10:22', completeTime: '2026-07-20 16:30', expressNo: '', expressCompany: '', accountType: '主营业务', usageScene: '转盘抽奖', channel: 'APP', store: '三亚国际免税城', entryType: '私域' },
     { orderId: 'EX20260717002', prizeId: 'PRIZE-0007', prizeName: '海南免税95折券', prizeImg: '', prizeType: '优惠券-优选单券', quantity: 1, relatedPrize: '', relatedPrizeId: '', sourceType: '兑换中心', sourceActivityName: '夏日狂欢兑换活动', sourceActivityId: 'ACT-001', userName: '孙雨桐', userId: 'UID-10007', userPhone: '18812347788', userAddress: '', memberLevel: '普通会员', payType: '积分', payPoints: 350, status: '退款中', time: '2026-07-17 15:30', completeTime: '', expressNo: '', expressCompany: '', accountType: '主营业务', usageScene: '兑换中心', channel: 'APP', store: '海口国际免税城', entryType: '公域' },
-    { orderId: 'EX20260716001', prizeId: 'PRIZE-0008', prizeName: '迪奥口红套装', prizeImg: '', prizeType: '转盘抽奖', quantity: 1, relatedPrize: '', relatedPrizeId: '', sourceType: '转盘抽奖', sourceActivityName: '年中大促转盘', sourceActivityId: 'LOT-001', userName: '周文博', userId: 'UID-10008', userPhone: '15012341122', userAddress: '上海市黄浦区南京东路800号', memberLevel: '金卡会员', payType: '积分', payPoints: 3500, status: '已取消', time: '2026-07-16 08:55', completeTime: '', expressNo: '', expressCompany: '', accountType: '非主营业务', usageScene: '转盘抽奖', channel: 'H5', store: '博鳌免税店', entryType: '公域' },
+    { orderId: 'EX20260716001', prizeId: 'PRIZE-0008', prizeName: '迪奥口红套装', prizeImg: '', prizeType: '转盘抽奖', quantity: 1, relatedPrize: '', relatedPrizeId: '', sourceType: '转盘抽奖', sourceActivityName: '年中大促转盘', sourceActivityId: 'LOT-001', userName: '周文博', userId: 'UID-10008', userPhone: '15012341122', userAddress: '上海市黄浦区南京东路800号', memberLevel: '金卡会员', payType: '积分', payPoints: 3500, status: '已退款', time: '2026-07-16 08:55', completeTime: '', expressNo: '', expressCompany: '', accountType: '非主营业务', usageScene: '转盘抽奖', channel: 'H5', store: '博鳌免税店', entryType: '公域' },
     ];
 
   // 补充订单计算字段（延迟到 allRefunds 声明后执行）
@@ -3812,7 +3790,7 @@
       '待发货': 'background:#e3f2fd;color:#1565c0;',
       '待收货/待使用': 'background:#e8f5e9;color:#2e7d32;',
       '已完成': 'background:#f5f5f5;color:var(--ink-2);',
-      '已取消': 'background:#ffebee;color:#c62828;',
+      '已退款': 'background:#ffebee;color:#c62828;',
       '待审核': 'background:#fff3e0;color:#e65100;',
       '审核驳回': 'background:#ffebee;color:#c62828;',
       '退款中': 'background:#e8f0fe;color:#1a73e8;',
@@ -3939,12 +3917,12 @@
 
       // 操作按钮
       var actions = '<button class="btn btn-text btn-sm" onclick="openOrderDetailModal(\'' + o.orderId + '\')">详情</button>';
-      if (o.sourceType === '兑换中心' && o.status !== '已取消') {
+      if (o.sourceType === '兑换中心' && o.status !== '已退款') {
         actions += ' <button class="btn btn-text btn-sm" onclick="openExpressModal(\'' + o.orderId + '\')">物流</button>';
       }
       if (o.status === '退款中') {
         actions += ' <button class="btn btn-danger btn-sm" onclick="goToRefundTab(\'' + o.orderId + '\')">售后订单</button>';
-      } else if (o.status !== '已取消') {
+      } else if (o.status !== '已退款') {
         actions += ' <button class="btn btn-danger btn-sm" onclick="openRefundModal(\'' + o.orderId + '\')">退款</button>';
       }
 
@@ -4427,7 +4405,7 @@
     if (!reason) { showToast('请选择或填写退款原因', 'warning'); return; }
     var o = allOrders.find(function(x) { return x.orderId === orderId; });
     if (!o) return;
-    o.status = '已取消';
+    o.status = '已退款';
     var newRefundId = 'RF' + Date.now().toString().substring(2);
     var nowTime = new Date().getFullYear() + '-' + String(new Date().getMonth()+1).padStart(2,'0') + '-' + String(new Date().getDate()).padStart(2,'0') + ' ' + String(new Date().getHours()).padStart(2,'0') + ':' + String(new Date().getMinutes()).padStart(2,'0');
     var auditors = Array.from(document.querySelectorAll('input[name="refundAuditors"]:checked')).map(function(cb) { return cb.value; });
@@ -4642,6 +4620,38 @@
   var currentBill2IncomeSubTab = 'month';
   var currentBill2ExpenseSubTab = 'month';
 
+  // 初始化默认日期值
+  var _bill2DatesInitialized = false;
+  function initBill2DefaultDates() {
+    if (_bill2DatesInitialized) return;
+    _bill2DatesInitialized = true;
+    var now = new Date();
+    // 月汇总默认：当月起往前3个月
+    var thisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    var monthStart = new Date(now.getFullYear(), now.getMonth() - 2, 1); // 当月往前推2个月 = 3个月范围
+    var fmtMonth = function(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0'); };
+    var incMonthStart = document.getElementById('bill2IncMonthDateStart');
+    var incMonthEnd = document.getElementById('bill2IncMonthDateEnd');
+    if (incMonthStart) incMonthStart.value = fmtMonth(monthStart);
+    if (incMonthEnd) incMonthEnd.value = fmtMonth(thisMonth);
+    var expMonthStart = document.getElementById('bill2ExpMonthDateStart');
+    var expMonthEnd = document.getElementById('bill2ExpMonthDateEnd');
+    if (expMonthStart) expMonthStart.value = fmtMonth(monthStart);
+    if (expMonthEnd) expMonthEnd.value = fmtMonth(thisMonth);
+    // 日汇总默认：从昨天开始往前30天
+    var yesterday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
+    var dayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 30);
+    var fmtDate = function(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
+    var incDayStart = document.getElementById('bill2IncDayDateStart');
+    var incDayEnd = document.getElementById('bill2IncDayDateEnd');
+    if (incDayStart) incDayStart.value = fmtDate(dayStart);
+    if (incDayEnd) incDayEnd.value = fmtDate(yesterday);
+    var expDayStart = document.getElementById('bill2ExpDayDateStart');
+    var expDayEnd = document.getElementById('bill2ExpDayDateEnd');
+    if (expDayStart) expDayStart.value = fmtDate(dayStart);
+    if (expDayEnd) expDayEnd.value = fmtDate(yesterday);
+  }
+
   // 收入账单模拟数据（基于订单）
   var bill2IncomeData = [
     { orderId: 'EX20260722001', prizeName: '雅诗兰黛持妆粉底液 30ml', prizeType: '实物礼品', activity: '夏日狂欢兑换活动', payType: '积分', amount: 8800, actualAmount: 8800, userPhone: '138****8888', time: '2026-07-22 10:30', status: '已完成', channel: 'APP', accountType: '主营业务' },
@@ -4675,7 +4685,6 @@
     { orderId: 'EX20260719007', prizeName: '迪奥口红套装', prizeType: '实物礼品', scene: '兑换中心', bizType: '奖品成本', cost: 6800, pointsCost: Math.round(6800 * 0.8), shellsCost: Math.round(6800 * 0.2), time: '2026-07-19 09:18', payType: '贝壳', amount: 6800, actualAmount: 6800, status: '已完成', channel: 'H5', accountType: '主营业务', activity: '夏日狂欢兑换活动' },
     { orderId: 'EX20260718008', prizeName: 'CDF 50元无门槛券', prizeType: '优惠券-优选单券', scene: '签到', bizType: '券成本', cost: 50, pointsCost: Math.round(50 * 0.8), shellsCost: Math.round(50 * 0.2), time: '2026-07-18 10:22', payType: '积分', amount: 50, actualAmount: 50, status: '已完成', channel: 'APP', accountType: '主营业务', activity: '每日签到' },
     { orderId: 'EX20260718009', prizeName: '转盘抽奖机会 × 3', prizeType: '转盘抽奖', scene: '转盘抽奖', bizType: '奖品成本', cost: 60, pointsCost: Math.round(60 * 0.8), shellsCost: Math.round(60 * 0.2), time: '2026-07-18 08:15', payType: '贝壳', amount: 60, actualAmount: 60, status: '已完成', channel: '支付宝小程序', accountType: '非主营业务', activity: '周年庆转盘抽奖' },
-    { orderId: 'EX20260717010', prizeName: '三亚SPA体验券', prizeType: '预约抽奖', scene: '预约抽奖', bizType: '奖品成本', cost: 1200, pointsCost: Math.round(1200 * 0.8), shellsCost: Math.round(1200 * 0.2), time: '2026-07-17 16:40', payType: '积分', amount: 1200, actualAmount: 1200, status: '已完成', channel: '微信小程序', accountType: '非主营业务', activity: '预约抽奖活动' },
     { orderId: 'EX20260717011', prizeName: '全场通用88折券', prizeType: '优惠券-券中心', scene: '兑换中心', bizType: '券成本', cost: 80, pointsCost: Math.round(80 * 0.8), shellsCost: Math.round(80 * 0.2), time: '2026-07-17 11:20', payType: '贝壳', amount: 80, actualAmount: 80, status: '已完成', channel: 'H5', accountType: '主营业务', activity: '夏日狂欢兑换活动' },
     { orderId: 'EX20260716012', prizeName: '资生堂红腰子精华 50ml', prizeType: '实物礼品', scene: '兑换中心', bizType: '奖品成本', cost: 5500, pointsCost: Math.round(5500 * 0.8), shellsCost: Math.round(5500 * 0.2), time: '2026-07-16 14:30', payType: '积分', amount: 5500, actualAmount: 5500, status: '已完成', channel: 'APP', accountType: '主营业务', activity: '夏日狂欢兑换活动' },
     { orderId: 'EX20260716013', prizeName: 'CDF 100元代金券', prizeType: '优惠券-优选单券', scene: '兑换中心', bizType: '券成本', cost: 100, pointsCost: Math.round(100 * 0.8), shellsCost: Math.round(100 * 0.2), time: '2026-07-16 09:45', payType: '贝壳', amount: 100, actualAmount: 100, status: '已完成', channel: '第三方', accountType: '主营业务', activity: '夏日狂欢兑换活动' },
@@ -4685,10 +4694,13 @@
     { orderId: 'EX20260723017', prizeName: '每日签到88折券', prizeType: '优惠券-券中心', scene: '签到', bizType: '券成本', cost: 60, pointsCost: Math.round(60 * 0.8), shellsCost: Math.round(60 * 0.2), time: '2026-07-23 08:30', payType: '贝壳', amount: 60, actualAmount: 60, status: '已完成', channel: '微信小程序', accountType: '主营业务', activity: '每日签到' },
     { orderId: 'EX20260722018', prizeName: '新人任务福利值 100', prizeType: '福利值', scene: '任务', bizType: '福利成本', cost: 40, pointsCost: Math.round(40 * 0.8), shellsCost: Math.round(40 * 0.2), time: '2026-07-22 19:20', payType: '积分', amount: 40, actualAmount: 40, status: '已完成', channel: 'H5', accountType: '非主营业务', activity: '新人任务' },
     { orderId: 'EX20260722019', prizeName: '转盘抽奖机会 × 8', prizeType: '转盘抽奖', scene: '转盘抽奖', bizType: '奖品成本', cost: 160, pointsCost: Math.round(160 * 0.8), shellsCost: Math.round(160 * 0.2), time: '2026-07-22 20:45', payType: '贝壳', amount: 160, actualAmount: 160, status: '已完成', channel: 'APP', accountType: '非主营业务', activity: '周年庆转盘抽奖' },
-    { orderId: 'EX20260721020', prizeName: '海口骑楼老街体验券', prizeType: '预约抽奖', scene: '预约抽奖', bizType: '奖品成本', cost: 980, pointsCost: Math.round(980 * 0.8), shellsCost: Math.round(980 * 0.2), time: '2026-07-21 15:10', payType: '积分', amount: 980, actualAmount: 980, status: '已完成', channel: '微信小程序', accountType: '非主营业务', activity: '预约抽奖活动' },
     { orderId: 'EX20260720021', prizeName: 'CDF 200元代金券', prizeType: '优惠券-优选单券', scene: '兑换中心', bizType: '券成本', cost: 200, pointsCost: Math.round(200 * 0.8), shellsCost: Math.round(200 * 0.2), time: '2026-07-20 13:25', payType: '贝壳', amount: 200, actualAmount: 200, status: '已完成', channel: '支付宝小程序', accountType: '主营业务', activity: '夏日狂欢兑换活动' },
     { orderId: 'EX20260720021', prizeName: 'CDF 200元代金券', prizeType: '优惠券-优选单券', scene: '兑换中心', bizType: '平台服务费', cost: 4, pointsCost: Math.round(4 * 0.8), shellsCost: Math.round(4 * 0.2), time: '2026-07-20 13:25', payType: '积分', amount: 4, actualAmount: 4, status: '已完成', channel: '支付宝小程序', accountType: '主营业务', activity: '夏日狂欢兑换活动' },
     { orderId: 'EX20260719022', prizeName: '签到专享95折券', prizeType: '优惠券-券中心', scene: '签到', bizType: '券成本', cost: 70, pointsCost: Math.round(70 * 0.8), shellsCost: Math.round(70 * 0.2), time: '2026-07-19 08:05', payType: '贝壳', amount: 70, actualAmount: 70, status: '已完成', channel: '第三方', accountType: '主营业务', activity: '每日签到' },
+    { orderId: 'EX20260718023', prizeName: '签到福利值 30', prizeType: '福利值', scene: '签到', bizType: '福利成本', cost: 20, pointsCost: Math.round(20 * 0.8), shellsCost: Math.round(20 * 0.2), time: '2026-07-18 09:30', payType: '积分', amount: 20, actualAmount: 20, status: '已完成', channel: 'APP', accountType: '非主营业务', activity: '每日签到' },
+    // 退款记录（逆向）
+    { orderId: 'EX20260720005-R', prizeName: '海南免税95折券', prizeType: '优惠券-优选单券', scene: '兑换中心', bizType: '券成本', cost: -50, pointsCost: Math.round(-50 * 0.8), shellsCost: Math.round(-50 * 0.2), time: '2026-07-22 14:00', payType: '积分', amount: -50, actualAmount: -50, status: '已退款', channel: 'APP', accountType: '主营业务', activity: '夏日狂欢兑换活动' },
+    { orderId: 'EX20260719006-R', prizeName: '全场通用88折券', prizeType: '优惠券-券中心', scene: '签到', bizType: '券成本', cost: -80, pointsCost: Math.round(-80 * 0.8), shellsCost: Math.round(-80 * 0.2), time: '2026-07-23 10:30', payType: '贝壳', amount: -80, actualAmount: -80, status: '已退款', channel: '微信小程序', accountType: '非主营业务', activity: '每日签到' },
   ];
 
   // 计算分摊金额
@@ -4761,8 +4773,7 @@
     renderBill2Expense();
   }
 
-  // 弹窗函数
-  var currentBill2ModalTab = 'store';
+  // 工具函数
   var MERCHANT_NAMES = ['星巴克咖啡店','喜茶饮品店','海底捞餐饮','万达影院','三亚度假酒店','海口亚特兰蒂斯酒店','中免海南商城','悦诗风吟美妆店','肯德基快餐','免税城spa会所'];
   var STORE_NAMES = ['三亚国际免税城', '海口国际免税城', '博鳌免税店', '三亚凤凰机场店', '海口美兰机场店'];
   function getMerchantName(str) {
@@ -4789,8 +4800,10 @@
     if (bill2PageState[key] < Math.ceil(list / BILL2_PAGE_SIZE)) { bill2PageState[key]++; }
     if (key.startsWith('income')) renderBill2Income(); else renderBill2Expense();
   }
-  function batchDownloadBill2(key) {
-    showToast('已批量下载' + (key.startsWith('income') ? '收入账单' : '成本账单'), 'success');
+  function exportBill2(key) {
+    var label = key.startsWith('income') ? '收入账单' : '成本账单';
+    var subLabel = key.indexOf('month') >= 0 ? '月汇总' : key.indexOf('day') >= 0 ? '日汇总' : '明细';
+    showToast('已导出' + label + subLabel + '数据', 'success');
   }
   function updateBill2PageInfo(subKey, total) {
     var totalP = Math.ceil(total / BILL2_PAGE_SIZE);
@@ -4804,69 +4817,54 @@
       if (btns[1]) btns[1].disabled = (bill2PageState[subKey] >= totalP);
     }
   }
+  // 点击"分成明细"/"分摊明细"按钮 → 切换到明细tab，并自动带入时间段+奖品类型筛选
   function openBill2IncomeDetail(periodType, prizeType, btn, isExpense) {
-    var modalType = isExpense ? 'cost' : 'income';
-    document.getElementById('bill2DetailModalTitle').textContent = prizeType + ' - ' + (periodType === 'month' ? '月度' : '日度') + '明细';
-    var filtered;
     if (isExpense) {
-      filtered = bill2ExpenseData.filter(function(r) { return r.prizeType === prizeType; });
-    } else {
-      filtered = bill2IncomeData.filter(function(r) { return r.prizeType === prizeType; });
-    }
-    var merchants = {};
-    var stores = {};
-    var incomeLabel = isExpense ? '积分成本' : '积分收入';
-    var shellLabel = isExpense ? '贝壳成本' : '贝壳收入';
-    filtered.forEach(function(r) {
-      if (isExpense || r.amount >= 0) {
-        var mKey = getMerchantName(r.orderId);
-        if (!merchants[mKey]) merchants[mKey] = { pIncome: 0, sIncome: 0 };
-        if (isExpense) {
-          merchants[mKey].pIncome += r.pointsCost;
-          merchants[mKey].sIncome += r.shellsCost;
-        } else {
-          if (r.payType === '积分') merchants[mKey].pIncome += r.amount; else merchants[mKey].sIncome += r.amount;
-        }
-        var sKey = STORE_NAMES[Math.floor(Math.random() * STORE_NAMES.length)];
-        if (!stores[sKey]) stores[sKey] = { pIncome: 0, sIncome: 0 };
-        if (isExpense) {
-          stores[sKey].pIncome += r.pointsCost;
-          stores[sKey].sIncome += r.shellsCost;
-        } else {
-          if (r.payType === '积分') stores[sKey].pIncome += r.amount; else stores[sKey].sIncome += r.amount;
-        }
+      // 成本账单 → 切换到"分摊明细"tab
+      // 读取月/日汇总的日期范围和奖品类型
+      var dateStart, dateEnd;
+      if (periodType === 'month') {
+        dateStart = (document.getElementById('bill2ExpMonthDateStart') || {}).value || '';
+        dateEnd = (document.getElementById('bill2ExpMonthDateEnd') || {}).value || '';
+      } else {
+        dateStart = (document.getElementById('bill2ExpDayDateStart') || {}).value || '';
+        dateEnd = (document.getElementById('bill2ExpDayDateEnd') || {}).value || '';
       }
-    });
-    // 更新弹窗表头文字
-    var brandTable = document.getElementById('bill2ModalBrandView');
-    var storeTable = document.getElementById('bill2ModalStoreView');
-    brandTable.querySelector('thead tr').children[0].textContent = '商户名称';
-    brandTable.querySelector('thead tr').children[1].textContent = incomeLabel;
-    brandTable.querySelector('thead tr').children[2].textContent = shellLabel;
-    storeTable.querySelector('thead tr').children[1].textContent = incomeLabel;
-    storeTable.querySelector('thead tr').children[2].textContent = shellLabel;
-    var bHtml = Object.keys(merchants).map(function(b) {
-      return '<tr><td style="padding:8px;border-bottom:1px solid var(--border);font-size:13px;">' + b + '</td><td style="text-align:right;padding:8px;border-bottom:1px solid var(--border);font-size:13px;">' + merchants[b].pIncome.toLocaleString() + '</td><td style="text-align:right;padding:8px;border-bottom:1px solid var(--border);font-size:13px;">' + merchants[b].sIncome.toLocaleString() + '</td></tr>';
-    }).join('');
-    document.getElementById('bill2ModalBrandBody').innerHTML = bHtml || '<tr><td colspan="3" style="text-align:center;padding:20px;color:var(--ink-4);">暂无数据</td></tr>';
-    var sHtml = Object.keys(stores).map(function(s) {
-      return '<tr><td style="padding:8px;border-bottom:1px solid var(--border);font-size:13px;">' + s + '</td><td style="text-align:right;padding:8px;border-bottom:1px solid var(--border);font-size:13px;">' + stores[s].pIncome.toLocaleString() + '</td><td style="text-align:right;padding:8px;border-bottom:1px solid var(--border);font-size:13px;">' + stores[s].sIncome.toLocaleString() + '</td></tr>';
-    }).join('');
-    document.getElementById('bill2ModalStoreBody').innerHTML = sHtml || '<tr><td colspan="3" style="text-align:center;padding:20px;color:var(--ink-4);">暂无数据</td></tr>';
-    switchBill2ModalTab('store');
-    document.getElementById('bill2DetailModal').style.display = 'block';
-  }
-  function closeBill2DetailModal() {
-    document.getElementById('bill2DetailModal').style.display = 'none';
-  }
-  function switchBill2ModalTab(tab) {
-    currentBill2ModalTab = tab;
-    document.getElementById('bill2ModalBrandView').style.display = tab === 'brand' ? 'block' : 'none';
-    document.getElementById('bill2ModalStoreView').style.display = tab === 'store' ? 'block' : 'none';
-    document.getElementById('bill2ModalTabBrand').style.background = tab === 'brand' ? 'var(--primary)' : 'transparent';
-    document.getElementById('bill2ModalTabBrand').style.color = tab === 'brand' ? '#fff' : 'var(--ink-3)';
-    document.getElementById('bill2ModalTabStore').style.background = tab === 'store' ? 'var(--primary)' : 'transparent';
-    document.getElementById('bill2ModalTabStore').style.color = tab === 'store' ? '#fff' : 'var(--ink-3)';
+      // 切换到明细tab
+      var detailBtn = document.querySelector('.bill2-exp-sub-tab[onclick*="\'detail\'"]');
+      if (detailBtn) switchBill2ExpenseTab('detail', detailBtn);
+      // 重置场景筛选为"全部场景"，分摊明细tab不按场景筛选
+      currentBill2ExpenseScene = 'all';
+      document.querySelectorAll('#bill2ExpenseSceneTabs .tab-btn').forEach(function(b) {
+        b.style.borderBottom = '2px solid transparent';
+        b.style.color = 'var(--ink-3)';
+      });
+      var allBtn = document.querySelector('#bill2ExpenseSceneTabs .tab-btn:first-child');
+      if (allBtn) { allBtn.style.borderBottom = '2px solid var(--primary)'; allBtn.style.color = 'var(--primary)'; }
+      // 设置明细tab的筛选条件（仅日期和奖品类型，不带场景）
+      if (dateStart) { var ds = document.getElementById('bill2ExpDetailDateStart'); if (ds) ds.value = dateStart; }
+      if (dateEnd) { var de = document.getElementById('bill2ExpDetailDateEnd'); if (de) de.value = dateEnd; }
+      if (prizeType) { var pt = document.getElementById('bill2ExpDetailPrizeType'); if (pt) pt.value = prizeType; }
+      renderBill2Expense();
+    } else {
+      // 收入账单 → 切换到"收入明细"tab
+      var dateStart2, dateEnd2;
+      if (periodType === 'month') {
+        dateStart2 = (document.getElementById('bill2IncMonthDateStart') || {}).value || '';
+        dateEnd2 = (document.getElementById('bill2IncMonthDateEnd') || {}).value || '';
+      } else {
+        dateStart2 = (document.getElementById('bill2IncDayDateStart') || {}).value || '';
+        dateEnd2 = (document.getElementById('bill2IncDayDateEnd') || {}).value || '';
+      }
+      // 切换到明细tab
+      var detailBtn2 = document.querySelector('.bill2-inc-sub-tab[onclick*="\'detail\'"]');
+      if (detailBtn2) switchBill2IncomeTab('detail', detailBtn2);
+      // 设置明细tab的筛选条件
+      if (dateStart2) { var ds2 = document.getElementById('bill2IncDetailDateStart'); if (ds2) ds2.value = dateStart2; }
+      if (dateEnd2) { var de2 = document.getElementById('bill2IncDetailDateEnd'); if (de2) de2.value = dateEnd2; }
+      if (prizeType) { var pt2 = document.getElementById('bill2IncDetailPrizeType'); if (pt2) pt2.value = prizeType; }
+      renderBill2Income();
+    }
   }
 
   // 收入渲染函数
@@ -4899,8 +4897,14 @@
 
     var filtered = bill2IncomeData.filter(function(r) {
       var d = r.time.substring(0, 10);
-      if (dateStart && d < dateStart) return false;
-      if (dateEnd && d > dateEnd) return false;
+      var dMonth = r.time.substring(0, 7);
+      if (currentBill2IncomeSubTab === 'month') {
+        if (dateStart && dMonth < dateStart) return false;
+        if (dateEnd && dMonth > dateEnd) return false;
+      } else {
+        if (dateStart && d < dateStart) return false;
+        if (dateEnd && d > dateEnd) return false;
+      }
       if (typeFilter && r.prizeType !== typeFilter) return false;
       if (r.prizeType === '福利值' || r.prizeType === '预约抽奖') return false;
       if (currentBill2IncomeSubTab === 'detail') {
@@ -4978,7 +4982,7 @@
             '<td' + sCls + '>' + pShare.platform.toLocaleString() + ' / ' + sShare.platform.toLocaleString() + '</td>' +
             '<td' + sCls + '>' + pShare.store.toLocaleString() + ' / ' + sShare.store.toLocaleString() + '</td>' +
             '<td' + sCls + '>' + pShare.brand.toLocaleString() + ' / ' + sShare.brand.toLocaleString() + '</td>' +
-            '<td style="text-align:center;white-space:nowrap;"><button class="btn btn-outline btn-sm" onclick="showToast(\'账单已下载\',\'success\')" style="margin-right:4px;">下载账单</button><button class="btn btn-outline btn-sm" onclick="openBill2IncomeDetail(\'' + ptype + '\',\'' + r.prizeType + '\',this)">分成明细</button></td>' +
+            '<td style="text-align:center;white-space:nowrap;"><button class="btn btn-outline btn-sm" onclick="openBill2IncomeDetail(\'' + ptype + '\',\'' + r.prizeType + '\',this)">分成明细</button></td>' +
             '</tr>';
         }).join('');
         document.getElementById(countId).textContent = String(list.length);
@@ -5054,10 +5058,12 @@
       dateStart = (document.getElementById('bill2ExpMonthDateStart') || {}).value || '';
       dateEnd = (document.getElementById('bill2ExpMonthDateEnd') || {}).value || '';
       sceneFilter = (document.getElementById('bill2ExpMonthScene') || {}).value || '';
+      prizeTypeFilter = (document.getElementById('bill2ExpMonthPrizeType') || {}).value || '';
     } else if (currentBill2ExpenseSubTab === 'day') {
       dateStart = (document.getElementById('bill2ExpDayDateStart') || {}).value || '';
       dateEnd = (document.getElementById('bill2ExpDayDateEnd') || {}).value || '';
       sceneFilter = (document.getElementById('bill2ExpDayScene') || {}).value || '';
+      prizeTypeFilter = (document.getElementById('bill2ExpDayPrizeType') || {}).value || '';
     } else {
       dateStart = (document.getElementById('bill2ExpDetailDateStart') || {}).value || '';
       dateEnd = (document.getElementById('bill2ExpDetailDateEnd') || {}).value || '';
@@ -5071,14 +5077,20 @@
 
     var filtered = bill2ExpenseData.filter(function(r) {
       var d = r.time.substring(0, 10);
-      if (dateStart && d < dateStart) return false;
-      if (dateEnd && d > dateEnd) return false;
+      var dMonth = r.time.substring(0, 7);
+      if (currentBill2ExpenseSubTab === 'month') {
+        if (dateStart && dMonth < dateStart) return false;
+        if (dateEnd && dMonth > dateEnd) return false;
+      } else {
+        if (dateStart && d < dateStart) return false;
+        if (dateEnd && d > dateEnd) return false;
+      }
       if (sceneFilter && r.scene !== sceneFilter) return false;
-      if (currentBill2ExpenseScene !== 'all' && r.scene !== currentBill2ExpenseScene) return false;
+      // 月/日汇总时按使用场景筛选；分摊明细tab不按场景筛选，仅靠奖品类型和日期筛选
+      if ((currentBill2ExpenseSubTab === 'month' || currentBill2ExpenseSubTab === 'day') && currentBill2ExpenseScene !== 'all' && r.scene !== currentBill2ExpenseScene) return false;
+      if (prizeTypeFilter && r.prizeType !== prizeTypeFilter) return false;
       if (currentBill2ExpenseSubTab === 'detail') {
-        if (prizeTypeFilter && r.prizeType !== prizeTypeFilter) return false;
         if (orderNoFilter && r.orderId.indexOf(orderNoFilter) < 0) return false;
-        if (r.payType !== '贝壳') return false;
         if (channelFilter && r.channel !== channelFilter) return false;
         if (accountTypeFilter && r.accountType !== accountTypeFilter) return false;
         if (activityFilter && r.activity !== activityFilter) return false;
@@ -5133,7 +5145,7 @@
             '<td' + sCls + '>' + pShare.platform.toLocaleString() + ' / ' + sShare.platform.toLocaleString() + '</td>' +
             '<td' + sCls + '>' + pShare.brand.toLocaleString() + ' / ' + sShare.brand.toLocaleString() + '</td>' +
             '<td' + sCls + '>' + pShare.store.toLocaleString() + ' / ' + sShare.store.toLocaleString() + '</td>' +
-            '<td style="text-align:center;white-space:nowrap;"><button class="btn btn-outline btn-sm" onclick="showToast(\'账单已下载\',\'success\')" style="margin-right:4px;">下载账单</button><button class="btn btn-outline btn-sm" onclick="openBill2IncomeDetail(\'' + ptype + '\',\'' + r.scene + '\',this,true)">分摊明细</button></td>' +
+            '<td style="text-align:center;white-space:nowrap;"><button class="btn btn-outline btn-sm" onclick="openBill2IncomeDetail(\'' + ptype + '\',\'' + r.scene + '\',this,true)">分摊明细</button></td>' +
             '</tr>';
         }).join('');
         document.getElementById(countId).textContent = String(list.length);
@@ -5166,7 +5178,13 @@
           var share = calcBill2Share(r.amount, '');
           var merchantName = getMerchantName(r.orderId);
           var brandPctStr2 = share.brandPct.replace('%','');
-          var brandHtml = '<div style="font-size:11px;color:var(--ink-4);">' + merchantName + '</div>' + share.brand.toLocaleString() + ' (' + brandPctStr2 + '%)';
+          var isRefund = r.status === '已退款' || r.amount < 0;
+          var statusHtml = isRefund ? '<span class="tag tag-gold">已退款</span>' : '<span class="tag tag-green">已完成</span>';
+          var pctStr = isRefund ? '(退款)' : share.platPct;
+          var storePctStr = isRefund ? '(退款)' : share.storePct;
+          var brandHtml = isRefund
+            ? share.brand.toLocaleString() + ' (退款)'
+            : '<div style="font-size:11px;color:var(--ink-4);">' + merchantName + '</div>' + share.brand.toLocaleString() + ' (' + brandPctStr2 + '%)';
           return '<tr>' +
             '<td style="font-size:12px;">' + r.orderId + '</td>' +
             '<td style="font-size:13px;">' + r.prizeName + '</td>' +
@@ -5177,11 +5195,11 @@
             '<td style="font-size:12px;">' + (r.activity || '-') + '</td>' +
             '<td style="font-size:12px;">' + (r.prizeType === '实物礼品' ? '实物' : '贝壳') + '</td>' +
             '<td style="text-align:right;font-weight:500;">' + r.actualAmount.toLocaleString() + '</td>' +
-            '<td style="text-align:right;font-size:12px;white-space:nowrap;">' + share.platform.toLocaleString() + ' (' + share.platPct + ')</td>' +
+            '<td style="text-align:right;font-size:12px;white-space:nowrap;">' + share.platform.toLocaleString() + ' (' + pctStr + ')</td>' +
             '<td style="text-align:right;font-size:12px;white-space:nowrap;">' + brandHtml + '</td>' +
-            '<td style="text-align:right;font-size:12px;white-space:nowrap;"><div style="font-size:11px;color:var(--ink-4);">' + getStoreName(r.orderId) + '</div>' + share.store.toLocaleString() + ' (' + share.storePct + ')</td>' +
+            '<td style="text-align:right;font-size:12px;white-space:nowrap;"><div style="font-size:11px;color:var(--ink-4);">' + getStoreName(r.orderId) + '</div>' + share.store.toLocaleString() + ' (' + storePctStr + ')</td>' +
             '<td style="font-size:12px;">' + r.time + '</td>' +
-            '<td><span class="tag tag-green">已完成</span></td>' +
+            '<td>' + statusHtml + '</td>' +
             '</tr>';
         }).join('');
         document.getElementById('bill2ExpenseDetailCount').textContent = String(sorted.length);
