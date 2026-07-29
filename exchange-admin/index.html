@@ -1825,8 +1825,68 @@
             </div>
           </div>
         </div>
-
+        <div class="form-section-title" style="margin-top:16px;">成本分摊与收入分成</div>
+        <div class="form-group full">
+          <label class="form-label">成本分摊</label>
+          <select class="form-control form-select" id="act_costShareType" style="width:100%;margin-bottom:10px;" onchange="toggleActivityCostShare()">
+            <option value="平台全额">平台全额</option>
+            <option value="门店全额">门店全额</option>
+            <option value="品牌全额">品牌全额</option>
+            <option value="混合分摊">混合分摊</option>
+          </select>
+          <div id="act_costShareRole" style="display:none;">
+            <div style="font-size:12px;color:var(--ink-4);margin-bottom:8px;">费用分摊角色比例（三项之和需为100%）</div>
+            <div style="display:flex;gap:12px;flex-wrap:wrap;">
+              <div style="display:flex;align-items:center;gap:6px;">
+                <span style="font-size:13px;color:var(--ink-2);width:60px;">平台</span>
+                <input class="form-control" id="act_cost_platform" type="number" value="0" style="width:70px;" oninput="validateShareSum('cost')">
+                <span style="font-size:12px;color:var(--ink-3);">%</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;">
+                <span style="font-size:13px;color:var(--ink-2);width:60px;">门店</span>
+                <input class="form-control" id="act_cost_store" type="number" value="0" style="width:70px;" oninput="validateShareSum('cost')">
+                <span style="font-size:12px;color:var(--ink-3);">%</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;">
+                <span style="font-size:13px;color:var(--ink-2);width:60px;">品牌</span>
+                <input class="form-control" id="act_cost_brand" type="number" value="0" style="width:70px;" oninput="validateShareSum('cost')">
+                <span style="font-size:12px;color:var(--ink-3);">%</span>
+              </div>
+            </div>
+            <div id="act_costSumTip" style="font-size:12px;margin-top:6px;"></div>
+          </div>
         </div>
+        <div class="form-group full" style="margin-top:4px;">
+          <label class="form-label">收入分成</label>
+          <select class="form-control form-select" id="act_revenueShareType" style="width:100%;margin-bottom:10px;" onchange="toggleActivityRevenueShare()">
+            <option value="平台全额">平台全额</option>
+            <option value="门店全额">门店全额</option>
+            <option value="品牌全额">品牌全额</option>
+            <option value="混合分成">混合分成</option>
+          </select>
+          <div id="act_revenueShareRole" style="display:none;">
+            <div style="font-size:12px;color:var(--ink-4);margin-bottom:8px;">费用分成角色比例（三项之和需为100%）</div>
+            <div style="display:flex;gap:12px;flex-wrap:wrap;">
+              <div style="display:flex;align-items:center;gap:6px;">
+                <span style="font-size:13px;color:var(--ink-2);width:60px;">平台</span>
+                <input class="form-control" id="act_revenue_platform" type="number" value="0" style="width:70px;" oninput="validateShareSum('revenue')">
+                <span style="font-size:12px;color:var(--ink-3);">%</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;">
+                <span style="font-size:13px;color:var(--ink-2);width:60px;">门店</span>
+                <input class="form-control" id="act_revenue_store" type="number" value="0" style="width:70px;" oninput="validateShareSum('revenue')">
+                <span style="font-size:12px;color:var(--ink-3);">%</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;">
+                <span style="font-size:13px;color:var(--ink-2);width:60px;">品牌</span>
+                <input class="form-control" id="act_revenue_brand" type="number" value="0" style="width:70px;" oninput="validateShareSum('revenue')">
+                <span style="font-size:12px;color:var(--ink-3);">%</span>
+              </div>
+            </div>
+            <div id="act_revenueSumTip" style="font-size:12px;margin-top:6px;"></div>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="modal-footer">
       <button class="btn btn-outline" onclick="closeModal('activityModal')">取消</button>
@@ -1993,8 +2053,8 @@
             <input class="form-control" id="f_name" placeholder="如：雅诗兰黛持妆粉底液 30ml">
           </div>
           <div class="form-group">
-            <label class="form-label">奖品价值</label>
-            <input class="form-control" id="f_value" type="number" placeholder="请输入奖品价值（元）">
+            <label class="form-label">奖品成本</label>
+            <input class="form-control" id="f_value" type="number" placeholder="请输入奖品成本（元）">
           </div>
         </div>
 
@@ -2039,70 +2099,6 @@
               <option value="三亚凤凰机场店">三亚凤凰机场店</option>
               <option value="海口美兰机场店">海口美兰机场店</option>
             </select>
-          </div>
-        </div>
-
-        <div class="form-section-title">成本分摊与收入分成</div>
-        <div class="form-grid">
-          <!-- 成本分摊 -->
-          <div class="form-group full">
-            <label class="form-label">成本分摊</label>
-            <select class="form-control form-select" id="f_costShareType" style="width:100%;margin-bottom:10px;" onchange="toggleProductCostShare()">
-              <option value="平台全额">平台全额</option>
-              <option value="门店全额">门店全额</option>
-              <option value="品牌全额">品牌全额</option>
-              <option value="混合分摊">混合分摊</option>
-            </select>
-            <div id="f_costShareRole" style="display:none;">
-              <div style="font-size:12px;color:var(--ink-4);margin-bottom:8px;">费用分摊角色比例</div>
-              <div style="display:flex;gap:12px;flex-wrap:wrap;">
-                <div style="display:flex;align-items:center;gap:6px;">
-                  <span style="font-size:13px;color:var(--ink-2);width:60px;">品牌方</span>
-                  <input class="form-control" id="f_cost_brand" type="number" value="0" style="width:70px;">
-                  <span style="font-size:12px;color:var(--ink-3);">%</span>
-                </div>
-                <div style="display:flex;align-items:center;gap:6px;">
-                  <span style="font-size:13px;color:var(--ink-2);width:60px;">门店</span>
-                  <input class="form-control" id="f_cost_store" type="number" value="0" style="width:70px;">
-                  <span style="font-size:12px;color:var(--ink-3);">%</span>
-                </div>
-                <div style="display:flex;align-items:center;gap:6px;">
-                  <span style="font-size:13px;color:var(--ink-2);width:60px;">有税商户</span>
-                  <input class="form-control" id="f_cost_tax" type="number" value="0" style="width:70px;">
-                  <span style="font-size:12px;color:var(--ink-3);">%</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- 收入分成 -->
-          <div class="form-group full" style="margin-top:4px;">
-            <label class="form-label">收入分成</label>
-            <select class="form-control form-select" id="f_revenueShareType" style="width:100%;margin-bottom:10px;" onchange="toggleProductRevenueShare()">
-              <option value="平台全额">平台全额</option>
-              <option value="门店全额">门店全额</option>
-              <option value="品牌全额">品牌全额</option>
-              <option value="混合分成">混合分成</option>
-            </select>
-            <div id="f_revenueShareRole" style="display:none;">
-              <div style="font-size:12px;color:var(--ink-4);margin-bottom:8px;">费用分成角色比例</div>
-              <div style="display:flex;gap:12px;flex-wrap:wrap;">
-                <div style="display:flex;align-items:center;gap:6px;">
-                  <span style="font-size:13px;color:var(--ink-2);width:60px;">品牌方</span>
-                  <input class="form-control" id="f_revenue_brand" type="number" value="0" style="width:70px;">
-                  <span style="font-size:12px;color:var(--ink-3);">%</span>
-                </div>
-                <div style="display:flex;align-items:center;gap:6px;">
-                  <span style="font-size:13px;color:var(--ink-2);width:60px;">门店</span>
-                  <input class="form-control" id="f_revenue_store" type="number" value="0" style="width:70px;">
-                  <span style="font-size:12px;color:var(--ink-3);">%</span>
-                </div>
-                <div style="display:flex;align-items:center;gap:6px;">
-                  <span style="font-size:13px;color:var(--ink-2);width:60px;">有税商户</span>
-                  <input class="form-control" id="f_revenue_tax" type="number" value="0" style="width:70px;">
-                  <span style="font-size:12px;color:var(--ink-3);">%</span>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
 
@@ -2370,7 +2366,7 @@
     { id: 1, prizeId: 'PRIZE-0001', name: '雅诗兰黛持妆粉底液 30ml', desc: '到店兑换券', sku: 'EX-CDF-001', category: '香水化妆品', tag: '香水化妆品', type: '实物', original: 880, value: 880, img: 'assets/product-1.jpg', channel: '三亚国际免税城', relatedPrize: '', stock: 25, totalStock: 100, deadlineType: 'days', deadlineValue: 30, status: '启用', prizeType: '实物礼品', usageScene: ['兑换中心'], exchangeRule: '到店出示兑换码即可领取'},
     { id: 2, prizeId: 'PRIZE-0002', name: '兰蔻小黑瓶精华肌底液 20ml', desc: '到店核销券', sku: 'EX-CDF-002', category: '香水化妆品', tag: '香水化妆品', type: '实物', original: 1280, value: 1280, img: 'assets/product-2.jpg', channel: '海口国际免税城', relatedPrize: '', stock: 12, totalStock: 50, deadlineType: 'days', deadlineValue: 15, status: '启用', prizeType: '实物礼品', usageScene: ['兑换中心'], exchangeRule: '限海口国际免税城门店兑换'},
     { id: 3, prizeId: 'PRIZE-0003', name: '三亚免税城 SPA 美容服务体验券', desc: '到店核销', sku: 'EX-CDF-003', category: '电子券', tag: '电子券', type: '虚拟', original: 680, img: 'assets/product-3.jpg', channel: 'cdf中免海南', relatedPrize: '夏日狂欢预约抽奖活动', stock: 100, totalStock: 200, deadlineType: 'days', deadlineValue: 90, status: '启用', prizeType: '预约抽奖', usageScene: ['兑换中心', '签到'], exchangeRule: '预约后到店体验'},
-    { id: 4, prizeId: 'PRIZE-0004', name: '资生堂红腰子精华 50ml', desc: '到店核销券', sku: 'EX-CDF-004', category: '香水化妆品', tag: '香水化妆品', type: '实物', original: 980, value: 1500, img: 'assets/product-4.jpg', channel: '博鳌免税店', relatedPrize: '', stock: 8, totalStock: 60, deadlineType: 'date', deadlineValue: '2026-12-31', status: '停用', prizeType: '实物礼品', usageScene: ['兑换中心'], exchangeRule: '博鳌免税店专属兑换' },
+    { id: 4, prizeId: 'PRIZE-0004', name: '资生堂红腰子精华 50ml', desc: '到店核销券', sku: 'EX-CDF-004', category: '香水化妆品', tag: '香水化妆品', type: '实物', original: 980, value: 1500, img: 'assets/product-4.jpg', channel: '博鳌免税店', relatedPrize: '', stock: 8, totalStock: 60, deadlineType: 'date', deadlineValue: '2026-12-31', status: '停用', prizeType: '实物礼品', usageScene: ['兑换中心'], exchangeRule: '博鳌免税店专属兑换'},
     { id: 5, prizeId: 'PRIZE-0005', name: '转盘抽奖机会 × 3', desc: '三亚国免', sku: 'EX-CDF-005', category: '虚拟权益', tag: '虚拟权益', type: '虚拟', original: 0, img: 'assets/product-5.jpg', channel: 'cdf中免海南', relatedPrize: '每日签到转盘抽奖活动', stock: 500, totalStock: 1000, deadlineType: 'days', deadlineValue: 7, status: '启用', prizeType: '转盘抽奖', usageScene: ['转盘抽奖'], exchangeRule: '转盘抽奖获得，自动发放至账户'},
     { id: 6, prizeId: 'PRIZE-0006', name: 'SK-II 神仙水 230ml', desc: '门店兑换券', sku: 'EX-CDF-006', category: '香水化妆品', tag: '香水化妆品', type: '实物', original: 1880, value: 1980, img: 'assets/product-6.jpg', channel: '海口国际免税城', relatedPrize: '', stock: 3, totalStock: 30, deadlineType: 'days', deadlineValue: 60, status: '启用', prizeType: '实物礼品', usageScene: ['兑换中心'], exchangeRule: '限量兑换，每人限1份'},
     { id: 7, prizeId: 'PRIZE-0007', name: '迪奥口红礼盒套装', desc: '限量典藏版', sku: 'EX-CDF-007', category: '香水化妆品', tag: '香水化妆品', type: '实物', original: 480, value: 480, img: 'assets/product-7.jpg', channel: '三亚凤凰机场店', relatedPrize: '', stock: 15, totalStock: 80, deadlineType: 'days', deadlineValue: 45, status: '启用', prizeType: '实物礼品', usageScene: ['兑换中心'], exchangeRule: '机场店离岛前兑换'},
@@ -2588,6 +2584,7 @@
     }
     if (prizeType === '优惠券-优选单券' || prizeType === '优惠券-券中心') {
       channelGroup.style.display = '';
+      deadlineGroup.style.display = '';
     }
 
     // 更新关联奖品可搜索列表
@@ -2693,20 +2690,6 @@
         document.getElementById('f_deadlineDate').value = '';
       }
       document.getElementById('f_channel').value = p.channel || 'cdf中免海南';
-      // cost share
-      var cs = p.costShare || { type: '平台全额' };
-      document.getElementById('f_costShareType').value = cs.type || '平台全额';
-      document.getElementById('f_cost_brand').value = cs.brand || 0;
-      document.getElementById('f_cost_store').value = cs.store || 0;
-      document.getElementById('f_cost_tax').value = cs.tax || 0;
-      toggleProductCostShare();
-      // revenue share
-      var rs = p.revenueShare || { type: '平台全额' };
-      document.getElementById('f_revenueShareType').value = rs.type || '平台全额';
-      document.getElementById('f_revenue_brand').value = rs.brand || 0;
-      document.getElementById('f_revenue_store').value = rs.store || 0;
-      document.getElementById('f_revenue_tax').value = rs.tax || 0;
-      toggleProductRevenueShare();
     } else {
       document.querySelectorAll('#productModal input[type="text"], #productModal input[type="number"], #productModal textarea').forEach(el => el.value = '');
       document.getElementById('f_prizeType').value = '实物礼品';
@@ -2720,16 +2703,6 @@
       document.getElementById('f_dayLimit').value = '-1';
       document.getElementById('f_channel').value = 'cdf中免海南';
       document.querySelector('input[name="f_deadlineType"][value="days"]').checked = true;
-      document.getElementById('f_costShareType').value = '平台全额';
-      document.getElementById('f_cost_brand').value = 0;
-      document.getElementById('f_cost_store').value = 0;
-      document.getElementById('f_cost_tax').value = 0;
-      document.getElementById('f_revenueShareType').value = '平台全额';
-      document.getElementById('f_revenue_brand').value = 0;
-      document.getElementById('f_revenue_store').value = 0;
-      document.getElementById('f_revenue_tax').value = 0;
-      toggleProductCostShare();
-      toggleProductRevenueShare();
     }
     toggleDeadlineType();
     onPrizeTypeChange();
@@ -2804,19 +2777,6 @@
     var monthLimit = document.getElementById('f_monthLimit') ? parseInt(document.getElementById('f_monthLimit').value) || -1 : -1;
     var dayLimit = document.getElementById('f_dayLimit') ? parseInt(document.getElementById('f_dayLimit').value) || -1 : -1;
 
-    const costShare = {
-      type: document.getElementById('f_costShareType').value || '平台全额',
-      brand: parseInt(document.getElementById('f_cost_brand').value) || 0,
-      store: parseInt(document.getElementById('f_cost_store').value) || 0,
-      tax: parseInt(document.getElementById('f_cost_tax').value) || 0
-    };
-    const revenueShare = {
-      type: document.getElementById('f_revenueShareType').value || '平台全额',
-      brand: parseInt(document.getElementById('f_revenue_brand').value) || 0,
-      store: parseInt(document.getElementById('f_revenue_store').value) || 0,
-      tax: parseInt(document.getElementById('f_revenue_tax').value) || 0
-    };
-
     const payload = {
       name,
       prizeId: 'PRIZE-' + String(editingId || (allProducts.length + 1)).padStart(4, '0'),
@@ -2834,9 +2794,7 @@
       usageScene: usageScene,
       welfarePoints: welfarePoints,
       monthLimit: monthLimit,
-      dayLimit: dayLimit,
-      costShare,
-      revenueShare
+      dayLimit: dayLimit
     };
 
     if (editingId) {
@@ -2924,7 +2882,7 @@
 
   // ===== 活动管理 =====
   const allActivities = [
-    { id: 1, name: '夏日狂欢兑换活动', timeRange: { start: '2026-07-19 10:00', end: '2026-07-25 23:59' }, createdAt: '2026-07-18 14:30', createdBy: '管理员', status: 'active', rule: '每人每场限兑2件', channel: ['APP', '微信小程序'], payType: '积分', source: '千帆', costShare: { type: '混合分摊', brand: 30, store: 50, tax: 20 }, revenueShare: { type: '平台全额' }, memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 500000, actualCost: 149600, actualRevenue: 149600,
+    { id: 1, name: '夏日狂欢兑换活动', timeRange: { start: '2026-07-19 10:00', end: '2026-07-25 23:59' }, createdAt: '2026-07-18 14:30', createdBy: '管理员', status: 'active', rule: '每人每场限兑2件', channel: ['APP', '微信小程序'], payType: '积分', source: '千帆', memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 500000, actualCost: 149600, actualRevenue: 149600, costShare: { type: '混合分摊', platform: 20, store: 50, brand: 30 }, revenueShare: { type: '平台全额' },
       items: [
         { name: '雅诗兰黛粉底液 30ml', type: '实物礼品', price: 8800, stock: 50, exchanged: 12, monthLimit: -1, dayLimit: -1, tags: ['限时', '会员专属'] },
         { name: 'CDF 100元代金券', type: '优惠券-优选单券', price: 500, stock: -1, exchanged: 67, monthLimit: -1, dayLimit: -1, tags: ['限时'] },
@@ -2932,36 +2890,36 @@
         { name: '中免海南限定化妆包', type: '实物礼品', price: 2800, stock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['品牌联合'] },
       ]
     },
-    { id: 2, name: '会员专属兑换活动', timeRange: { start: '2026-07-20 10:00', end: '2026-07-27 23:59' }, createdAt: '2026-07-19 09:00', createdBy: '管理员', status: 'active', rule: '仅限银卡及以上会员参与', channel: ['APP', 'H5'], payType: '贝壳', source: '千帆', costShare: { type: '平台全额' }, revenueShare: { type: '平台全额' }, memberDiscount: { normal: 100, silver: 90, gold: 85, platinum: 80, diamond: 75 }, accountType: '主营业务', budgetLimit: 300000, actualCost: 0, actualRevenue: 0,
+    { id: 2, name: '会员专属兑换活动', timeRange: { start: '2026-07-20 10:00', end: '2026-07-27 23:59' }, createdAt: '2026-07-19 09:00', createdBy: '管理员', status: 'active', rule: '仅限银卡及以上会员参与', channel: ['APP', 'H5'], payType: '贝壳', source: '千帆', memberDiscount: { normal: 100, silver: 90, gold: 85, platinum: 80, diamond: 75 }, accountType: '主营业务', budgetLimit: 300000, actualCost: 0, actualRevenue: 0, costShare: { type: '平台全额' }, revenueShare: { type: '平台全额' },
       items: [
         { name: 'SK-II 神仙水 230ml', type: '实物礼品', price: 12000, stock: 40, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['会员专属'] },
         { name: 'CDF 200元代金券', type: '优惠券-优选单券', price: 1000, stock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['会员专属', '满减活动'] },
         { name: '免税店专属折扣券', type: '优惠券-券中心', price: 80, stock: 500, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['满减活动'] },
       ]
     },
-    { id: 3, name: '限时闪购活动', timeRange: { start: '2026-07-21 10:00', end: '2026-07-23 23:59' }, createdAt: '2026-07-20 11:00', createdBy: '运营专员', status: 'active', rule: '每人每场限兑3件', channel: ['APP'], payType: '积分', source: '繁星-三亚国际免税城', costShare: { type: '门店全额' }, revenueShare: { type: '门店全额' }, memberDiscount: { normal: 100, silver: 100, gold: 100, platinum: 100, diamond: 100 }, accountType: '非主营业务', budgetLimit: 200000, actualCost: 0, actualRevenue: 0,
+    { id: 3, name: '限时闪购活动', timeRange: { start: '2026-07-21 10:00', end: '2026-07-23 23:59' }, createdAt: '2026-07-20 11:00', createdBy: '运营专员', status: 'active', rule: '每人每场限兑3件', channel: ['APP'], payType: '积分', source: '繁星-三亚国际免税城', memberDiscount: { normal: 100, silver: 100, gold: 100, platinum: 100, diamond: 100 }, accountType: '非主营业务', budgetLimit: 200000, actualCost: 0, actualRevenue: 0, costShare: { type: '门店全额' }, revenueShare: { type: '门店全额' },
       items: [
         { name: '资生堂红腰子 75ml', type: '实物礼品', price: 9500, stock: 60, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['限时', '品牌联合'] },
         { name: '迪奥口红套装', type: '实物礼品', price: 3500, stock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['限时'] },
         { name: '全场通用88折券', type: '优惠券-券中心', price: 200, stock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['限时', '满减活动'] },
       ]
     },
-    { id: 4, name: '年中大促活动', timeRange: { start: '2026-07-18 10:00', end: '2026-07-18 23:59' }, createdAt: '2026-07-17 16:00', createdBy: '管理员', status: 'active', rule: '', channel: ['微信小程序', '支付宝小程序', 'H5'], payType: '贝壳', source: '千帆', costShare: { type: '品牌全额' }, revenueShare: { type: '品牌全额' }, memberDiscount: { normal: 100, silver: 100, gold: 100, platinum: 100, diamond: 100 }, accountType: '主营业务', budgetLimit: 800000, actualCost: 446700, actualRevenue: 446700,
+    { id: 4, name: '年中大促活动', timeRange: { start: '2026-07-18 10:00', end: '2026-07-18 23:59' }, createdAt: '2026-07-17 16:00', createdBy: '管理员', status: 'active', rule: '', channel: ['微信小程序', '支付宝小程序', 'H5'], payType: '贝壳', source: '千帆', memberDiscount: { normal: 100, silver: 100, gold: 100, platinum: 100, diamond: 100 }, accountType: '主营业务', budgetLimit: 800000, actualCost: 446700, actualRevenue: 446700, costShare: { type: '混合分摊', platform: 20, store: 40, brand: 40 }, revenueShare: { type: '混合分摊', platform: 20, store: 40, brand: 40 },
       items: [
         { name: '海蓝之谜面霜 30ml', type: '实物礼品', price: 15000, stock: 20, exchanged: 20, monthLimit: -1, dayLimit: -1, tags: ['节日活动'] },
         { name: 'CDF 50元无门槛券', type: '优惠券-优选单券', price: 300, stock: -1, exchanged: 489, monthLimit: -1, dayLimit: -1, tags: ['新人专享'] },
       ]
     },
-    { id: 5, name: '春节限时兑换活动', timeRange: { start: '2026-01-20 10:00', end: '2026-02-10 23:59' }, createdAt: '2026-01-15 09:00', createdBy: '管理员', status: 'terminated', rule: '每人每场限兑2件', channel: ['APP', '微信小程序', 'H5'], payType: '积分', source: '千帆', costShare: { type: '混合分摊', brand: 40, store: 40, tax: 20 }, revenueShare: { type: '混合分摊', brand: 40, store: 40, tax: 20 }, memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 600000, actualCost: 2070000, actualRevenue: 2070000,
+    { id: 5, name: '春节限时兑换活动', timeRange: { start: '2026-01-20 10:00', end: '2026-02-10 23:59' }, createdAt: '2026-01-15 09:00', createdBy: '管理员', status: 'terminated', rule: '每人每场限兑2件', channel: ['APP', '微信小程序', 'H5'], payType: '积分', source: '千帆', memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 600000, actualCost: 2070000, actualRevenue: 2070000, costShare: { type: '平台全额' }, revenueShare: { type: '平台全额' },
       items: [
         { name: '雅诗兰黛持妆粉底液 30ml', type: '实物礼品', price: 8800, stock: 100, exchanged: 95, monthLimit: -1, dayLimit: -1 },
         { name: '兰蔻小黑瓶精华肌底液 20ml', type: '实物礼品', price: 12800, stock: 50, exchanged: 48, monthLimit: -1, dayLimit: -1 },
         { name: 'CDF 100元代金券', type: '优惠券-优选单券', price: 500, stock: 200, exchanged: 200, monthLimit: -1, dayLimit: -1 },
       ]
     },
-    { id: 6, name: '每日签到', timeRange: { start: '2026-07-01 00:00', end: '2026-07-31 23:59' }, createdAt: '2026-06-28 10:00', createdBy: '管理员', status: 'active', rule: '每日签到获得奖励', channel: ['APP', '微信小程序'], payType: '积分', source: '千帆', costShare: { type: '混合分摊', brand: 20, store: 60, tax: 20 }, revenueShare: { type: '门店全额' }, memberDiscount: { normal: 100, silver: 100, gold: 100, platinum: 100, diamond: 100 }, accountType: '非主营业务', budgetLimit: 50000, actualCost: 800, actualRevenue: 800, items: [] },
-    { id: 7, name: '新人任务', timeRange: { start: '2026-07-01 00:00', end: '2026-12-31 23:59' }, createdAt: '2026-06-25 10:00', createdBy: '管理员', status: 'active', rule: '新人专享任务', channel: ['APP', 'H5'], payType: '积分', source: '千帆', costShare: { type: '品牌全额' }, revenueShare: { type: '平台全额' }, memberDiscount: { normal: 100, silver: 100, gold: 100, platinum: 100, diamond: 100 }, accountType: '非主营业务', budgetLimit: 30000, actualCost: 200, actualRevenue: 200, items: [] },
-    { id: 8, name: '周年庆转盘抽奖', timeRange: { start: '2026-07-15 00:00', end: '2026-07-25 23:59' }, createdAt: '2026-07-10 10:00', createdBy: '运营专员', status: 'active', rule: '周年庆转盘抽奖活动', channel: ['支付宝小程序', 'APP'], payType: '贝壳', source: '繁星-三亚国际免税城', costShare: { type: '混合分摊', brand: 40, store: 40, tax: 20 }, revenueShare: { type: '混合分摊', brand: 40, store: 40, tax: 20 }, memberDiscount: { normal: 100, silver: 100, gold: 100, platinum: 100, diamond: 100 }, accountType: '非主营业务', budgetLimit: 100000, actualCost: 6000, actualRevenue: 6000, items: [] },
+    { id: 6, name: '每日签到', timeRange: { start: '2026-07-01 00:00', end: '2026-07-31 23:59' }, createdAt: '2026-06-28 10:00', createdBy: '管理员', status: 'active', rule: '每日签到获得奖励', channel: ['APP', '微信小程序'], payType: '积分', source: '千帆', memberDiscount: { normal: 100, silver: 100, gold: 100, platinum: 100, diamond: 100 }, accountType: '非主营业务', budgetLimit: 50000, actualCost: 800, actualRevenue: 800, costShare: { type: '平台全额' }, revenueShare: { type: '平台全额' }, items: [] },
+    { id: 7, name: '新人任务', timeRange: { start: '2026-07-01 00:00', end: '2026-12-31 23:59' }, createdAt: '2026-06-25 10:00', createdBy: '管理员', status: 'active', rule: '新人专享任务', channel: ['APP', 'H5'], payType: '积分', source: '千帆', memberDiscount: { normal: 100, silver: 100, gold: 100, platinum: 100, diamond: 100 }, accountType: '非主营业务', budgetLimit: 30000, actualCost: 200, actualRevenue: 200, costShare: { type: '平台全额' }, revenueShare: { type: '平台全额' }, items: [] },
+    { id: 8, name: '周年庆转盘抽奖', timeRange: { start: '2026-07-15 00:00', end: '2026-07-25 23:59' }, createdAt: '2026-07-10 10:00', createdBy: '运营专员', status: 'active', rule: '周年庆转盘抽奖活动', channel: ['支付宝小程序', 'APP'], payType: '贝壳', source: '繁星-三亚国际免税城', memberDiscount: { normal: 100, silver: 100, gold: 100, platinum: 100, diamond: 100 }, accountType: '非主营业务', budgetLimit: 100000, actualCost: 6000, actualRevenue: 6000, costShare: { type: '混合分摊', platform: 20, store: 40, brand: 40 }, revenueShare: { type: '混合分摊', platform: 20, store: 40, brand: 40 }, items: [] },
   ];
 
   let editingActivityId = null;
@@ -3034,20 +2992,41 @@
     }
   }
 
-  function toggleProductCostShare() {
-    var type = document.getElementById('f_costShareType').value;
-    var roleGroup = document.getElementById('f_costShareRole');
+  function toggleActivityCostShare() {
+    var type = document.getElementById('act_costShareType').value;
+    var roleGroup = document.getElementById('act_costShareRole');
     if (roleGroup) {
       roleGroup.style.display = type === '混合分摊' ? 'block' : 'none';
     }
+    validateShareSum('cost');
   }
 
-  function toggleProductRevenueShare() {
-    var type = document.getElementById('f_revenueShareType').value;
-    var roleGroup = document.getElementById('f_revenueShareRole');
+  function toggleActivityRevenueShare() {
+    var type = document.getElementById('act_revenueShareType').value;
+    var roleGroup = document.getElementById('act_revenueShareRole');
     if (roleGroup) {
       roleGroup.style.display = (type === '混合分摊' || type === '混合分成') ? 'block' : 'none';
     }
+    validateShareSum('revenue');
+  }
+
+  // 实时校验分摊/分成比例三项之和是否为100%
+  function validateShareSum(prefix) {
+    var tip = document.getElementById('act_' + prefix + 'SumTip');
+    if (!tip) return true;
+    var platformEl = document.getElementById('act_' + prefix + '_platform');
+    var storeEl = document.getElementById('act_' + prefix + '_store');
+    var brandEl = document.getElementById('act_' + prefix + '_brand');
+    if (!platformEl || !storeEl || !brandEl) return true;
+    var sum = (parseInt(platformEl.value) || 0) + (parseInt(storeEl.value) || 0) + (parseInt(brandEl.value) || 0);
+    if (sum === 100) {
+      tip.textContent = '比例合计 100%，符合要求';
+      tip.style.color = 'var(--success, #16a34a)';
+    } else {
+      tip.textContent = '比例合计 ' + sum + '%，需调整为 100%';
+      tip.style.color = 'var(--danger, #dc2626)';
+    }
+    return sum === 100;
   }
 
   function openActivityModal(id) {
@@ -3084,6 +3063,20 @@
       var accRb = document.querySelector('input[name="act_accountType"][value="' + (a.accountType || '主营业务') + '"]');
       if (accRb) accRb.checked = true;
       toggleAccountField();
+      // cost share
+      var cs = a.costShare || { type: '平台全额' };
+      document.getElementById('act_costShareType').value = cs.type || '平台全额';
+      document.getElementById('act_cost_platform').value = cs.platform || 0;
+      document.getElementById('act_cost_store').value = cs.store || 0;
+      document.getElementById('act_cost_brand').value = cs.brand || 0;
+      toggleActivityCostShare();
+      // revenue share
+      var rs = a.revenueShare || { type: '平台全额' };
+      document.getElementById('act_revenueShareType').value = rs.type || '平台全额';
+      document.getElementById('act_revenue_platform').value = rs.platform || 0;
+      document.getElementById('act_revenue_store').value = rs.store || 0;
+      document.getElementById('act_revenue_brand').value = rs.brand || 0;
+      toggleActivityRevenueShare();
     } else {
       document.getElementById('act_name').value = '';
       document.getElementById('act_start').value = '';
@@ -3096,6 +3089,16 @@
       document.querySelector('input[name="act_payType"][value="积分"]').checked = true;
       document.querySelector('input[name="act_accountType"][value="主营业务"]').checked = true;
       toggleAccountField();
+      document.getElementById('act_costShareType').value = '平台全额';
+      document.getElementById('act_cost_platform').value = 0;
+      document.getElementById('act_cost_store').value = 0;
+      document.getElementById('act_cost_brand').value = 0;
+      toggleActivityCostShare();
+      document.getElementById('act_revenueShareType').value = '平台全额';
+      document.getElementById('act_revenue_platform').value = 0;
+      document.getElementById('act_revenue_store').value = 0;
+      document.getElementById('act_revenue_brand').value = 0;
+      toggleActivityRevenueShare();
     }
     document.getElementById('activityModal').classList.add('show');
   }
@@ -3114,6 +3117,30 @@
       const v = document.getElementById('act_member_' + level).value;
       if (v) memberDiscount[level] = parseInt(v);
     });
+    const costShareType = document.getElementById('act_costShareType').value || '平台全额';
+    const costShare = {
+      type: costShareType,
+      platform: parseInt(document.getElementById('act_cost_platform').value) || 0,
+      store: parseInt(document.getElementById('act_cost_store').value) || 0,
+      brand: parseInt(document.getElementById('act_cost_brand').value) || 0
+    };
+    const revenueShareType = document.getElementById('act_revenueShareType').value || '平台全额';
+    const revenueShare = {
+      type: revenueShareType,
+      platform: parseInt(document.getElementById('act_revenue_platform').value) || 0,
+      store: parseInt(document.getElementById('act_revenue_store').value) || 0,
+      brand: parseInt(document.getElementById('act_revenue_brand').value) || 0
+    };
+
+    // 混合分摊/分成时校验三项之和为100%
+    if (costShareType === '混合分摊') {
+      var costSum = costShare.platform + costShare.store + costShare.brand;
+      if (costSum !== 100) { showToast('成本分摊比例合计 ' + costSum + '%，需为 100%', 'warning'); return; }
+    }
+    if (revenueShareType === '混合分成' || revenueShareType === '混合分摊') {
+      var revSum = revenueShare.platform + revenueShare.store + revenueShare.brand;
+      if (revSum !== 100) { showToast('收入分成比例合计 ' + revSum + '%，需为 100%', 'warning'); return; }
+    }
 
     if (editingActivityId) {
       const a = allActivities.find(x => x.id === editingActivityId);
@@ -3124,6 +3151,8 @@
         a.payType = payType;
         a.accountType = (document.querySelector('input[name="act_accountType"]:checked') || {}).value || '主营业务';
         a.memberDiscount = memberDiscount;
+        a.costShare = costShare;
+        a.revenueShare = revenueShare;
       }
       showToast('活动已更新', 'success');
     } else {
@@ -3131,7 +3160,7 @@
       const now = new Date();
       const createdAt = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0') + ' ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
       var accountType = (document.querySelector('input[name="act_accountType"]:checked') || {}).value || '主营业务';
-      allActivities.push({ id: newId, name, timeRange: { start, end }, createdAt, createdBy: '管理员', status: 'active', channel: channels, payType, accountType, memberDiscount, items: [] });
+      allActivities.push({ id: newId, name, timeRange: { start, end }, createdAt, createdBy: '管理员', status: 'active', channel: channels, payType, accountType, memberDiscount, costShare, revenueShare, items: [] });
       showToast('活动已创建', 'success');
     }
     closeModal('activityModal');
@@ -4718,7 +4747,7 @@
     { orderId: 'EX20260719006-R', prizeName: '全场通用88折券', prizeType: '优惠券-券中心', scene: '签到', bizType: '券成本', cost: -80, pointsCost: Math.round(-80 * 0.8), shellsCost: Math.round(-80 * 0.2), time: '2026-07-23 10:30', payType: '贝壳', amount: -80, actualAmount: -80, status: '已退款', channel: '微信小程序', accountType: '非主营业务', activity: '每日签到' },
   ];
 
-  // 计算分摊金额
+  // 计算分摊金额（从活动管理读取配置）
   function calcBill2Share(amount, activityName) {
     var act = allActivities.find(function(a) { return a.name === activityName; });
     var cs = (act && act.costShare) ? act.costShare : { type: '平台全额' };
@@ -4729,10 +4758,11 @@
     else if (cs.type === '混合分摊') {
       brandPct = String(cs.brand || 0) + '%';
       storePct = String(cs.store || 0) + '%';
+      var platPctVal = cs.platform !== undefined ? cs.platform : (100 - (cs.brand || 0) - (cs.store || 0) - (cs.tax || 0));
+      platPct = String(platPctVal) + '%';
       brand = Math.round(amount * (cs.brand || 0) / 100);
       store = Math.round(amount * (cs.store || 0) / 100);
       platform = amount - brand - store;
-      platPct = (100 - (cs.brand || 0) - (cs.store || 0)) + '%';
     }
     return { platform: platform, brand: brand, store: store, platPct: platPct, brandPct: brandPct, storePct: storePct };
   }
@@ -5794,7 +5824,7 @@
     return Object.keys(stores);
   }
 
-  // 获取活动的分摊信息
+  // 获取活动的分摊信息（从活动管理读取）
   function getActivityShare(activityName) {
     var act = allActivities.find(function(a) { return a.name === activityName; });
     var cs = (act && act.costShare) ? act.costShare : { type: '平台全额' };
@@ -5806,10 +5836,10 @@
     else if (cs.type === '品牌全额') roles.push('品牌');
     else if (cs.type === '混合分摊') {
       var parts = [];
-      if (cs.brand) parts.push('品牌' + cs.brand + '%');
+      var platPct = cs.platform !== undefined ? cs.platform : (100 - (cs.brand || 0) - (cs.store || 0) - (cs.tax || 0));
+      if (platPct) parts.push('平台' + platPct + '%');
       if (cs.store) parts.push('门店' + cs.store + '%');
-      var platPct = 100 - (cs.brand || 0) - (cs.store || 0) - (cs.tax || 0);
-      if (platPct > 0) parts.push('平台' + platPct + '%');
+      if (cs.brand) parts.push('品牌' + cs.brand + '%');
       roles = parts;
     }
     return { mode: cs.type, ratio: ratioText, roles: roles.length > 0 ? roles.join(' / ') : cs.type };
@@ -5823,10 +5853,10 @@
     if (share.type === '品牌全额') return '品牌100%';
     if (share.type === '混合分摊' || share.type === '混合分成') {
       var parts = [];
-      if (share.brand) parts.push('品牌' + share.brand + '%');
+      var platformPct = share.platform !== undefined ? share.platform : (100 - (share.brand || 0) - (share.store || 0) - (share.tax || 0));
+      if (platformPct) parts.push('平台' + platformPct + '%');
       if (share.store) parts.push('门店' + share.store + '%');
-      var platformPct = 100 - (share.brand || 0) - (share.store || 0) - (share.tax || 0);
-      if (platformPct > 0) parts.push('平台' + platformPct + '%');
+      if (share.brand) parts.push('品牌' + share.brand + '%');
       return parts.join(' / ');
     }
     return share.type || '-';
@@ -5857,6 +5887,7 @@
       // 使用积分/贝壳消耗量
       var consume = a.actualCost || 0;
       var revenue = a.actualRevenue || 0;
+      // 从活动管理读取分摊配置
       var cs = a.costShare || { type: '平台全额' };
       var rs = a.revenueShare || { type: '平台全额' };
 
