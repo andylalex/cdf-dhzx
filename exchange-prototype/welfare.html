@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>福利中心</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cdf-red: #b7141b;
+    --cdf-red-deep: #8a0f15;
+    --cdf-red-light: #d63a40;
+    --cdf-gold: #c8a36a;
+    --cdf-gold-deep: #a37f48;
+    --cdf-gold-light: #e6c896;
+    --cdf-ink: #1a1a1a;
+    --cdf-ink-2: #4a4a4a;
+    --cdf-ink-3: #8a8a8a;
+    --cdf-ink-4: #b8b8b8;
+    --cdf-border: #ececec;
+    --shadow-sm: 0 1px 4px rgba(0,0,0,0.04);
+    --orange: #ff6d00;
+    --orange-dark: #e65100;
+    --ocean-blue: #00bcd4;
+    --ocean-teal: #009688;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body { font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif; color: var(--cdf-ink); background: #f5f5f5; line-height: 1.5; }
+  body { display: flex; justify-content: center; min-height: 100vh; }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+  img { display: block; max-width: 100%; }
+
+  .page-container {
+    width: 100%;
+    max-width: 414px;
+    margin: 0 auto;
+    background: #f5f5f5;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ============ 1. Task Hero Area ============ */
+  .task-hero {
+    background: linear-gradient(160deg, #00acc1 0%, #4dd0e1 30%, #80deea 60%, #b2ebf2 100%);
+    padding: 20px 16px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .task-hero::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 160px; height: 160px;
+    background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .task-hero::after {
+    content: '';
+    position: absolute;
+    bottom: -30px; left: -20px;
+    width: 100px; height: 100px;
+    background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .task-top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    z-index: 2;
+    margin-bottom: 20px;
+  }
+  .btn-rules {
+    background: rgba(255,255,255,0.85);
+    color: #00838f;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 6px 14px;
+    border-radius: 16px;
+    backdrop-filter: blur(4px);
+  }
+  .shell-count {
+    background: rgba(255,255,255,0.9);
+    color: #00695c;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 6px 14px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    backdrop-filter: blur(4px);
+  }
+  .shell-count .shell-num {
+    font-size: 18px;
+    font-weight: 700;
+    color: #00838f;
+  }
+
+  .task-hero-title {
+    text-align: center;
+    position: relative;
+    z-index: 2;
+    margin-bottom: 22px;
+  }
+  .task-hero-title h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    letter-spacing: 2px;
+  }
+
+  /* Floating task icons */
+  .task-icons-row {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    position: relative;
+    z-index: 2;
+    margin-bottom: 22px;
+  }
+  .task-icon-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    animation: float 3s ease-in-out infinite;
+  }
+  .task-icon-item:nth-child(2) { animation-delay: -1s; }
+  .task-icon-item:nth-child(3) { animation-delay: -2s; }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+
+  .task-icon-circle {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    position: relative;
+  }
+  .task-icon-circle svg { width: 24px; height: 24px; }
+  .task-icon-circle::after {
+    content: '';
+    position: absolute;
+    top: -3px; right: -3px;
+    width: 20px; height: 20px;
+    background: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    color: #333;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+  }
+  .task-icon-circle .badge {
+    position: absolute;
+    top: -4px; right: -4px;
+    width: 20px; height: 20px;
+    background: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    color: #333;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    z-index: 3;
+  }
+  .task-icon-blue { background: linear-gradient(135deg, #1e88e5, #1565c0); }
+  .task-icon-yellow { background: linear-gradient(135deg, #fdd835, #f9a825); }
+  .task-icon-purple { background: linear-gradient(135deg, #ab47bc, #7b1fa2); }
+
+  .task-icon-label {
+    font-size: 11px;
+    color: #fff;
+    font-weight: 500;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.15);
+  }
+
+  /* CTA button */
+  .task-cta-wrap {
+    text-align: center;
+    position: relative;
+    z-index: 2;
+  }
+  .btn-task-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(135deg, #ff9800, #ff6d00);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 12px 28px;
+    border-radius: 24px;
+    box-shadow: 0 4px 16px rgba(255,109,0,0.35);
+    letter-spacing: 1px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-task-cta:active {
+    transform: scale(0.97);
+    box-shadow: 0 2px 8px rgba(255,109,0,0.3);
+  }
+  .btn-task-cta svg { width: 16px; height: 16px; }
+
+  /* ============ 2. Section Title Bar ============ */
+  .section-title-bar {
+    background: #fff;
+    padding: 14px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--cdf-border);
+  }
+  .section-title-bar h2 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--cdf-ink);
+  }
+  .section-title-bar .view-all {
+    font-size: 13px;
+    color: var(--cdf-ink-3);
+  }
+
+  /* ============ 3. Product List ============ */
+  .flash-list { padding: 0 12px; background: #fff; }
+  .flash-item {
+    background: #fff;
+    display: flex;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    position: relative;
+  }
+  .flash-item:last-child { border-bottom: none; }
+  .flash-item:active { opacity: 0.7; }
+  .flash-img {
+    width: 88px;
+    height: 88px;
+    background: #f5f5f5;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .flash-img img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
+  .flash-body { flex: 1; display: flex; flex-direction: column; justify-content: space-between; min-width: 0; padding: 2px 0; }
+  .flash-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+  .flash-name {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .flash-desc { font-size: 11px; color: var(--cdf-ink-4); margin-top: 2px; }
+  .flash-bottom { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; }
+  .flash-price-row { display: flex; align-items: baseline; gap: 3px; }
+  .flash-price {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--cdf-red);
+    line-height: 1;
+  }
+  .flash-price.gold { color: var(--cdf-gold-deep); }
+  .flash-price-unit { font-size: 12px; font-weight: 500; }
+  .flash-price-unit.red { color: var(--cdf-red); }
+  .flash-price-unit.gold { color: var(--cdf-gold-deep); }
+  .flash-original-price { font-size: 12px; color: var(--cdf-ink-4); text-decoration: line-through; margin-left: 6px; }
+  .flash-stock {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .flash-stock-bar {
+    flex: 1;
+    height: 4px;
+    background: #f0f0f0;
+    overflow: hidden;
+  }
+  .flash-stock-fill {
+    height: 100%;
+    background: var(--cdf-red);
+    transition: width 0.4s;
+  }
+  .flash-stock-fill.shell-fill { background: var(--cdf-gold-deep); }
+  .flash-stock-label { font-size: 10px; color: var(--cdf-ink-4); white-space: nowrap; }
+  .flash-exchange-btn {
+    flex-shrink: 0;
+    height: 34px;
+    padding: 0 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    align-self: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .flash-exchange-btn svg { width: 14px; height: 14px; }
+  .flash-exchange-btn.points-btn { background: var(--cdf-red); }
+  .flash-exchange-btn.shell-btn { background: var(--cdf-gold-deep); }
+  .flash-exchange-btn:active { opacity: 0.85; }
+</style>
+</head>
+<body>
+<div class="page-container">
+
+  <!-- ======== 1. Task Hero Area ======== -->
+  <section class="task-hero">
+    <div class="task-top-bar">
+      <button class="btn-rules">规则</button>
+      <div class="shell-count">
+        已攒贝壳 <span class="shell-num">168</span>
+      </div>
+    </div>
+
+    <div class="task-hero-title">
+      <h1>攒贝壳 赢大奖</h1>
+    </div>
+
+    <div class="task-icons-row">
+      <!-- +1 每日签到 -->
+      <div class="task-icon-item">
+        <div class="task-icon-circle task-icon-blue">
+          <span class="badge">+1</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+        </div>
+        <span class="task-icon-label">每日签到</span>
+      </div>
+      <!-- +1 分享好友 -->
+      <div class="task-icon-item">
+        <div class="task-icon-circle task-icon-yellow">
+          <span class="badge">+1</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+            <polyline points="16 6 12 2 8 6"/>
+            <line x1="12" y1="2" x2="12" y2="15"/>
+          </svg>
+        </div>
+        <span class="task-icon-label">分享好友</span>
+      </div>
+      <!-- +5 完善资料 -->
+      <div class="task-icon-item">
+        <div class="task-icon-circle task-icon-purple">
+          <span class="badge">+5</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+        </div>
+        <span class="task-icon-label">完善资料</span>
+      </div>
+    </div>
+
+    <div class="task-cta-wrap">
+      <button class="btn-task-cta">
+        做任务 赚更多贝壳
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"/>
+        </svg>
+      </button>
+    </div>
+  </section>
+
+  <!-- ======== 2. Section Title Bar ======== -->
+  <div class="section-title-bar">
+    <h2>兑换中心 - 10点上新</h2>
+    <a href="javascript:void(0)" class="view-all">查看全部 &gt;</a>
+  </div>
+
+  <!-- ======== 3. Product Grid ======== -->
+  <div class="flash-list" id="productList"></div>
+
+</div>
+
+<script>
+const welfareProducts = [
+  { id: 101, name: '满300减40优惠券', desc: '电子券', price: 68, original: 40, tag: '电子券', currency: 'shell', type: 'virtual', stock: 15, img: 'assets/product-5-voucher.jpg' },
+  { id: 109, name: 'SK-II 神仙水 230ml', desc: '香水化妆品', price: 12000, original: 1880, tag: '香水化妆品', currency: 'points', type: 'physical', stock: 20, img: 'assets/product-6-skii.jpg' },
+  { id: 104, name: '肌肤之钥光采精华修护精华乳 12ml', desc: '香水化妆品', price: 200, original: 380, tag: '香水化妆品', currency: 'shell', type: 'physical', stock: 30, img: 'assets/product-1-esteelauder.jpg' },
+  { id: 110, name: '雅诗兰黛持妆粉底液 30ml', desc: '香水化妆品', price: 8800, original: 880, tag: '香水化妆品', currency: 'points', type: 'physical', stock: 35, img: 'assets/product-1-esteelauder.jpg' },
+  { id: 102, name: '满600减70优惠券', desc: '电子券', price: 158, original: 70, tag: '电子券', currency: 'shell', type: 'virtual', stock: 22, img: 'assets/product-5-voucher.jpg' },
+  { id: 111, name: '兰蔻小黑瓶精华肌底液 20ml', desc: '香水化妆品', price: 10800, original: 1280, tag: '香水化妆品', currency: 'points', type: 'physical', stock: 15, img: 'assets/product-2-lancome.jpg' },
+  { id: 105, name: '欧莱雅复颜玻尿酸精华液 30ml', desc: '香水化妆品', price: 279, original: 450, tag: '香水化妆品', currency: 'shell', type: 'physical', stock: 18, img: 'assets/product-2-lancome.jpg' },
+  { id: 112, name: 'CDF 100元代金券', desc: '电子券', price: 5000, original: 100, tag: '电子券', currency: 'points', type: 'virtual', stock: 50, img: 'assets/product-5-voucher.jpg' },
+  { id: 106, name: '后津率享平颜润肤液 150ml', desc: '香水化妆品', price: 328, original: 520, tag: '香水化妆品', currency: 'shell', type: 'physical', stock: 12, img: 'assets/product-4-shiseido.jpg' },
+  { id: 103, name: '满1200减120优惠券', desc: '电子券', price: 288, original: 120, tag: '电子券', currency: 'shell', type: 'virtual', stock: 8, img: 'assets/product-5-voucher.jpg' },
+  { id: 107, name: '雪花秀润致焕活精华肌底液 40ml', desc: '香水化妆品', price: 360, original: 680, tag: '香水化妆品', currency: 'shell', type: 'physical', stock: 25, img: 'assets/product-6-skii.jpg' },
+  { id: 108, name: '后秘贴焕能修护精华液 7ml', desc: '香水化妆品', price: 628, original: 890, tag: '香水化妆品', currency: 'shell', type: 'physical', stock: 5, img: 'assets/product-3-spa.jpg' },
+];
+
+function renderProducts() {
+  const list = document.getElementById('productList');
+  list.innerHTML = welfareProducts.map(p => {
+    const isShell = p.currency === 'shell';
+    return `
+      <div class="flash-item">
+        <div class="flash-img">
+          ${p.img ? `<img src="${p.img}" alt="${p.name}">` : ''}
+        </div>
+        <div class="flash-body">
+          <div class="flash-top">
+            <div style="min-width:0">
+              <div class="flash-name">${p.name}</div>
+              <div class="flash-desc">${p.desc}</div>
+            </div>
+            <button class="flash-exchange-btn ${isShell ? 'shell-btn' : 'points-btn'}">
+              <svg viewBox="0 0 1024 1024" fill="currentColor" style="width:14px;height:14px"><path d="M778.5 305.7c-10.6-8-14.4-14.3-24.6-22.3-7.8-6.1-14.9-11.8-25-18.4C301.1-14.6-137.7 641.3 263.4 787.8c44.1 16.1 94.4 27.5 144.5 32.8 208.4 22.5 476.2-10.2 507.8-204.8 19-116.6-70.5-259.6-137.2-310.1zM601.7 796.5c33.4-76.5-40.9-130.3-90.1-130.5-62.7-.3-123.9 70.6-90 131-105.4-37-17.7-191.5 90-190.4 117 1 187.4 160.4 90.1 189.9z m71.2-15.5c48.3-42.2 30.6-124.8-5.8-172.1-127.7-166.2-328.3-54.7-346.9 83.3-6.7 49.7 11.2 62.1 29 89.4-86.6-32.9-86.4-133.2-34-209.8 106.1-155.2 304.1-142.3 395.2 4.8 68.7 111.1 13.4 195.5-37.5 204.4z m156.5-136.7c-5.4 55.6-47.8 104.9-86.1 120.4 11.3-16.2 26.4-24.9 36.9-50.6 28.6-69.9-1.2-145.3-40.7-199C614.8 345.8 402 354 285.9 509.7c-21.7 29.2-46.9 74.8-52.8 121.1-8.2 64.2 10.4 91.9 42.2 129.8-40.6-13.8-81.2-68.3-82.8-130.2-1.6-60.4 26.8-118.1 53.9-156.6 140-199.2 403.9-192.4 536.2 8.9 25.8 39.5 52.6 101.4 46.8 161.6z"/></svg>
+              立即兑换
+            </button>
+          </div>
+          <div class="flash-bottom">
+            <div style="flex:1;min-width:0">
+              <div class="flash-price-row">
+                <span class="flash-price ${isShell ? 'gold' : ''}">${p.price.toLocaleString()}</span>
+                <span class="flash-price-unit ${isShell ? 'gold' : 'red'}">${isShell ? '贝壳' : '积分'}</span>
+                ${p.type === 'physical' && p.original ? `<span class="flash-original-price">¥${p.original}</span>` : ''}
+              </div>
+              <div class="flash-stock">
+                <div class="flash-stock-bar"><div class="flash-stock-fill ${isShell ? 'shell-fill' : ''}" style="width:${Math.round(Math.random()*60)}%"></div></div>
+                <span class="flash-stock-label">剩余${p.stock}件</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+renderProducts();
+</script>
+</body>
+</html>

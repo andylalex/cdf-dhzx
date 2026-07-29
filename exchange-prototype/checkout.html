@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>结算中心</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #f5f5f5;
+    color: #333;
+    -webkit-font-smoothing: antialiased;
+    max-width: 414px;
+    margin: 0 auto;
+    min-height: 100vh;
+    padding-bottom: 80px;
+  }
+
+  /* 顶部导航 */
+  .nav-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .nav-back {
+    width: 24px; height: 24px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .nav-back svg { width: 20px; height: 20px; }
+  .nav-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: #1a1a1a;
+  }
+  .nav-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .nav-actions svg { width: 24px; height: 24px; }
+
+  /* 收货人信息 */
+  .section {
+    background: #fff;
+    margin-bottom: 10px;
+    padding: 16px;
+  }
+  .section-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 12px;
+  }
+  .address-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px;
+    background: #fffbf5;
+    border: 1px solid #f0e6d6;
+    border-radius: 8px;
+  }
+  .address-icon {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: #f5f5f5;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .address-icon svg { width: 18px; height: 18px; color: #999; }
+  .address-info { flex: 1; min-width: 0; }
+  .address-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  .address-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1a1a1a;
+  }
+  .address-phone {
+    font-size: 13px;
+    color: #666;
+  }
+  .address-detail {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.5;
+  }
+  .address-edit {
+    font-size: 12px;
+    color: #b7141b;
+    flex-shrink: 0;
+    padding-top: 2px;
+  }
+
+  /* 奖品详情 */
+  .product-card {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .product-img {
+    width: 70px; height: 70px;
+    background: #f5f5f5;
+    border-radius: 6px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .product-img img { width: 100%; height: 100%; object-fit: cover; }
+  .product-info { flex: 1; min-width: 0; }
+  .product-name {
+    font-size: 14px;
+    color: #1a1a1a;
+    line-height: 1.4;
+    margin-bottom: 4px;
+  }
+  .product-qty {
+    font-size: 12px;
+    color: #999;
+  }
+
+  /* 费用明细 */
+  .fee-list {
+    text-align: right;
+  }
+  .fee-row {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 6px;
+    font-size: 13px;
+    color: #666;
+  }
+  .fee-row.total {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px dashed #eee;
+  }
+  .fee-label { color: #999; }
+  .fee-value { color: #666; }
+  .fee-value.highlight {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1a1a1a;
+  }
+
+  /* 协议 */
+  .agreement {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 16px;
+    background: #fff;
+    margin-bottom: 10px;
+  }
+  .agreement-check {
+    width: 18px; height: 18px;
+    border: 1.5px solid #ccc;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 1px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .agreement-check.checked {
+    background: #b7141b;
+    border-color: #b7141b;
+  }
+  .agreement-check.checked::after {
+    content: '';
+    width: 5px; height: 9px;
+    border: 2px solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    margin-bottom: 2px;
+  }
+  .agreement-text {
+    font-size: 12px;
+    color: #999;
+    line-height: 1.6;
+  }
+  .agreement-text a {
+    color: #b7141b;
+    text-decoration: none;
+  }
+
+  /* 底部栏 */
+  .bottom-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    max-width: 414px;
+    margin: 0 auto;
+    background: #fff;
+    border-top: 1px solid #f0f0f0;
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    z-index: 20;
+  }
+  .bottom-amount {
+    font-size: 18px;
+    font-weight: 700;
+    color: #b7141b;
+  }
+  .bottom-amount .currency { font-size: 13px; font-weight: 400; }
+  .submit-btn {
+    flex: 1;
+    max-width: 200px;
+    height: 44px;
+    background: #b7141b;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    border: none;
+    border-radius: 22px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .submit-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+  }
+</style>
+</head>
+<body>
+
+<!-- 导航栏 -->
+<div class="nav-bar">
+  <div class="nav-back">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+  </div>
+  <div class="nav-title">结算中心</div>
+  <div class="nav-actions">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/></svg>
+  </div>
+</div>
+
+<!-- 收货人信息 -->
+<div class="section">
+  <div class="section-title">收货人信息</div>
+  <div class="address-card">
+    <div class="address-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    </div>
+    <div class="address-info">
+      <div class="address-row">
+        <span class="address-name">张三张三</span>
+        <span class="address-phone">+86 18566663103</span>
+      </div>
+      <div class="address-detail">海南省 三亚市 海棠湾区龙海路中国中免三亚物流中心</div>
+    </div>
+    <div class="address-edit">编辑</div>
+  </div>
+</div>
+
+<!-- 奖品详情 -->
+<div class="section">
+  <div class="section-title">奖品详情</div>
+  <div class="product-card">
+    <div class="product-img">
+      <img src="assets/product-5-voucher.jpg" alt="年终有奖刮刮乐抽奖券" onerror="this.style.display='none'">
+    </div>
+    <div class="product-info">
+      <div class="product-name">年终有奖刮刮乐抽奖券 cdf三亚国际免税城</div>
+      <div class="product-qty">×1</div>
+    </div>
+  </div>
+</div>
+
+<!-- 费用明细 -->
+<div class="section">
+  <div class="fee-list">
+    <div class="fee-row">
+      <span class="fee-label">商品总价：</span>
+      <span class="fee-value">¥89.00</span>
+    </div>
+    <div class="fee-row">
+      <span class="fee-label">积分抵扣：</span>
+      <span class="fee-value">-¥89.00</span>
+    </div>
+    <div class="fee-row total">
+      <span class="fee-label">应付金额：</span>
+      <span class="fee-value highlight">¥0.00</span>
+    </div>
+  </div>
+</div>
+
+<!-- 协议 -->
+<div class="agreement" onclick="toggleAgreement()">
+  <div class="agreement-check" id="agreeCheck"></div>
+  <div class="agreement-text">
+    已阅读并同意<a>《用户兑换须知》</a>，奖品一经兑换，不支持退换，请您确认。
+  </div>
+</div>
+
+<!-- 底部栏 -->
+<div class="bottom-bar">
+  <div class="bottom-amount">
+    <span class="currency">¥</span>0.00
+  </div>
+  <button class="submit-btn" id="submitBtn" onclick="submitOrder()" disabled>提交订单</button>
+</div>
+
+<script>
+  let agreed = false;
+  function toggleAgreement() {
+    agreed = !agreed;
+    document.getElementById('agreeCheck').classList.toggle('checked', agreed);
+    document.getElementById('submitBtn').disabled = !agreed;
+  }
+  function submitOrder() {
+    if (!agreed) return;
+    alert('订单提交成功');
+  }
+</script>
+
+</body>
+</html>

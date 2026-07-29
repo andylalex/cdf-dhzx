@@ -629,7 +629,7 @@
                   <th style="min-width:140px;">来源活动</th>
                   <th style="width:110px;">下单入口</th>
                   <th style="width:70px;">支付方式</th>
-                  <th style="width:80px;">订单渠道</th>
+                  <th style="min-width:120px;">用户信息</th>
                   <th style="width:100px;">应付/实付</th>
                   <th style="width:90px;">记账方式</th>
                   <th style="width:80px;">订单来源</th>
@@ -1343,7 +1343,7 @@
         <div style="display:flex;gap:4px;background:var(--bg-2);padding:3px;border-radius:8px;margin-bottom:12px;width:fit-content;">
           <button class="bill2-exp-sub-tab" onclick="switchBill2ExpenseTab('month', this)" style="display:inline-flex;align-items:center;padding:6px 16px;font-size:13px;border-radius:6px;cursor:pointer;border:none;background:var(--primary);color:#fff;">月汇总</button>
           <button class="bill2-exp-sub-tab" onclick="switchBill2ExpenseTab('day', this)" style="display:inline-flex;align-items:center;padding:6px 16px;font-size:13px;border-radius:6px;cursor:pointer;border:none;background:transparent;color:var(--ink-3);">日汇总</button>
-          <button class="bill2-exp-sub-tab" onclick="switchBill2ExpenseTab('detail', this)" style="display:inline-flex;align-items:center;padding:6px 16px;font-size:13px;border-radius:6px;cursor:pointer;border:none;background:transparent;color:var(--ink-3);">分摊明细</button>
+          <button class="bill2-exp-sub-tab" onclick="switchBill2ExpenseTab('detail', this)" style="display:inline-flex;align-items:center;padding:6px 16px;font-size:13px;border-radius:6px;cursor:pointer;border:none;background:transparent;color:var(--ink-3);">成本明细</button>
         </div>
         <!-- 成本月/日汇总 3级Tab: 使用场景 -->
         <div id="bill2ExpenseSceneTabs" style="display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:12px;">
@@ -1447,7 +1447,7 @@
             </div>
           </div>
         </div>
-        <!-- 分摊明细 -->
+        <!-- 成本明细 -->
         <div id="bill2ExpenseDetail" style="display:none;">
           <div class="toolbar" style="margin-bottom:12px;">
             <div class="toolbar-left">
@@ -1489,7 +1489,7 @@
               <input type="text" class="form-input" style="width:160px;" placeholder="搜索来源单号" id="bill2ExpDetailOrderNo" oninput="renderBill2Expense()">
             </div>
             <div class="toolbar-right">
-              <button class="btn btn-outline btn-sm" onclick="showToast('已导出分摊明细', 'success')">导出</button>
+              <button class="btn btn-outline btn-sm" onclick="showToast('已导出成本明细', 'success')">导出</button>
             </div>
           </div>
           <div class="table-wrap">
@@ -2043,7 +2043,7 @@
             </div>
           </div>
           <div class="form-group">
-            <label class="form-label">关联奖品</label>
+            <label class="form-label">关联奖品<span class="required" id="relatedPrize-required" style="display:none;">*</span></label>
             <div style="position:relative;" id="f_relatedPrizeWrapper">
               <input type="text" class="form-control" id="f_relatedPrizeInput" placeholder="搜索并选择关联奖品" autocomplete="off" oninput="filterRelatedPrize(this)" onfocus="showRelatedPrizeDropdown()" onblur="setTimeout(function(){document.getElementById('f_relatedPrizeDropdown').style.display='none';},200)">
               <input type="hidden" id="f_relatedPrize">
@@ -2584,6 +2584,9 @@
       channelGroup.style.display = '';
       deadlineGroup.style.display = '';
     }
+    if (prizeType === '优惠券-优选单券' || prizeType === '优惠券-券中心') {
+      channelGroup.style.display = '';
+    }
 
     // 更新关联奖品可搜索列表
     window._relatedPrizeList = allProducts.filter(function(p) { return p.prizeType !== '福利值'; }).map(function(p) { return { id: p.name, name: p.name, type: p.prizeType }; });
@@ -2591,12 +2594,15 @@
 
     // 福利值和实物礼品时关联奖品禁用
     var relatedInput = document.getElementById('f_relatedPrizeInput');
+    var relatedReq = document.getElementById('relatedPrize-required');
     if (prizeType === '福利值' || prizeType === '实物礼品') {
       relatedInput.disabled = true;
       relatedInput.value = '';
       document.getElementById('f_relatedPrize').value = '';
+      if (relatedReq) relatedReq.style.display = 'none';
     } else {
       relatedInput.disabled = false;
+      if (relatedReq) relatedReq.style.display = '';
     }
     renderUsageSceneCheckboxes([]);
 
@@ -2762,6 +2768,10 @@
     const prizeType = document.getElementById('f_prizeType').value;
     const stockVal = document.getElementById('f_stock').value;
     if (stockVal === '') { showToast('请填写奖品总库存', 'warning'); return; }
+    var relatedInput = document.getElementById('f_relatedPrizeInput');
+    if (!relatedInput.disabled && !document.getElementById('f_relatedPrize').value.trim()) {
+      showToast('请选择关联奖品', 'warning'); return;
+    }
     const stock = parseInt(stockVal);
     const channel = document.getElementById('f_channel').value;
     var welfarePoints = document.getElementById('f_welfarePoints') ? parseInt(document.getElementById('f_welfarePoints').value) || 0 : 0;
@@ -2908,6 +2918,9 @@
         { name: 'CDF 100元代金券', type: '优惠券-优选单券', price: 500, stock: 200, exchanged: 200, monthLimit: -1, dayLimit: -1 },
       ]
     },
+    { id: 6, name: '每日签到', timeRange: { start: '2026-07-01 00:00', end: '2026-07-31 23:59' }, createdAt: '2026-06-28 10:00', createdBy: '管理员', status: 'active', rule: '每日签到获得奖励', channel: ['APP', '微信小程序'], payType: '积分', source: '千帆', costShare: { type: '混合分摊', brand: 20, store: 60, tax: 20 }, revenueShare: { type: '门店全额' }, memberDiscount: { normal: 100, silver: 100, gold: 100, platinum: 100, diamond: 100 }, accountType: '非主营业务', budgetLimit: 50000, actualCost: 800, actualRevenue: 800, items: [] },
+    { id: 7, name: '新人任务', timeRange: { start: '2026-07-01 00:00', end: '2026-12-31 23:59' }, createdAt: '2026-06-25 10:00', createdBy: '管理员', status: 'active', rule: '新人专享任务', channel: ['APP', 'H5'], payType: '积分', source: '千帆', costShare: { type: '品牌全额' }, revenueShare: { type: '平台全额' }, memberDiscount: { normal: 100, silver: 100, gold: 100, platinum: 100, diamond: 100 }, accountType: '非主营业务', budgetLimit: 30000, actualCost: 200, actualRevenue: 200, items: [] },
+    { id: 8, name: '周年庆转盘抽奖', timeRange: { start: '2026-07-15 00:00', end: '2026-07-25 23:59' }, createdAt: '2026-07-10 10:00', createdBy: '运营专员', status: 'active', rule: '周年庆转盘抽奖活动', channel: ['支付宝小程序', 'APP'], payType: '贝壳', source: '繁星-三亚国际免税城', costShare: { type: '混合分摊', brand: 40, store: 40, tax: 20 }, revenueShare: { type: '混合分摊', brand: 40, store: 40, tax: 20 }, memberDiscount: { normal: 100, silver: 100, gold: 100, platinum: 100, diamond: 100 }, accountType: '非主营业务', budgetLimit: 100000, actualCost: 6000, actualRevenue: 6000, items: [] },
   ];
 
   let editingActivityId = null;
@@ -3940,7 +3953,7 @@
       var sourceHtml = '<div style="font-size:12px;">' + o.sourceActivityName + '</div><div style="font-size:11px;color:var(--ink-4);">' + o.sourceActivityId + '</div>';
 
       // 用户信息合并格：手机号 + 用户ID
-      var userHtml = '<div style="font-weight:500;font-size:13px;color:#000;">' + (o.userPhone || '-') + '</div><div style="font-size:11px;color:var(--ink-4);margin-top:1px;">ID: ' + (o.userId || '-') + '</div>';
+      var userHtml = '<div style="font-weight:600;font-size:13px;color:#000;">' + (o.userPhone || '-') + '</div><div style="font-size:11px;color:var(--ink-4);margin-top:1px;">ID: ' + (o.userId || '-') + '</div>';
 
       // 会员等级颜色
       var levelStyles = {
@@ -3964,7 +3977,7 @@
         '<td>' + sourceHtml + '</td>' +
         '<td style="font-size:12px;">' + (function() { var entry = o.entryType || '公域'; return entry === '私域' ? '私域<div style="font-size:11px;color:var(--ink-4);">' + (o.store || '') + '</div>' : '公域'; })() + '</td>' +
         '<td><span style="display:inline-block;padding:1px 6px;border-radius:4px;font-size:11px;' + payTypeColor + '">' + o.payType + '</span></td>' +
-        '<td style="font-size:12px;color:var(--ink-3);">' + (o.channel || '-') + '</td>' +
+        '<td>' + userHtml + '</td>' +
         '<td style="font-weight:600;font-size:12px;">' + o.payPoints.toLocaleString() + '/' + (o.actualPayPoints || o.payPoints).toLocaleString() + '</td>' +
         '<td style="font-size:12px;"><span style="display:inline-block;padding:1px 6px;border-radius:4px;font-size:11px;' + (o.accountType === '主营业务' ? 'background:#e8f5e9;color:#2e7d32;' : 'background:#fff3e0;color:#e65100;') + '">' + (o.accountType || '-') + '</span></td>' +
         '<td style="font-size:12px;">' + (o.usageScene || '-') + '</td>' +
@@ -4817,10 +4830,10 @@
       if (btns[1]) btns[1].disabled = (bill2PageState[subKey] >= totalP);
     }
   }
-  // 点击"分成明细"/"分摊明细"按钮 → 切换到明细tab，并自动带入时间段+奖品类型筛选
+  // 点击"分成明细"/"成本明细"按钮 → 切换到明细tab，并自动带入时间段+奖品类型筛选
   function openBill2IncomeDetail(periodType, prizeType, btn, isExpense) {
     if (isExpense) {
-      // 成本账单 → 切换到"分摊明细"tab
+      // 成本账单 → 切换到"成本明细"tab
       // 读取月/日汇总的日期范围和奖品类型
       var dateStart, dateEnd;
       if (periodType === 'month') {
@@ -4833,7 +4846,7 @@
       // 切换到明细tab
       var detailBtn = document.querySelector('.bill2-exp-sub-tab[onclick*="\'detail\'"]');
       if (detailBtn) switchBill2ExpenseTab('detail', detailBtn);
-      // 重置场景筛选为"全部场景"，分摊明细tab不按场景筛选
+      // 重置场景筛选为"全部场景"，成本明细tab不按场景筛选
       currentBill2ExpenseScene = 'all';
       document.querySelectorAll('#bill2ExpenseSceneTabs .tab-btn').forEach(function(b) {
         b.style.borderBottom = '2px solid transparent';
@@ -5086,7 +5099,7 @@
         if (dateEnd && d > dateEnd) return false;
       }
       if (sceneFilter && r.scene !== sceneFilter) return false;
-      // 月/日汇总时按使用场景筛选；分摊明细tab不按场景筛选，仅靠奖品类型和日期筛选
+      // 月/日汇总时按使用场景筛选；成本明细tab不按场景筛选，仅靠奖品类型和日期筛选
       if ((currentBill2ExpenseSubTab === 'month' || currentBill2ExpenseSubTab === 'day') && currentBill2ExpenseScene !== 'all' && r.scene !== currentBill2ExpenseScene) return false;
       if (prizeTypeFilter && r.prizeType !== prizeTypeFilter) return false;
       if (currentBill2ExpenseSubTab === 'detail') {
@@ -5110,9 +5123,14 @@
       filtered.forEach(function(r) {
         var p = r.time.substring(0, periodLen);
         var key = p + '|' + r.prizeType;
-        if (!map[key]) map[key] = { period: p, scene: r.prizeType, pCost: 0, sCost: 0 };
+        if (!map[key]) map[key] = { period: p, scene: r.prizeType, pCost: 0, sCost: 0, pPlat: 0, pBrand: 0, pStore: 0, sPlat: 0, sBrand: 0, sStore: 0 };
         map[key].pCost += r.pointsCost;
         map[key].sCost += r.shellsCost;
+        // 按实际活动分摊配置累计
+        var pShare = calcBill2Share(r.pointsCost, r.activity);
+        var sShare = calcBill2Share(r.shellsCost, r.activity);
+        map[key].pPlat += pShare.platform; map[key].pBrand += pShare.brand; map[key].pStore += pShare.store;
+        map[key].sPlat += sShare.platform; map[key].sBrand += sShare.brand; map[key].sStore += sShare.store;
       });
       var list = Object.values(map).sort(function(a, b) { return b.period.localeCompare(a.period) || a.scene.localeCompare(b.scene); });
       var subKey = isMonth ? 'expense-month' : 'expense-day';
@@ -5130,22 +5148,20 @@
         var sumPPlat = 0, sumSPlat = 0, sumPBrand = 0, sumSBrand = 0, sumPStore = 0, sumSStore = 0;
         var sCls = ' style="text-align:right;font-size:12px;white-space:nowrap;"';
         tbody.innerHTML = pageList.map(function(r) {
-          var pShare = calcBill2Share(r.pCost, '');
-          var sShare = calcBill2Share(r.sCost, '');
           sumPCost += r.pCost; sumSCost += r.sCost;
-          sumPPlat += pShare.platform; sumSPlat += sShare.platform;
-          sumPBrand += pShare.brand; sumSBrand += sShare.brand;
-          sumPStore += pShare.store; sumSStore += sShare.store;
+          sumPPlat += r.pPlat; sumSPlat += r.sPlat;
+          sumPBrand += r.pBrand; sumSBrand += r.sBrand;
+          sumPStore += r.pStore; sumSStore += r.sStore;
           var ptype = isMonth ? 'month' : 'day';
           return '<tr>' +
             '<td>' + r.period + '</td>' +
             '<td>' + r.scene + '</td>' +
             '<td' + sCls + '>' + r.pCost.toLocaleString() + '</td>' +
             '<td' + sCls + '>' + r.sCost.toLocaleString() + '</td>' +
-            '<td' + sCls + '>' + pShare.platform.toLocaleString() + ' / ' + sShare.platform.toLocaleString() + '</td>' +
-            '<td' + sCls + '>' + pShare.brand.toLocaleString() + ' / ' + sShare.brand.toLocaleString() + '</td>' +
-            '<td' + sCls + '>' + pShare.store.toLocaleString() + ' / ' + sShare.store.toLocaleString() + '</td>' +
-            '<td style="text-align:center;white-space:nowrap;"><button class="btn btn-outline btn-sm" onclick="openBill2IncomeDetail(\'' + ptype + '\',\'' + r.scene + '\',this,true)">分摊明细</button></td>' +
+            '<td' + sCls + '>' + r.pPlat.toLocaleString() + ' / ' + r.sPlat.toLocaleString() + '</td>' +
+            '<td' + sCls + '>' + r.pBrand.toLocaleString() + ' / ' + r.sBrand.toLocaleString() + '</td>' +
+            '<td' + sCls + '>' + r.pStore.toLocaleString() + ' / ' + r.sStore.toLocaleString() + '</td>' +
+            '<td style="text-align:center;white-space:nowrap;"><button class="btn btn-outline btn-sm" onclick="openBill2IncomeDetail(\'' + ptype + '\',\'' + r.scene + '\',this,true)">成本明细</button></td>' +
             '</tr>';
         }).join('');
         document.getElementById(countId).textContent = String(list.length);
@@ -5175,7 +5191,7 @@
         updateBill2PageInfo(subKey, 0);
       } else {
         tbody.innerHTML = pageList.map(function(r) {
-          var share = calcBill2Share(r.amount, '');
+          var share = calcBill2Share(r.amount, r.activity);
           var merchantName = getMerchantName(r.orderId);
           var brandPctStr2 = share.brandPct.replace('%','');
           var isRefund = r.status === '已退款' || r.amount < 0;

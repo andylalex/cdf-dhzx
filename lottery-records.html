@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>我的抽奖记录 - 中免海南商城</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", "Microsoft YaHei", sans-serif;
+            background: #f0f2f5;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 375px;
+            min-height: 100vh;
+            background: #f5f6f8;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 导航栏 */
+        .nav-bar {
+            height: 44px;
+            background: linear-gradient(135deg, #D32F2F 0%, #B71C1C 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            color: #fff;
+            font-size: 17px;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(211, 47, 47, 0.2);
+            flex-shrink: 0;
+        }
+
+        .nav-back {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .nav-back svg {
+            width: 22px;
+            height: 22px;
+            fill: #fff;
+        }
+
+        .nav-title {
+            font-size: 17px;
+            font-weight: 600;
+        }
+
+        /* 统计概览卡片 */
+        .summary-card {
+            background: linear-gradient(135deg, #D32F2F 0%, #B71C1C 100%);
+            padding: 18px 16px 22px;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .summary-card::before {
+            content: "";
+            position: absolute;
+            top: -40px;
+            right: -40px;
+            width: 140px;
+            height: 140px;
+            background: radial-gradient(circle, rgba(255, 160, 0, 0.25) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .summary-card::after {
+            content: "";
+            position: absolute;
+            bottom: -50px;
+            left: -20px;
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle, rgba(255, 160, 0, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-around;
+            position: relative;
+            z-index: 1;
+        }
+
+        .summary-item {
+            text-align: center;
+        }
+
+        .summary-num {
+            font-size: 22px;
+            font-weight: 700;
+            line-height: 1.2;
+            background: linear-gradient(135deg, #FFD54F 0%, #FFA000 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .summary-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.85);
+            margin-top: 4px;
+        }
+
+        /* 筛选Tab */
+        .filter-tabs {
+            display: flex;
+            background: #fff;
+            padding: 0 12px;
+            border-bottom: 1px solid #f0f0f0;
+            position: sticky;
+            top: 0;
+            z-index: 5;
+        }
+
+        .tab-item {
+            flex: 1;
+            text-align: center;
+            padding: 13px 0;
+            font-size: 14px;
+            color: #666;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s;
+        }
+
+        .tab-item.active {
+            color: #D32F2F;
+            font-weight: 600;
+        }
+
+        .tab-item.active::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 24px;
+            height: 3px;
+            background: linear-gradient(90deg, #D32F2F 0%, #FFA000 100%);
+            border-radius: 2px;
+        }
+
+        /* 内容区 */
+        .content {
+            flex: 1;
+            padding: 12px;
+            overflow-y: auto;
+        }
+
+        /* 记录卡片 */
+        .records-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .record-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 14px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .record-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #f0f0f0;
+        }
+
+        .record-type {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .type-tag {
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: 500;
+        }
+
+        .type-tag.turntable {
+            background: linear-gradient(135deg, #FFEBEE 0%, #FFCDD2 100%);
+            color: #C62828;
+        }
+
+        .type-tag.appointment {
+            background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%);
+            color: #E65100;
+        }
+
+        .record-time {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .record-body {
+            display: flex;
+            align-items: center;
+        }
+
+        .prize-thumb {
+            width: 64px;
+            height: 64px;
+            border-radius: 8px;
+            flex-shrink: 0;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .prize-thumb.red {
+            background: linear-gradient(135deg, #FFCDD2 0%, #EF5350 100%);
+        }
+
+        .prize-thumb.gold {
+            background: linear-gradient(135deg, #FFE082 0%, #FFA000 100%);
+        }
+
+        .prize-thumb.purple {
+            background: linear-gradient(135deg, #E1BEE7 0%, #8E24AA 100%);
+        }
+
+        .prize-thumb svg {
+            width: 32px;
+            height: 32px;
+            fill: #fff;
+        }
+
+        .prize-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .prize-name {
+            font-size: 15px;
+            font-weight: 500;
+            color: #333;
+            line-height: 1.4;
+            margin-bottom: 6px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+        }
+
+        .prize-cost {
+            font-size: 12px;
+            color: #999;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .prize-cost .shell-icon {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            background: linear-gradient(135deg, #FFD54F 0%, #FFA000 100%);
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .prize-cost .shell-icon::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 4px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.6);
+        }
+
+        .prize-cost .cost-num {
+            color: #FF8F00;
+            font-weight: 600;
+        }
+
+        .record-status {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 6px;
+        }
+
+        .status-badge {
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .status-badge.pending {
+            background: #FFF3E0;
+            color: #FB8C00;
+        }
+
+        .status-badge.delivered {
+            background: #E8F5E9;
+            color: #43A047;
+        }
+
+        .status-badge.used {
+            background: #ECEFF1;
+            color: #607D8B;
+        }
+
+        .status-badge.expired {
+            background: #FFEBEE;
+            color: #E53935;
+        }
+
+        .record-action {
+            font-size: 12px;
+            color: #D32F2F;
+            cursor: pointer;
+        }
+
+        .record-action.disabled {
+            color: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* 空状态 */
+        .empty-state {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 80px 0 40px;
+        }
+
+        .empty-state.show {
+            display: flex;
+        }
+
+        .empty-icon {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .empty-icon svg {
+            width: 50px;
+            height: 50px;
+            fill: #FFA000;
+            opacity: 0.6;
+        }
+
+        .empty-text {
+            font-size: 14px;
+            color: #999;
+            margin-bottom: 16px;
+        }
+
+        .empty-btn {
+            padding: 8px 24px;
+            background: linear-gradient(135deg, #D32F2F 0%, #FFA000 100%);
+            color: #fff;
+            font-size: 13px;
+            border: none;
+            border-radius: 18px;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(211, 47, 47, 0.25);
+        }
+
+        /* 底部说明 */
+        .footer-tip {
+            text-align: center;
+            font-size: 11px;
+            color: #bbb;
+            padding: 16px 0 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 导航栏 -->
+        <div class="nav-bar">
+            <div class="nav-back">
+                <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+            </div>
+            <span class="nav-title">我的抽奖记录</span>
+        </div>
+
+        <!-- 统计概览 -->
+        <div class="summary-card">
+            <div class="summary-row">
+                <div class="summary-item">
+                    <div class="summary-num">12</div>
+                    <div class="summary-label">累计抽奖次数</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-num">8</div>
+                    <div class="summary-label">中奖次数</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-num">680</div>
+                    <div class="summary-label">累计消耗贝壳</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 筛选Tab -->
+        <div class="filter-tabs">
+            <div class="tab-item active" data-tab="all">全部</div>
+            <div class="tab-item" data-tab="turntable">转盘抽奖</div>
+            <div class="tab-item" data-tab="appointment">预约抽奖</div>
+        </div>
+
+        <!-- 内容区 -->
+        <div class="content">
+            <!-- 记录列表 -->
+            <div class="records-list" id="recordsList">
+                <!-- 记录1 -->
+                <div class="record-card" data-type="turntable">
+                    <div class="record-header">
+                        <div class="record-type">
+                            <span class="type-tag turntable">转盘抽奖</span>
+                        </div>
+                        <div class="record-time">2026-07-25 14:32</div>
+                    </div>
+                    <div class="record-body">
+                        <div class="prize-thumb gold">
+                            <svg viewBox="0 0 24 24"><path d="M20 6h-2.18c.11-.31.18-.65.18-1a2.996 2.996 0 0 0-5.5-1.65l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2z"/></svg>
+                        </div>
+                        <div class="prize-info">
+                            <div class="prize-name">星巴克中杯咖啡兑换券</div>
+                            <div class="prize-cost">
+                                <span class="shell-icon"></span>
+                                消耗 <span class="cost-num">50</span> 贝壳
+                            </div>
+                        </div>
+                        <div class="record-status">
+                            <span class="status-badge delivered">已发放</span>
+                            <span class="record-action">去使用</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 记录2 -->
+                <div class="record-card" data-type="appointment">
+                    <div class="record-header">
+                        <div class="record-type">
+                            <span class="type-tag appointment">预约抽奖</span>
+                        </div>
+                        <div class="record-time">2026-07-24 20:15</div>
+                    </div>
+                    <div class="record-body">
+                        <div class="prize-thumb purple">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+                        </div>
+                        <div class="prize-info">
+                            <div class="prize-name">海蓝之谜精华液小样体验装</div>
+                            <div class="prize-cost">
+                                <span class="shell-icon"></span>
+                                消耗 <span class="cost-num">120</span> 贝壳
+                            </div>
+                        </div>
+                        <div class="record-status">
+                            <span class="status-badge pending">待发放</span>
+                            <span class="record-action disabled">查看详情</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 记录3 -->
+                <div class="record-card" data-type="turntable">
+                    <div class="record-header">
+                        <div class="record-type">
+                            <span class="type-tag turntable">转盘抽奖</span>
+                        </div>
+                        <div class="record-time">2026-07-22 09:48</div>
+                    </div>
+                    <div class="record-body">
+                        <div class="prize-thumb red">
+                            <svg viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg>
+                        </div>
+                        <div class="prize-info">
+                            <div class="prize-name">50元无门槛代金券</div>
+                            <div class="prize-cost">
+                                <span class="shell-icon"></span>
+                                消耗 <span class="cost-num">30</span> 贝壳
+                            </div>
+                        </div>
+                        <div class="record-status">
+                            <span class="status-badge used">已使用</span>
+                            <span class="record-action disabled">查看订单</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 记录4 -->
+                <div class="record-card" data-type="turntable">
+                    <div class="record-header">
+                        <div class="record-type">
+                            <span class="type-tag turntable">转盘抽奖</span>
+                        </div>
+                        <div class="record-time">2026-07-20 16:05</div>
+                    </div>
+                    <div class="record-body">
+                        <div class="prize-thumb gold">
+                            <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                        </div>
+                        <div class="prize-info">
+                            <div class="prize-name">兰蔻小黑瓶精华体验装</div>
+                            <div class="prize-cost">
+                                <span class="shell-icon"></span>
+                                消耗 <span class="cost-num">80</span> 贝壳
+                            </div>
+                        </div>
+                        <div class="record-status">
+                            <span class="status-badge expired">已过期</span>
+                            <span class="record-action disabled">查看详情</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 记录5 -->
+                <div class="record-card" data-type="appointment">
+                    <div class="record-header">
+                        <div class="record-type">
+                            <span class="type-tag appointment">预约抽奖</span>
+                        </div>
+                        <div class="record-time">2026-07-18 11:22</div>
+                    </div>
+                    <div class="record-body">
+                        <div class="prize-thumb red">
+                            <svg viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg>
+                        </div>
+                        <div class="prize-info">
+                            <div class="prize-name">100元免税店代金券</div>
+                            <div class="prize-cost">
+                                <span class="shell-icon"></span>
+                                消耗 <span class="cost-num">200</span> 贝壳
+                            </div>
+                        </div>
+                        <div class="record-status">
+                            <span class="status-badge delivered">已发放</span>
+                            <span class="record-action">去使用</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 记录6 -->
+                <div class="record-card" data-type="turntable">
+                    <div class="record-header">
+                        <div class="record-type">
+                            <span class="type-tag turntable">转盘抽奖</span>
+                        </div>
+                        <div class="record-time">2026-07-15 19:30</div>
+                    </div>
+                    <div class="record-body">
+                        <div class="prize-thumb gold">
+                            <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                        </div>
+                        <div class="prize-info">
+                            <div class="prize-name">雅诗兰黛口红正装一支</div>
+                            <div class="prize-cost">
+                                <span class="shell-icon"></span>
+                                消耗 <span class="cost-num">200</span> 贝壳
+                            </div>
+                        </div>
+                        <div class="record-status">
+                            <span class="status-badge pending">待发放</span>
+                            <span class="record-action disabled">查看详情</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 空状态 -->
+            <div class="empty-state" id="emptyState">
+                <div class="empty-icon">
+                    <svg viewBox="0 0 24 24"><path d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 9c1.65 0 3-1.35 3-3s-1.35-3-3-3-3 1.35-3 3 1.35 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V18h14v-1.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                </div>
+                <div class="empty-text">暂无抽奖记录</div>
+                <button class="empty-btn">去抽奖赢好礼</button>
+            </div>
+
+            <div class="footer-tip">仅展示近6个月抽奖记录</div>
+        </div>
+    </div>
+
+    <script>
+        // Tab切换
+        const tabs = document.querySelectorAll('.tab-item');
+        const cards = document.querySelectorAll('.record-card');
+        const emptyState = document.getElementById('emptyState');
+        const recordsList = document.getElementById('recordsList');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                tabs.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                const type = this.dataset.tab;
+                let visibleCount = 0;
+                
+                cards.forEach(card => {
+                    if (type === 'all' || card.dataset.type === type) {
+                        card.style.display = 'block';
+                        visibleCount++;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+
+                if (visibleCount === 0) {
+                    recordsList.style.display = 'none';
+                    emptyState.classList.add('show');
+                } else {
+                    recordsList.style.display = 'flex';
+                    emptyState.classList.remove('show');
+                }
+            });
+        });
+
+        // 返回按钮
+        document.querySelector('.nav-back').addEventListener('click', function() {
+            history.back();
+        });
+
+        // 操作按钮
+        document.querySelectorAll('.record-action').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (this.classList.contains('disabled')) return;
+                alert('跳转至奖品使用页面');
+            });
+        });
+    </script>
+</body>
+</html>
