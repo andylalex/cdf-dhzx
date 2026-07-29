@@ -1826,68 +1826,6 @@
           </div>
         </div>
 
-        <!-- 成本分摊 -->
-        <div class="form-group full" style="margin-top:8px;">
-          <label class="form-label">成本分摊</label>
-          <select class="form-control form-select" id="act_costShareType" style="width:100%;margin-bottom:10px;" onchange="toggleActCostShare()">
-            <option value="平台全额">平台全额</option>
-            <option value="门店全额">门店全额</option>
-            <option value="品牌全额">品牌全额</option>
-            <option value="混合分摊">混合分摊</option>
-          </select>
-          <div id="act_costShareRole" style="display:none;">
-            <div style="font-size:12px;color:var(--ink-4);margin-bottom:8px;">费用分摊角色比例</div>
-            <div style="display:flex;gap:12px;flex-wrap:wrap;">
-              <div style="display:flex;align-items:center;gap:6px;">
-                <span style="font-size:13px;color:var(--ink-2);width:60px;">品牌方</span>
-                <input class="form-control" id="act_cost_brand" type="number" value="0" style="width:70px;">
-                <span style="font-size:12px;color:var(--ink-3);">%</span>
-              </div>
-              <div style="display:flex;align-items:center;gap:6px;">
-                <span style="font-size:13px;color:var(--ink-2);width:60px;">门店</span>
-                <input class="form-control" id="act_cost_store" type="number" value="0" style="width:70px;">
-                <span style="font-size:12px;color:var(--ink-3);">%</span>
-              </div>
-              <div style="display:flex;align-items:center;gap:6px;">
-                <span style="font-size:13px;color:var(--ink-2);width:60px;">有税商户</span>
-                <input class="form-control" id="act_cost_tax" type="number" value="0" style="width:70px;">
-                <span style="font-size:12px;color:var(--ink-3);">%</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 收入分成 -->
-        <div class="form-group full" style="margin-top:8px;">
-          <label class="form-label">收入分成</label>
-          <select class="form-control form-select" id="act_revenueShareType" style="width:100%;margin-bottom:10px;" onchange="toggleActRevenueShare()">
-            <option value="平台全额">平台全额</option>
-            <option value="门店全额">门店全额</option>
-            <option value="品牌全额">品牌全额</option>
-            <option value="混合分成">混合分成</option>
-          </select>
-          <div id="act_revenueShareRole" style="display:none;">
-            <div style="font-size:12px;color:var(--ink-4);margin-bottom:8px;">费用分摊角色比例</div>
-            <div style="display:flex;gap:12px;flex-wrap:wrap;">
-              <div style="display:flex;align-items:center;gap:6px;">
-                <span style="font-size:13px;color:var(--ink-2);width:60px;">品牌方</span>
-                <input class="form-control" id="act_revenue_brand" type="number" value="0" style="width:70px;">
-                <span style="font-size:12px;color:var(--ink-3);">%</span>
-              </div>
-              <div style="display:flex;align-items:center;gap:6px;">
-                <span style="font-size:13px;color:var(--ink-2);width:60px;">门店</span>
-                <input class="form-control" id="act_revenue_store" type="number" value="0" style="width:70px;">
-                <span style="font-size:12px;color:var(--ink-3);">%</span>
-              </div>
-              <div style="display:flex;align-items:center;gap:6px;">
-                <span style="font-size:13px;color:var(--ink-2);width:60px;">有税商户</span>
-                <input class="form-control" id="act_revenue_tax" type="number" value="0" style="width:70px;">
-                <span style="font-size:12px;color:var(--ink-3);">%</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
         </div>
     </div>
     <div class="modal-footer">
@@ -2101,6 +2039,70 @@
               <option value="三亚凤凰机场店">三亚凤凰机场店</option>
               <option value="海口美兰机场店">海口美兰机场店</option>
             </select>
+          </div>
+        </div>
+
+        <div class="form-section-title">成本分摊与收入分成</div>
+        <div class="form-grid">
+          <!-- 成本分摊 -->
+          <div class="form-group full">
+            <label class="form-label">成本分摊</label>
+            <select class="form-control form-select" id="f_costShareType" style="width:100%;margin-bottom:10px;" onchange="toggleProductCostShare()">
+              <option value="平台全额">平台全额</option>
+              <option value="门店全额">门店全额</option>
+              <option value="品牌全额">品牌全额</option>
+              <option value="混合分摊">混合分摊</option>
+            </select>
+            <div id="f_costShareRole" style="display:none;">
+              <div style="font-size:12px;color:var(--ink-4);margin-bottom:8px;">费用分摊角色比例</div>
+              <div style="display:flex;gap:12px;flex-wrap:wrap;">
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <span style="font-size:13px;color:var(--ink-2);width:60px;">品牌方</span>
+                  <input class="form-control" id="f_cost_brand" type="number" value="0" style="width:70px;">
+                  <span style="font-size:12px;color:var(--ink-3);">%</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <span style="font-size:13px;color:var(--ink-2);width:60px;">门店</span>
+                  <input class="form-control" id="f_cost_store" type="number" value="0" style="width:70px;">
+                  <span style="font-size:12px;color:var(--ink-3);">%</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <span style="font-size:13px;color:var(--ink-2);width:60px;">有税商户</span>
+                  <input class="form-control" id="f_cost_tax" type="number" value="0" style="width:70px;">
+                  <span style="font-size:12px;color:var(--ink-3);">%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- 收入分成 -->
+          <div class="form-group full" style="margin-top:4px;">
+            <label class="form-label">收入分成</label>
+            <select class="form-control form-select" id="f_revenueShareType" style="width:100%;margin-bottom:10px;" onchange="toggleProductRevenueShare()">
+              <option value="平台全额">平台全额</option>
+              <option value="门店全额">门店全额</option>
+              <option value="品牌全额">品牌全额</option>
+              <option value="混合分成">混合分成</option>
+            </select>
+            <div id="f_revenueShareRole" style="display:none;">
+              <div style="font-size:12px;color:var(--ink-4);margin-bottom:8px;">费用分成角色比例</div>
+              <div style="display:flex;gap:12px;flex-wrap:wrap;">
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <span style="font-size:13px;color:var(--ink-2);width:60px;">品牌方</span>
+                  <input class="form-control" id="f_revenue_brand" type="number" value="0" style="width:70px;">
+                  <span style="font-size:12px;color:var(--ink-3);">%</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <span style="font-size:13px;color:var(--ink-2);width:60px;">门店</span>
+                  <input class="form-control" id="f_revenue_store" type="number" value="0" style="width:70px;">
+                  <span style="font-size:12px;color:var(--ink-3);">%</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <span style="font-size:13px;color:var(--ink-2);width:60px;">有税商户</span>
+                  <input class="form-control" id="f_revenue_tax" type="number" value="0" style="width:70px;">
+                  <span style="font-size:12px;color:var(--ink-3);">%</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -2691,6 +2693,20 @@
         document.getElementById('f_deadlineDate').value = '';
       }
       document.getElementById('f_channel').value = p.channel || 'cdf中免海南';
+      // cost share
+      var cs = p.costShare || { type: '平台全额' };
+      document.getElementById('f_costShareType').value = cs.type || '平台全额';
+      document.getElementById('f_cost_brand').value = cs.brand || 0;
+      document.getElementById('f_cost_store').value = cs.store || 0;
+      document.getElementById('f_cost_tax').value = cs.tax || 0;
+      toggleProductCostShare();
+      // revenue share
+      var rs = p.revenueShare || { type: '平台全额' };
+      document.getElementById('f_revenueShareType').value = rs.type || '平台全额';
+      document.getElementById('f_revenue_brand').value = rs.brand || 0;
+      document.getElementById('f_revenue_store').value = rs.store || 0;
+      document.getElementById('f_revenue_tax').value = rs.tax || 0;
+      toggleProductRevenueShare();
     } else {
       document.querySelectorAll('#productModal input[type="text"], #productModal input[type="number"], #productModal textarea').forEach(el => el.value = '');
       document.getElementById('f_prizeType').value = '实物礼品';
@@ -2704,6 +2720,16 @@
       document.getElementById('f_dayLimit').value = '-1';
       document.getElementById('f_channel').value = 'cdf中免海南';
       document.querySelector('input[name="f_deadlineType"][value="days"]').checked = true;
+      document.getElementById('f_costShareType').value = '平台全额';
+      document.getElementById('f_cost_brand').value = 0;
+      document.getElementById('f_cost_store').value = 0;
+      document.getElementById('f_cost_tax').value = 0;
+      document.getElementById('f_revenueShareType').value = '平台全额';
+      document.getElementById('f_revenue_brand').value = 0;
+      document.getElementById('f_revenue_store').value = 0;
+      document.getElementById('f_revenue_tax').value = 0;
+      toggleProductCostShare();
+      toggleProductRevenueShare();
     }
     toggleDeadlineType();
     onPrizeTypeChange();
@@ -2778,6 +2804,19 @@
     var monthLimit = document.getElementById('f_monthLimit') ? parseInt(document.getElementById('f_monthLimit').value) || -1 : -1;
     var dayLimit = document.getElementById('f_dayLimit') ? parseInt(document.getElementById('f_dayLimit').value) || -1 : -1;
 
+    const costShare = {
+      type: document.getElementById('f_costShareType').value || '平台全额',
+      brand: parseInt(document.getElementById('f_cost_brand').value) || 0,
+      store: parseInt(document.getElementById('f_cost_store').value) || 0,
+      tax: parseInt(document.getElementById('f_cost_tax').value) || 0
+    };
+    const revenueShare = {
+      type: document.getElementById('f_revenueShareType').value || '平台全额',
+      brand: parseInt(document.getElementById('f_revenue_brand').value) || 0,
+      store: parseInt(document.getElementById('f_revenue_store').value) || 0,
+      tax: parseInt(document.getElementById('f_revenue_tax').value) || 0
+    };
+
     const payload = {
       name,
       prizeId: 'PRIZE-' + String(editingId || (allProducts.length + 1)).padStart(4, '0'),
@@ -2795,7 +2834,9 @@
       usageScene: usageScene,
       welfarePoints: welfarePoints,
       monthLimit: monthLimit,
-      dayLimit: dayLimit
+      dayLimit: dayLimit,
+      costShare,
+      revenueShare
     };
 
     if (editingId) {
@@ -2993,17 +3034,17 @@
     }
   }
 
-  function toggleActCostShare() {
-    var type = document.getElementById('act_costShareType').value;
-    var roleGroup = document.getElementById('act_costShareRole');
+  function toggleProductCostShare() {
+    var type = document.getElementById('f_costShareType').value;
+    var roleGroup = document.getElementById('f_costShareRole');
     if (roleGroup) {
       roleGroup.style.display = type === '混合分摊' ? 'block' : 'none';
     }
   }
 
-  function toggleActRevenueShare() {
-    var type = document.getElementById('act_revenueShareType').value;
-    var roleGroup = document.getElementById('act_revenueShareRole');
+  function toggleProductRevenueShare() {
+    var type = document.getElementById('f_revenueShareType').value;
+    var roleGroup = document.getElementById('f_revenueShareRole');
     if (roleGroup) {
       roleGroup.style.display = (type === '混合分摊' || type === '混合分成') ? 'block' : 'none';
     }
@@ -3042,20 +3083,6 @@
       document.querySelectorAll('input[name="act_accountType"]').forEach(function(rb) { rb.checked = false; });
       var accRb = document.querySelector('input[name="act_accountType"][value="' + (a.accountType || '主营业务') + '"]');
       if (accRb) accRb.checked = true;
-      // cost share
-      var cs = a.costShare || { type: '平台全额' };
-      document.getElementById('act_costShareType').value = cs.type || '平台全额';
-      document.getElementById('act_cost_brand').value = cs.brand || 0;
-      document.getElementById('act_cost_store').value = cs.store || 0;
-      document.getElementById('act_cost_tax').value = cs.tax || 0;
-      toggleActCostShare();
-      // revenue share
-      var rs = a.revenueShare || { type: '平台全额' };
-      document.getElementById('act_revenueShareType').value = rs.type || '平台全额';
-      document.getElementById('act_revenue_brand').value = rs.brand || 0;
-      document.getElementById('act_revenue_store').value = rs.store || 0;
-      document.getElementById('act_revenue_tax').value = rs.tax || 0;
-      toggleActRevenueShare();
       toggleAccountField();
     } else {
       document.getElementById('act_name').value = '';
@@ -3066,18 +3093,8 @@
       document.getElementById('act_member_gold').value = 100;
       document.getElementById('act_member_platinum').value = 100;
       document.getElementById('act_member_diamond').value = 100;
-      document.getElementById('act_costShareType').value = '平台全额';
-      document.getElementById('act_cost_brand').value = 0;
-      document.getElementById('act_cost_store').value = 0;
-      document.getElementById('act_cost_tax').value = 0;
-      document.getElementById('act_revenueShareType').value = '平台全额';
-      document.getElementById('act_revenue_brand').value = 0;
-      document.getElementById('act_revenue_store').value = 0;
-      document.getElementById('act_revenue_tax').value = 0;
       document.querySelector('input[name="act_payType"][value="积分"]').checked = true;
       document.querySelector('input[name="act_accountType"][value="主营业务"]').checked = true;
-      toggleActCostShare();
-      toggleActRevenueShare();
       toggleAccountField();
     }
     document.getElementById('activityModal').classList.add('show');
@@ -3098,19 +3115,6 @@
       if (v) memberDiscount[level] = parseInt(v);
     });
 
-    const costShare = {
-      type: document.getElementById('act_costShareType').value || '平台全额',
-      brand: parseInt(document.getElementById('act_cost_brand').value) || 0,
-      store: parseInt(document.getElementById('act_cost_store').value) || 0,
-      tax: parseInt(document.getElementById('act_cost_tax').value) || 0
-    };
-    const revenueShare = {
-      type: document.getElementById('act_revenueShareType').value || '平台全额',
-      brand: parseInt(document.getElementById('act_revenue_brand').value) || 0,
-      store: parseInt(document.getElementById('act_revenue_store').value) || 0,
-      tax: parseInt(document.getElementById('act_revenue_tax').value) || 0
-    };
-
     if (editingActivityId) {
       const a = allActivities.find(x => x.id === editingActivityId);
       if (a) {
@@ -3120,8 +3124,6 @@
         a.payType = payType;
         a.accountType = (document.querySelector('input[name="act_accountType"]:checked') || {}).value || '主营业务';
         a.memberDiscount = memberDiscount;
-        a.costShare = costShare;
-        a.revenueShare = revenueShare;
       }
       showToast('活动已更新', 'success');
     } else {
@@ -3129,7 +3131,7 @@
       const now = new Date();
       const createdAt = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0') + ' ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
       var accountType = (document.querySelector('input[name="act_accountType"]:checked') || {}).value || '主营业务';
-      allActivities.push({ id: newId, name, timeRange: { start, end }, createdAt, createdBy: '管理员', status: 'active', channel: channels, payType, accountType, memberDiscount, costShare, revenueShare, items: [] });
+      allActivities.push({ id: newId, name, timeRange: { start, end }, createdAt, createdBy: '管理员', status: 'active', channel: channels, payType, accountType, memberDiscount, items: [] });
       showToast('活动已创建', 'success');
     }
     closeModal('activityModal');
