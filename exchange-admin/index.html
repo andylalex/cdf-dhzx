@@ -1592,25 +1592,31 @@
       <div id="centerTabConfig" style="display:none;">
         <!-- 图片配置（合并卡片） -->
         <div style="background:#fff;border-radius:12px;padding:20px;border:1px solid var(--border);margin-bottom:16px;overflow-x:auto;">
-          <div style="display:flex;gap:20px;min-width:1080px;">
+          <div style="display:flex;gap:20px;min-width:1200px;">
           <!-- 左侧：配置区 -->
-          <div style="flex:1;min-width:360px;">
+          <div style="flex:1;min-width:460px;">
             <div style="font-weight:600;font-size:15px;margin-bottom:2px;">图片配置</div>
             <div style="font-size:12px;color:var(--ink-4);margin-bottom:12px;">配置用户端各位置图片，右侧参考图标注了各图片的显示位置</div>
 
             <!-- Banner图 -->
             <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--border);">
-              <div style="width:110px;flex-shrink:0;font-size:12px;font-weight:500;color:var(--ink-2);">① 背景图<br><span style="font-size:11px;color:var(--ink-4);font-weight:400;">750x300px</span></div>
+              <div style="flex-shrink:0;display:flex;align-items:center;justify-content:center;background:var(--bg-2);border-radius:6px;border:1px solid var(--border);padding:4px;min-width:80px;height:68px;">
+                <img src="assets/page-config/bg.png" style="height:60px;width:auto;display:block;border-radius:4px;" alt="背景图效果图">
+              </div>
+              <div style="width:110px;flex-shrink:0;font-size:12px;font-weight:500;color:var(--ink-2);">① 背景图<br><span style="font-size:11px;color:var(--ink-4);font-weight:400;">750×398px</span></div>
               <div id="bannerPreviewThumb" style="width:100px;height:50px;background:var(--bg-2);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--ink-4);flex-shrink:0;overflow:hidden;border:1px dashed var(--border);">背景图</div>
               <div style="width:80px;flex-shrink:0;">
                 <label class="btn btn-outline btn-sm" style="cursor:pointer;font-size:12px;">上传<input type="file" accept="image/*" style="display:none;" onchange="handleBannerUpload(this)"></label>
               </div>
             </div>
 
-            <!-- 卡通形象 -->
+            <!-- 形象图 -->
             <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--border);">
-              <div style="width:110px;flex-shrink:0;font-size:12px;font-weight:500;color:var(--ink-2);">② 卡通形象<br><span style="font-size:11px;color:var(--ink-4);font-weight:400;">175x175px</span></div>
-              <div id="mascotPreviewThumb" style="width:50px;height:50px;background:var(--bg-2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--ink-4);flex-shrink:0;overflow:hidden;border:1px dashed var(--border);">卡通形象</div>
+              <div style="flex-shrink:0;display:flex;align-items:center;justify-content:center;background:var(--bg-2);border-radius:6px;border:1px solid var(--border);padding:4px;min-width:80px;height:68px;">
+                <img src="assets/page-config/mascot.png" style="height:60px;width:auto;display:block;border-radius:4px;" alt="形象图效果图">
+              </div>
+              <div style="width:110px;flex-shrink:0;font-size:12px;font-weight:500;color:var(--ink-2);">② 形象图<br><span style="font-size:11px;color:var(--ink-4);font-weight:400;">262×206px</span></div>
+              <div id="mascotPreviewThumb" style="width:50px;height:50px;background:var(--bg-2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--ink-4);flex-shrink:0;overflow:hidden;border:1px dashed var(--border);">形象图</div>
               <div style="width:80px;flex-shrink:0;">
                 <label class="btn btn-outline btn-sm" style="cursor:pointer;font-size:12px;">上传<input type="file" accept="image/*" style="display:none;" onchange="handleMascotUpload(this)"></label>
               </div>
@@ -1618,7 +1624,10 @@
 
             <!-- 明细按钮图 -->
             <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--border);">
-              <div style="width:110px;flex-shrink:0;font-size:12px;font-weight:500;color:var(--ink-2);">③ 明细按钮图<br><span style="font-size:11px;color:var(--ink-4);font-weight:400;">40x40px</span></div>
+              <div style="flex-shrink:0;display:flex;align-items:center;justify-content:center;background:var(--bg-2);border-radius:6px;border:1px solid var(--border);padding:4px;min-width:80px;height:48px;">
+                <img src="assets/page-config/detail-btn.png" style="height:40px;width:auto;display:block;border-radius:4px;" alt="明细按钮图效果图">
+              </div>
+              <div style="width:110px;flex-shrink:0;font-size:12px;font-weight:500;color:var(--ink-2);">③ 明细按钮图<br><span style="font-size:11px;color:var(--ink-4);font-weight:400;">104×44px</span></div>
               <div id="detailBtnPreview" style="width:40px;height:40px;background:var(--bg-2);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--ink-4);flex-shrink:0;overflow:hidden;border:1px dashed var(--border);">明细按钮</div>
               <div style="width:80px;flex-shrink:0;">
                 <label class="btn btn-outline btn-sm" style="cursor:pointer;font-size:12px;">上传<input type="file" accept="image/*" style="display:none;" onchange="handleTabImageUpload(this,'detailBtnPreview')"></label>
@@ -1627,8 +1636,11 @@
 
             <!-- 兑换规则图 -->
             <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--border);">
-              <div style="width:110px;flex-shrink:0;font-size:12px;font-weight:500;color:var(--ink-2);">④ 兑换规则图<br><span style="font-size:11px;color:var(--ink-4);font-weight:400;">宽750px</span></div>
-              <div id="ruleImagePreview" style="width:100px;height:50px;background:var(--bg-2);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--ink-4);flex-shrink:0;overflow:hidden;border:1px dashed var(--border);">兑换规则</div>
+              <div style="flex-shrink:0;display:flex;align-items:center;justify-content:center;background:var(--bg-2);border-radius:6px;border:1px solid var(--border);padding:4px;min-width:80px;height:88px;">
+                <img src="assets/page-config/rule.png" style="height:80px;width:auto;display:block;border-radius:4px;" alt="兑换规则图效果图">
+              </div>
+              <div style="width:110px;flex-shrink:0;font-size:12px;font-weight:500;color:var(--ink-2);">④ 兑换规则图<br><span style="font-size:11px;color:var(--ink-4);font-weight:400;">57×134px</span></div>
+              <div id="ruleImagePreview" style="width:50px;height:50px;background:var(--bg-2);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--ink-4);flex-shrink:0;overflow:hidden;border:1px dashed var(--border);">兑换规则</div>
               <div style="width:80px;flex-shrink:0;">
                 <label class="btn btn-outline btn-sm" style="cursor:pointer;font-size:12px;">上传<input type="file" accept="image/*" style="display:none;" onchange="handleTabImageUpload(this,'ruleImagePreview')"></label>
               </div>
@@ -1636,16 +1648,22 @@
 
             <!-- ⑤ 积分Tab选中图 -->
             <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--border);">
-              <div style="width:110px;flex-shrink:0;font-size:12px;font-weight:500;color:var(--ink-2);">⑤ 积分Tab选中图<br><span style="font-size:11px;color:var(--ink-4);font-weight:400;">Tab图标</span></div>
+              <div style="flex-shrink:0;display:flex;align-items:center;justify-content:center;background:var(--bg-2);border-radius:6px;border:1px solid var(--border);padding:4px;min-width:80px;height:38px;">
+                <img src="assets/page-config/tab-points.png" style="height:30px;width:auto;display:block;border-radius:4px;" alt="积分Tab选中图效果图">
+              </div>
+              <div style="width:110px;flex-shrink:0;font-size:12px;font-weight:500;color:var(--ink-2);">⑤ 积分Tab选中图<br><span style="font-size:11px;color:var(--ink-4);font-weight:400;">750×155px</span></div>
               <div id="tabPointsPreview" style="width:80px;height:36px;background:var(--bg-2);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--ink-4);flex-shrink:0;overflow:hidden;border:1px dashed var(--border);">积分Tab</div>
               <div style="width:80px;flex-shrink:0;">
                 <label class="btn btn-outline btn-sm" style="cursor:pointer;font-size:12px;">上传<input type="file" accept="image/*" style="display:none;" onchange="handleTabImageUpload(this,'tabPointsPreview')"></label>
               </div>
             </div>
 
-            <!-- ⑤ 贝壳Tab选中图 -->
+            <!-- ⑥ 贝壳Tab选中图 -->
             <div style="display:flex;align-items:center;gap:10px;">
-              <div style="width:110px;flex-shrink:0;font-size:12px;font-weight:500;color:var(--ink-2);">⑤ 贝壳Tab选中图<br><span style="font-size:11px;color:var(--ink-4);font-weight:400;">Tab图标</span></div>
+              <div style="flex-shrink:0;display:flex;align-items:center;justify-content:center;background:var(--bg-2);border-radius:6px;border:1px solid var(--border);padding:4px;min-width:80px;height:38px;">
+                <img src="assets/page-config/tab-shells.png" style="height:30px;width:auto;display:block;border-radius:4px;" alt="贝壳Tab选中图效果图">
+              </div>
+              <div style="width:110px;flex-shrink:0;font-size:12px;font-weight:500;color:var(--ink-2);">⑥ 贝壳Tab选中图<br><span style="font-size:11px;color:var(--ink-4);font-weight:400;">750×155px</span></div>
               <div id="tabShellsPreview" style="width:80px;height:36px;background:var(--bg-2);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--ink-4);flex-shrink:0;overflow:hidden;border:1px dashed var(--border);">贝壳Tab</div>
               <div style="width:80px;flex-shrink:0;">
                 <label class="btn btn-outline btn-sm" style="cursor:pointer;font-size:12px;">上传<input type="file" accept="image/*" style="display:none;" onchange="handleTabImageUpload(this,'tabShellsPreview')"></label>
