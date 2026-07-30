@@ -1605,10 +1605,10 @@
                 <img src="assets/page-config/bg.png" style="height:60px;width:auto;display:block;border-radius:4px;" alt="背景图效果图">
               </div>
               <div style="flex:1;"></div>
-              <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
-                <div id="bannerPreviewThumb" style="width:100px;height:50px;background:var(--bg-2);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--ink-4);overflow:hidden;border:1px dashed var(--border);">背景图</div>
-                <label class="btn btn-outline btn-sm" style="cursor:pointer;font-size:12px;">上传<input type="file" accept="image/*" style="display:none;" onchange="handleBannerUpload(this)"></label>
-              </div>
+              <label style="cursor:pointer;flex-shrink:0;">
+                <div id="bannerPreviewThumb" style="width:94px;height:50px;background:var(--bg-2);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--ink-3);overflow:hidden;border:1px dashed var(--border);">上传</div>
+                <input type="file" accept="image/*" style="display:none;" onchange="handleBannerUpload(this)">
+              </label>
             </div>
 
             <!-- 形象图 -->
@@ -1618,10 +1618,10 @@
                 <img src="assets/page-config/mascot.png" style="height:60px;width:auto;display:block;border-radius:4px;" alt="形象图效果图">
               </div>
               <div style="flex:1;"></div>
-              <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
-                <div id="mascotPreviewThumb" style="width:50px;height:50px;background:var(--bg-2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--ink-4);overflow:hidden;border:1px dashed var(--border);">形象图</div>
-                <label class="btn btn-outline btn-sm" style="cursor:pointer;font-size:12px;">上传<input type="file" accept="image/*" style="display:none;" onchange="handleMascotUpload(this)"></label>
-              </div>
+              <label style="cursor:pointer;flex-shrink:0;">
+                <div id="mascotPreviewThumb" style="width:64px;height:50px;background:var(--bg-2);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--ink-3);overflow:hidden;border:1px dashed var(--border);">上传</div>
+                <input type="file" accept="image/*" style="display:none;" onchange="handleMascotUpload(this)">
+              </label>
             </div>
 
             <!-- 明细按钮图 -->
@@ -1631,10 +1631,10 @@
                 <img src="assets/page-config/detail-btn.png" style="height:40px;width:auto;display:block;border-radius:4px;" alt="明细按钮图效果图">
               </div>
               <div style="flex:1;"></div>
-              <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
-                <div id="detailBtnPreview" style="width:40px;height:40px;background:var(--bg-2);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--ink-4);overflow:hidden;border:1px dashed var(--border);">明细按钮</div>
-                <label class="btn btn-outline btn-sm" style="cursor:pointer;font-size:12px;">上传<input type="file" accept="image/*" style="display:none;" onchange="handleTabImageUpload(this,'detailBtnPreview')"></label>
-              </div>
+              <label style="cursor:pointer;flex-shrink:0;">
+                <div id="detailBtnPreview" style="width:66px;height:28px;background:var(--bg-2);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--ink-3);overflow:hidden;border:1px dashed var(--border);">上传</div>
+                <input type="file" accept="image/*" style="display:none;" onchange="handleTabImageUpload(this,'detailBtnPreview')">
+              </label>
             </div>
 
             <!-- 兑换规则图 -->
@@ -1644,10 +1644,10 @@
                 <img src="assets/page-config/rule.png" style="height:80px;width:auto;display:block;border-radius:4px;" alt="兑换规则图效果图">
               </div>
               <div style="flex:1;"></div>
-              <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
-                <div id="ruleImagePreview" style="width:50px;height:50px;background:var(--bg-2);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--ink-4);overflow:hidden;border:1px dashed var(--border);">兑换规则</div>
-                <label class="btn btn-outline btn-sm" style="cursor:pointer;font-size:12px;">上传<input type="file" accept="image/*" style="display:none;" onchange="handleTabImageUpload(this,'ruleImagePreview')"></label>
-              </div>
+              <label style="cursor:pointer;flex-shrink:0;">
+                <div id="ruleImagePreview" style="width:26px;height:60px;background:var(--bg-2);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--ink-3);overflow:hidden;border:1px dashed var(--border);writing-mode:vertical-rl;">上传</div>
+                <input type="file" accept="image/*" style="display:none;" onchange="handleTabImageUpload(this,'ruleImagePreview')">
+              </label>
             </div>
 
             <!-- ⑤ 积分Tab选中图 -->
@@ -1657,10 +1657,10 @@
                 <img src="assets/page-config/tab-points.png" style="height:30px;width:auto;display:block;border-radius:4px;" alt="积分Tab选中图效果图">
               </div>
               <div style="flex:1;"></div>
-              <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
-                <div id="tabPointsPreview" style="width:80px;height:36px;background:var(--bg-2);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--ink-4);overflow:hidden;border:1px dashed var(--border);">积分Tab</div>
-                <label class="btn btn-outline btn-sm" style="cursor:pointer;font-size:12px;">上传<input type="file" accept="image/*" style="display:none;" onchange="handleTabImageUpload(this,'tabPointsPreview')"></label>
-              </div>
+              <label style="cursor:pointer;flex-shrink:0;">
+                <div id="tabPointsPreview" style="width:116px;height:24px;background:var(--bg-2);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--ink-3);overflow:hidden;border:1px dashed var(--border);">上传</div>
+                <input type="file" accept="image/*" style="display:none;" onchange="handleTabImageUpload(this,'tabPointsPreview')">
+              </label>
             </div>
 
             <!-- ⑥ 贝壳Tab选中图 -->
@@ -1670,10 +1670,10 @@
                 <img src="assets/page-config/tab-shells.png" style="height:30px;width:auto;display:block;border-radius:4px;" alt="贝壳Tab选中图效果图">
               </div>
               <div style="flex:1;"></div>
-              <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
-                <div id="tabShellsPreview" style="width:80px;height:36px;background:var(--bg-2);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--ink-4);overflow:hidden;border:1px dashed var(--border);">贝壳Tab</div>
-                <label class="btn btn-outline btn-sm" style="cursor:pointer;font-size:12px;">上传<input type="file" accept="image/*" style="display:none;" onchange="handleTabImageUpload(this,'tabShellsPreview')"></label>
-              </div>
+              <label style="cursor:pointer;flex-shrink:0;">
+                <div id="tabShellsPreview" style="width:116px;height:24px;background:var(--bg-2);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--ink-3);overflow:hidden;border:1px dashed var(--border);">上传</div>
+                <input type="file" accept="image/*" style="display:none;" onchange="handleTabImageUpload(this,'tabShellsPreview')">
+              </label>
             </div>
           </div>
 
@@ -3767,6 +3767,19 @@
         thumbEl.innerHTML = '<img src="' + e.target.result + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">';
         var previewEl = document.getElementById('previewMascot');
         previewEl.innerHTML = '<img src="' + e.target.result + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">';
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  function handleTabImageUpload(input, previewId) {
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        var thumbEl = document.getElementById(previewId);
+        if (thumbEl) {
+          thumbEl.innerHTML = '<img src="' + e.target.result + '" style="width:100%;height:100%;object-fit:cover;border-radius:6px;">';
+        }
       };
       reader.readAsDataURL(input.files[0]);
     }
