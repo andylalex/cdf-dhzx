@@ -599,6 +599,12 @@
                 <option value="公域">公域</option>
                 <option value="私域">私域</option>
               </select>
+              <select class="form-input form-select" style="width:120px;" id="filterOrderSource" onchange="renderOrders()">
+                <option value="">全部来源</option>
+                <option value="兑换中心">兑换中心</option>
+                <option value="转盘抽奖">转盘抽奖</option>
+                <option value="预约抽奖">预约抽奖</option>
+              </select>
               <select class="form-input form-select" style="width:120px;" id="filterOrderAccountType" onchange="renderOrders()">
                 <option value="">全部记账方式</option>
                 <option value="主营业务">主营业务</option>
@@ -621,8 +627,9 @@
             <table class="table">
               <thead>
                 <tr>
-                  <th style="width:120px;">订单号</th>
+                  <th style="width:140px;">订单号</th>
                   <th style="min-width:160px;">奖品信息</th>
+                  <th style="width:100px;">订单来源</th>
                   <th style="min-width:140px;">来源活动</th>
                   <th style="width:110px;">下单入口</th>
                   <th style="width:70px;">支付方式</th>
@@ -631,7 +638,7 @@
                   <th style="width:90px;">记账方式</th>
                   <th style="width:90px;">状态</th>
                   <th style="min-width:100px;">下单时间</th>
-                  <th style="width:100px;">操作</th>
+                  <th style="width:120px;">操作</th>
                 </tr>
               </thead>
               <tbody id="orderBody"></tbody>
@@ -696,6 +703,7 @@
                   <th style="width:120px;">退款单号</th>
                   <th style="width:120px;">原订单号</th>
                   <th style="min-width:160px;">奖品信息</th>
+                  <th style="width:100px;">订单来源</th>
                   <th style="min-width:120px;">下单入口</th>
                   <th style="min-width:120px;">用户信息</th>
                   <th style="width:70px;">支付方式</th>
@@ -3838,11 +3846,11 @@
     { orderId: 'EX20260721001', prizeId: 'PRIZE-0001', prizeName: '雅诗兰黛持妆粉底液 30ml', prizeImg: '', prizeType: '实物礼品', quantity: 1, relatedPrize: '', relatedPrizeId: '', sourceType: '兑换中心', sourceActivityName: '夏日狂欢兑换活动', sourceActivityId: 'ACT-001', userName: '王梦琪', userId: 'UID-10001', userPhone: '13812348888', userAddress: '海南省三亚市天涯区海棠北路118号 中免海棠湾国际免税城', memberLevel: '金卡会员', payType: '积分', payPoints: 8800, status: '待发货', time: '2026-07-21 10:30', completeTime: '', expressNo: '', expressCompany: '', accountType: '主营业务', usageScene: '兑换中心', channel: 'APP', store: '三亚国际免税城', entryType: '公域' },
     { orderId: 'EX20260720015', prizeId: 'PRIZE-0002', prizeName: '兰蔻小黑瓶精华肌底液 20ml', prizeImg: '', prizeType: '实物礼品', quantity: 1, relatedPrize: '', relatedPrizeId: '', sourceType: '兑换中心', sourceActivityName: '会员专属兑换活动', sourceActivityId: 'ACT-002', userName: '李思涵', userId: 'UID-10002', userPhone: '18612346677', userAddress: '海南省海口市龙华区国贸路68号', memberLevel: '铂金VIP', payType: '贝壳', payPoints: 1000, status: '待发货', time: '2026-07-20 14:22', completeTime: '', expressNo: '', expressCompany: '', accountType: '主营业务', usageScene: '兑换中心', channel: 'APP', store: '海口国际免税城', entryType: '私域' },
     { orderId: 'EX20260720012', prizeId: 'PRIZE-0003', prizeName: 'CDF 100元代金券', prizeImg: '', prizeType: '优惠券-优选单券', quantity: 2, relatedPrize: '', relatedPrizeId: '', sourceType: '兑换中心', sourceActivityName: '夏日狂欢兑换活动', sourceActivityId: 'ACT-001', userName: '张雅婷', userId: 'UID-10003', userPhone: '15912343344', userAddress: '', memberLevel: '银卡会员', payType: '积分', payPoints: 1000, status: '待收货/待使用', time: '2026-07-20 11:08', completeTime: '', expressNo: '', expressCompany: '', accountType: '主营业务', usageScene: '预约抽奖', channel: 'APP', store: '博鳌免税店', entryType: '公域' },
-    { orderId: 'EX20260719008', prizeId: 'PRIZE-0005', prizeName: 'SK-II 神仙水 230ml', prizeImg: '', prizeType: '预约抽奖', quantity: 1, relatedPrize: '', relatedPrizeId: '', sourceType: '预约抽奖', sourceActivityName: '七月预约抽奖', sourceActivityId: 'LOT-003', userName: '陈佳琪', userId: 'UID-10004', userPhone: '17712342211', userAddress: '广东省广州市天河区珠江新城花城大道68号', memberLevel: '钻石VIP', payType: '贝壳', payPoints: 1200, status: '待收货/待使用', time: '2026-07-19 16:45', completeTime: '', expressNo: 'SF1234567890', expressCompany: '顺丰速运', accountType: '非主营业务', usageScene: '预约抽奖', channel: '微信小程序', store: '三亚凤凰机场店', entryType: '私域' },
-    { orderId: 'EX20260719003', prizeId: 'PRIZE-0006', prizeName: '海蓝之谜面霜 30ml', prizeImg: '', prizeType: '转盘抽奖', quantity: 1, relatedPrize: '兰蔻小黑瓶精华肌底液 20ml', relatedPrizeId: 'PRIZE-0002', sourceType: '转盘抽奖', sourceActivityName: '年中大促转盘', sourceActivityId: 'LOT-001', userName: '赵晓晨', userId: 'UID-10005', userPhone: '13512349900', userAddress: '北京市朝阳区建国门外大街1号', memberLevel: '金卡会员', payType: '贝壳', payPoints: 1500, status: '已完成', time: '2026-07-19 09:18', completeTime: '2026-07-22 14:00', expressNo: 'YT9876543210', expressCompany: '圆通速递', accountType: '非主营业务', usageScene: '转盘抽奖', channel: 'H5', store: '海口美兰机场店', entryType: '公域' },
+    { orderId: 'EX20260719008', prizeId: 'PRIZE-0005', prizeName: 'SK-II 神仙水 230ml', prizeImg: '', prizeType: '预约抽奖', quantity: 1, relatedPrize: '', relatedPrizeId: '', sourceType: '预约抽奖', sourceOrderId: 'LOT20260715003', sourceActivityName: '七月预约抽奖', sourceActivityId: 'LOT-003', userName: '陈佳琪', userId: 'UID-10004', userPhone: '17712342211', userAddress: '广东省广州市天河区珠江新城花城大道68号', memberLevel: '钻石VIP', payType: '贝壳', payPoints: 1200, status: '待收货/待使用', time: '2026-07-19 16:45', completeTime: '', expressNo: 'SF1234567890', expressCompany: '顺丰速运', accountType: '非主营业务', usageScene: '预约抽奖', channel: '微信小程序', store: '三亚凤凰机场店', entryType: '私域' },
+    { orderId: 'EX20260719003', prizeId: 'PRIZE-0006', prizeName: '海蓝之谜面霜 30ml', prizeImg: '', prizeType: '转盘抽奖', quantity: 1, relatedPrize: '兰蔻小黑瓶精华肌底液 20ml', relatedPrizeId: 'PRIZE-0002', sourceType: '转盘抽奖', sourceOrderId: 'LOT20260718007', sourceActivityName: '年中大促转盘', sourceActivityId: 'LOT-001', userName: '赵晓晨', userId: 'UID-10005', userPhone: '13512349900', userAddress: '北京市朝阳区建国门外大街1号', memberLevel: '金卡会员', payType: '贝壳', payPoints: 1500, status: '已完成', time: '2026-07-19 09:18', completeTime: '2026-07-22 14:00', expressNo: 'YT9876543210', expressCompany: '圆通速递', accountType: '非主营业务', usageScene: '转盘抽奖', channel: 'H5', store: '海口美兰机场店', entryType: '公域' },
     { orderId: 'EX20260718005', prizeId: 'PRIZE-0004', prizeName: '三亚免税城 SPA 体验券', prizeImg: '', prizeType: '优惠券-券中心', quantity: 1, relatedPrize: '', relatedPrizeId: '', sourceType: '兑换中心', sourceActivityName: '限时闪购活动', sourceActivityId: 'ACT-003', userName: '刘婉清', userId: 'UID-10006', userPhone: '13212345566', userAddress: '', memberLevel: '银卡会员', payType: '积分', payPoints: 9500, status: '已完成', time: '2026-07-18 10:22', completeTime: '2026-07-20 16:30', expressNo: '', expressCompany: '', accountType: '主营业务', usageScene: '转盘抽奖', channel: 'APP', store: '三亚国际免税城', entryType: '私域' },
     { orderId: 'EX20260717002', prizeId: 'PRIZE-0007', prizeName: '海南免税95折券', prizeImg: '', prizeType: '优惠券-优选单券', quantity: 1, relatedPrize: '', relatedPrizeId: '', sourceType: '兑换中心', sourceActivityName: '夏日狂欢兑换活动', sourceActivityId: 'ACT-001', userName: '孙雨桐', userId: 'UID-10007', userPhone: '18812347788', userAddress: '', memberLevel: '普通会员', payType: '积分', payPoints: 350, status: '退款中', time: '2026-07-17 15:30', completeTime: '', expressNo: '', expressCompany: '', accountType: '主营业务', usageScene: '兑换中心', channel: 'APP', store: '海口国际免税城', entryType: '公域' },
-    { orderId: 'EX20260716001', prizeId: 'PRIZE-0008', prizeName: '迪奥口红套装', prizeImg: '', prizeType: '转盘抽奖', quantity: 1, relatedPrize: '', relatedPrizeId: '', sourceType: '转盘抽奖', sourceActivityName: '年中大促转盘', sourceActivityId: 'LOT-001', userName: '周文博', userId: 'UID-10008', userPhone: '15012341122', userAddress: '上海市黄浦区南京东路800号', memberLevel: '金卡会员', payType: '积分', payPoints: 3500, status: '已退款', time: '2026-07-16 08:55', completeTime: '', expressNo: '', expressCompany: '', accountType: '非主营业务', usageScene: '转盘抽奖', channel: 'H5', store: '博鳌免税店', entryType: '公域' },
+    { orderId: 'EX20260716001', prizeId: 'PRIZE-0008', prizeName: '迪奥口红套装', prizeImg: '', prizeType: '转盘抽奖', quantity: 1, relatedPrize: '', relatedPrizeId: '', sourceType: '转盘抽奖', sourceOrderId: 'LOT20260715002', sourceActivityName: '年中大促转盘', sourceActivityId: 'LOT-001', userName: '周文博', userId: 'UID-10008', userPhone: '15012341122', userAddress: '上海市黄浦区南京东路800号', memberLevel: '金卡会员', payType: '积分', payPoints: 3500, status: '已退款', time: '2026-07-16 08:55', completeTime: '', expressNo: '', expressCompany: '', accountType: '非主营业务', usageScene: '转盘抽奖', channel: 'H5', store: '博鳌免税店', entryType: '公域' },
     ];
 
   // 补充订单计算字段（延迟到 allRefunds 声明后执行）
@@ -4006,6 +4014,7 @@
     var accountTypeFilter = document.getElementById('filterOrderAccountType') ? document.getElementById('filterOrderAccountType').value : '';
     var usageSceneFilter = document.getElementById('filterOrderUsageScene') ? document.getElementById('filterOrderUsageScene').value : '';
     var activityFilter = document.getElementById('filterOrderActivity') ? document.getElementById('filterOrderActivity').value : '';
+    var sourceFilter = document.getElementById('filterOrderSource') ? document.getElementById('filterOrderSource').value : '';
     var dateStartFilter = document.getElementById('filterOrderDateStart') ? document.getElementById('filterOrderDateStart').value : '';
     var dateEndFilter = document.getElementById('filterOrderDateEnd') ? document.getElementById('filterOrderDateEnd').value : '';
 
@@ -4019,6 +4028,7 @@
       if (accountTypeFilter && o.accountType !== accountTypeFilter) return false;
       if (usageSceneFilter && o.usageScene !== usageSceneFilter) return false;
       if (activityFilter && o.sourceActivityName !== activityFilter) return false;
+      if (sourceFilter && o.sourceType !== sourceFilter) return false;
       if (dateStartFilter && (!o.time || o.time.substring(0,10) < dateStartFilter)) return false;
       if (dateEndFilter && (!o.time || o.time.substring(0,10) > dateEndFilter)) return false;
       return true;
@@ -4026,7 +4036,7 @@
 
     var tbody = document.getElementById('orderBody');
     if (list.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;color:var(--ink-4);padding:40px 0;">暂无数据</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="12" style="text-align:center;color:var(--ink-4);padding:40px 0;">暂无数据</td></tr>';
       document.getElementById('orderCount').textContent = '0';
       return;
     }
@@ -4046,12 +4056,16 @@
 
       // 操作按钮
       var actions = '<button class="btn btn-text btn-sm" onclick="openOrderDetailModal(\'' + o.orderId + '\')">详情</button>';
-      if (o.sourceType === '兑换中心' && o.status !== '已退款') {
+      // 实物类型奖品展示物流按钮
+      var isPhysical = o.prizeType === '实物礼品';
+      if (isPhysical) {
         actions += ' <button class="btn btn-text btn-sm" onclick="openExpressModal(\'' + o.orderId + '\')">物流</button>';
       }
+      // 抽奖类型订单不支持售后退款
+      var isLottery = o.sourceType === '转盘抽奖' || o.sourceType === '预约抽奖';
       if (o.status === '退款中') {
         actions += ' <button class="btn btn-danger btn-sm" onclick="goToRefundTab(\'' + o.orderId + '\')">售后订单</button>';
-      } else if (o.status !== '已退款') {
+      } else if (!isLottery && o.status !== '已退款') {
         actions += ' <button class="btn btn-danger btn-sm" onclick="openRefundModal(\'' + o.orderId + '\')">退款</button>';
       }
 
@@ -4065,8 +4079,23 @@
       var prizeTypeBadge = '<span style="display:inline-block;padding:1px 6px;border-radius:4px;font-size:11px;white-space:nowrap;' + prizeTypeStyle + ';margin-bottom:2px;">' + (o.prizeType || '-') + '</span>';
       var prizeInfoHtml = '<div style="display:flex;align-items:flex-start;gap:10px;">' + imgHtml + '<div style="min-width:0;">' + prizeTypeBadge + '<div style="font-size:11px;color:var(--ink-4);">奖品ID: ' + o.prizeId + '</div><div style="font-weight:500;font-size:13px;margin-top:1px;">' + o.prizeName + ' <span style="font-weight:400;color:var(--ink-3);">×' + (o.quantity || 1) + '</span></div>' + relatedHtml + '</div></div>';
 
-      // 来源活动合并格：来源类型 badge + 活动名 + 活动ID
-      var sourceHtml = '<div style="font-size:12px;">' + o.sourceActivityName + '</div><div style="font-size:11px;color:var(--ink-4);">' + o.sourceActivityId + '</div>';
+      // 订单号 + 来源订单号
+      var orderIdHtml = '<div style="font-family:monospace;font-size:12px;">' + o.orderId + '</div>';
+      if (o.sourceOrderId) {
+        orderIdHtml += '<div style="font-size:11px;color:var(--ink-4);margin-top:2px;">来源: ' + o.sourceOrderId + '</div>';
+      }
+
+      // 订单来源 badge
+      var sourceTypeColors = {
+        '兑换中心': 'background:#e8f5e9;color:#2e7d32;',
+        '转盘抽奖': 'background:#fff8e1;color:#e65100;',
+        '预约抽奖': 'background:#f3e5f5;color:#7b1fa2;'
+      };
+      var sourceTypeStyle = sourceTypeColors[o.sourceType] || 'background:#f5f5f5;color:var(--ink-2);';
+      var sourceTypeHtml = '<span style="display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;' + sourceTypeStyle + ';">' + (o.sourceType || '-') + '</span>';
+
+      // 来源活动
+      var sourceActivityHtml = '<div style="font-size:12px;">' + o.sourceActivityName + '</div><div style="font-size:11px;color:var(--ink-4);">' + o.sourceActivityId + '</div>';
 
       // 用户信息合并格：手机号 + 用户ID
       var userHtml = '<div style="font-weight:600;font-size:13px;color:#000;">' + maskPhone(o.userPhone) + '</div><div style="font-size:11px;color:var(--ink-4);margin-top:1px;">ID: ' + (o.userId || '-') + '</div>';
@@ -4088,9 +4117,10 @@
       }
 
       return '<tr>' +
-        '<td style="font-family:monospace;font-size:12px;">' + o.orderId + '</td>' +
+        '<td>' + orderIdHtml + '</td>' +
         '<td>' + prizeInfoHtml + '</td>' +
-        '<td>' + sourceHtml + '</td>' +
+        '<td>' + sourceTypeHtml + '</td>' +
+        '<td>' + sourceActivityHtml + '</td>' +
         '<td style="font-size:12px;">' + (function() { var entry = o.entryType || '公域'; return entry === '私域' ? '私域<div style="font-size:11px;color:var(--ink-4);">' + (o.store || '') + '</div>' : '公域'; })() + '</td>' +
         '<td><span style="display:inline-block;padding:1px 6px;border-radius:4px;font-size:11px;' + payTypeColor + '">' + o.payType + '</span></td>' +
         '<td>' + userHtml + '</td>' +
@@ -4125,7 +4155,7 @@
 
     var tbody = document.getElementById('refundBody');
     if (list.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;color:var(--ink-4);padding:40px 0;">暂无数据</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="12" style="text-align:center;color:var(--ink-4);padding:40px 0;">暂无数据</td></tr>';
       document.getElementById('refundCount').textContent = '0';
       return;
     }
@@ -4168,6 +4198,15 @@
       var prizeTypeBadge = '<span style="display:inline-block;padding:1px 6px;border-radius:4px;font-size:11px;white-space:nowrap;' + prizeTypeStyle + ';margin-bottom:2px;">' + (r.prizeType || '-') + '</span>';
       var prizeInfoHtml = '<div style="display:flex;align-items:flex-start;gap:10px;">' + imgHtml + '<div style="min-width:0;">' + prizeTypeBadge + '<div style="font-size:11px;color:var(--ink-4);">奖品ID: ' + r.prizeId + '</div><div style="font-weight:500;font-size:13px;margin-top:1px;">' + r.prizeName + '</div>' + relatedHtml + '</div></div>';
 
+      // 订单来源 badge
+      var sourceTypeColors = {
+        '兑换中心': 'background:#e8f5e9;color:#2e7d32;',
+        '转盘抽奖': 'background:#fff8e1;color:#e65100;',
+        '预约抽奖': 'background:#f3e5f5;color:#7b1fa2;'
+      };
+      var sourceTypeStyle = sourceTypeColors[r.sourceType] || 'background:#f5f5f5;color:var(--ink-2);';
+      var sourceTypeHtml = '<span style="display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;' + sourceTypeStyle + ';">' + (r.sourceType || '-') + '</span>';
+
       // 来源活动合并格
       var entryDisplay = r.entryType === '私域' ? '私域<div style="font-size:11px;color:var(--ink-4);">' + (r.store || '') + '</div>' : '公域';
       var storeHtml = '<div style="font-size:12px;">' + entryDisplay + '</div>';
@@ -4179,6 +4218,7 @@
         '<td style="font-family:monospace;font-size:12px;">' + r.refundId + '</td>' +
         '<td style="font-family:monospace;font-size:12px;color:var(--ink-3);">' + r.orderId + '</td>' +
         '<td>' + prizeInfoHtml + '</td>' +
+        '<td>' + sourceTypeHtml + '</td>' +
         '<td>' + storeHtml + '</td>' +
         '<td>' + userHtml + '</td>' +
         '<td><span style="display:inline-block;padding:1px 6px;border-radius:4px;font-size:11px;' + payTypeColor + '">' + (r.payType || '-') + '</span></td>' +
