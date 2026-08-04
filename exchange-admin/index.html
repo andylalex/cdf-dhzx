@@ -570,7 +570,8 @@
               <select class="form-input form-select" style="width:120px;" id="filterOrderStatus" onchange="renderOrders()">
                 <option value="">全部状态</option>
                 <option value="待发货">待发货</option>
-                <option value="待收货/待使用">待收货/待使用</option>
+                <option value="待收货">待收货</option>
+                <option value="待使用">待使用</option>
                 <option value="已完成">已完成</option>
                 <option value="退款中">退款中</option>
                 <option value="已退款">已退款</option>
@@ -1542,21 +1543,21 @@
       <div id="centerTabPrizes">
         <div class="toolbar">
           <div class="toolbar-left">
-            <input class="form-input" style="width:180px;" placeholder="搜索奖品名称" id="searchCenterPrize" oninput="renderCenterPrizes()">
-            <select class="form-input form-select" style="width:140px;" id="filterCenterSource" onchange="renderCenterPrizes()">
+            <input class="form-input" style="width:180px;" placeholder="搜索奖品名称" id="searchCenterPrize" oninput="centerPrizePage=1;renderCenterPrizes()">
+            <select class="form-input form-select" style="width:140px;" id="filterCenterSource" onchange="centerPrizePage=1;renderCenterPrizes()">
               <option value="">全部活动</option>
             </select>
-            <select class="form-input form-select" style="width:120px;" id="filterCenterVisibility" onchange="renderCenterPrizes()">
+            <select class="form-input form-select" style="width:120px;" id="filterCenterVisibility" onchange="centerPrizePage=1;renderCenterPrizes()">
               <option value="visible">已上架</option>
               <option value="all">全部</option>
               <option value="hidden">已下架</option>
             </select>
-            <select class="form-input form-select" style="width:120px;" id="filterCenterTag" onchange="renderCenterPrizes()">
+            <select class="form-input form-select" style="width:120px;" id="filterCenterTag" onchange="centerPrizePage=1;renderCenterPrizes()">
                 <option value="">全部标签</option>
               </select>
-              <input type="date" class="form-input" style="width:130px;" id="filterCenterDateStart" onchange="renderCenterPrizes()">
+              <input type="date" class="form-input" style="width:130px;" id="filterCenterDateStart" onchange="centerPrizePage=1;renderCenterPrizes()">
               <span style="color:var(--ink-4);font-size:12px;">~</span>
-              <input type="date" class="form-input" style="width:130px;" id="filterCenterDateEnd" onchange="renderCenterPrizes()">
+              <input type="date" class="form-input" style="width:130px;" id="filterCenterDateEnd" onchange="centerPrizePage=1;renderCenterPrizes()">
             </div>
           <div class="toolbar-right">
             <button class="btn btn-outline btn-sm" onclick="batchOffShelfCenterPrizes()">批量下架</button>
@@ -1588,6 +1589,8 @@
         </div>
         <div class="pagination">
           <div class="page-info">共 <strong id="centerPrizeCount">0</strong> 条奖品</div>
+          <div class="page-controls" id="centerPrizePagination" style="display:flex;align-items:center;gap:8px;">
+          </div>
         </div>
       </div>
 
@@ -3504,6 +3507,8 @@
   // ===== 兑换中心管理 =====
   let centerPrizeItems = []; // populated from activities
   let currentCenterPrizeTab = '积分'; // '积分' or '贝壳'
+  let centerPrizePage = 1;
+  let centerPrizePageSize = 10;
   let centerConfig = {
     banners: [
       { id: 1, title: '夏日狂欢兑换', image: '', link: '', visible: true, sort: 1 },
@@ -3613,14 +3618,35 @@
       return true;
     });
 
+    var total = list.length;
+    document.getElementById('centerPrizeCount').textContent = total;
+
     var tbody = document.getElementById('centerPrizeBody');
-    if (list.length === 0) {
+    if (total === 0) {
       tbody.innerHTML = '<tr><td colspan="13" style="text-align:center;color:var(--ink-4);padding:40px 0;">暂无数据</td></tr>';
-      document.getElementById('centerPrizeCount').textContent = '0';
+      document.getElementById('centerPrizePagination').innerHTML = '';
       return;
     }
 
-    document.getElementById('centerPrizeCount').textContent = list.length;
+    // Pagination
+    var totalPages = Math.ceil(total / centerPrizePageSize);
+    if (centerPrizePage > totalPages) centerPrizePage = totalPages;
+    if (centerPrizePage < 1) centerPrizePage = 1;
+    var startIdx = (centerPrizePage - 1) * centerPrizePageSize;
+    var endIdx = startIdx + centerPrizePageSize;
+    var pageList = list.slice(startIdx, endIdx);
+
+    // Render pagination controls
+    var pagHtml = '';
+    pagHtml += '<button class="btn btn-outline btn-sm" onclick="goCenterPrizePage(' + (centerPrizePage - 1) + ')" ' + (centerPrizePage === 1 ? 'disabled style="opacity:0.5;cursor:not-allowed;"' : '') + '>上一页</button>';
+    pagHtml += '<span style="font-size:12px;color:var(--ink-3);">第 ' + centerPrizePage + ' / ' + totalPages + ' 页</span>';
+    pagHtml += '<button class="btn btn-outline btn-sm" onclick="goCenterPrizePage(' + (centerPrizePage + 1) + ')" ' + (centerPrizePage === totalPages ? 'disabled style="opacity:0.5;cursor:not-allowed;"' : '') + '>下一页</button>';
+    pagHtml += '<select class="form-input form-select" style="width:90px;" onchange="changeCenterPrizePageSize(this.value)">';
+    [10, 20, 50].forEach(function(sz) {
+      pagHtml += '<option value="' + sz + '" ' + (centerPrizePageSize === sz ? 'selected' : '') + '>' + sz + '条/页</option>';
+    });
+    pagHtml += '</select>';
+    document.getElementById('centerPrizePagination').innerHTML = pagHtml;
 
     var typeColorMap = {
       '实物礼品': 'background:#e8f5e9;color:#2e7d32;',
@@ -3630,7 +3656,7 @@
       '优惠券': 'background:#e3f2fd;color:#1565c0;',
     };
 
-    tbody.innerHTML = list.map(function(p) {
+    tbody.innerHTML = pageList.map(function(p) {
       var typeStyle = typeColorMap[p.type] || 'background:#f5f5f5;color:var(--ink-2);';
       var statusDot = p.visible ? '<span class="status-dot on"></span>已上架' : '<span class="status-dot off"></span>已下架';
       var statusStyle = 'white-space:nowrap;';
@@ -3651,6 +3677,17 @@
         '<td class="td-actions"><button class="btn btn-text btn-sm" onclick="toggleCenterPrizeVisible(\'' + p.id + '\')">' + (p.visible ? '下架' : '上架') + '</button></td>' +
       '</tr>';
     }).join('');
+  }
+
+  function goCenterPrizePage(page) {
+    centerPrizePage = page;
+    renderCenterPrizes();
+  }
+
+  function changeCenterPrizePageSize(size) {
+    centerPrizePageSize = parseInt(size);
+    centerPrizePage = 1;
+    renderCenterPrizes();
   }
 
   function toggleCenterPrizeCheck(id, checked) {
@@ -3756,7 +3793,10 @@
     });
     btn.style.borderBottom = '2px solid var(--primary)';
     btn.style.color = 'var(--primary)';
-    if (tab !== 'config') renderCenterPrizes();
+    if (tab !== 'config') {
+      centerPrizePage = 1;
+      renderCenterPrizes();
+    }
   }
 
   // Page config rendering
@@ -3845,8 +3885,8 @@
   var allOrders = [
     { orderId: 'EX20260721001', prizeId: 'PRIZE-0001', prizeName: '雅诗兰黛持妆粉底液 30ml', prizeImg: '', prizeType: '实物礼品', quantity: 1, relatedPrize: '', relatedPrizeId: '', sourceType: '兑换中心', sourceActivityName: '夏日狂欢兑换活动', sourceActivityId: 'ACT-001', userName: '王梦琪', userId: 'UID-10001', userPhone: '13812348888', userAddress: '海南省三亚市天涯区海棠北路118号 中免海棠湾国际免税城', memberLevel: '金卡会员', payType: '积分', payPoints: 8800, status: '待发货', time: '2026-07-21 10:30', completeTime: '', expressNo: '', expressCompany: '', accountType: '主营业务', usageScene: '兑换中心', channel: 'APP', store: '三亚国际免税城', entryType: '公域' },
     { orderId: 'EX20260720015', prizeId: 'PRIZE-0002', prizeName: '兰蔻小黑瓶精华肌底液 20ml', prizeImg: '', prizeType: '实物礼品', quantity: 1, relatedPrize: '', relatedPrizeId: '', sourceType: '兑换中心', sourceActivityName: '会员专属兑换活动', sourceActivityId: 'ACT-002', userName: '李思涵', userId: 'UID-10002', userPhone: '18612346677', userAddress: '海南省海口市龙华区国贸路68号', memberLevel: '铂金VIP', payType: '贝壳', payPoints: 1000, status: '待发货', time: '2026-07-20 14:22', completeTime: '', expressNo: '', expressCompany: '', accountType: '主营业务', usageScene: '兑换中心', channel: 'APP', store: '海口国际免税城', entryType: '私域' },
-    { orderId: 'EX20260720012', prizeId: 'PRIZE-0003', prizeName: 'CDF 100元代金券', prizeImg: '', prizeType: '优惠券-优选单券', quantity: 2, relatedPrize: '', relatedPrizeId: '', sourceType: '兑换中心', sourceActivityName: '夏日狂欢兑换活动', sourceActivityId: 'ACT-001', userName: '张雅婷', userId: 'UID-10003', userPhone: '15912343344', userAddress: '', memberLevel: '银卡会员', payType: '积分', payPoints: 1000, status: '待收货/待使用', time: '2026-07-20 11:08', completeTime: '', expressNo: '', expressCompany: '', accountType: '主营业务', usageScene: '预约抽奖', channel: 'APP', store: '博鳌免税店', entryType: '公域' },
-    { orderId: 'EX20260719008', prizeId: 'PRIZE-0005', prizeName: 'SK-II 神仙水 230ml', prizeImg: '', prizeType: '预约抽奖', quantity: 1, relatedPrize: '', relatedPrizeId: '', sourceType: '预约抽奖', sourceOrderId: 'LOT20260715003', sourceActivityName: '七月预约抽奖', sourceActivityId: 'LOT-003', userName: '陈佳琪', userId: 'UID-10004', userPhone: '17712342211', userAddress: '广东省广州市天河区珠江新城花城大道68号', memberLevel: '钻石VIP', payType: '贝壳', payPoints: 1200, status: '待收货/待使用', time: '2026-07-19 16:45', completeTime: '', expressNo: 'SF1234567890', expressCompany: '顺丰速运', accountType: '非主营业务', usageScene: '预约抽奖', channel: '微信小程序', store: '三亚凤凰机场店', entryType: '私域' },
+    { orderId: 'EX20260720012', prizeId: 'PRIZE-0003', prizeName: 'CDF 100元代金券', prizeImg: '', prizeType: '优惠券-优选单券', quantity: 2, relatedPrize: '', relatedPrizeId: '', sourceType: '兑换中心', sourceActivityName: '夏日狂欢兑换活动', sourceActivityId: 'ACT-001', userName: '张雅婷', userId: 'UID-10003', userPhone: '15912343344', userAddress: '', memberLevel: '银卡会员', payType: '积分', payPoints: 1000, status: '待使用', time: '2026-07-20 11:08', completeTime: '', expressNo: '', expressCompany: '', accountType: '主营业务', usageScene: '预约抽奖', channel: 'APP', store: '博鳌免税店', entryType: '公域' },
+    { orderId: 'EX20260719008', prizeId: 'PRIZE-0005', prizeName: 'SK-II 神仙水 230ml', prizeImg: '', prizeType: '预约抽奖', quantity: 1, relatedPrize: '', relatedPrizeId: '', sourceType: '预约抽奖', sourceOrderId: 'LOT20260715003', sourceActivityName: '七月预约抽奖', sourceActivityId: 'LOT-003', userName: '陈佳琪', userId: 'UID-10004', userPhone: '17712342211', userAddress: '广东省广州市天河区珠江新城花城大道68号', memberLevel: '钻石VIP', payType: '贝壳', payPoints: 1200, status: '待收货', time: '2026-07-19 16:45', completeTime: '', expressNo: 'SF1234567890', expressCompany: '顺丰速运', accountType: '非主营业务', usageScene: '预约抽奖', channel: '微信小程序', store: '三亚凤凰机场店', entryType: '私域' },
     { orderId: 'EX20260719003', prizeId: 'PRIZE-0006', prizeName: '海蓝之谜面霜 30ml', prizeImg: '', prizeType: '转盘抽奖', quantity: 1, relatedPrize: '兰蔻小黑瓶精华肌底液 20ml', relatedPrizeId: 'PRIZE-0002', sourceType: '转盘抽奖', sourceOrderId: 'LOT20260718007', sourceActivityName: '年中大促转盘', sourceActivityId: 'LOT-001', userName: '赵晓晨', userId: 'UID-10005', userPhone: '13512349900', userAddress: '北京市朝阳区建国门外大街1号', memberLevel: '金卡会员', payType: '贝壳', payPoints: 1500, status: '已完成', time: '2026-07-19 09:18', completeTime: '2026-07-22 14:00', expressNo: 'YT9876543210', expressCompany: '圆通速递', accountType: '非主营业务', usageScene: '转盘抽奖', channel: 'H5', store: '海口美兰机场店', entryType: '公域' },
     { orderId: 'EX20260718005', prizeId: 'PRIZE-0004', prizeName: '三亚免税城 SPA 体验券', prizeImg: '', prizeType: '优惠券-券中心', quantity: 1, relatedPrize: '', relatedPrizeId: '', sourceType: '兑换中心', sourceActivityName: '限时闪购活动', sourceActivityId: 'ACT-003', userName: '刘婉清', userId: 'UID-10006', userPhone: '13212345566', userAddress: '', memberLevel: '银卡会员', payType: '积分', payPoints: 9500, status: '已完成', time: '2026-07-18 10:22', completeTime: '2026-07-20 16:30', expressNo: '', expressCompany: '', accountType: '主营业务', usageScene: '转盘抽奖', channel: 'APP', store: '三亚国际免税城', entryType: '私域' },
     { orderId: 'EX20260717002', prizeId: 'PRIZE-0007', prizeName: '海南免税95折券', prizeImg: '', prizeType: '优惠券-优选单券', quantity: 1, relatedPrize: '', relatedPrizeId: '', sourceType: '兑换中心', sourceActivityName: '夏日狂欢兑换活动', sourceActivityId: 'ACT-001', userName: '孙雨桐', userId: 'UID-10007', userPhone: '18812347788', userAddress: '', memberLevel: '普通会员', payType: '积分', payPoints: 350, status: '退款中', time: '2026-07-17 15:30', completeTime: '', expressNo: '', expressCompany: '', accountType: '主营业务', usageScene: '兑换中心', channel: 'APP', store: '海口国际免税城', entryType: '公域' },
@@ -3873,28 +3913,28 @@
   };
 
   var allRefunds = [
-    { refundId: 'RF20260722001', orderId: 'EX20260711007', prizeId: 'PRIZE-0004', prizeName: '资生堂红腰子精华 50ml', prizeImg: '', prizeType: '实物礼品', quantity: 1, relatedPrize: '', relatedPrizeId: '', sourceType: '兑换中心', sourceActivityName: '夏日狂欢兑换活动', sourceActivityId: 'ACT-001', userName: '李思远', userId: 'UID-10015', userPhone: '15112346677', userAddress: '海南省海口市龙华区滨海大道99号', memberLevel: '铂金VIP', payType: '积分', payPoints: 15000, reason: '到期未使用自动退款', status: '退款完成', time: '2026-07-22 00:05', channel: 'APP', logs: [
+    { refundId: 'RF20260722001', orderId: 'EX20260711007', prizeId: 'PRIZE-0004', prizeName: '资生堂红腰子精华 50ml', prizeImg: '', prizeType: '实物礼品', quantity: 1, relatedPrize: '', relatedPrizeId: '', sourceType: '兑换中心', sourceActivityName: '夏日狂欢兑换活动', sourceActivityId: 'ACT-001', userName: '李思远', userId: 'UID-10015', userPhone: '15112346677', userAddress: '海南省海口市龙华区滨海大道99号', memberLevel: '铂金VIP', payType: '积分', payPoints: 15000, reason: '到期未使用自动退款', status: '退款完成', time: '2026-07-22 00:05', channel: 'APP', submitter: '系统', logs: [
       { time: '2026-07-22 00:05:00', operator: '系统', action: '自动退款' },
       { time: '2026-07-22 00:05:01', operator: '系统', action: '退款完成' }
     ], store: '三亚国际免税城', usageScene: '兑换中心', entryType: '私域', auditors: ['管理员A', '运营专员', '财务审核D'], auditResults: {'管理员A': '通过', '运营专员': '通过', '财务审核D': '通过'}, materials: ['https://picsum.photos/200/200?random=1']},
-    { refundId: 'RF20260721001', orderId: 'EX20260716001', prizeId: 'PRIZE-0008', prizeName: '迪奥口红套装', prizeImg: '', prizeType: '转盘抽奖', quantity: 1, relatedPrize: '', relatedPrizeId: '', sourceType: '转盘抽奖', sourceActivityName: '年中大促转盘', sourceActivityId: 'LOT-001', userName: '周文博', userId: 'UID-10008', userPhone: '15012341122', userAddress: '上海市黄浦区南京东路800号', memberLevel: '金卡会员', payType: '积分', payPoints: 3500, reason: '不想要了', status: '待审核', time: '2026-07-21 09:10', channel: 'H5', logs: [
+    { refundId: 'RF20260721001', orderId: 'EX20260716001', prizeId: 'PRIZE-0008', prizeName: '迪奥口红套装', prizeImg: '', prizeType: '转盘抽奖', quantity: 1, relatedPrize: '', relatedPrizeId: '', sourceType: '转盘抽奖', sourceActivityName: '年中大促转盘', sourceActivityId: 'LOT-001', userName: '周文博', userId: 'UID-10008', userPhone: '15012341122', userAddress: '上海市黄浦区南京东路800号', memberLevel: '金卡会员', payType: '积分', payPoints: 3500, reason: '不想要了', status: '待审核', time: '2026-07-21 09:10', channel: 'H5', submitter: '运营专员小周', logs: [
       { time: '2026-07-21 09:10:00', operator: '周文博', action: '申请退款' }
     ], store: '海口国际免税城', usageScene: '转盘抽奖', entryType: '公域', auditors: ['管理员A', '运营专员', '财务审核D'], materials: ['https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4']},
-    { refundId: 'RF20260720003', orderId: 'EX20260715005', prizeId: 'PRIZE-0001', prizeName: '雅诗兰黛持妆粉底液 30ml', prizeImg: '', prizeType: '实物礼品', quantity: 1, relatedPrize: '', relatedPrizeId: '', sourceType: '兑换中心', sourceActivityName: '会员专属兑换活动', sourceActivityId: 'ACT-002', userName: '王梦琪', userId: 'UID-10009', userPhone: '13612349988', userAddress: '海南省三亚市天涯区海棠北路118号', memberLevel: '银卡会员', payType: '积分', payPoints: 8800, reason: '商品破损', status: '退款中', time: '2026-07-20 16:30', channel: 'APP', logs: [
+    { refundId: 'RF20260720003', orderId: 'EX20260715005', prizeId: 'PRIZE-0001', prizeName: '雅诗兰黛持妆粉底液 30ml', prizeImg: '', prizeType: '实物礼品', quantity: 1, relatedPrize: '', relatedPrizeId: '', sourceType: '兑换中心', sourceActivityName: '会员专属兑换活动', sourceActivityId: 'ACT-002', userName: '王梦琪', userId: 'UID-10009', userPhone: '13612349988', userAddress: '海南省三亚市天涯区海棠北路118号', memberLevel: '银卡会员', payType: '积分', payPoints: 8800, reason: '商品破损', status: '退款中', time: '2026-07-20 16:30', channel: 'APP', submitter: '运营专员小李', logs: [
       { time: '2026-07-20 16:30:00', operator: '王梦琪', action: '申请退款' },
       { time: '2026-07-20 17:15:22', operator: '运营专员', action: '审核通过' },
       { time: '2026-07-20 17:15:23', operator: '系统', action: '全部审核通过，发起退款' }
     ], store: '博鳌免税店', usageScene: '兑换中心', entryType: '公域', auditors: ['管理员B', '运营专员'], auditResults: {'管理员B': '通过', '运营专员': '通过'}, materials: ['https://picsum.photos/200/200?random=2', 'https://picsum.photos/200/200?random=3']},
-    { refundId: 'RF20260719002', orderId: 'EX20260713008', prizeId: 'PRIZE-0003', prizeName: 'CDF 100元代金券', prizeImg: '', prizeType: '优惠券-优选单券', quantity: 2, relatedPrize: '', relatedPrizeId: '', sourceType: '兑换中心', sourceActivityName: '夏日狂欢兑换活动', sourceActivityId: 'ACT-001', userName: '张雅婷', userId: 'UID-10010', userPhone: '15912343344', userAddress: '', memberLevel: '普通会员', payType: '积分', payPoints: 500, reason: '重复兑换', status: '审核驳回', time: '2026-07-19 11:22', channel: 'APP', logs: [
+    { refundId: 'RF20260719002', orderId: 'EX20260713008', prizeId: 'PRIZE-0003', prizeName: 'CDF 100元代金券', prizeImg: '', prizeType: '优惠券-优选单券', quantity: 2, relatedPrize: '', relatedPrizeId: '', sourceType: '兑换中心', sourceActivityName: '夏日狂欢兑换活动', sourceActivityId: 'ACT-001', userName: '张雅婷', userId: 'UID-10010', userPhone: '15912343344', userAddress: '', memberLevel: '普通会员', payType: '积分', payPoints: 500, reason: '重复兑换', status: '审核驳回', time: '2026-07-19 11:22', channel: 'APP', submitter: '运营专员小陈', logs: [
       { time: '2026-07-19 11:22:00', operator: '张雅婷', action: '申请退款' },
       { time: '2026-07-19 14:05:18', operator: '运营专员', action: '审核驳回' }
     ], store: '三亚凤凰机场店', usageScene: '兑换中心', entryType: '私域', auditors: ['运营专员', '财务审核D'], auditResults: {'运营专员': '驳回'}, materials: []},
-    { refundId: 'RF20260718001', orderId: 'EX20260712003', prizeId: 'PRIZE-0005', prizeName: 'SK-II 神仙水 230ml', prizeImg: '', prizeType: '预约抽奖', quantity: 1, relatedPrize: '', relatedPrizeId: '', sourceType: '预约抽奖', sourceActivityName: '七月预约抽奖', sourceActivityId: 'LOT-003', userName: '陈佳琪', userId: 'UID-10011', userPhone: '17712342211', userAddress: '广东省广州市天河区珠江新城', memberLevel: '钻石VIP', payType: '积分', payPoints: 12000, reason: '不想要了', status: '退款中', time: '2026-07-18 14:55', channel: '微信小程序', logs: [
+    { refundId: 'RF20260718001', orderId: 'EX20260712003', prizeId: 'PRIZE-0005', prizeName: 'SK-II 神仙水 230ml', prizeImg: '', prizeType: '预约抽奖', quantity: 1, relatedPrize: '', relatedPrizeId: '', sourceType: '预约抽奖', sourceActivityName: '七月预约抽奖', sourceActivityId: 'LOT-003', userName: '陈佳琪', userId: 'UID-10011', userPhone: '17712342211', userAddress: '广东省广州市天河区珠江新城', memberLevel: '钻石VIP', payType: '积分', payPoints: 12000, reason: '不想要了', status: '退款中', time: '2026-07-18 14:55', channel: '微信小程序', submitter: '运营专员小周', logs: [
       { time: '2026-07-18 14:55:00', operator: '陈佳琪', action: '申请退款' },
       { time: '2026-07-18 16:20:33', operator: '管理员A', action: '审核通过' },
       { time: '2026-07-18 16:20:34', operator: '系统', action: '全部审核通过，发起退款' }
     ], store: '海口美兰机场店', usageScene: '预约抽奖', entryType: '私域', auditors: ['管理员A', '运营专员'], auditResults: {'管理员A': '通过', '运营专员': '通过'}, materials: ['https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4', 'https://picsum.photos/200/200?random=4']},
-    { refundId: 'RF20260715001', orderId: 'EX20260710002', prizeId: 'PRIZE-0006', prizeName: '海蓝之谜面霜 30ml', prizeImg: '', prizeType: '转盘抽奖', quantity: 1, relatedPrize: '兰蔻小黑瓶精华肌底液 20ml', relatedPrizeId: 'PRIZE-0002', sourceType: '转盘抽奖', sourceActivityName: '年中大促转盘', sourceActivityId: 'LOT-001', userName: '赵晓晨', userId: 'UID-10012', userPhone: '13512349900', userAddress: '北京市朝阳区建国门外大街1号', memberLevel: '金卡会员', payType: '贝壳', payPoints: 1500, reason: '发错商品', status: '退款完成', time: '2026-07-15 10:00', channel: 'H5', logs: [
+    { refundId: 'RF20260715001', orderId: 'EX20260710002', prizeId: 'PRIZE-0006', prizeName: '海蓝之谜面霜 30ml', prizeImg: '', prizeType: '转盘抽奖', quantity: 1, relatedPrize: '兰蔻小黑瓶精华肌底液 20ml', relatedPrizeId: 'PRIZE-0002', sourceType: '转盘抽奖', sourceActivityName: '年中大促转盘', sourceActivityId: 'LOT-001', userName: '赵晓晨', userId: 'UID-10012', userPhone: '13512349900', userAddress: '北京市朝阳区建国门外大街1号', memberLevel: '金卡会员', payType: '贝壳', payPoints: 1500, reason: '发错商品', status: '退款完成', time: '2026-07-15 10:00', channel: 'H5', submitter: '运营专员小李', logs: [
       { time: '2026-07-15 10:00:00', operator: '赵晓晨', action: '申请退款' },
       { time: '2026-07-15 11:30:15', operator: '运营专员', action: '审核通过' },
       { time: '2026-07-15 11:30:16', operator: '系统', action: '全部审核通过，发起退款' },
@@ -3926,7 +3966,8 @@
   function getStatusStyle(status) {
     var map = {
       '待发货': 'background:#e3f2fd;color:#1565c0;',
-      '待收货/待使用': 'background:#e8f5e9;color:#2e7d32;',
+      '待收货': 'background:#e8f5e9;color:#2e7d32;',
+      '待使用': 'background:#fff3e0;color:#e65100;',
       '已完成': 'background:#f5f5f5;color:var(--ink-2);',
       '已退款': 'background:#ffebee;color:#c62828;',
       '待审核': 'background:#fff3e0;color:#e65100;',
@@ -4352,7 +4393,7 @@
 
       o.expressCompany = company;
       o.expressNo = expressNo;
-      o.status = '待收货/待使用';
+      o.status = '待收货';
       successList.push({ orderId: orderId, company: company, expressNo: expressNo });
     });
 
@@ -4483,7 +4524,7 @@
     if (o) {
       o.expressCompany = company;
       o.expressNo = no;
-      if (o.status === '待发货') o.status = '待收货/待使用';
+      if (o.status === '待发货') o.status = '待收货';
       renderOrders();
       closeModal('expressModal');
       showToast('物流信息已录入', 'success');
@@ -4723,6 +4764,16 @@
         '<div style="font-size:13px;line-height:1.8;"><span style="color:var(--ink-4);">申请原因：</span>' + (r.reason || '-') + '</div>' +
         '<div style="margin-top:10px;font-size:12px;color:var(--ink-4);margin-bottom:6px;">上传资料</div>' +
         materialsHtml +
+      '</div>' +
+      '<div style="padding:16px;background:#fff;border:1px solid var(--border);border-radius:8px;margin-bottom:16px;">' +
+        '<div style="font-size:13px;font-weight:600;margin-bottom:10px;">提交人</div>' +
+        '<div style="display:flex;align-items:center;gap:10px;">' +
+          '<div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#e3f2fd,#bbdefb);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;color:#1565c0;">' + ((r.submitter || '-').charAt(0)) + '</div>' +
+          '<div>' +
+            '<div style="font-size:13px;font-weight:500;">' + (r.submitter || '-') + '</div>' +
+            '<div style="font-size:11px;color:var(--ink-4);margin-top:2px;">提交时间：' + (r.time || '-') + '</div>' +
+          '</div>' +
+        '</div>' +
       '</div>' +
       '<div style="padding:16px;background:#fff;border:1px solid var(--border);border-radius:8px;">' +
         '<div style="font-size:13px;font-weight:600;margin-bottom:10px;">审核人</div>' +
