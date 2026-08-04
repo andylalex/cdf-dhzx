@@ -434,6 +434,12 @@
                 <option value="启用">启用</option>
                 <option value="停用">停用</option>
               </select>
+              <select class="form-input form-select" style="width:140px;" id="filterUsageScene">
+                <option value="">全部使用场景</option>
+                <option value="兑换中心">兑换中心</option>
+                <option value="转盘抽奖">转盘抽奖</option>
+                <option value="预约抽奖">预约抽奖</option>
+              </select>
             </div>
             <div class="toolbar-right">
               <button class="btn btn-outline" onclick="showToast('已导出商品列表', 'success')">
@@ -454,8 +460,9 @@
                   <tr>
                     <th style="width:50px;">序号</th>
                     <th style="width:120px;">奖品类型</th>
-                    <th style="min-width:220px;">奖品信息</th>
+                    <th style="min-width:220px;">奖品</th>
                     <th style="width:140px;">关联奖品</th>
+                    <th style="width:100px;">使用场景</th>
                     <th style="width:110px;">适用门店</th>
                     <th style="width:90px;">奖品成本（元）</th>
                     <th style="width:110px;">剩余/总库存</th>
@@ -629,7 +636,7 @@
               <thead>
                 <tr>
                   <th style="width:140px;">订单号</th>
-                  <th style="min-width:160px;">奖品信息</th>
+                  <th style="min-width:160px;">奖品名称</th>
                   <th style="width:100px;">订单来源</th>
                   <th style="min-width:140px;">来源活动</th>
                   <th style="width:110px;">下单入口</th>
@@ -703,7 +710,7 @@
                 <tr>
                   <th style="width:120px;">退款单号</th>
                   <th style="width:120px;">原订单号</th>
-                  <th style="min-width:160px;">奖品信息</th>
+                  <th style="min-width:160px;">奖品名称</th>
                   <th style="width:100px;">订单来源</th>
                   <th style="min-width:120px;">下单入口</th>
                   <th style="min-width:120px;">用户信息</th>
@@ -2459,19 +2466,20 @@
     const prizeTypeFilter = document.getElementById('filterPrizeType')?.value || '';
     const channelFilter = document.getElementById('filterChannel')?.value || '';
     const statusFilter = document.getElementById('filterStatus')?.value || '';
-    const sceneFilter = document.getElementById('filterScene')?.value || '';
+    const usageSceneFilter = document.getElementById('filterUsageScene')?.value || '';
 
     let list = allProducts.filter(p => {
       if (search && !p.name.toLowerCase().includes(search) && !p.sku.toLowerCase().includes(search) && !(p.prizeId || '').toLowerCase().includes(search)) return false;
       if (prizeTypeFilter && p.prizeType !== prizeTypeFilter) return false;
       if (channelFilter && p.channel !== channelFilter) return false;
       if (statusFilter && p.status !== statusFilter) return false;
+      if (usageSceneFilter && (p.usageScene || []).indexOf(usageSceneFilter) === -1) return false;
       return true;
     });
 
     const tbody = document.getElementById('productTableBody');
     if (list.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;color:var(--ink-4);padding:40px 0;">暂无数据</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;color:var(--ink-4);padding:40px 0;">暂无数据</td></tr>';
       return;
     }
 
@@ -2513,6 +2521,13 @@
           </div>
         </td>
         <td style="font-size:12px;color:var(--ink-2);max-width:140px;line-height:1.4;">${relatedText}</td>
+        <td style="font-size:12px;">
+          ${(p.usageScene || []).map(function(s) {
+            var colors = { '兑换中心': 'background:#e8f5e9;color:#2e7d32;', '转盘抽奖': 'background:#fff8e1;color:#e65100;', '预约抽奖': 'background:#f3e5f5;color:#7b1fa2;', '签到': 'background:#e3f2fd;color:#1565c0;' };
+            var style = colors[s] || 'background:#f5f5f5;color:var(--ink-2);';
+            return '<span style="display:inline-block;padding:1px 6px;border-radius:4px;font-size:11px;margin:1px 2px 1px 0;' + style + ';">' + s + '</span>';
+          }).join('') || '<span style="color:var(--ink-4);">-</span>'}
+        </td>
         <td style="font-size:12px;color:var(--ink-2);">${channelText}</td>
         <td style="font-size:12px;">${p.value ? '¥' + p.value.toLocaleString() : '-'}</td>
         <td style="font-size:12px;">${stockText}</td>
@@ -2621,13 +2636,16 @@
     window._relatedPrizeList = allProducts.filter(function(p) { return p.prizeType !== '福利值'; }).map(function(p) { return { id: p.name, name: p.name, type: p.prizeType }; });
     renderRelatedPrizeDropdown('');
 
-    // 福利值和实物礼品时关联奖品禁用
+    // 福利值时关联奖品禁用，实物礼品时可选，其他类型必填
     var relatedInput = document.getElementById('f_relatedPrizeInput');
     var relatedReq = document.getElementById('relatedPrize-required');
-    if (prizeType === '福利值' || prizeType === '实物礼品') {
+    if (prizeType === '福利值') {
       relatedInput.disabled = true;
       relatedInput.value = '';
       document.getElementById('f_relatedPrize').value = '';
+      if (relatedReq) relatedReq.style.display = 'none';
+    } else if (prizeType === '实物礼品') {
+      relatedInput.disabled = false;
       if (relatedReq) relatedReq.style.display = 'none';
     } else {
       relatedInput.disabled = false;
@@ -2804,7 +2822,9 @@
     const stockVal = document.getElementById('f_stock').value;
     if (stockVal === '') { showToast('请填写奖品总库存', 'warning'); return; }
     var relatedInput = document.getElementById('f_relatedPrizeInput');
-    if (!relatedInput.disabled && !document.getElementById('f_relatedPrize').value.trim()) {
+    // 只有非实物礼品、非福利值的类型才必填关联奖品
+    var requireRelated = prizeType !== '福利值' && prizeType !== '实物礼品';
+    if (requireRelated && !document.getElementById('f_relatedPrize').value.trim()) {
       showToast('请选择关联奖品', 'warning'); return;
     }
     const stock = parseInt(stockVal);
@@ -2877,8 +2897,7 @@
   document.getElementById('filterPrizeType')?.addEventListener('change', renderProducts);
   document.getElementById('filterChannel')?.addEventListener('change', renderProducts);
   document.getElementById('filterStatus')?.addEventListener('change', renderProducts);
-
-  document.getElementById('filterScene')?.addEventListener('change', renderProducts);
+  document.getElementById('filterUsageScene')?.addEventListener('change', renderProducts);
 
   // ===== 活动标签 =====
   let activityTags = ['限时', '会员专属', '新人专享', '节日活动', '品牌联合', '满减活动'];
