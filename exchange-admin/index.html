@@ -1575,7 +1575,7 @@
                 <th style="width:120px;">来源活动</th>
                 <th style="width:90px;">适用门店</th>
                 <th style="width:80px;">支付方式</th>
-                <th style="width:100px;">兑换福利值</th>
+                <th style="width:100px;" id="centerPrizePayValueLabel">兑换福利值</th>
                 <th style="width:170px;">活动时间</th>
                 <th style="width:120px;">奖品标签</th>
                 <th style="width:90px;">剩余/活动库存</th>
@@ -1948,7 +1948,7 @@
               <th>奖品名称</th>
               <th>奖品类型</th>
               <th>奖品标签</th>
-              <th style="width:90px;">兑换福利值</th>
+              <th style="width:90px;" id="configItemPayValueLabel">兑换福利值</th>
               <th style="width:90px;">月限/人</th>
               <th style="width:90px;">日限/人</th>
               <th style="width:90px;">活动库存</th>
@@ -2441,6 +2441,8 @@
     if (panelId === 'reconciliation2') { initBill2DefaultDates(); renderBill2Income(); }
     if (panelId === 'exchangeCenter') {
       buildCenterPrizeItems();
+      var labelEl = document.getElementById('centerPrizePayValueLabel');
+      if (labelEl) labelEl.textContent = '兑换积分';
       renderCenterPrizes();
     }
   }
@@ -3224,6 +3226,9 @@
     document.getElementById('configActName').textContent = a.name || '-';
     const timeRange = a.timeRange ? (a.timeRange.start + ' ~ ' + a.timeRange.end) : '-';
     document.getElementById('configActTimeRange').textContent = timeRange;
+    var payLabel = a.payType === '贝壳' ? '兑换贝壳' : '兑换积分';
+    var labelEl = document.getElementById('configItemPayValueLabel');
+    if (labelEl) labelEl.textContent = payLabel;
     renderConfigItems(a);
     document.getElementById('activityConfigModal').classList.add('show');
   }
@@ -3795,6 +3800,8 @@
     btn.style.color = 'var(--primary)';
     if (tab !== 'config') {
       centerPrizePage = 1;
+      var labelEl = document.getElementById('centerPrizePayValueLabel');
+      if (labelEl) labelEl.textContent = tab === 'points' ? '兑换积分' : '兑换贝壳';
       renderCenterPrizes();
     }
   }
