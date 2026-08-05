@@ -497,6 +497,12 @@
         <div class="toolbar">
           <div class="toolbar-left">
             <input class="form-input" style="width:180px;" placeholder="搜索活动名称 / ID" id="searchActivity">
+            <select class="form-input form-select" style="width:120px;" id="filterActPlatform">
+              <option value="">全部平台</option>
+              <option value="千帆">千帆</option>
+              <option value="繁星-三亚国际免税城">繁星-三亚国际免税城</option>
+              <option value="繁星-海口国际免税城">繁星-海口国际免税城</option>
+            </select>
             <select class="form-input form-select" style="width:120px;" id="filterActChannel">
               <option value="">全部渠道</option>
               <option value="APP">APP</option>
@@ -542,6 +548,7 @@
               <thead>
                 <tr>
                   <th>活动ID</th>
+                  <th style="width:100px;">平台</th>
                   <th>兑换活动名称</th>
                   <th>活动时间</th>
                   <th>活动渠道</th>
@@ -1973,6 +1980,24 @@
   </div>
 </div>
 
+<!-- ===== 活动日志弹窗 ===== -->
+<div class="modal-mask" id="activityLogModal">
+  <div class="modal" style="max-width:500px;">
+    <div class="modal-header">
+      <div class="modal-title">活动日志</div>
+      <button class="modal-close" onclick="closeModal('activityLogModal')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body" style="padding:20px 24px;">
+      <div id="activityLogList" style="max-height:400px;overflow-y:auto;"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('activityLogModal')">关闭</button>
+    </div>
+  </div>
+</div>
+
 <!-- ===== 活动标签管理弹窗 ===== -->
 <div class="modal-mask" id="activityTagModal">
   <div class="modal" style="max-width:500px;">
@@ -2937,7 +2962,7 @@
 
   // ===== 活动管理 =====
   const allActivities = [
-    { id: 1, name: '夏日狂欢兑换活动', timeRange: { start: '2026-07-19 10:00', end: '2026-07-25 23:59' }, createdAt: '2026-07-18 14:30', createdBy: '管理员', status: 'active', rule: '每人每场限兑2件', channel: ['APP', '微信小程序'], payType: '积分', source: '千帆', memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 500000, actualCost: 149600, actualRevenue: 149600, costShare: { type: '混合分摊', platform: 20, store: 50, brand: 30 }, revenueShare: { type: '平台全额' },
+    { id: 1, name: '夏日狂欢兑换活动', timeRange: { start: '2026-07-19 10:00', end: '2026-07-25 23:59' }, createdAt: '2026-07-18 14:30', createdBy: '管理员', status: 'active', rule: '每人每场限兑2件', channel: ['APP', '微信小程序'], payType: '积分', source: '千帆', memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 500000, actualCost: 149600, actualRevenue: 149600, costShare: { type: '混合分摊', platform: 20, store: 50, brand: 30 }, revenueShare: { type: '平台全额' }, auditLogs: [{ time: '2026-07-18 15:20', auditor: '管理员A', action: '审核通过' }],
       items: [
         { name: '雅诗兰黛粉底液 30ml', type: '实物礼品', price: 8800, stock: 50, exchanged: 12, monthLimit: -1, dayLimit: -1, tags: ['限时', '会员专属'] },
         { name: 'CDF 100元代金券', type: '优惠券-优选单券', price: 500, stock: -1, exchanged: 67, monthLimit: -1, dayLimit: -1, tags: ['限时'] },
@@ -2945,43 +2970,43 @@
         { name: '中免海南限定化妆包', type: '实物礼品', price: 2800, stock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['品牌联合'] },
       ]
     },
-    { id: 2, name: '会员专属兑换活动', timeRange: { start: '2026-07-20 10:00', end: '2026-07-27 23:59' }, createdAt: '2026-07-19 09:00', createdBy: '管理员', status: 'active', rule: '仅限银卡及以上会员参与', channel: ['APP', 'H5'], payType: '贝壳', source: '千帆', memberDiscount: { normal: 100, silver: 90, gold: 85, platinum: 80, diamond: 75 }, accountType: '主营业务', budgetLimit: 300000, actualCost: 0, actualRevenue: 0, costShare: { type: '平台全额' }, revenueShare: { type: '平台全额' },
+    { id: 2, name: '会员专属兑换活动', timeRange: { start: '2026-07-20 10:00', end: '2026-07-27 23:59' }, createdAt: '2026-07-19 09:00', createdBy: '管理员', status: 'active', rule: '仅限银卡及以上会员参与', channel: ['APP', 'H5'], payType: '贝壳', source: '千帆', memberDiscount: { normal: 100, silver: 90, gold: 85, platinum: 80, diamond: 75 }, accountType: '主营业务', budgetLimit: 300000, actualCost: 0, actualRevenue: 0, costShare: { type: '平台全额' }, revenueShare: { type: '平台全额' }, auditLogs: [{ time: '2026-07-19 10:15', auditor: '运营专员', action: '审核通过' }],
       items: [
         { name: 'SK-II 神仙水 230ml', type: '实物礼品', price: 12000, stock: 40, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['会员专属'] },
         { name: 'CDF 200元代金券', type: '优惠券-优选单券', price: 1000, stock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['会员专属', '满减活动'] },
         { name: '免税店专属折扣券', type: '优惠券-券中心', price: 80, stock: 500, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['满减活动'] },
       ]
     },
-    { id: 3, name: '限时闪购活动', timeRange: { start: '2026-07-21 10:00', end: '2026-07-23 23:59' }, createdAt: '2026-07-20 11:00', createdBy: '运营专员', status: 'active', rule: '每人每场限兑3件', channel: ['APP'], payType: '积分', source: '繁星-三亚国际免税城', memberDiscount: { normal: 100, silver: 100, gold: 100, platinum: 100, diamond: 100 }, accountType: '非主营业务', budgetLimit: 200000, actualCost: 0, actualRevenue: 0, costShare: { type: '门店全额' }, revenueShare: { type: '门店全额' },
+    { id: 3, name: '限时闪购活动', timeRange: { start: '2026-07-21 10:00', end: '2026-07-23 23:59' }, createdAt: '2026-07-20 11:00', createdBy: '运营专员', status: 'active', rule: '每人每场限兑3件', channel: ['APP'], payType: '积分', source: '繁星-三亚国际免税城', memberDiscount: { normal: 100, silver: 100, gold: 100, platinum: 100, diamond: 100 }, accountType: '非主营业务', budgetLimit: 200000, actualCost: 0, actualRevenue: 0, costShare: { type: '门店全额' }, revenueShare: { type: '门店全额' }, auditLogs: [{ time: '2026-07-20 14:30', auditor: '管理员B', action: '审核通过' }],
       items: [
         { name: '资生堂红腰子 75ml', type: '实物礼品', price: 9500, stock: 60, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['限时', '品牌联合'] },
         { name: '迪奥口红套装', type: '实物礼品', price: 3500, stock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['限时'] },
         { name: '全场通用88折券', type: '优惠券-券中心', price: 200, stock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['限时', '满减活动'] },
       ]
     },
-    { id: 4, name: '年中大促活动', timeRange: { start: '2026-07-18 10:00', end: '2026-07-18 23:59' }, createdAt: '2026-07-17 16:00', createdBy: '管理员', status: 'active', rule: '', channel: ['微信小程序', '支付宝小程序', 'H5'], payType: '贝壳', source: '千帆', memberDiscount: { normal: 100, silver: 100, gold: 100, platinum: 100, diamond: 100 }, accountType: '主营业务', budgetLimit: 800000, actualCost: 446700, actualRevenue: 446700, costShare: { type: '混合分摊', platform: 20, store: 40, brand: 40 }, revenueShare: { type: '混合分摊', platform: 20, store: 40, brand: 40 },
+    { id: 4, name: '年中大促活动', timeRange: { start: '2026-07-18 10:00', end: '2026-07-18 23:59' }, createdAt: '2026-07-17 16:00', createdBy: '管理员', status: 'active', rule: '', channel: ['微信小程序', '支付宝小程序', 'H5'], payType: '贝壳', source: '千帆', memberDiscount: { normal: 100, silver: 100, gold: 100, platinum: 100, diamond: 100 }, accountType: '主营业务', budgetLimit: 800000, actualCost: 446700, actualRevenue: 446700, costShare: { type: '混合分摊', platform: 20, store: 40, brand: 40 }, revenueShare: { type: '混合分摊', platform: 20, store: 40, brand: 40 }, auditLogs: [{ time: '2026-07-17 18:00', auditor: '管理员A', action: '审核通过' }],
       items: [
         { name: '海蓝之谜面霜 30ml', type: '实物礼品', price: 15000, stock: 20, exchanged: 20, monthLimit: -1, dayLimit: -1, tags: ['节日活动'] },
         { name: 'CDF 50元无门槛券', type: '优惠券-优选单券', price: 300, stock: -1, exchanged: 489, monthLimit: -1, dayLimit: -1, tags: ['新人专享'] },
       ]
     },
-    { id: 5, name: '春节限时兑换活动', timeRange: { start: '2026-01-20 10:00', end: '2026-02-10 23:59' }, createdAt: '2026-01-15 09:00', createdBy: '管理员', status: 'terminated', rule: '每人每场限兑2件', channel: ['APP', '微信小程序', 'H5'], payType: '积分', source: '千帆', memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 600000, actualCost: 2070000, actualRevenue: 2070000, costShare: { type: '平台全额' }, revenueShare: { type: '平台全额' },
+    { id: 5, name: '春节限时兑换活动', timeRange: { start: '2026-01-20 10:00', end: '2026-02-10 23:59' }, createdAt: '2026-01-15 09:00', createdBy: '管理员', status: 'terminated', rule: '每人每场限兑2件', channel: ['APP', '微信小程序', 'H5'], payType: '积分', source: '千帆', memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 600000, actualCost: 2070000, actualRevenue: 2070000, costShare: { type: '平台全额' }, revenueShare: { type: '平台全额' }, auditLogs: [{ time: '2026-01-15 10:30', auditor: '管理员A', action: '审核通过' }, { time: '2026-02-11 00:00', auditor: '系统', action: '自动终止' }],
       items: [
         { name: '雅诗兰黛持妆粉底液 30ml', type: '实物礼品', price: 8800, stock: 100, exchanged: 95, monthLimit: -1, dayLimit: -1 },
         { name: '兰蔻小黑瓶精华肌底液 20ml', type: '实物礼品', price: 12800, stock: 50, exchanged: 48, monthLimit: -1, dayLimit: -1 },
         { name: 'CDF 100元代金券', type: '优惠券-优选单券', price: 500, stock: 200, exchanged: 200, monthLimit: -1, dayLimit: -1 },
       ]
     },
-    { id: 6, name: '每日签到', timeRange: { start: '2026-07-01 00:00', end: '2026-07-31 23:59' }, createdAt: '2026-06-28 10:00', createdBy: '管理员', status: 'active', rule: '每日签到获得奖励', channel: ['APP', '微信小程序'], payType: '积分', source: '千帆', memberDiscount: { normal: 100, silver: 100, gold: 100, platinum: 100, diamond: 100 }, accountType: '非主营业务', budgetLimit: 50000, actualCost: 800, actualRevenue: 800, costShare: { type: '平台全额' }, revenueShare: { type: '平台全额' }, items: [] },
-    { id: 7, name: '新人任务', timeRange: { start: '2026-07-01 00:00', end: '2026-12-31 23:59' }, createdAt: '2026-06-25 10:00', createdBy: '管理员', status: 'active', rule: '新人专享任务', channel: ['APP', 'H5'], payType: '积分', source: '千帆', memberDiscount: { normal: 100, silver: 100, gold: 100, platinum: 100, diamond: 100 }, accountType: '非主营业务', budgetLimit: 30000, actualCost: 200, actualRevenue: 200, costShare: { type: '平台全额' }, revenueShare: { type: '平台全额' }, items: [] },
-    { id: 8, name: '周年庆转盘抽奖', timeRange: { start: '2026-07-15 00:00', end: '2026-07-25 23:59' }, createdAt: '2026-07-10 10:00', createdBy: '运营专员', status: 'active', rule: '周年庆转盘抽奖活动', channel: ['支付宝小程序', 'APP'], payType: '贝壳', source: '繁星-三亚国际免税城', memberDiscount: { normal: 100, silver: 100, gold: 100, platinum: 100, diamond: 100 }, accountType: '非主营业务', budgetLimit: 100000, actualCost: 6000, actualRevenue: 6000, costShare: { type: '混合分摊', platform: 20, store: 40, brand: 40 }, revenueShare: { type: '混合分摊', platform: 20, store: 40, brand: 40 }, items: [] },
-    { id: 9, name: '七夕情人节活动', timeRange: { start: '2026-08-01 10:00', end: '2026-08-07 23:59' }, createdAt: '2026-07-30 15:30', createdBy: '运营专员', status: 'pending', rule: '情人节限定礼品兑换', channel: ['APP', '微信小程序', 'H5'], payType: '积分', source: '千帆', memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 300000, actualCost: 0, actualRevenue: 0, costShare: { type: '平台全额' }, revenueShare: { type: '平台全额' },
+    { id: 6, name: '每日签到', timeRange: { start: '2026-07-01 00:00', end: '2026-07-31 23:59' }, createdAt: '2026-06-28 10:00', createdBy: '管理员', status: 'active', rule: '每日签到获得奖励', channel: ['APP', '微信小程序'], payType: '积分', source: '千帆', memberDiscount: { normal: 100, silver: 100, gold: 100, platinum: 100, diamond: 100 }, accountType: '非主营业务', budgetLimit: 50000, actualCost: 800, actualRevenue: 800, costShare: { type: '平台全额' }, revenueShare: { type: '平台全额' }, auditLogs: [{ time: '2026-06-28 15:00', auditor: '管理员A', action: '审核通过' }], items: [] },
+    { id: 7, name: '新人任务', timeRange: { start: '2026-07-01 00:00', end: '2026-12-31 23:59' }, createdAt: '2026-06-25 10:00', createdBy: '管理员', status: 'active', rule: '新人专享任务', channel: ['APP', 'H5'], payType: '积分', source: '千帆', memberDiscount: { normal: 100, silver: 100, gold: 100, platinum: 100, diamond: 100 }, accountType: '非主营业务', budgetLimit: 30000, actualCost: 200, actualRevenue: 200, costShare: { type: '平台全额' }, revenueShare: { type: '平台全额' }, auditLogs: [{ time: '2026-06-25 14:20', auditor: '运营专员', action: '审核通过' }], items: [] },
+    { id: 8, name: '周年庆转盘抽奖', timeRange: { start: '2026-07-15 00:00', end: '2026-07-25 23:59' }, createdAt: '2026-07-10 10:00', createdBy: '运营专员', status: 'active', rule: '周年庆转盘抽奖活动', channel: ['支付宝小程序', 'APP'], payType: '贝壳', source: '繁星-三亚国际免税城', memberDiscount: { normal: 100, silver: 100, gold: 100, platinum: 100, diamond: 100 }, accountType: '非主营业务', budgetLimit: 100000, actualCost: 6000, actualRevenue: 6000, costShare: { type: '混合分摊', platform: 20, store: 40, brand: 40 }, revenueShare: { type: '混合分摊', platform: 20, store: 40, brand: 40 }, auditLogs: [{ time: '2026-07-10 16:30', auditor: '管理员B', action: '审核通过' }], items: [] },
+    { id: 9, name: '七夕情人节活动', timeRange: { start: '2026-08-01 10:00', end: '2026-08-07 23:59' }, createdAt: '2026-07-30 15:30', createdBy: '运营专员', status: 'pending', rule: '情人节限定礼品兑换', channel: ['APP', '微信小程序', 'H5'], payType: '积分', source: '千帆', memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 300000, actualCost: 0, actualRevenue: 0, costShare: { type: '平台全额' }, revenueShare: { type: '平台全额' }, auditLogs: [],
       items: [
         { name: '限定款情侣对戒', type: '实物礼品', price: 9999, stock: 30, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['节日活动', '限时'] },
         { name: '迪奥真我香水 50ml', type: '实物礼品', price: 8500, stock: 50, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['节日活动'] },
       ]
     },
-    { id: 10, name: '八月会员日活动', timeRange: { start: '2026-08-08 00:00', end: '2026-08-08 23:59' }, createdAt: '2026-07-31 09:00', createdBy: '运营专员', status: 'pending', rule: '会员日专享折扣', channel: ['APP'], payType: '贝壳', source: '繁星-三亚国际免税城', memberDiscount: { normal: 100, silver: 90, gold: 80, platinum: 70, diamond: 60 }, accountType: '主营业务', budgetLimit: 150000, actualCost: 0, actualRevenue: 0, costShare: { type: '混合分摊', platform: 30, store: 40, brand: 30 }, revenueShare: { type: '混合分成', platform: 30, store: 40, brand: 30 }, items: [] },
+    { id: 10, name: '八月会员日活动', timeRange: { start: '2026-08-08 00:00', end: '2026-08-08 23:59' }, createdAt: '2026-07-31 09:00', createdBy: '运营专员', status: 'pending', rule: '会员日专享折扣', channel: ['APP'], payType: '贝壳', source: '繁星-三亚国际免税城', memberDiscount: { normal: 100, silver: 90, gold: 80, platinum: 70, diamond: 60 }, accountType: '主营业务', budgetLimit: 150000, actualCost: 0, actualRevenue: 0, costShare: { type: '混合分摊', platform: 30, store: 40, brand: 30 }, revenueShare: { type: '混合分成', platform: 30, store: 40, brand: 30 }, auditLogs: [], items: [] },
   ];
 
   let editingActivityId = null;
@@ -2990,6 +3015,7 @@
 
   function renderActivities() {
     const search = (document.getElementById('searchActivity')?.value || '').toLowerCase();
+    const platformFilter = document.getElementById('filterActPlatform')?.value || '';
     const channelFilter = document.getElementById('filterActChannel')?.value || '';
     const payFilter = document.getElementById('filterActPayType')?.value || '';
     const statusFilter = document.getElementById('filterActStatus')?.value || '';
@@ -2999,6 +3025,7 @@
 
     let filtered = allActivities.filter(a => {
       if (search && !a.name.toLowerCase().includes(search) && !String(a.id).includes(search)) return false;
+      if (platformFilter && a.source !== platformFilter) return false;
       if (channelFilter && !(a.channel || []).includes(channelFilter)) return false;
       if (payFilter && a.payType !== payFilter) return false;
       if (statusFilter && a.status !== statusFilter) return false;
@@ -3014,12 +3041,22 @@
       const [statusText, statusDot] = statusMap[a.status] || ['进行中', 'on'];
       const isTerminated = a.status === 'terminated';
       const isPending = a.status === 'pending';
+      const isActive = a.status === 'active';
       const statusHtml = isTerminated
         ? '<span class="status-dot off"></span><span style="color:var(--ink-4);">已终止</span>'
         : isPending
           ? '<span class="status-dot" style="background:#f59e0b;"></span><span style="color:#f59e0b;">待审核</span>'
           : '<span class="status-dot on"></span>' + statusText;
-      const timeRange = a.timeRange ? (a.timeRange.start + ' ~ ' + a.timeRange.end) : '-';
+      // 平台badge
+      const platformBadge = a.source === '千帆'
+        ? '<span style="display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;background:#e3f2fd;color:#1565c0;">千帆</span>'
+        : a.source && a.source.startsWith('繁星')
+          ? '<span style="display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;background:#f3e5f5;color:#7b1fa2;">' + a.source + '</span>'
+          : '<span style="color:var(--ink-4);">-</span>';
+      // 活动时间两行
+      const timeHtml = a.timeRange
+        ? '<div style="font-size:12px;line-height:1.6;"><div style="color:var(--ink-3);">开始：' + a.timeRange.start + '</div><div style="color:var(--ink-3);">结束：' + a.timeRange.end + '</div></div>'
+        : '-';
       const channelText = (a.channel || []).join('、') || '-';
       const payTypeBadge = a.payType === '贝壳'
         ? '<span class="tag tag-gold">贝壳</span>'
@@ -3027,8 +3064,9 @@
       const prizeCount = (a.items || []).length;
       return `<tr>
         <td style="font-family:monospace;font-size:12px;color:var(--ink-2);">${a.id}</td>
+        <td style="font-size:12px;">${platformBadge}</td>
         <td style="font-weight:500;">${a.name || '未命名活动'}</td>
-        <td style="font-size:12px;color:var(--ink-2);">${timeRange}</td>
+        <td>${timeHtml}</td>
         <td style="font-size:12px;color:var(--ink-2);">${channelText}</td>
         <td>${payTypeBadge}</td>
         <td style="font-size:13px;font-weight:500;text-align:center;">${prizeCount}</td>
@@ -3039,6 +3077,7 @@
         <td class="td-actions">
           <div class="td-actions-inner">
             ${isPending ? '<button class="btn btn-primary btn-sm" onclick="openActivityAuditModal(' + a.id + ')">审核</button>' : ''}
+            ${isActive ? '<button class="btn btn-text btn-sm" onclick="openActivityLogModal(' + a.id + ')">日志</button>' : ''}
             <button class="btn btn-text btn-sm" onclick="openActivityConfig(${a.id})">奖品配置</button>
             ${!isTerminated ? '<button class="btn btn-text btn-sm" onclick="openActivityModal(' + a.id + ')">编辑</button>' : ''}
             <button class="btn btn-text btn-sm" onclick="copyActivity(${a.id})">复制</button>
@@ -3471,23 +3510,7 @@
     const bodyEl = document.getElementById('refundModalBody');
     const footerEl = document.getElementById('refundModalFooter');
     document.querySelector('#refundModal .modal-title').textContent = '活动审核 - ' + a.name;
-    const timeRange = a.timeRange ? (a.timeRange.start + ' ~ ' + a.timeRange.end) : '-';
-    const channelText = (a.channel || []).join('、') || '-';
-    const prizeCount = (a.items || []).length;
     bodyEl.innerHTML =
-      '<div style="padding:16px;background:#fafafa;border-radius:8px;margin-bottom:16px;">' +
-        '<div style="font-size:13px;font-weight:600;margin-bottom:10px;">活动信息</div>' +
-        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px;line-height:1.8;">' +
-          '<div><span style="color:var(--ink-4);">活动名称：</span>' + a.name + '</div>' +
-          '<div><span style="color:var(--ink-4);">活动时间：</span>' + timeRange + '</div>' +
-          '<div><span style="color:var(--ink-4);">适用渠道：</span>' + channelText + '</div>' +
-          '<div><span style="color:var(--ink-4);">兑换方式：</span>' + (a.payType || '-') + '</div>' +
-          '<div><span style="color:var(--ink-4);">记账方式：</span>' + (a.accountType || '主营业务') + '</div>' +
-          '<div><span style="color:var(--ink-4);">奖品数量：</span>' + prizeCount + ' 个</div>' +
-          '<div><span style="color:var(--ink-4);">创建人：</span>' + (a.createdBy || '-') + '</div>' +
-          '<div><span style="color:var(--ink-4);">创建时间：</span>' + (a.createdAt || '-') + '</div>' +
-        '</div>' +
-      '</div>' +
       '<div style="padding:16px;background:#fff0e6;border-radius:8px;border-left:3px solid #f59e0b;">' +
         '<div style="font-size:13px;color:#d97706;font-weight:500;">审核提示</div>' +
         '<div style="font-size:12px;color:var(--ink-3);margin-top:6px;line-height:1.6;">审核通过后，活动将变为"进行中"状态，用户可参与兑换。请确认活动配置无误后再审核通过。</div>' +
@@ -3496,10 +3519,40 @@
     document.getElementById('refundModal').classList.add('show');
   }
 
+  function openActivityLogModal(id) {
+    const a = allActivities.find(x => x.id === id);
+    if (!a) return;
+    const logs = a.auditLogs || [];
+    const listEl = document.getElementById('activityLogList');
+    if (logs.length === 0) {
+      listEl.innerHTML = '<div style="text-align:center;color:var(--ink-4);padding:40px 0;font-size:13px;">暂无日志记录</div>';
+    } else {
+      listEl.innerHTML = logs.map(function(log, idx) {
+        const isLast = idx === 0;
+        const actionColor = log.action === '审核通过' ? 'color:#16a34a;' : log.action === '审核驳回' ? 'color:#dc2626;' : log.action === '自动终止' ? 'color:var(--ink-4);' : 'color:var(--primary);';
+        return '<div style="display:flex;gap:12px;position:relative;padding-bottom:20px;">' +
+          '<div style="flex-shrink:0;position:relative;z-index:1;width:12px;height:12px;border-radius:50%;background:var(--primary);margin-top:5px;"></div>' +
+          (idx < logs.length - 1 ? '<div style="position:absolute;left:5px;top:17px;bottom:0;width:1px;background:var(--border);"></div>' : '') +
+          '<div style="flex:1;">' +
+            '<div style="font-size:13px;font-weight:500;' + actionColor + '">' + log.action + '</div>' +
+            '<div style="font-size:12px;color:var(--ink-3);margin-top:4px;">审核人：' + (log.auditor || '-') + '</div>' +
+            '<div style="font-size:12px;color:var(--ink-4);margin-top:2px;">' + log.time + '</div>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+    }
+    document.getElementById('activityLogModal').classList.add('show');
+  }
+
   function approveActivity(id) {
     const a = allActivities.find(x => x.id === id);
     if (!a) return;
     a.status = 'active';
+    // 记录审核日志
+    if (!a.auditLogs) a.auditLogs = [];
+    const now = new Date();
+    const timeStr = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0') + ' ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+    a.auditLogs.unshift({ time: timeStr, auditor: '管理员', action: '审核通过' });
     renderActivities();
     closeModal('refundModal');
     showToast('审核通过，活动已上线', 'success');
@@ -6373,6 +6426,7 @@
   // ===== 初始化 =====
   renderProducts();
   document.getElementById('searchActivity')?.addEventListener('input', renderActivities);
+  document.getElementById('filterActPlatform')?.addEventListener('change', renderActivities);
   document.getElementById('filterActChannel')?.addEventListener('change', renderActivities);
   document.getElementById('filterActPayType')?.addEventListener('change', renderActivities);
   document.getElementById('filterActStatus')?.addEventListener('change', renderActivities);
