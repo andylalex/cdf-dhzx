@@ -1982,15 +1982,26 @@
 
 <!-- ===== 活动日志弹窗 ===== -->
 <div class="modal-mask" id="activityLogModal">
-  <div class="modal" style="max-width:500px;">
+  <div class="modal" style="max-width:600px;">
     <div class="modal-header">
       <div class="modal-title">活动日志</div>
       <button class="modal-close" onclick="closeModal('activityLogModal')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
-    <div class="modal-body" style="padding:20px 24px;">
-      <div id="activityLogList" style="max-height:400px;overflow-y:auto;"></div>
+    <div class="modal-body" style="padding:16px 20px;">
+      <div class="table-wrap" style="border-radius:8px;box-shadow:none;">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:140px;">操作类型</th>
+              <th style="width:120px;">审核人</th>
+              <th>审核时间</th>
+            </tr>
+          </thead>
+          <tbody id="activityLogList"></tbody>
+        </table>
+      </div>
     </div>
     <div class="modal-footer">
       <button class="btn btn-outline" onclick="closeModal('activityLogModal')">关闭</button>
@@ -3077,7 +3088,7 @@
         <td class="td-actions">
           <div class="td-actions-inner">
             ${isPending ? '<button class="btn btn-primary btn-sm" onclick="openActivityAuditModal(' + a.id + ')">审核</button>' : ''}
-            ${isActive ? '<button class="btn btn-text btn-sm" onclick="openActivityLogModal(' + a.id + ')">日志</button>' : ''}
+            ${!isPending ? '<button class="btn btn-text btn-sm" onclick="openActivityLogModal(' + a.id + ')">日志</button>' : ''}
             <button class="btn btn-text btn-sm" onclick="openActivityConfig(${a.id})">奖品配置</button>
             ${!isTerminated ? '<button class="btn btn-text btn-sm" onclick="openActivityModal(' + a.id + ')">编辑</button>' : ''}
             <button class="btn btn-text btn-sm" onclick="copyActivity(${a.id})">复制</button>
@@ -3499,6 +3510,11 @@
     if (!a) return;
     showConfirm('终止活动', '活动终止后不可恢复，确定要终止该活动吗？', function() {
       a.status = 'terminated';
+      // 记录终止日志
+      if (!a.auditLogs) a.auditLogs = [];
+      const now = new Date();
+      const timeStr = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0') + ' ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+      a.auditLogs.unshift({ time: timeStr, auditor: '管理员', action: '终止' });
       renderActivities();
       showToast('活动已终止', 'success');
     });
@@ -3525,20 +3541,15 @@
     const logs = a.auditLogs || [];
     const listEl = document.getElementById('activityLogList');
     if (logs.length === 0) {
-      listEl.innerHTML = '<div style="text-align:center;color:var(--ink-4);padding:40px 0;font-size:13px;">暂无日志记录</div>';
+      listEl.innerHTML = '<tr><td colspan="3" style="text-align:center;color:var(--ink-4);padding:40px 0;font-size:13px;">暂无日志记录</td></tr>';
     } else {
-      listEl.innerHTML = logs.map(function(log, idx) {
-        const isLast = idx === 0;
-        const actionColor = log.action === '审核通过' ? 'color:#16a34a;' : log.action === '审核驳回' ? 'color:#dc2626;' : log.action === '自动终止' ? 'color:var(--ink-4);' : 'color:var(--primary);';
-        return '<div style="display:flex;gap:12px;position:relative;padding-bottom:20px;">' +
-          '<div style="flex-shrink:0;position:relative;z-index:1;width:12px;height:12px;border-radius:50%;background:var(--primary);margin-top:5px;"></div>' +
-          (idx < logs.length - 1 ? '<div style="position:absolute;left:5px;top:17px;bottom:0;width:1px;background:var(--border);"></div>' : '') +
-          '<div style="flex:1;">' +
-            '<div style="font-size:13px;font-weight:500;' + actionColor + '">' + log.action + '</div>' +
-            '<div style="font-size:12px;color:var(--ink-3);margin-top:4px;">审核人：' + (log.auditor || '-') + '</div>' +
-            '<div style="font-size:12px;color:var(--ink-4);margin-top:2px;">' + log.time + '</div>' +
-          '</div>' +
-        '</div>';
+      listEl.innerHTML = logs.map(function(log) {
+        const actionColor = log.action === '审核通过' ? 'color:#16a34a;background:#f0fdf4;' : log.action === '审核驳回' ? 'color:#dc2626;background:#fef2f2;' : log.action === '自动终止' ? 'color:var(--ink-4);background:#f5f5f5;' : 'color:var(--primary);background:#eff6ff;';
+        return '<tr>' +
+          '<td><span style="display:inline-block;padding:2px 10px;border-radius:4px;font-size:12px;font-weight:500;' + actionColor + '">' + log.action + '</span></td>' +
+          '<td style="font-size:13px;color:var(--ink-2);">' + (log.auditor || '-') + '</td>' +
+          '<td style="font-size:12px;color:var(--ink-3);">' + log.time + '</td>' +
+        '</tr>';
       }).join('');
     }
     document.getElementById('activityLogModal').classList.add('show');
