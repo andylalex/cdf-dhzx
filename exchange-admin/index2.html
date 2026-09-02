@@ -8002,6 +8002,11 @@
                 <option value="预约抽奖">预约抽奖</option>
                 <option value="转盘抽奖">转盘抽奖</option>
               </select>
+              <select class="form-input form-select" style="width:110px;" id="filterRefundSourceEnd" onchange="renderRefunds()">
+                <option value="">全部来源端</option>
+                <option value="cEnd">C端</option>
+                <option value="bEnd">B端</option>
+              </select>
               <input type="date" class="form-input" style="width:130px;" id="filterRefundDateStart" onchange="renderRefunds()">
               <span style="color:var(--ink-4);font-size:12px;">~</span>
               <input type="date" class="form-input" style="width:130px;" id="filterRefundDateEnd" onchange="renderRefunds()">
@@ -8026,6 +8031,7 @@
                   <th style="width:70px;">支付方式</th>
                   <th style="width:80px;">退款额</th>
                   <th style="width:80px;">订单渠道</th>
+                  <th style="width:70px;">来源端</th>
                   <th style="width:90px;">退款状态</th>
                   <th style="min-width:100px;">申请时间</th>
                   <th style="width:100px;">操作</th>
@@ -8831,11 +8837,17 @@
       </button>
     </div>
     <div class="modal-body">
-      <!-- 自动通过配置 -->
-      <div style="margin-bottom:24px;padding:14px 16px;background:var(--bg-2);border-radius:8px;">
+      <!-- Tab 切换 -->
+      <div style="display:flex;gap:8px;margin-bottom:20px;border-bottom:1px solid var(--border);padding-bottom:0;">
+        <div id="auditTab_cEnd" style="padding:10px 18px;cursor:pointer;font-size:14px;font-weight:500;border-bottom:2px solid var(--primary);color:var(--primary);margin-bottom:-1px;" onclick="switchAuditTab('cEnd')">C端申请</div>
+        <div id="auditTab_bEnd" style="padding:10px 18px;cursor:pointer;font-size:14px;font-weight:500;border-bottom:2px solid transparent;color:var(--ink-3);margin-bottom:-1px;" onclick="switchAuditTab('bEnd')">B端申请</div>
+      </div>
+
+      <!-- 自动通过配置（仅C端显示） -->
+      <div id="autoApproveSection" style="margin-bottom:24px;padding:14px 16px;background:var(--bg-2);border-radius:8px;">
         <div style="display:flex;align-items:center;justify-content:space-between;">
           <div>
-            <div style="font-weight:500;font-size:14px;color:var(--ink-1);">用户端申请自动通过</div>
+            <div style="font-weight:500;font-size:14px;color:var(--ink-1);">C端申请自动通过</div>
             <div style="font-size:12px;color:var(--ink-4);margin-top:4px;">开启后，用户提交售后申请将自动通过，无需人工审核</div>
           </div>
           <label style="position:relative;display:inline-block;width:44px;height:24px;cursor:pointer;flex-shrink:0;">
@@ -9745,35 +9757,74 @@
   // ===== 活动标签 =====
   let activityTags = ['限时', '会员专属', '新人专享', '节日活动', '品牌联合', '满减活动'];
 
-  // ===== 售后审核管理 =====
-  let refundAuditors = [
-    { name: '张运营', role: '运营专员' },
-    { name: '李主管', role: '运营主管' },
-    { name: '王经理', role: '运营经理' }
-  ];
-  let refundAutoApprove = false;
+  // ===== 售后审核管理（C端/B端独立配置）=====
+  let currentAuditTab = 'cEnd';
+  let refundAuditConfig = {
+    cEnd: {
+      auditors: [
+        { name: '张运营' },
+        { name: '李主管' },
+        { name: '王经理' }
+      ],
+      autoApprove: false
+    },
+    bEnd: {
+      auditors: [
+        { name: '商户运营' },
+        { name: '财务主管' }
+      ]
+    }
+  };
+
+  function getCurrentAuditConfig() {
+    return refundAuditConfig[currentAuditTab];
+  }
+
+  function switchAuditTab(tab) {
+    currentAuditTab = tab;
+    // 更新Tab样式
+    var cTab = document.getElementById('auditTab_cEnd');
+    var bTab = document.getElementById('auditTab_bEnd');
+    cTab.style.borderBottomColor = tab === 'cEnd' ? 'var(--primary)' : 'transparent';
+    cTab.style.color = tab === 'cEnd' ? 'var(--primary)' : 'var(--ink-3)';
+    bTab.style.borderBottomColor = tab === 'bEnd' ? 'var(--primary)' : 'transparent';
+    bTab.style.color = tab === 'bEnd' ? 'var(--primary)' : 'var(--ink-3)';
+    // B端隐藏自动通过开关
+    var autoSection = document.getElementById('autoApproveSection');
+    if (tab === 'cEnd') {
+      autoSection.style.display = 'block';
+    } else {
+      autoSection.style.display = 'none';
+    }
+    // 刷新审核人列表
+    renderAuditorList();
+  }
 
   function openAuditManageModal() {
-    renderAuditorList();
-    // 初始化开关状态
+    currentAuditTab = 'cEnd';
+    switchAuditTab('cEnd');
+    // 初始化C端开关状态
+    var cfg = refundAuditConfig.cEnd;
     var toggle = document.getElementById('autoApproveToggle');
     var slider = document.getElementById('autoApproveSlider');
     var dot = document.getElementById('autoApproveDot');
-    toggle.checked = refundAutoApprove;
-    slider.style.background = refundAutoApprove ? 'var(--primary)' : '#ccc';
-    dot.style.transform = refundAutoApprove ? 'translateX(20px)' : 'translateX(0)';
+    toggle.checked = cfg.autoApprove;
+    slider.style.background = cfg.autoApprove ? 'var(--primary)' : '#ccc';
+    dot.style.transform = cfg.autoApprove ? 'translateX(20px)' : 'translateX(0)';
     document.getElementById('auditManageModal').classList.add('show');
   }
 
   function renderAuditorList() {
+    var cfg = getCurrentAuditConfig();
+    var auditors = cfg.auditors;
     var list = document.getElementById('auditorList');
-    if (refundAuditors.length === 0) {
+    if (auditors.length === 0) {
       list.innerHTML = '<div style="color:var(--ink-4);font-size:13px;padding:20px 0;text-align:center;">暂无审核人，请添加</div>';
       return;
     }
-    list.innerHTML = refundAuditors.map(function(a, idx) {
+    list.innerHTML = auditors.map(function(a, idx) {
       var isFirst = idx === 0;
-      var isLast = idx === refundAuditors.length - 1;
+      var isLast = idx === auditors.length - 1;
       var upBtn = '<button style="width:28px;height:28px;border:1px solid var(--border);background:#fff;border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--ink-3);' + (isFirst ? 'opacity:0.3;cursor:not-allowed;' : '') + '" onclick="' + (isFirst ? '' : 'moveAuditor(' + idx + ',-1)') + '" title="上移">↑</button>';
       var downBtn = '<button style="width:28px;height:28px;border:1px solid var(--border);background:#fff;border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--ink-3);' + (isLast ? 'opacity:0.3;cursor:not-allowed;' : '') + '" onclick="' + (isLast ? '' : 'moveAuditor(' + idx + ',1)') + '" title="下移">↓</button>';
       var delBtn = '<button style="width:28px;height:28px;border:1px solid #ffcdd2;background:#fff;border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;color:#e53935;" onclick="deleteAuditor(' + idx + ')" title="删除">×</button>';
@@ -9786,38 +9837,41 @@
   }
 
   function addAuditor() {
+    var cfg = getCurrentAuditConfig();
     var nameInput = document.getElementById('newAuditorName');
     var name = nameInput.value.trim();
     if (!name) { showToast('请输入审核人姓名', 'warning'); return; }
-    var exists = refundAuditors.some(function(a) { return a.name === name; });
+    var exists = cfg.auditors.some(function(a) { return a.name === name; });
     if (exists) { showToast('审核人已存在', 'warning'); return; }
-    refundAuditors.push({ name: name });
+    cfg.auditors.push({ name: name });
     nameInput.value = '';
     renderAuditorList();
     showToast('审核人已添加', 'success');
   }
 
   function deleteAuditor(idx) {
-    var name = refundAuditors[idx] ? refundAuditors[idx].name : '';
+    var cfg = getCurrentAuditConfig();
+    var name = cfg.auditors[idx] ? cfg.auditors[idx].name : '';
     showConfirm('删除审核人', '确定删除审核人「' + name + '」吗？', function() {
-      refundAuditors.splice(idx, 1);
+      cfg.auditors.splice(idx, 1);
       renderAuditorList();
       showToast('审核人已删除', 'success');
     });
   }
 
   function moveAuditor(idx, direction) {
+    var cfg = getCurrentAuditConfig();
     if (direction === -1 && idx === 0) return;
-    if (direction === 1 && idx === refundAuditors.length - 1) return;
+    if (direction === 1 && idx === cfg.auditors.length - 1) return;
     var target = idx + direction;
-    var temp = refundAuditors[idx];
-    refundAuditors[idx] = refundAuditors[target];
-    refundAuditors[target] = temp;
+    var temp = cfg.auditors[idx];
+    cfg.auditors[idx] = cfg.auditors[target];
+    cfg.auditors[target] = temp;
     renderAuditorList();
   }
 
   function toggleAutoApprove(checked) {
-    refundAutoApprove = checked;
+    refundAuditConfig.cEnd.autoApprove = checked;
     var slider = document.getElementById('autoApproveSlider');
     var dot = document.getElementById('autoApproveDot');
     slider.style.background = checked ? 'var(--primary)' : '#ccc';
@@ -10855,31 +10909,31 @@
     { refundId: 'RF20260722001', orderId: 'EX20260711007', prizeId: 'PRIZE-0004', prizeName: '资生堂红腰子精华 50ml', prizeImg: '', prizeType: '实物礼品', quantity: 1, relatedPrize: '', relatedPrizeId: '', sourceType: '兑换中心', sourceActivityName: '夏日狂欢兑换活动', sourceActivityId: 'ACT-001', userName: '李思远', userId: 'UID-10015', userPhone: '15112346677', userAddress: '海南省海口市龙华区滨海大道99号', memberLevel: '铂金VIP', payType: '积分', payPoints: 15000, reason: '到期未使用自动退款', status: '退款完成', time: '2026-07-22 00:05', channel: 'APP', submitter: '系统', logs: [
       { time: '2026-07-22 00:05:00', operator: '系统', action: '自动退款' },
       { time: '2026-07-22 00:05:01', operator: '人工', action: '退款完成' }
-    ], store: '三亚国际免税城', usageScene: '兑换中心', entryType: '私域', auditors: ['管理员A', '运营专员', '财务审核D'], auditResults: {'管理员A': '通过', '运营专员': '通过', '财务审核D': '通过'}, materials: ['https://picsum.photos/200/200?random=1']},
+    ], store: '三亚国际免税城', usageScene: '兑换中心', entryType: '私域', sourceEnd: 'cEnd', auditors: ['张运营', '李主管', '王经理'], auditResults: {'张运营': '通过', '李主管': '通过', '王经理': '通过'}, materials: ['https://picsum.photos/200/200?random=1']},
     { refundId: 'RF20260721001', orderId: 'EX20260716001', prizeId: 'PRIZE-0008', prizeName: '迪奥口红套装', prizeImg: '', prizeType: '转盘抽奖', quantity: 1, relatedPrize: '', relatedPrizeId: '', sourceType: '转盘抽奖', sourceActivityName: '年中大促转盘', sourceActivityId: 'LOT-001', userName: '周文博', userId: 'UID-10008', userPhone: '15012341122', userAddress: '上海市黄浦区南京东路800号', memberLevel: '金卡会员', payType: '积分', payPoints: 3500, reason: '不想要了', status: '待审核', time: '2026-07-21 09:10', channel: 'H5', submitter: '运营专员小周', logs: [
       { time: '2026-07-21 09:10:00', operator: '周文博', action: '申请退款' },
-      { time: '2026-07-21 10:30:00', operator: '管理员A', action: '审核通过' }
-    ], store: '海口国际免税城', usageScene: '转盘抽奖', entryType: '公域', auditors: ['管理员A', '运营专员', '财务审核D'], auditResults: {'管理员A': '通过'}, materials: ['https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4']},
+      { time: '2026-07-21 10:30:00', operator: '张运营', action: '审核通过' }
+    ], store: '海口国际免税城', usageScene: '转盘抽奖', entryType: '公域', sourceEnd: 'bEnd', auditors: ['商户运营', '财务主管'], auditResults: {'商户运营': '通过'}, materials: ['https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4']},
     { refundId: 'RF20260720003', orderId: 'EX20260715005', prizeId: 'PRIZE-0001', prizeName: '雅诗兰黛持妆粉底液 30ml', prizeImg: '', prizeType: '实物礼品', quantity: 1, relatedPrize: '', relatedPrizeId: '', sourceType: '兑换中心', sourceActivityName: '会员专属兑换活动', sourceActivityId: 'ACT-002', userName: '王梦琪', userId: 'UID-10009', userPhone: '13612349988', userAddress: '海南省三亚市天涯区海棠北路118号', memberLevel: '银卡会员', payType: '积分', payPoints: 8800, reason: '商品破损', status: '退款中', time: '2026-07-20 16:30', channel: 'APP', submitter: '运营专员小李', logs: [
       { time: '2026-07-20 16:30:00', operator: '王梦琪', action: '申请退款' },
-      { time: '2026-07-20 17:15:22', operator: '运营专员', action: '审核通过' },
+      { time: '2026-07-20 17:15:22', operator: '商户运营', action: '审核通过' },
       { time: '2026-07-20 17:15:23', operator: '系统', action: '全部审核通过，发起退款' }
-    ], store: '博鳌免税店', usageScene: '兑换中心', entryType: '公域', auditors: ['管理员B', '运营专员'], auditResults: {'管理员B': '通过', '运营专员': '通过'}, materials: ['https://picsum.photos/200/200?random=2', 'https://picsum.photos/200/200?random=3']},
+    ], store: '博鳌免税店', usageScene: '兑换中心', entryType: '公域', sourceEnd: 'bEnd', auditors: ['商户运营', '财务主管'], auditResults: {'商户运营': '通过', '财务主管': '通过'}, materials: ['https://picsum.photos/200/200?random=2', 'https://picsum.photos/200/200?random=3']},
     { refundId: 'RF20260719002', orderId: 'EX20260713008', prizeId: 'PRIZE-0003', prizeName: 'CDF 100元代金券', prizeImg: '', prizeType: '优惠券-优选单券', quantity: 2, relatedPrize: '', relatedPrizeId: '', sourceType: '兑换中心', sourceActivityName: '夏日狂欢兑换活动', sourceActivityId: 'ACT-001', userName: '张雅婷', userId: 'UID-10010', userPhone: '15912343344', userAddress: '', memberLevel: '普通会员', payType: '积分', payPoints: 500, reason: '重复兑换', status: '审核驳回', time: '2026-07-19 11:22', channel: 'APP', submitter: '运营专员小陈', logs: [
       { time: '2026-07-19 11:22:00', operator: '张雅婷', action: '申请退款' },
-      { time: '2026-07-19 14:05:18', operator: '运营专员', action: '审核驳回' }
-    ], store: '三亚凤凰机场店', usageScene: '兑换中心', entryType: '私域', auditors: ['运营专员', '财务审核D'], auditResults: {'运营专员': '驳回'}, materials: []},
+      { time: '2026-07-19 14:05:18', operator: '张运营', action: '审核驳回' }
+    ], store: '三亚凤凰机场店', usageScene: '兑换中心', entryType: '私域', sourceEnd: 'cEnd', auditors: ['张运营', '李主管'], auditResults: {'张运营': '驳回'}, materials: []},
     { refundId: 'RF20260718001', orderId: 'EX20260712003', prizeId: 'PRIZE-0005', prizeName: 'SK-II 神仙水 230ml', prizeImg: '', prizeType: '预约抽奖', quantity: 1, relatedPrize: '', relatedPrizeId: '', sourceType: '预约抽奖', sourceActivityName: '七月预约抽奖', sourceActivityId: 'LOT-003', userName: '陈佳琪', userId: 'UID-10011', userPhone: '17712342211', userAddress: '广东省广州市天河区珠江新城', memberLevel: '钻石VIP', payType: '积分', payPoints: 12000, reason: '不想要了', status: '退款中', time: '2026-07-18 14:55', channel: '微信小程序', submitter: '运营专员小周', logs: [
       { time: '2026-07-18 14:55:00', operator: '陈佳琪', action: '申请退款' },
-      { time: '2026-07-18 16:20:33', operator: '管理员A', action: '审核通过' },
+      { time: '2026-07-18 16:20:33', operator: '商户运营', action: '审核通过' },
       { time: '2026-07-18 16:20:34', operator: '系统', action: '全部审核通过，发起退款' }
-    ], store: '海口美兰机场店', usageScene: '预约抽奖', entryType: '私域', auditors: ['管理员A', '运营专员'], auditResults: {'管理员A': '通过', '运营专员': '通过'}, materials: ['https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4', 'https://picsum.photos/200/200?random=4']},
+    ], store: '海口美兰机场店', usageScene: '预约抽奖', entryType: '私域', sourceEnd: 'bEnd', auditors: ['商户运营', '财务主管'], auditResults: {'商户运营': '通过', '财务主管': '通过'}, materials: ['https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4', 'https://picsum.photos/200/200?random=4']},
     { refundId: 'RF20260715001', orderId: 'EX20260710002', prizeId: 'PRIZE-0006', prizeName: '海蓝之谜面霜 30ml', prizeImg: '', prizeType: '转盘抽奖', quantity: 1, relatedPrize: '兰蔻小黑瓶精华肌底液 20ml', relatedPrizeId: 'PRIZE-0002', sourceType: '转盘抽奖', sourceActivityName: '年中大促转盘', sourceActivityId: 'LOT-001', userName: '赵晓晨', userId: 'UID-10012', userPhone: '13512349900', userAddress: '北京市朝阳区建国门外大街1号', memberLevel: '金卡会员', payType: '贝壳', payPoints: 1500, reason: '发错商品', status: '退款完成', time: '2026-07-15 10:00', channel: 'H5', submitter: '运营专员小李', logs: [
       { time: '2026-07-15 10:00:00', operator: '赵晓晨', action: '申请退款' },
-      { time: '2026-07-15 11:30:15', operator: '运营专员', action: '审核通过' },
+      { time: '2026-07-15 11:30:15', operator: '张运营', action: '审核通过' },
       { time: '2026-07-15 11:30:16', operator: '系统', action: '全部审核通过，发起退款' },
       { time: '2026-07-16 09:00:00', operator: '系统', action: '退款完成' }
-    ], store: '三亚国际免税城', usageScene: '转盘抽奖', entryType: '私域', auditors: ['运营专员', '财务审核D'], auditResults: {'运营专员': '通过', '财务审核D': '通过'}, materials: ['https://picsum.photos/200/200?random=5']},
+    ], store: '三亚国际免税城', usageScene: '转盘抽奖', entryType: '私域', sourceEnd: 'cEnd', auditors: ['张运营', '李主管', '王经理'], auditResults: {'张运营': '通过', '李主管': '通过', '王经理': '通过'}, materials: ['https://picsum.photos/200/200?random=5']},
   ];
 
   _initOrderComputedFields();
@@ -11120,6 +11174,7 @@
     var entryFilter = document.getElementById('filterRefundEntry') ? document.getElementById('filterRefundEntry').value : '';
     var channelFilter = document.getElementById('filterRefundChannel') ? document.getElementById('filterRefundChannel').value : '';
     var sourceFilter = document.getElementById('filterRefundSource') ? document.getElementById('filterRefundSource').value : '';
+    var sourceEndFilter = document.getElementById('filterRefundSourceEnd') ? document.getElementById('filterRefundSourceEnd').value : '';
     var dateStartFilter = document.getElementById('filterRefundDateStart') ? document.getElementById('filterRefundDateStart').value : '';
     var dateEndFilter = document.getElementById('filterRefundDateEnd') ? document.getElementById('filterRefundDateEnd').value : '';
 
@@ -11129,6 +11184,7 @@
       if (entryFilter && r.entryType !== entryFilter) return false;
       if (channelFilter && r.channel !== channelFilter) return false;
       if (sourceFilter && r.sourceType !== sourceFilter) return false;
+      if (sourceEndFilter && r.sourceEnd !== sourceEndFilter) return false;
       if (dateStartFilter && (!r.time || r.time.substring(0,10) < dateStartFilter)) return false;
       if (dateEndFilter && (!r.time || r.time.substring(0,10) > dateEndFilter)) return false;
       return true;
@@ -11136,7 +11192,7 @@
 
     var tbody = document.getElementById('refundBody');
     if (list.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="12" style="text-align:center;color:var(--ink-4);padding:40px 0;">暂无数据</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="13" style="text-align:center;color:var(--ink-4);padding:40px 0;">暂无数据</td></tr>';
       document.getElementById('refundCount').textContent = '0';
       return;
     }
@@ -11205,6 +11261,7 @@
         '<td><span style="display:inline-block;padding:1px 6px;border-radius:4px;font-size:11px;' + payTypeColor + '">' + (r.payType || '-') + '</span></td>' +
         '<td style="font-weight:600;">' + (r.payPoints ? r.payPoints.toLocaleString() : '-') + '</td>' +
         '<td style="font-size:12px;color:var(--ink-3);">' + (r.channel || '-') + '</td>' +
+        '<td><span style="display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;' + (r.sourceEnd === 'bEnd' ? 'background:#e8f5e9;color:#2e7d32;' : 'background:#e3f2fd;color:#1565c0;') + '">' + (r.sourceEnd === 'bEnd' ? 'B端' : 'C端') + '</span></td>' +
         '<td><span style="display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;' + getStatusStyle(r.status) + '">' + r.status + '</span></td>' +
         '<td style="font-size:12px;color:var(--ink-3);">' + r.time + '</td>' +
         '<td class="td-actions">' + actions + '</td>' +
@@ -11501,12 +11558,15 @@
         '<input class="form-control" id="refundReasonCustom" type="text" placeholder="请输入自定义退款原因" oninput="document.querySelector(\'input[name=refundReason][value=自定义]\').checked=true">' +
       '</div>' +
       '<div class="form-group">' +
+        '<label class="form-label">来源端<span class="required">*</span></label>' +
+        '<select class="form-control form-select" id="refundSourceEnd" onchange="updateRefundAuditorOptions()">' +
+          '<option value="cEnd">C端申请</option>' +
+          '<option value="bEnd">B端申请</option>' +
+        '</select>' +
+      '</div>' +
+      '<div class="form-group">' +
         '<label class="form-label">审核人</label>' +
-        '<div style="display:flex;gap:16px;flex-wrap:wrap;">' +
-          '<label style="display:flex;align-items:center;gap:6px;cursor:pointer;"><input type="checkbox" name="refundAuditors" value="管理员A"> 管理员A</label>' +
-          '<label style="display:flex;align-items:center;gap:6px;cursor:pointer;"><input type="checkbox" name="refundAuditors" value="管理员B"> 管理员B</label>' +
-          '<label style="display:flex;align-items:center;gap:6px;cursor:pointer;"><input type="checkbox" name="refundAuditors" value="运营专员C"> 运营专员C</label>' +
-          '<label style="display:flex;align-items:center;gap:6px;cursor:pointer;"><input type="checkbox" name="refundAuditors" value="财务审核D"> 财务审核D</label>' +
+        '<div id="refundAuditorOptions" style="display:flex;gap:16px;flex-wrap:wrap;">' +
         '</div>' +
       '</div>' +
       '<div class="form-group">' +
@@ -11521,6 +11581,22 @@
       '</div>';
     footerEl.innerHTML = '<button class="btn btn-outline" onclick="closeModal(\'refundModal\')">取消</button> <button class="btn btn-danger" onclick="confirmRefundFromModal(\'' + orderId + '\')">确认退款</button>';
     document.getElementById('refundModal').classList.add('show');
+    // 初始化审核人选项（默认C端，全部勾选）
+    updateRefundAuditorOptions(true);
+  }
+
+  function updateRefundAuditorOptions(checkAll) {
+    var sourceEnd = document.getElementById('refundSourceEnd').value;
+    var cfg = refundAuditConfig[sourceEnd];
+    var container = document.getElementById('refundAuditorOptions');
+    if (!cfg || !cfg.auditors || cfg.auditors.length === 0) {
+      container.innerHTML = '<span style="font-size:12px;color:var(--ink-4);">暂无审核人配置，请先在审核管理中添加</span>';
+      return;
+    }
+    container.innerHTML = cfg.auditors.map(function(a) {
+      var checked = checkAll ? 'checked' : '';
+      return '<label style="display:flex;align-items:center;gap:6px;cursor:pointer;"><input type="checkbox" name="refundAuditors" value="' + a.name + '" ' + checked + '> ' + a.name + '</label>';
+    }).join('');
   }
 
   function previewRefundMaterials(input) {
@@ -11553,6 +11629,7 @@
     o.status = '已退款';
     var newRefundId = 'RF' + Date.now().toString().substring(2);
     var nowTime = new Date().getFullYear() + '-' + String(new Date().getMonth()+1).padStart(2,'0') + '-' + String(new Date().getDate()).padStart(2,'0') + ' ' + String(new Date().getHours()).padStart(2,'0') + ':' + String(new Date().getMinutes()).padStart(2,'0');
+    var sourceEnd = document.getElementById('refundSourceEnd').value;
     var auditors = Array.from(document.querySelectorAll('input[name="refundAuditors"]:checked')).map(function(cb) { return cb.value; });
     var previewArea = document.getElementById('refundMaterialPreviewArea');
     var materialUrls = [];
@@ -11568,7 +11645,7 @@
       userName: o.userName, userId: o.userId, userPhone: o.userPhone, userAddress: o.userAddress || '',
       memberLevel: o.memberLevel, payType: o.payType, payPoints: o.payPoints,
       reason: reason, auditors: auditors, materials: materialUrls,
-      status: '待审核', time: nowTime,
+      sourceEnd: sourceEnd, status: '待审核', time: nowTime,
       logs: [
         { time: nowTime + ':00', operator: o.userName || '用户', action: '申请退款', content: '用户提交退款申请，原因：' + reason }
       ]
