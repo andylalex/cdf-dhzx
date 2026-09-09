@@ -2297,7 +2297,6 @@
               <th style="width:90px;">月限/人</th>
               <th style="width:90px;">日限/人</th>
               <th style="width:90px;">活动库存</th>
-              <th style="width:90px;">每日库存</th>
               <th style="width:60px;">操作</th>
             </tr>
           </thead>
@@ -2455,7 +2454,7 @@
 
 
 <!-- ===== 商品编辑弹窗 ===== -->
-<div class="modal-mask show" id="productModal">
+<div class="modal-mask" id="productModal">
   <div class="modal" style="width:760px;">
     <div class="modal-header">
       <div class="modal-title" id="modalTitle">新增奖品</div>
@@ -2526,25 +2525,25 @@
             </div>
           </div>
           <div class="full" style="display: flex; gap: 16px; width: 100%; position: relative;">
-            <div class="form-group" style="flex:1;display:flex;flex-direction:column;">
+            <div class="form-group" style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;">
               <label class="form-label">奖品总库存<span class="required">*</span></label>
-              <input class="form-control" id="f_stock" type="number" value="-1" placeholder="-1 表示不限" style="margin-top:auto;">
+              <input class="form-control" id="f_stock" type="number" value="-1" placeholder="-1 表示不限">
             </div>
-            <div class="form-group" style="flex:1;display:flex;flex-direction:column;">
+            <div class="form-group" style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;">
               <label class="form-label">每日库存</label>
-              <input class="form-control" id="f_dailyStock" type="number" value="-1" placeholder="-1 表示不限" style="margin-top:auto;">
+              <input class="form-control" id="f_dailyStock" type="number" value="-1" placeholder="-1 表示不限">
             </div>
-            <div class="form-group" style="flex:1;display:flex;flex-direction:column;">
+            <div class="form-group" style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;">
               <label class="form-label">每月兑换次数上限/人<span class="required" id="monthLimit-required" style="display:none;">*</span></label>
-              <input class="form-control" id="f_monthLimit" type="number" placeholder="-1为不限" disabled="" style="margin-top:auto;">
+              <input class="form-control" id="f_monthLimit" type="number" placeholder="-1为不限" disabled="">
             </div>
-            <div class="form-group" style="flex:1;display:flex;flex-direction:column;">
+            <div class="form-group" style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;">
               <label class="form-label">每日兑换次数上限/人<span class="required" id="dayLimit-required" style="display:none;">*</span></label>
-              <input class="form-control" id="f_dayLimit" type="number" placeholder="-1为不限" disabled="" style="margin-top:auto;">
+              <input class="form-control" id="f_dayLimit" type="number" placeholder="-1为不限" disabled="">
             </div>
-            <div class="form-group" style="flex:1;display:flex;flex-direction:column;">
+            <div class="form-group" style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;">
               <label class="form-label">消耗福利值<span class="required" id="welfarePoints-required" style="display:none;">*</span></label>
-              <input class="form-control" id="f_welfarePoints" type="number" placeholder="请输入消耗福利值" disabled="" style="margin-top:auto;">
+              <input class="form-control" id="f_welfarePoints" type="number" placeholder="请输入消耗福利值" disabled="">
             </div>
           </div>
           <div class="form-group full" id="channelGroup" style="">
@@ -3114,7 +3113,6 @@
       document.getElementById('f_desc').value = p.desc || '';
       document.getElementById('f_exchangeRule').value = p.exchangeRule || '';
       document.getElementById('f_stock').value = p.stock !== undefined ? p.stock : '';
-      document.getElementById('f_dailyStock').value = p.dailyStock !== undefined ? p.dailyStock : -1;
       document.getElementById('f_value').value = p.value || '';
       document.getElementById('f_eopLianyingDaMa').value = p.eopLianyingDaMa || '';
       document.getElementById('f_welfarePoints').value = p.welfarePoints || '';
@@ -3136,7 +3134,6 @@
       document.getElementById('f_prizeType').value = '实物礼品';
       renderUsageSceneCheckboxes([]);
       document.getElementById('f_stock').value = -1;
-      document.getElementById('f_dailyStock').value = -1;
       document.getElementById('f_deadlineDays').value = -1;
       document.getElementById('f_deadlineDate').value = '';
       document.getElementById('f_value').value = '';
@@ -3228,7 +3225,6 @@
       showToast('请选择关联奖品', 'warning'); return;
     }
     const stock = parseInt(stockVal);
-    const dailyStock = parseInt(document.getElementById('f_dailyStock').value) || -1;
     const channel = document.getElementById('f_channel').value;
     var welfarePoints = document.getElementById('f_welfarePoints') ? parseInt(document.getElementById('f_welfarePoints').value) || 0 : 0;
     var monthLimit = document.getElementById('f_monthLimit') ? parseInt(document.getElementById('f_monthLimit').value) || -1 : -1;
@@ -3243,7 +3239,6 @@
       exchangeRule: document.getElementById('f_exchangeRule').value,
       stock,
       totalStock: stock,
-      dailyStock,
       status: '启用',
       channel,
       deadlineType: document.querySelector('input[name="f_deadlineType"]:checked')?.value || 'days',
@@ -3464,37 +3459,37 @@
   const allActivities = [
     { id: 1, name: '夏日狂欢兑换活动', timeRange: { start: '2026-07-19 10:00', end: '2026-07-25 23:59' }, createdAt: '2026-07-18 14:30', createdBy: '管理员', status: 'active', rule: '每人每场限兑2件', channel: ['APP', '微信小程序'], payType: '积分', source: '千帆', memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 500000, actualCost: 149600, actualRevenue: 149600, costShare: { type: '混合分摊', platform: 20, store: 50, brand: 30 }, revenueShare: { type: '平台全额' }, auditLogs: [{ time: '2026-07-18 15:20', auditor: '管理员A', action: '审核通过' }],
       items: [
-        { prizeId: 'PRIZE-0001', name: '雅诗兰黛粉底液 30ml', type: '实物礼品', price: 8800, stock: 50, dailyStock: -1, exchanged: 12, monthLimit: -1, dayLimit: -1, tags: ['限时', '会员专属'] },
-        { prizeId: 'PRIZE-0011', name: 'CDF 100元代金券', type: '优惠券-优选单券', price: 500, stock: -1, dailyStock: -1, exchanged: 67, monthLimit: -1, dayLimit: -1, tags: ['限时'] },
-        { prizeId: 'PRIZE-0012', name: '海南免税95折券', type: '优惠券-券中心', price: 350, stock: 300, dailyStock: -1, exchanged: 120, monthLimit: -1, dayLimit: -1, tags: ['节日活动'] },
-        { prizeId: 'PRIZE-0008', name: '中免海南限定化妆包', type: '实物礼品', price: 2800, stock: -1, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['品牌联合'] },
+        { prizeId: 'PRIZE-0001', name: '雅诗兰黛粉底液 30ml', type: '实物礼品', price: 8800, stock: 50, exchanged: 12, monthLimit: -1, dayLimit: -1, tags: ['限时', '会员专属'] },
+        { prizeId: 'PRIZE-0011', name: 'CDF 100元代金券', type: '优惠券-优选单券', price: 500, stock: -1, exchanged: 67, monthLimit: -1, dayLimit: -1, tags: ['限时'] },
+        { prizeId: 'PRIZE-0012', name: '海南免税95折券', type: '优惠券-券中心', price: 350, stock: 300, exchanged: 120, monthLimit: -1, dayLimit: -1, tags: ['节日活动'] },
+        { prizeId: 'PRIZE-0008', name: '中免海南限定化妆包', type: '实物礼品', price: 2800, stock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['品牌联合'] },
       ]
     },
     { id: 2, name: '会员专属兑换活动', timeRange: { start: '2026-07-20 10:00', end: '2026-07-27 23:59' }, createdAt: '2026-07-19 09:00', createdBy: '管理员', status: 'active', rule: '仅限银卡及以上会员参与', channel: ['APP', 'H5'], payType: '贝壳', source: '千帆', memberDiscount: { normal: 100, silver: 90, gold: 85, platinum: 80, diamond: 75 }, accountType: '主营业务', budgetLimit: 300000, actualCost: 0, actualRevenue: 0, costShare: { type: '平台全额' }, revenueShare: { type: '平台全额' }, auditLogs: [{ time: '2026-07-19 10:15', auditor: '运营专员', action: '审核通过' }],
       items: [
-        { prizeId: 'PRIZE-0006', name: 'SK-II 神仙水 230ml', type: '实物礼品', price: 12000, stock: 40, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['会员专属'] },
-        { prizeId: 'PRIZE-0013', name: 'CDF 200元代金券', type: '优惠券-优选单券', price: 1000, stock: -1, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['会员专属', '满减活动'] },
-        { prizeId: 'PRIZE-0014', name: '免税店专属折扣券', type: '优惠券-券中心', price: 80, stock: 500, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['满减活动'] },
+        { prizeId: 'PRIZE-0006', name: 'SK-II 神仙水 230ml', type: '实物礼品', price: 12000, stock: 40, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['会员专属'] },
+        { prizeId: 'PRIZE-0013', name: 'CDF 200元代金券', type: '优惠券-优选单券', price: 1000, stock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['会员专属', '满减活动'] },
+        { prizeId: 'PRIZE-0014', name: '免税店专属折扣券', type: '优惠券-券中心', price: 80, stock: 500, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['满减活动'] },
       ]
     },
     { id: 3, name: '限时闪购活动', timeRange: { start: '2026-07-21 10:00', end: '2026-07-23 23:59' }, createdAt: '2026-07-20 11:00', createdBy: '运营专员', status: 'active', rule: '每人每场限兑3件', channel: ['APP'], payType: '积分', source: '繁星-三亚国际免税城', memberDiscount: { normal: 100, silver: 100, gold: 100, platinum: 100, diamond: 100 }, accountType: '非主营业务', budgetLimit: 200000, actualCost: 0, actualRevenue: 0, costShare: { type: '门店全额' }, revenueShare: { type: '门店全额' }, auditLogs: [{ time: '2026-07-20 14:30', auditor: '管理员B', action: '审核通过' }],
       items: [
-        { prizeId: 'PRIZE-0015', name: '资生堂红腰子 75ml', type: '实物礼品', price: 9500, stock: 60, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['限时', '品牌联合'] },
-        { prizeId: 'PRIZE-0007', name: '迪奥口红套装', type: '实物礼品', price: 3500, stock: -1, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['限时'] },
-        { prizeId: 'PRIZE-0016', name: '全场通用88折券', type: '优惠券-券中心', price: 200, stock: -1, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['限时', '满减活动'] },
+        { prizeId: 'PRIZE-0015', name: '资生堂红腰子 75ml', type: '实物礼品', price: 9500, stock: 60, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['限时', '品牌联合'] },
+        { prizeId: 'PRIZE-0007', name: '迪奥口红套装', type: '实物礼品', price: 3500, stock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['限时'] },
+        { prizeId: 'PRIZE-0016', name: '全场通用88折券', type: '优惠券-券中心', price: 200, stock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['限时', '满减活动'] },
       ]
     },
     { id: 4, name: '年中大促活动', timeRange: { start: '2026-07-18 10:00', end: '2026-07-18 23:59' }, createdAt: '2026-07-17 16:00', createdBy: '管理员', status: 'active', rule: '', channel: ['微信小程序', '支付宝小程序', 'H5'], payType: '贝壳', source: '千帆', memberDiscount: { normal: 100, silver: 100, gold: 100, platinum: 100, diamond: 100 }, accountType: '主营业务', budgetLimit: 800000, actualCost: 446700, actualRevenue: 446700, costShare: { type: '混合分摊', platform: 20, store: 40, brand: 40 }, revenueShare: { type: '混合分摊', platform: 20, store: 40, brand: 40 }, auditLogs: [{ time: '2026-07-17 18:00', auditor: '管理员A', action: '审核通过' }],
       items: [
-        { prizeId: 'PRIZE-0017', name: '海蓝之谜面霜 30ml', type: '实物礼品', price: 15000, stock: 20, dailyStock: -1, exchanged: 20, monthLimit: -1, dayLimit: -1, tags: ['节日活动'] },
-        { prizeId: 'PRIZE-0018', name: 'CDF 50元无门槛券', type: '优惠券-优选单券', price: 300, stock: -1, dailyStock: -1, exchanged: 489, monthLimit: -1, dayLimit: -1, tags: ['新人专享'] },
+        { prizeId: 'PRIZE-0017', name: '海蓝之谜面霜 30ml', type: '实物礼品', price: 15000, stock: 20, exchanged: 20, monthLimit: -1, dayLimit: -1, tags: ['节日活动'] },
+        { prizeId: 'PRIZE-0018', name: 'CDF 50元无门槛券', type: '优惠券-优选单券', price: 300, stock: -1, exchanged: 489, monthLimit: -1, dayLimit: -1, tags: ['新人专享'] },
       ]
     },
     { id: 5, name: '春节限时兑换活动', timeRange: { start: '2026-01-20 10:00', end: '2026-02-10 23:59' }, createdAt: '2026-01-15 09:00', createdBy: '管理员', status: 'terminated', rule: '每人每场限兑2件', channel: ['APP', '微信小程序', 'H5'], payType: '积分', source: '千帆', memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 600000, actualCost: 2070000, actualRevenue: 2070000, costShare: { type: '平台全额' }, revenueShare: { type: '平台全额' }, auditLogs: [{ time: '2026-01-15 10:30', auditor: '管理员A', action: '审核通过' }, { time: '2026-02-11 00:00', auditor: '系统', action: '自动终止' }],
       items: [
-        { prizeId: 'PRIZE-0001', name: '雅诗兰黛持妆粉底液 30ml', type: '实物礼品', price: 8800, stock: 100, dailyStock: -1, exchanged: 95, monthLimit: -1, dayLimit: -1 },
-        { prizeId: 'PRIZE-0002', name: '兰蔻小黑瓶精华肌底液 20ml', type: '实物礼品', price: 12800, stock: 50, dailyStock: -1, exchanged: 48, monthLimit: -1, dayLimit: -1 },
-        { prizeId: 'PRIZE-0011', name: 'CDF 100元代金券', type: '优惠券-优选单券', price: 500, stock: 200, dailyStock: -1, exchanged: 200, monthLimit: -1, dayLimit: -1 },
+        { prizeId: 'PRIZE-0001', name: '雅诗兰黛持妆粉底液 30ml', type: '实物礼品', price: 8800, stock: 100, exchanged: 95, monthLimit: -1, dayLimit: -1 },
+        { prizeId: 'PRIZE-0002', name: '兰蔻小黑瓶精华肌底液 20ml', type: '实物礼品', price: 12800, stock: 50, exchanged: 48, monthLimit: -1, dayLimit: -1 },
+        { prizeId: 'PRIZE-0011', name: 'CDF 100元代金券', type: '优惠券-优选单券', price: 500, stock: 200, exchanged: 200, monthLimit: -1, dayLimit: -1 },
       ]
     },
     { id: 6, name: '每日签到', timeRange: { start: '2026-07-01 00:00', end: '2026-07-31 23:59' }, createdAt: '2026-06-28 10:00', createdBy: '管理员', status: 'active', rule: '每日签到获得奖励', channel: ['APP', '微信小程序'], payType: '积分', source: '千帆', memberDiscount: { normal: 100, silver: 100, gold: 100, platinum: 100, diamond: 100 }, accountType: '非主营业务', budgetLimit: 50000, actualCost: 800, actualRevenue: 800, costShare: { type: '平台全额' }, revenueShare: { type: '平台全额' }, auditLogs: [{ time: '2026-06-28 15:00', auditor: '管理员A', action: '审核通过' }], items: [] },
@@ -3502,8 +3497,8 @@
     { id: 8, name: '周年庆转盘抽奖', timeRange: { start: '2026-07-15 00:00', end: '2026-07-25 23:59' }, createdAt: '2026-07-10 10:00', createdBy: '运营专员', status: 'active', rule: '周年庆转盘抽奖活动', channel: ['支付宝小程序', 'APP'], payType: '贝壳', source: '繁星-三亚国际免税城', memberDiscount: { normal: 100, silver: 100, gold: 100, platinum: 100, diamond: 100 }, accountType: '非主营业务', budgetLimit: 100000, actualCost: 6000, actualRevenue: 6000, costShare: { type: '混合分摊', platform: 20, store: 40, brand: 40 }, revenueShare: { type: '混合分摊', platform: 20, store: 40, brand: 40 }, auditLogs: [{ time: '2026-07-10 16:30', auditor: '管理员B', action: '审核通过' }], items: [] },
     { id: 9, name: '七夕情人节活动', timeRange: { start: '2026-08-01 10:00', end: '2026-08-07 23:59' }, createdAt: '2026-07-30 15:30', createdBy: '运营专员', status: 'pending', rule: '情人节限定礼品兑换', channel: ['APP', '微信小程序', 'H5'], payType: '积分', source: '千帆', memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 300000, actualCost: 0, actualRevenue: 0, costShare: { type: '平台全额' }, revenueShare: { type: '平台全额' }, auditLogs: [],
       items: [
-        { prizeId: 'PRIZE-0019', name: '限定款情侣对戒', type: '实物礼品', price: 9999, stock: 30, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['节日活动', '限时'] },
-        { prizeId: 'PRIZE-0020', name: '迪奥真我香水 50ml', type: '实物礼品', price: 8500, stock: 50, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['节日活动'] },
+        { prizeId: 'PRIZE-0019', name: '限定款情侣对戒', type: '实物礼品', price: 9999, stock: 30, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['节日活动', '限时'] },
+        { prizeId: 'PRIZE-0020', name: '迪奥真我香水 50ml', type: '实物礼品', price: 8500, stock: 50, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['节日活动'] },
       ]
     },
     { id: 10, name: '八月会员日活动', timeRange: { start: '2026-08-08 00:00', end: '2026-08-08 23:59' }, createdAt: '2026-07-31 09:00', createdBy: '运营专员', status: 'pending', rule: '会员日专享折扣', channel: ['APP'], payType: '贝壳', source: '繁星-三亚国际免税城', memberDiscount: { normal: 100, silver: 90, gold: 80, platinum: 70, diamond: 60 }, accountType: '主营业务', budgetLimit: 150000, actualCost: 0, actualRevenue: 0, costShare: { type: '混合分摊', platform: 30, store: 40, brand: 30 }, revenueShare: { type: '混合分成', platform: 30, store: 40, brand: 30 }, auditLogs: [], items: [] },
@@ -3748,7 +3743,7 @@
   function renderConfigItems(a) {
     const tbody = document.getElementById('configItemBody');
     if (!a.items || a.items.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;color:var(--ink-4);padding:40px 0;">暂无数据</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:var(--ink-4);padding:40px 0;">暂无数据</td></tr>';
       return;
     }
     tbody.innerHTML = a.items.map((item, idx) => {
@@ -3756,7 +3751,6 @@
       const monthLimit = item.monthLimit !== undefined ? item.monthLimit : -1;
       const dayLimit = item.dayLimit !== undefined ? item.dayLimit : -1;
       const stock = item.stock !== undefined ? item.stock : -1;
-      const dailyStock = item.dailyStock !== undefined ? item.dailyStock : -1;
       // 匹配奖品仓库获取剩余库存
       var matchedProd = allProducts.find(function(prod) { return prod.name === item.name; });
       var warehouseStock = matchedProd ? (matchedProd.stock === -1 ? '不限' : matchedProd.stock) : '不限';
@@ -3784,7 +3778,6 @@
         '<td><input class="form-control" type="number" value="' + monthLimit + '" style="font-size:13px;padding:4px 8px;height:28px;width:70px;" placeholder="-1不限" onblur="updateItemLimit(' + a.id + ',' + idx + ',\'monthLimit\',this.value)"></td>' +
         '<td><input class="form-control" type="number" value="' + dayLimit + '" style="font-size:13px;padding:4px 8px;height:28px;width:70px;" placeholder="-1不限" onblur="updateItemLimit(' + a.id + ',' + idx + ',\'dayLimit\',this.value)"></td>' +
         '<td><div style="display:flex;flex-direction:column;gap:2px;"><input class="form-control" type="text" value="' + stock + '" style="font-size:13px;padding:4px 8px;height:28px;width:70px;" placeholder="-1为不限" onblur="updateItemStock(' + a.id + ',' + idx + ',this.value)"><span style="font-size:11px;color:var(--ink-4);">仓库: ' + warehouseStock + '</span></div></td>' +
-        '<td><input class="form-control" type="number" value="' + dailyStock + '" style="font-size:13px;padding:4px 8px;height:28px;width:70px;" placeholder="-1为不限" onblur="updateItemDailyStock(' + a.id + ',' + idx + ',this.value)"></td>' +
         '<td class="td-actions"><button class="btn btn-danger btn-sm" onclick="removeActivityItem(' + a.id + ',' + idx + ')">移除</button></td>' +
       '</tr>';
     }).join('');
@@ -3865,12 +3858,6 @@
     a.items[itemIdx].stock = parseInt(value) || -1;
   }
 
-  function updateItemDailyStock(activityId, itemIdx, value) {
-    const a = allActivities.find(x => x.id === activityId);
-    if (!a || !a.items[itemIdx]) return;
-    a.items[itemIdx].dailyStock = parseInt(value) || -1;
-  }
-
   function toggleItemTag(activityId, itemIdx, tag, checked) {
     const a = allActivities.find(x => x.id === activityId);
     if (!a || !a.items[itemIdx]) return;
@@ -3931,7 +3918,7 @@
       // 避免重复添加
       const exists = a.items.some(item => item.name === name);
       if (!exists) {
-        a.items.push({ prizeId, name, type: prizeType, price: 0, stock: -1, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1 });
+        a.items.push({ prizeId, name, type: prizeType, price: 0, stock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1 });
         addedCount++;
       }
     });
