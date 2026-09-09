@@ -609,7 +609,7 @@
           兑换管理
         </div>
         <div class="nav-children open" id="navChildrenExchange">
-          <div class="nav-child" onclick="switchPanel('products', this)">
+          <div class="nav-child active" onclick="switchPanel('products', this)">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
             奖品仓库
           </div>
@@ -621,7 +621,7 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
             页面运营
           </div>
-          <div class="nav-child active" onclick="switchPanel('orders', this)">
+          <div class="nav-child" onclick="switchPanel('orders', this)">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 01-8 0"></path></svg>
             兑换订单
           </div>
@@ -639,8 +639,8 @@
     <header class="header">
       <div class="header-left">
         <div>
-          <div class="header-title" id="pageTitle">兑换订单</div>
-          <div class="header-breadcrumb"><span id="breadcrumb">兑换订单</span></div>
+          <div class="header-title" id="pageTitle">奖品仓库</div>
+          <div class="header-breadcrumb"><span id="breadcrumb">奖品仓库</span></div>
         </div>
       </div>
       <div class="header-right">
@@ -655,7 +655,7 @@
     <div class="content">
 
       <!-- ========== 2. 商品列表 ========== -->
-      <div class="panel" id="panel-products">
+      <div class="panel active" id="panel-products">
         <!-- Tab navigation -->
         
 
@@ -734,8 +734,9 @@
             <img class="td-img" src="assets/product-1.jpg" alt="雅诗兰黛持妆粉底液 30ml" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2736%27 height=%2736%27%3E%3Crect fill=%27%23f0e6d6%27 width=%2736%27 height=%2736%27 rx=%276%27/%3E%3C/svg%3E'">
             <div>
               <div style="font-weight:500;font-size:13px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">雅诗兰黛持妆粉底液 30ml</div>
-              <div style="display:flex;align-items:center;gap:6px;margin-top:3px;">
+              <div style="display:flex;align-items:center;gap:6px;margin-top:3px;flex-wrap:wrap;">
                 <span style="font-size:11px;color:var(--ink-4);font-family:monospace;">PRIZE-0001</span>
+                <span style="font-size:11px;color:var(--ink-4);">EOP大码: C117418</span>
               </div>
             </div>
           </div>
@@ -769,8 +770,9 @@
             <img class="td-img" src="assets/product-2.jpg" alt="兰蔻小黑瓶精华肌底液 20ml" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2736%27 height=%2736%27%3E%3Crect fill=%27%23f0e6d6%27 width=%2736%27 height=%2736%27 rx=%276%27/%3E%3C/svg%3E'">
             <div>
               <div style="font-weight:500;font-size:13px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">兰蔻小黑瓶精华肌底液 20ml</div>
-              <div style="display:flex;align-items:center;gap:6px;margin-top:3px;">
+              <div style="display:flex;align-items:center;gap:6px;margin-top:3px;flex-wrap:wrap;">
                 <span style="font-size:11px;color:var(--ink-4);font-family:monospace;">PRIZE-0002</span>
+                
               </div>
             </div>
           </div>
@@ -804,8 +806,9 @@
             <img class="td-img" src="assets/product-3.jpg" alt="三亚免税城 SPA 美容服务体验券" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2736%27 height=%2736%27%3E%3Crect fill=%27%23f0e6d6%27 width=%2736%27 height=%2736%27 rx=%276%27/%3E%3C/svg%3E'">
             <div>
               <div style="font-weight:500;font-size:13px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">三亚免税城 SPA 美容服务体验券</div>
-              <div style="display:flex;align-items:center;gap:6px;margin-top:3px;">
+              <div style="display:flex;align-items:center;gap:6px;margin-top:3px;flex-wrap:wrap;">
                 <span style="font-size:11px;color:var(--ink-4);font-family:monospace;">PRIZE-0003</span>
+                
               </div>
             </div>
           </div>
@@ -839,8 +842,9 @@
             <img class="td-img" src="assets/product-4.jpg" alt="资生堂红腰子精华 50ml" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2736%27 height=%2736%27%3E%3Crect fill=%27%23f0e6d6%27 width=%2736%27 height=%2736%27 rx=%276%27/%3E%3C/svg%3E'">
             <div>
               <div style="font-weight:500;font-size:13px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">资生堂红腰子精华 50ml</div>
-              <div style="display:flex;align-items:center;gap:6px;margin-top:3px;">
+              <div style="display:flex;align-items:center;gap:6px;margin-top:3px;flex-wrap:wrap;">
                 <span style="font-size:11px;color:var(--ink-4);font-family:monospace;">PRIZE-0004</span>
+                <span style="font-size:11px;color:var(--ink-4);">EOP大码: C203567</span>
               </div>
             </div>
           </div>
@@ -874,8 +878,9 @@
             <img class="td-img" src="assets/product-5.jpg" alt="转盘抽奖机会 × 3" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2736%27 height=%2736%27%3E%3Crect fill=%27%23f0e6d6%27 width=%2736%27 height=%2736%27 rx=%276%27/%3E%3C/svg%3E'">
             <div>
               <div style="font-weight:500;font-size:13px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">转盘抽奖机会 × 3</div>
-              <div style="display:flex;align-items:center;gap:6px;margin-top:3px;">
+              <div style="display:flex;align-items:center;gap:6px;margin-top:3px;flex-wrap:wrap;">
                 <span style="font-size:11px;color:var(--ink-4);font-family:monospace;">PRIZE-0005</span>
+                
               </div>
             </div>
           </div>
@@ -909,8 +914,9 @@
             <img class="td-img" src="assets/product-6.jpg" alt="SK-II 神仙水 230ml" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2736%27 height=%2736%27%3E%3Crect fill=%27%23f0e6d6%27 width=%2736%27 height=%2736%27 rx=%276%27/%3E%3C/svg%3E'">
             <div>
               <div style="font-weight:500;font-size:13px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">SK-II 神仙水 230ml</div>
-              <div style="display:flex;align-items:center;gap:6px;margin-top:3px;">
+              <div style="display:flex;align-items:center;gap:6px;margin-top:3px;flex-wrap:wrap;">
                 <span style="font-size:11px;color:var(--ink-4);font-family:monospace;">PRIZE-0006</span>
+                <span style="font-size:11px;color:var(--ink-4);">EOP大码: C118902</span>
               </div>
             </div>
           </div>
@@ -944,8 +950,9 @@
             <img class="td-img" src="assets/product-7.jpg" alt="迪奥口红礼盒套装" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2736%27 height=%2736%27%3E%3Crect fill=%27%23f0e6d6%27 width=%2736%27 height=%2736%27 rx=%276%27/%3E%3C/svg%3E'">
             <div>
               <div style="font-weight:500;font-size:13px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">迪奥口红礼盒套装</div>
-              <div style="display:flex;align-items:center;gap:6px;margin-top:3px;">
+              <div style="display:flex;align-items:center;gap:6px;margin-top:3px;flex-wrap:wrap;">
                 <span style="font-size:11px;color:var(--ink-4);font-family:monospace;">PRIZE-0007</span>
+                
               </div>
             </div>
           </div>
@@ -979,8 +986,9 @@
             <img class="td-img" src="assets/product-8.jpg" alt="中免海南限定化妆包" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2736%27 height=%2736%27%3E%3Crect fill=%27%23f0e6d6%27 width=%2736%27 height=%2736%27 rx=%276%27/%3E%3C/svg%3E'">
             <div>
               <div style="font-weight:500;font-size:13px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">中免海南限定化妆包</div>
-              <div style="display:flex;align-items:center;gap:6px;margin-top:3px;">
+              <div style="display:flex;align-items:center;gap:6px;margin-top:3px;flex-wrap:wrap;">
                 <span style="font-size:11px;color:var(--ink-4);font-family:monospace;">PRIZE-0008</span>
+                
               </div>
             </div>
           </div>
@@ -1014,8 +1022,9 @@
             <img class="td-img" src="assets/product-9.jpg" alt="三亚机场贵宾室服务券" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2736%27 height=%2736%27%3E%3Crect fill=%27%23f0e6d6%27 width=%2736%27 height=%2736%27 rx=%276%27/%3E%3C/svg%3E'">
             <div>
               <div style="font-weight:500;font-size:13px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">三亚机场贵宾室服务券</div>
-              <div style="display:flex;align-items:center;gap:6px;margin-top:3px;">
+              <div style="display:flex;align-items:center;gap:6px;margin-top:3px;flex-wrap:wrap;">
                 <span style="font-size:11px;color:var(--ink-4);font-family:monospace;">PRIZE-0009</span>
+                
               </div>
             </div>
           </div>
@@ -1049,8 +1058,9 @@
             <img class="td-img" src="assets/product-10.jpg" alt="转盘抽奖机会 × 5" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2736%27 height=%2736%27%3E%3Crect fill=%27%23f0e6d6%27 width=%2736%27 height=%2736%27 rx=%276%27/%3E%3C/svg%3E'">
             <div>
               <div style="font-weight:500;font-size:13px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">转盘抽奖机会 × 5</div>
-              <div style="display:flex;align-items:center;gap:6px;margin-top:3px;">
+              <div style="display:flex;align-items:center;gap:6px;margin-top:3px;flex-wrap:wrap;">
                 <span style="font-size:11px;color:var(--ink-4);font-family:monospace;">PRIZE-0010</span>
+                
               </div>
             </div>
           </div>
@@ -1392,7 +1402,7 @@
       </div>
 
       <!-- ========== 3. 兑换订单 ========== -->
-      <div class="panel active" id="panel-orders">
+      <div class="panel" id="panel-orders">
         <!-- Tab navigation -->
         <div style="display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:16px;">
           <button class="tab-btn active" onclick="switchOrderTab('orders', this)" style="padding:10px 24px;font-size:14px;font-weight:500;border:none;background:transparent;cursor:pointer;border-bottom:2px solid var(--primary);color:var(--primary);">兑换订单</button>
@@ -2287,6 +2297,7 @@
               <th style="width:90px;">月限/人</th>
               <th style="width:90px;">日限/人</th>
               <th style="width:90px;">活动库存</th>
+              <th style="width:90px;">每日库存</th>
               <th style="width:60px;">操作</th>
             </tr>
           </thead>
@@ -2444,7 +2455,7 @@
 
 
 <!-- ===== 商品编辑弹窗 ===== -->
-<div class="modal-mask" id="productModal">
+<div class="modal-mask show" id="productModal">
   <div class="modal" style="width:760px;">
     <div class="modal-header">
       <div class="modal-title" id="modalTitle">新增奖品</div>
@@ -2479,14 +2490,12 @@
           </div>
           <div class="form-group" id="usageSceneGroup">
             <label class="form-label">使用场景<span class="required">*</span></label>
-            <div class="checkbox-group" id="usageSceneCheckboxes">
-              <!-- dynamically populated -->
-            </div>
+            <div class="checkbox-group" id="usageSceneCheckboxes"><label><input type="checkbox" name="f_usageScene" value="兑换中心"> 兑换中心</label><label style="color:var(--ink-4);cursor:not-allowed;"><input type="checkbox" name="f_usageScene" value="签到" disabled=""> 签到</label><label style="color:var(--ink-4);cursor:not-allowed;"><input type="checkbox" name="f_usageScene" value="任务" disabled=""> 任务</label><label style="color:var(--ink-4);cursor:not-allowed;"><input type="checkbox" name="f_usageScene" value="转盘抽奖" disabled=""> 转盘抽奖</label></div>
           </div>
           <div class="form-group">
             <label class="form-label">关联奖品<span class="required" id="relatedPrize-required" style="display:none;">*</span></label>
             <div style="position:relative;" id="f_relatedPrizeWrapper">
-              <input type="hidden" id="f_relatedPrize">
+              <div class="search-select-wrapper" style="width: 100%;"><input type="text" class="search-select-input" placeholder="搜索并选择关联奖品" style="width: 100%;"><div class="search-select-dropdown"></div><input type="hidden" id="f_relatedPrize" style="display: none;"></div>
             </div>
           </div>
           <div class="form-group">
@@ -2505,7 +2514,7 @@
 
         <div class="form-section-title">库存及兑换规则</div>
         <div class="form-grid">
-          <div class="form-group full" style="display:none;" id="deadlineGroup">
+          <div class="form-group full" style="" id="deadlineGroup">
             <label class="form-label">有效期</label>
             <div class="validity-box">
               <div class="validity-tabs">
@@ -2516,10 +2525,14 @@
               <input class="form-control" id="f_deadlineDate" type="date" style="display:none;">
             </div>
           </div>
-          <div class="full" style="display:flex;gap:16px;width:100%;">
+          <div class="full" style="display: flex; gap: 16px; width: 100%; position: relative;">
             <div class="form-group" style="flex:1;">
               <label class="form-label">奖品总库存<span class="required">*</span></label>
               <input class="form-control" id="f_stock" type="number" value="-1" placeholder="-1 表示不限">
+            </div>
+            <div class="form-group" style="flex:1;">
+              <label class="form-label">每日库存</label>
+              <input class="form-control" id="f_dailyStock" type="number" value="-1" placeholder="-1 表示不限">
             </div>
             <div class="form-group" style="flex:1;">
               <label class="form-label">每月兑换次数上限/人<span class="required" id="monthLimit-required" style="display:none;">*</span></label>
@@ -2534,7 +2547,7 @@
               <input class="form-control" id="f_welfarePoints" type="number" placeholder="请输入消耗福利值" disabled="">
             </div>
           </div>
-          <div class="form-group full" id="channelGroup" style="display:none;">
+          <div class="form-group full" id="channelGroup" style="">
             <label class="form-label">适用门店</label>
             <select class="form-control form-select" id="f_channel">
               <option value="cdf中免海南">cdf中免海南</option>
@@ -2639,7 +2652,7 @@
 </div>
 
 <!-- 批量导入物流弹窗 -->
-<div class="modal-mask show" id="batchExpressModal" onclick="closeModal('batchExpressModal')">
+<div class="modal-mask" id="batchExpressModal" onclick="closeModal('batchExpressModal')">
   <div class="modal" style="max-width:720px;" onclick="event.stopPropagation()">
     <div class="modal-header">
       <div class="modal-title">批量导入物流单号</div>
@@ -2805,16 +2818,16 @@
 <script>
   // ===== 商品数据 =====
   const allProducts = [
-    { id: 1, prizeId: 'PRIZE-0001', name: '雅诗兰黛持妆粉底液 30ml', desc: '到店兑换券', sku: 'EX-CDF-001', category: '香水化妆品', tag: '香水化妆品', type: '实物', original: 880, value: 880, img: 'assets/product-1.jpg', channel: '三亚国际免税城', relatedPrize: '', stock: 25, totalStock: 100, deadlineType: 'days', deadlineValue: 30, status: '启用', prizeType: '实物礼品', usageScene: ['兑换中心'], exchangeRule: '到店出示兑换码即可领取', eopLianyingDaMa: 'C117418'},
-    { id: 2, prizeId: 'PRIZE-0002', name: '兰蔻小黑瓶精华肌底液 20ml', desc: '到店核销券', sku: 'EX-CDF-002', category: '香水化妆品', tag: '香水化妆品', type: '实物', original: 1280, value: 1280, img: 'assets/product-2.jpg', channel: '海口国际免税城', relatedPrize: '', stock: 12, totalStock: 50, deadlineType: 'days', deadlineValue: 15, status: '启用', prizeType: '实物礼品', usageScene: ['兑换中心'], exchangeRule: '限海口国际免税城门店兑换', eopLianyingDaMa: ''},
-    { id: 3, prizeId: 'PRIZE-0003', name: '三亚免税城 SPA 美容服务体验券', desc: '到店核销', sku: 'EX-CDF-003', category: '电子券', tag: '电子券', type: '虚拟', original: 680, img: 'assets/product-3.jpg', channel: 'cdf中免海南', relatedPrize: '夏日狂欢预约抽奖活动', stock: 100, totalStock: 200, deadlineType: 'days', deadlineValue: 90, status: '启用', prizeType: '预约抽奖', usageScene: ['兑换中心', '签到'], exchangeRule: '预约后到店体验', eopLianyingDaMa: ''},
-    { id: 4, prizeId: 'PRIZE-0004', name: '资生堂红腰子精华 50ml', desc: '到店核销券', sku: 'EX-CDF-004', category: '香水化妆品', tag: '香水化妆品', type: '实物', original: 980, value: 1500, img: 'assets/product-4.jpg', channel: '博鳌免税店', relatedPrize: '', stock: 8, totalStock: 60, deadlineType: 'date', deadlineValue: '2026-12-31', status: '停用', prizeType: '实物礼品', usageScene: ['兑换中心'], exchangeRule: '博鳌免税店专属兑换', eopLianyingDaMa: 'C203567'},
-    { id: 5, prizeId: 'PRIZE-0005', name: '转盘抽奖机会 × 3', desc: '三亚国免', sku: 'EX-CDF-005', category: '虚拟权益', tag: '虚拟权益', type: '虚拟', original: 0, img: 'assets/product-5.jpg', channel: 'cdf中免海南', relatedPrize: '每日签到转盘抽奖活动', stock: 500, totalStock: 1000, deadlineType: 'days', deadlineValue: 7, status: '启用', prizeType: '转盘抽奖', usageScene: ['转盘抽奖'], exchangeRule: '转盘抽奖获得，自动发放至账户', eopLianyingDaMa: ''},
-    { id: 6, prizeId: 'PRIZE-0006', name: 'SK-II 神仙水 230ml', desc: '门店兑换券', sku: 'EX-CDF-006', category: '香水化妆品', tag: '香水化妆品', type: '实物', original: 1880, value: 1980, img: 'assets/product-6.jpg', channel: '海口国际免税城', relatedPrize: '', stock: 3, totalStock: 30, deadlineType: 'days', deadlineValue: 60, status: '启用', prizeType: '实物礼品', usageScene: ['兑换中心'], exchangeRule: '限量兑换，每人限1份', eopLianyingDaMa: 'C118902'},
-    { id: 7, prizeId: 'PRIZE-0007', name: '迪奥口红礼盒套装', desc: '限量典藏版', sku: 'EX-CDF-007', category: '香水化妆品', tag: '香水化妆品', type: '实物', original: 480, value: 480, img: 'assets/product-7.jpg', channel: '三亚凤凰机场店', relatedPrize: '', stock: 15, totalStock: 80, deadlineType: 'days', deadlineValue: 45, status: '启用', prizeType: '实物礼品', usageScene: ['兑换中心'], exchangeRule: '机场店离岛前兑换', eopLianyingDaMa: ''},
-    { id: 8, prizeId: 'PRIZE-0008', name: '中免海南限定化妆包', desc: '海星主题', sku: 'EX-CDF-008', category: '香水化妆品', tag: '香水化妆品', type: '实物', original: 280, value: 280, img: 'assets/product-8.jpg', channel: '海口美兰机场店', relatedPrize: '', stock: 60, totalStock: 150, deadlineType: 'days', deadlineValue: -1, status: '启用', prizeType: '实物礼品', usageScene: ['兑换中心'], exchangeRule: '不限期兑换', eopLianyingDaMa: ''},
-    { id: 9, prizeId: 'PRIZE-0009', name: '三亚机场贵宾室服务券', desc: '电子权益', sku: 'EX-CDF-009', category: '电子券', tag: '电子券', type: '虚拟', original: 350, img: 'assets/product-9.jpg', channel: 'cdf中免海南', relatedPrize: '会员专属预约抽奖活动', stock: 40, totalStock: 80, deadlineType: 'days', deadlineValue: 30, status: '停用', prizeType: '预约抽奖', usageScene: ['兑换中心', '签到'], exchangeRule: '预约成功后凭券进入贵宾室', eopLianyingDaMa: ''},
-    { id: 10, prizeId: 'PRIZE-0010', name: '转盘抽奖机会 × 5', desc: '福利转盘', sku: 'EX-CDF-010', category: '虚拟权益', tag: '虚拟权益', type: '虚拟', original: 0, img: 'assets/product-10.jpg', channel: 'cdf中免海南', relatedPrize: '周年庆转盘抽奖活动', stock: -1, totalStock: -1, deadlineType: 'days', deadlineValue: -1, status: '启用', prizeType: '转盘抽奖', usageScene: ['转盘抽奖'], exchangeRule: '每日签到可获得转盘机会', eopLianyingDaMa: ''}
+    { id: 1, prizeId: 'PRIZE-0001', name: '雅诗兰黛持妆粉底液 30ml', desc: '到店兑换券', sku: 'EX-CDF-001', category: '香水化妆品', tag: '香水化妆品', type: '实物', original: 880, value: 880, img: 'assets/product-1.jpg', channel: '三亚国际免税城', relatedPrize: '', stock: 25, totalStock: 100, dailyStock: -1, deadlineType: 'days', deadlineValue: 30, status: '启用', prizeType: '实物礼品', usageScene: ['兑换中心'], exchangeRule: '到店出示兑换码即可领取', eopLianyingDaMa: 'C117418'},
+    { id: 2, prizeId: 'PRIZE-0002', name: '兰蔻小黑瓶精华肌底液 20ml', desc: '到店核销券', sku: 'EX-CDF-002', category: '香水化妆品', tag: '香水化妆品', type: '实物', original: 1280, value: 1280, img: 'assets/product-2.jpg', channel: '海口国际免税城', relatedPrize: '', stock: 12, totalStock: 50, dailyStock: -1, deadlineType: 'days', deadlineValue: 15, status: '启用', prizeType: '实物礼品', usageScene: ['兑换中心'], exchangeRule: '限海口国际免税城门店兑换', eopLianyingDaMa: ''},
+    { id: 3, prizeId: 'PRIZE-0003', name: '三亚免税城 SPA 美容服务体验券', desc: '到店核销', sku: 'EX-CDF-003', category: '电子券', tag: '电子券', type: '虚拟', original: 680, img: 'assets/product-3.jpg', channel: 'cdf中免海南', relatedPrize: '夏日狂欢预约抽奖活动', stock: 100, totalStock: 200, dailyStock: -1, deadlineType: 'days', deadlineValue: 90, status: '启用', prizeType: '预约抽奖', usageScene: ['兑换中心', '签到'], exchangeRule: '预约后到店体验', eopLianyingDaMa: ''},
+    { id: 4, prizeId: 'PRIZE-0004', name: '资生堂红腰子精华 50ml', desc: '到店核销券', sku: 'EX-CDF-004', category: '香水化妆品', tag: '香水化妆品', type: '实物', original: 980, value: 1500, img: 'assets/product-4.jpg', channel: '博鳌免税店', relatedPrize: '', stock: 8, totalStock: 60, dailyStock: -1, deadlineType: 'date', deadlineValue: '2026-12-31', status: '停用', prizeType: '实物礼品', usageScene: ['兑换中心'], exchangeRule: '博鳌免税店专属兑换', eopLianyingDaMa: 'C203567'},
+    { id: 5, prizeId: 'PRIZE-0005', name: '转盘抽奖机会 × 3', desc: '三亚国免', sku: 'EX-CDF-005', category: '虚拟权益', tag: '虚拟权益', type: '虚拟', original: 0, img: 'assets/product-5.jpg', channel: 'cdf中免海南', relatedPrize: '每日签到转盘抽奖活动', stock: 500, totalStock: 1000, dailyStock: -1, deadlineType: 'days', deadlineValue: 7, status: '启用', prizeType: '转盘抽奖', usageScene: ['转盘抽奖'], exchangeRule: '转盘抽奖获得，自动发放至账户', eopLianyingDaMa: ''},
+    { id: 6, prizeId: 'PRIZE-0006', name: 'SK-II 神仙水 230ml', desc: '门店兑换券', sku: 'EX-CDF-006', category: '香水化妆品', tag: '香水化妆品', type: '实物', original: 1880, value: 1980, img: 'assets/product-6.jpg', channel: '海口国际免税城', relatedPrize: '', stock: 3, totalStock: 30, dailyStock: -1, deadlineType: 'days', deadlineValue: 60, status: '启用', prizeType: '实物礼品', usageScene: ['兑换中心'], exchangeRule: '限量兑换，每人限1份', eopLianyingDaMa: 'C118902'},
+    { id: 7, prizeId: 'PRIZE-0007', name: '迪奥口红礼盒套装', desc: '限量典藏版', sku: 'EX-CDF-007', category: '香水化妆品', tag: '香水化妆品', type: '实物', original: 480, value: 480, img: 'assets/product-7.jpg', channel: '三亚凤凰机场店', relatedPrize: '', stock: 15, totalStock: 80, dailyStock: -1, deadlineType: 'days', deadlineValue: 45, status: '启用', prizeType: '实物礼品', usageScene: ['兑换中心'], exchangeRule: '机场店离岛前兑换', eopLianyingDaMa: ''},
+    { id: 8, prizeId: 'PRIZE-0008', name: '中免海南限定化妆包', desc: '海星主题', sku: 'EX-CDF-008', category: '香水化妆品', tag: '香水化妆品', type: '实物', original: 280, value: 280, img: 'assets/product-8.jpg', channel: '海口美兰机场店', relatedPrize: '', stock: 60, totalStock: 150, dailyStock: -1, deadlineType: 'days', deadlineValue: -1, status: '启用', prizeType: '实物礼品', usageScene: ['兑换中心'], exchangeRule: '不限期兑换', eopLianyingDaMa: ''},
+    { id: 9, prizeId: 'PRIZE-0009', name: '三亚机场贵宾室服务券', desc: '电子权益', sku: 'EX-CDF-009', category: '电子券', tag: '电子券', type: '虚拟', original: 350, img: 'assets/product-9.jpg', channel: 'cdf中免海南', relatedPrize: '会员专属预约抽奖活动', stock: 40, totalStock: 80, dailyStock: -1, deadlineType: 'days', deadlineValue: 30, status: '停用', prizeType: '预约抽奖', usageScene: ['兑换中心', '签到'], exchangeRule: '预约成功后凭券进入贵宾室', eopLianyingDaMa: ''},
+    { id: 10, prizeId: 'PRIZE-0010', name: '转盘抽奖机会 × 5', desc: '福利转盘', sku: 'EX-CDF-010', category: '虚拟权益', tag: '虚拟权益', type: '虚拟', original: 0, img: 'assets/product-10.jpg', channel: 'cdf中免海南', relatedPrize: '周年庆转盘抽奖活动', stock: -1, totalStock: -1, dailyStock: -1, deadlineType: 'days', deadlineValue: -1, status: '启用', prizeType: '转盘抽奖', usageScene: ['转盘抽奖'], exchangeRule: '每日签到可获得转盘机会', eopLianyingDaMa: ''}
   ];
 
   // ===== 面板切换 =====
@@ -3101,6 +3114,7 @@
       document.getElementById('f_desc').value = p.desc || '';
       document.getElementById('f_exchangeRule').value = p.exchangeRule || '';
       document.getElementById('f_stock').value = p.stock !== undefined ? p.stock : '';
+      document.getElementById('f_dailyStock').value = p.dailyStock !== undefined ? p.dailyStock : -1;
       document.getElementById('f_value').value = p.value || '';
       document.getElementById('f_eopLianyingDaMa').value = p.eopLianyingDaMa || '';
       document.getElementById('f_welfarePoints').value = p.welfarePoints || '';
@@ -3122,6 +3136,7 @@
       document.getElementById('f_prizeType').value = '实物礼品';
       renderUsageSceneCheckboxes([]);
       document.getElementById('f_stock').value = -1;
+      document.getElementById('f_dailyStock').value = -1;
       document.getElementById('f_deadlineDays').value = -1;
       document.getElementById('f_deadlineDate').value = '';
       document.getElementById('f_value').value = '';
@@ -3213,6 +3228,7 @@
       showToast('请选择关联奖品', 'warning'); return;
     }
     const stock = parseInt(stockVal);
+    const dailyStock = parseInt(document.getElementById('f_dailyStock').value) || -1;
     const channel = document.getElementById('f_channel').value;
     var welfarePoints = document.getElementById('f_welfarePoints') ? parseInt(document.getElementById('f_welfarePoints').value) || 0 : 0;
     var monthLimit = document.getElementById('f_monthLimit') ? parseInt(document.getElementById('f_monthLimit').value) || -1 : -1;
@@ -3227,6 +3243,7 @@
       exchangeRule: document.getElementById('f_exchangeRule').value,
       stock,
       totalStock: stock,
+      dailyStock,
       status: '启用',
       channel,
       deadlineType: document.querySelector('input[name="f_deadlineType"]:checked')?.value || 'days',
@@ -3447,37 +3464,37 @@
   const allActivities = [
     { id: 1, name: '夏日狂欢兑换活动', timeRange: { start: '2026-07-19 10:00', end: '2026-07-25 23:59' }, createdAt: '2026-07-18 14:30', createdBy: '管理员', status: 'active', rule: '每人每场限兑2件', channel: ['APP', '微信小程序'], payType: '积分', source: '千帆', memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 500000, actualCost: 149600, actualRevenue: 149600, costShare: { type: '混合分摊', platform: 20, store: 50, brand: 30 }, revenueShare: { type: '平台全额' }, auditLogs: [{ time: '2026-07-18 15:20', auditor: '管理员A', action: '审核通过' }],
       items: [
-        { prizeId: 'PRIZE-0001', name: '雅诗兰黛粉底液 30ml', type: '实物礼品', price: 8800, stock: 50, exchanged: 12, monthLimit: -1, dayLimit: -1, tags: ['限时', '会员专属'] },
-        { prizeId: 'PRIZE-0011', name: 'CDF 100元代金券', type: '优惠券-优选单券', price: 500, stock: -1, exchanged: 67, monthLimit: -1, dayLimit: -1, tags: ['限时'] },
-        { prizeId: 'PRIZE-0012', name: '海南免税95折券', type: '优惠券-券中心', price: 350, stock: 300, exchanged: 120, monthLimit: -1, dayLimit: -1, tags: ['节日活动'] },
-        { prizeId: 'PRIZE-0008', name: '中免海南限定化妆包', type: '实物礼品', price: 2800, stock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['品牌联合'] },
+        { prizeId: 'PRIZE-0001', name: '雅诗兰黛粉底液 30ml', type: '实物礼品', price: 8800, stock: 50, dailyStock: -1, exchanged: 12, monthLimit: -1, dayLimit: -1, tags: ['限时', '会员专属'] },
+        { prizeId: 'PRIZE-0011', name: 'CDF 100元代金券', type: '优惠券-优选单券', price: 500, stock: -1, dailyStock: -1, exchanged: 67, monthLimit: -1, dayLimit: -1, tags: ['限时'] },
+        { prizeId: 'PRIZE-0012', name: '海南免税95折券', type: '优惠券-券中心', price: 350, stock: 300, dailyStock: -1, exchanged: 120, monthLimit: -1, dayLimit: -1, tags: ['节日活动'] },
+        { prizeId: 'PRIZE-0008', name: '中免海南限定化妆包', type: '实物礼品', price: 2800, stock: -1, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['品牌联合'] },
       ]
     },
     { id: 2, name: '会员专属兑换活动', timeRange: { start: '2026-07-20 10:00', end: '2026-07-27 23:59' }, createdAt: '2026-07-19 09:00', createdBy: '管理员', status: 'active', rule: '仅限银卡及以上会员参与', channel: ['APP', 'H5'], payType: '贝壳', source: '千帆', memberDiscount: { normal: 100, silver: 90, gold: 85, platinum: 80, diamond: 75 }, accountType: '主营业务', budgetLimit: 300000, actualCost: 0, actualRevenue: 0, costShare: { type: '平台全额' }, revenueShare: { type: '平台全额' }, auditLogs: [{ time: '2026-07-19 10:15', auditor: '运营专员', action: '审核通过' }],
       items: [
-        { prizeId: 'PRIZE-0006', name: 'SK-II 神仙水 230ml', type: '实物礼品', price: 12000, stock: 40, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['会员专属'] },
-        { prizeId: 'PRIZE-0013', name: 'CDF 200元代金券', type: '优惠券-优选单券', price: 1000, stock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['会员专属', '满减活动'] },
-        { prizeId: 'PRIZE-0014', name: '免税店专属折扣券', type: '优惠券-券中心', price: 80, stock: 500, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['满减活动'] },
+        { prizeId: 'PRIZE-0006', name: 'SK-II 神仙水 230ml', type: '实物礼品', price: 12000, stock: 40, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['会员专属'] },
+        { prizeId: 'PRIZE-0013', name: 'CDF 200元代金券', type: '优惠券-优选单券', price: 1000, stock: -1, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['会员专属', '满减活动'] },
+        { prizeId: 'PRIZE-0014', name: '免税店专属折扣券', type: '优惠券-券中心', price: 80, stock: 500, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['满减活动'] },
       ]
     },
     { id: 3, name: '限时闪购活动', timeRange: { start: '2026-07-21 10:00', end: '2026-07-23 23:59' }, createdAt: '2026-07-20 11:00', createdBy: '运营专员', status: 'active', rule: '每人每场限兑3件', channel: ['APP'], payType: '积分', source: '繁星-三亚国际免税城', memberDiscount: { normal: 100, silver: 100, gold: 100, platinum: 100, diamond: 100 }, accountType: '非主营业务', budgetLimit: 200000, actualCost: 0, actualRevenue: 0, costShare: { type: '门店全额' }, revenueShare: { type: '门店全额' }, auditLogs: [{ time: '2026-07-20 14:30', auditor: '管理员B', action: '审核通过' }],
       items: [
-        { prizeId: 'PRIZE-0015', name: '资生堂红腰子 75ml', type: '实物礼品', price: 9500, stock: 60, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['限时', '品牌联合'] },
-        { prizeId: 'PRIZE-0007', name: '迪奥口红套装', type: '实物礼品', price: 3500, stock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['限时'] },
-        { prizeId: 'PRIZE-0016', name: '全场通用88折券', type: '优惠券-券中心', price: 200, stock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['限时', '满减活动'] },
+        { prizeId: 'PRIZE-0015', name: '资生堂红腰子 75ml', type: '实物礼品', price: 9500, stock: 60, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['限时', '品牌联合'] },
+        { prizeId: 'PRIZE-0007', name: '迪奥口红套装', type: '实物礼品', price: 3500, stock: -1, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['限时'] },
+        { prizeId: 'PRIZE-0016', name: '全场通用88折券', type: '优惠券-券中心', price: 200, stock: -1, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['限时', '满减活动'] },
       ]
     },
     { id: 4, name: '年中大促活动', timeRange: { start: '2026-07-18 10:00', end: '2026-07-18 23:59' }, createdAt: '2026-07-17 16:00', createdBy: '管理员', status: 'active', rule: '', channel: ['微信小程序', '支付宝小程序', 'H5'], payType: '贝壳', source: '千帆', memberDiscount: { normal: 100, silver: 100, gold: 100, platinum: 100, diamond: 100 }, accountType: '主营业务', budgetLimit: 800000, actualCost: 446700, actualRevenue: 446700, costShare: { type: '混合分摊', platform: 20, store: 40, brand: 40 }, revenueShare: { type: '混合分摊', platform: 20, store: 40, brand: 40 }, auditLogs: [{ time: '2026-07-17 18:00', auditor: '管理员A', action: '审核通过' }],
       items: [
-        { prizeId: 'PRIZE-0017', name: '海蓝之谜面霜 30ml', type: '实物礼品', price: 15000, stock: 20, exchanged: 20, monthLimit: -1, dayLimit: -1, tags: ['节日活动'] },
-        { prizeId: 'PRIZE-0018', name: 'CDF 50元无门槛券', type: '优惠券-优选单券', price: 300, stock: -1, exchanged: 489, monthLimit: -1, dayLimit: -1, tags: ['新人专享'] },
+        { prizeId: 'PRIZE-0017', name: '海蓝之谜面霜 30ml', type: '实物礼品', price: 15000, stock: 20, dailyStock: -1, exchanged: 20, monthLimit: -1, dayLimit: -1, tags: ['节日活动'] },
+        { prizeId: 'PRIZE-0018', name: 'CDF 50元无门槛券', type: '优惠券-优选单券', price: 300, stock: -1, dailyStock: -1, exchanged: 489, monthLimit: -1, dayLimit: -1, tags: ['新人专享'] },
       ]
     },
     { id: 5, name: '春节限时兑换活动', timeRange: { start: '2026-01-20 10:00', end: '2026-02-10 23:59' }, createdAt: '2026-01-15 09:00', createdBy: '管理员', status: 'terminated', rule: '每人每场限兑2件', channel: ['APP', '微信小程序', 'H5'], payType: '积分', source: '千帆', memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 600000, actualCost: 2070000, actualRevenue: 2070000, costShare: { type: '平台全额' }, revenueShare: { type: '平台全额' }, auditLogs: [{ time: '2026-01-15 10:30', auditor: '管理员A', action: '审核通过' }, { time: '2026-02-11 00:00', auditor: '系统', action: '自动终止' }],
       items: [
-        { prizeId: 'PRIZE-0001', name: '雅诗兰黛持妆粉底液 30ml', type: '实物礼品', price: 8800, stock: 100, exchanged: 95, monthLimit: -1, dayLimit: -1 },
-        { prizeId: 'PRIZE-0002', name: '兰蔻小黑瓶精华肌底液 20ml', type: '实物礼品', price: 12800, stock: 50, exchanged: 48, monthLimit: -1, dayLimit: -1 },
-        { prizeId: 'PRIZE-0011', name: 'CDF 100元代金券', type: '优惠券-优选单券', price: 500, stock: 200, exchanged: 200, monthLimit: -1, dayLimit: -1 },
+        { prizeId: 'PRIZE-0001', name: '雅诗兰黛持妆粉底液 30ml', type: '实物礼品', price: 8800, stock: 100, dailyStock: -1, exchanged: 95, monthLimit: -1, dayLimit: -1 },
+        { prizeId: 'PRIZE-0002', name: '兰蔻小黑瓶精华肌底液 20ml', type: '实物礼品', price: 12800, stock: 50, dailyStock: -1, exchanged: 48, monthLimit: -1, dayLimit: -1 },
+        { prizeId: 'PRIZE-0011', name: 'CDF 100元代金券', type: '优惠券-优选单券', price: 500, stock: 200, dailyStock: -1, exchanged: 200, monthLimit: -1, dayLimit: -1 },
       ]
     },
     { id: 6, name: '每日签到', timeRange: { start: '2026-07-01 00:00', end: '2026-07-31 23:59' }, createdAt: '2026-06-28 10:00', createdBy: '管理员', status: 'active', rule: '每日签到获得奖励', channel: ['APP', '微信小程序'], payType: '积分', source: '千帆', memberDiscount: { normal: 100, silver: 100, gold: 100, platinum: 100, diamond: 100 }, accountType: '非主营业务', budgetLimit: 50000, actualCost: 800, actualRevenue: 800, costShare: { type: '平台全额' }, revenueShare: { type: '平台全额' }, auditLogs: [{ time: '2026-06-28 15:00', auditor: '管理员A', action: '审核通过' }], items: [] },
@@ -3485,8 +3502,8 @@
     { id: 8, name: '周年庆转盘抽奖', timeRange: { start: '2026-07-15 00:00', end: '2026-07-25 23:59' }, createdAt: '2026-07-10 10:00', createdBy: '运营专员', status: 'active', rule: '周年庆转盘抽奖活动', channel: ['支付宝小程序', 'APP'], payType: '贝壳', source: '繁星-三亚国际免税城', memberDiscount: { normal: 100, silver: 100, gold: 100, platinum: 100, diamond: 100 }, accountType: '非主营业务', budgetLimit: 100000, actualCost: 6000, actualRevenue: 6000, costShare: { type: '混合分摊', platform: 20, store: 40, brand: 40 }, revenueShare: { type: '混合分摊', platform: 20, store: 40, brand: 40 }, auditLogs: [{ time: '2026-07-10 16:30', auditor: '管理员B', action: '审核通过' }], items: [] },
     { id: 9, name: '七夕情人节活动', timeRange: { start: '2026-08-01 10:00', end: '2026-08-07 23:59' }, createdAt: '2026-07-30 15:30', createdBy: '运营专员', status: 'pending', rule: '情人节限定礼品兑换', channel: ['APP', '微信小程序', 'H5'], payType: '积分', source: '千帆', memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 300000, actualCost: 0, actualRevenue: 0, costShare: { type: '平台全额' }, revenueShare: { type: '平台全额' }, auditLogs: [],
       items: [
-        { prizeId: 'PRIZE-0019', name: '限定款情侣对戒', type: '实物礼品', price: 9999, stock: 30, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['节日活动', '限时'] },
-        { prizeId: 'PRIZE-0020', name: '迪奥真我香水 50ml', type: '实物礼品', price: 8500, stock: 50, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['节日活动'] },
+        { prizeId: 'PRIZE-0019', name: '限定款情侣对戒', type: '实物礼品', price: 9999, stock: 30, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['节日活动', '限时'] },
+        { prizeId: 'PRIZE-0020', name: '迪奥真我香水 50ml', type: '实物礼品', price: 8500, stock: 50, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['节日活动'] },
       ]
     },
     { id: 10, name: '八月会员日活动', timeRange: { start: '2026-08-08 00:00', end: '2026-08-08 23:59' }, createdAt: '2026-07-31 09:00', createdBy: '运营专员', status: 'pending', rule: '会员日专享折扣', channel: ['APP'], payType: '贝壳', source: '繁星-三亚国际免税城', memberDiscount: { normal: 100, silver: 90, gold: 80, platinum: 70, diamond: 60 }, accountType: '主营业务', budgetLimit: 150000, actualCost: 0, actualRevenue: 0, costShare: { type: '混合分摊', platform: 30, store: 40, brand: 30 }, revenueShare: { type: '混合分成', platform: 30, store: 40, brand: 30 }, auditLogs: [], items: [] },
@@ -3731,7 +3748,7 @@
   function renderConfigItems(a) {
     const tbody = document.getElementById('configItemBody');
     if (!a.items || a.items.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:var(--ink-4);padding:40px 0;">暂无数据</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;color:var(--ink-4);padding:40px 0;">暂无数据</td></tr>';
       return;
     }
     tbody.innerHTML = a.items.map((item, idx) => {
@@ -3739,6 +3756,7 @@
       const monthLimit = item.monthLimit !== undefined ? item.monthLimit : -1;
       const dayLimit = item.dayLimit !== undefined ? item.dayLimit : -1;
       const stock = item.stock !== undefined ? item.stock : -1;
+      const dailyStock = item.dailyStock !== undefined ? item.dailyStock : -1;
       // 匹配奖品仓库获取剩余库存
       var matchedProd = allProducts.find(function(prod) { return prod.name === item.name; });
       var warehouseStock = matchedProd ? (matchedProd.stock === -1 ? '不限' : matchedProd.stock) : '不限';
@@ -3766,6 +3784,7 @@
         '<td><input class="form-control" type="number" value="' + monthLimit + '" style="font-size:13px;padding:4px 8px;height:28px;width:70px;" placeholder="-1不限" onblur="updateItemLimit(' + a.id + ',' + idx + ',\'monthLimit\',this.value)"></td>' +
         '<td><input class="form-control" type="number" value="' + dayLimit + '" style="font-size:13px;padding:4px 8px;height:28px;width:70px;" placeholder="-1不限" onblur="updateItemLimit(' + a.id + ',' + idx + ',\'dayLimit\',this.value)"></td>' +
         '<td><div style="display:flex;flex-direction:column;gap:2px;"><input class="form-control" type="text" value="' + stock + '" style="font-size:13px;padding:4px 8px;height:28px;width:70px;" placeholder="-1为不限" onblur="updateItemStock(' + a.id + ',' + idx + ',this.value)"><span style="font-size:11px;color:var(--ink-4);">仓库: ' + warehouseStock + '</span></div></td>' +
+        '<td><input class="form-control" type="number" value="' + dailyStock + '" style="font-size:13px;padding:4px 8px;height:28px;width:70px;" placeholder="-1为不限" onblur="updateItemDailyStock(' + a.id + ',' + idx + ',this.value)"></td>' +
         '<td class="td-actions"><button class="btn btn-danger btn-sm" onclick="removeActivityItem(' + a.id + ',' + idx + ')">移除</button></td>' +
       '</tr>';
     }).join('');
@@ -3846,6 +3865,12 @@
     a.items[itemIdx].stock = parseInt(value) || -1;
   }
 
+  function updateItemDailyStock(activityId, itemIdx, value) {
+    const a = allActivities.find(x => x.id === activityId);
+    if (!a || !a.items[itemIdx]) return;
+    a.items[itemIdx].dailyStock = parseInt(value) || -1;
+  }
+
   function toggleItemTag(activityId, itemIdx, tag, checked) {
     const a = allActivities.find(x => x.id === activityId);
     if (!a || !a.items[itemIdx]) return;
@@ -3906,7 +3931,7 @@
       // 避免重复添加
       const exists = a.items.some(item => item.name === name);
       if (!exists) {
-        a.items.push({ prizeId, name, type: prizeType, price: 0, stock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1 });
+        a.items.push({ prizeId, name, type: prizeType, price: 0, stock: -1, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1 });
         addedCount++;
       }
     });
