@@ -3587,8 +3587,6 @@
         statusHtml = '<span class="status-dot" style="background:#f59e0b;"></span><span style="color:#f59e0b;">待审核</span>';
       } else if (hasPendingSubmitted) {
         statusHtml = '<span class="status-dot on"></span>进行中 <span style="display:inline-block;margin-left:4px;padding:1px 6px;border-radius:4px;font-size:11px;background:#eff6ff;color:#3b82f6;">变更审核中</span>';
-      } else if (hasPendingVersion) {
-        statusHtml = '<span class="status-dot on"></span>进行中 <span style="display:inline-block;margin-left:4px;padding:1px 6px;border-radius:4px;font-size:11px;background:#fff7ed;color:#f59e0b;">待审核变更</span>';
       } else {
         statusHtml = '<span class="status-dot on"></span>' + statusText;
       }
@@ -3623,8 +3621,8 @@
           <div class="td-actions-inner">
             ${isPending ? '<button class="btn btn-primary btn-sm" onclick="openActivityAuditModal(' + a.id + ')">审核</button>' : ''}
             ${!isPending ? '<button class="btn btn-text btn-sm" onclick="openActivityLogModal(' + a.id + ')">日志</button>' : ''}
-            ${isActive && a.pendingVersion ? '<button class="btn btn-text btn-sm" onclick="openChangeAuditModal(' + a.id + ')">待生效变更</button>' : ''}
-            ${isActive && a.pendingVersion && !a.pendingSubmitted ? '<button class="btn btn-primary btn-sm" onclick="submitActivityChange(' + a.id + ')">提交变更审核</button>' : ''}
+            ${isActive && a.pendingSubmitted ? '<button class="btn btn-primary btn-sm" onclick="openChangeAuditModal(' + a.id + ')">审核</button>' : ''}
+            ${isActive && a.pendingVersion && !a.pendingSubmitted ? '<button class="btn btn-primary btn-sm" onclick="submitActivityChange(' + a.id + ')">提交审核</button>' : ''}
             ${isActive && !a.pendingSubmitted ? '<button class="btn btn-text btn-sm" onclick="openActivityConfig(' + a.id + ')">奖品配置</button>' : ''}
             ${!isTerminated ? '<button class="btn btn-text btn-sm" onclick="openActivityModal(' + a.id + ')">编辑</button>' : ''}
             <button class="btn btn-text btn-sm" onclick="copyActivity(${a.id})">复制</button>
@@ -4080,19 +4078,82 @@
     });
   }
 
+  // 活动审核：与变更审核共用 changeAuditModal，展示活动完整信息总览
   function openActivityAuditModal(id) {
     const a = allActivities.find(x => x.id === id);
     if (!a) return;
-    const bodyEl = document.getElementById('refundModalBody');
-    const footerEl = document.getElementById('refundModalFooter');
-    document.querySelector('#refundModal .modal-title').textContent = '活动审核 - ' + a.name;
-    bodyEl.innerHTML =
-      '<div style="padding:16px;background:#fff0e6;border-radius:8px;border-left:3px solid #f59e0b;">' +
+    currentChangeAuditActivityId = id;
+    document.getElementById('changeAuditTitle').textContent = '活动审核 - ' + a.name;
+    document.getElementById('changeAuditBody').innerHTML = renderActivityAuditBody(a);
+    document.getElementById('changeAuditModal').classList.add('show');
+  }
+
+  // 待审核活动信息总览：基础信息 + 奖品配置全量展示（无双列对比）
+  function renderActivityAuditBody(a) {
+    const mdMap = { normal: '普通', silver: '白银', gold: '黄金', platinum: '铂金', diamond: '钻石' };
+    const fmtMd = function(md) { return Object.keys(mdMap).map(function(k) { return mdMap[k] + (md && md[k] !== undefined ? md[k] : '-') + '%'; }).join('，'); };
+    const fmtL = fmtChangeLimit;
+    const tagsStr = function(t) { return (t && t.length) ? t.join('、') : '无'; };
+    const fields = [
+      ['活动名称', a.name],
+      ['活动时间', a.timeRange ? (a.timeRange.start + ' ~ ' + a.timeRange.end) : '-'],
+      ['活动渠道', (a.channel || []).join('、') || '-'],
+      ['支付方式', a.payType === '贝壳' ? '积分 + 贝壳' : '积分'],
+      ['会员折扣', fmtMd(a.memberDiscount)],
+      ['入账类型', a.accountType === '主营业务' ? '主营业务' : '非主营业务']
+    ];
+    const baseRows = fields.map(function(f) {
+      return '<tr>' +
+        '<td style="padding:8px 16px;font-size:13px;color:var(--ink-2);white-space:nowrap;border-top:1px solid var(--border);">' + f[0] + '</td>' +
+        '<td style="padding:8px 16px;font-size:13px;color:var(--ink-2);border-top:1px solid var(--border);">' + f[1] + '</td>' +
+      '</tr>';
+    }).join('');
+    const items = a.items || [];
+    const prizeRows = items.map(function(it) {
+      return '<tr>' +
+        '<td style="padding:8px 12px;font-size:12px;color:var(--ink-3);font-family:monospace;border-top:1px solid var(--border);">' + it.prizeId + '</td>' +
+        '<td style="padding:8px 12px;font-size:13px;font-weight:500;border-top:1px solid var(--border);">' + it.name + '</td>' +
+        '<td style="padding:8px 12px;font-size:12px;color:var(--ink-3);border-top:1px solid var(--border);">' + (it.type || '-') + '</td>' +
+        '<td style="padding:8px 12px;font-size:12px;color:var(--ink-3);border-top:1px solid var(--border);">' + tagsStr(it.tags) + '</td>' +
+        '<td style="padding:8px 12px;font-size:13px;font-weight:600;border-top:1px solid var(--border);">' + it.price + '</td>' +
+        '<td style="padding:8px 12px;font-size:12px;color:var(--ink-2);border-top:1px solid var(--border);">' + fmtL(it.stock) + '</td>' +
+        '<td style="padding:8px 12px;font-size:12px;color:var(--ink-2);border-top:1px solid var(--border);">' + fmtL(it.dailyStock) + '</td>' +
+        '<td style="padding:8px 12px;font-size:12px;color:var(--ink-2);border-top:1px solid var(--border);">' + fmtL(it.monthLimit) + '</td>' +
+        '<td style="padding:8px 12px;font-size:12px;color:var(--ink-2);border-top:1px solid var(--border);">' + fmtL(it.dayLimit) + '</td>' +
+      '</tr>';
+    }).join('');
+    return '<div style="padding:16px 24px;background:#fff0e6;border-bottom:1px solid var(--border);border-left:3px solid #f59e0b;">' +
         '<div style="font-size:13px;color:#d97706;font-weight:500;">审核提示</div>' +
-        '<div style="font-size:12px;color:var(--ink-3);margin-top:6px;line-height:1.6;">审核通过后，活动将变为"进行中"状态，用户可参与兑换。请确认活动配置无误后再审核通过。</div>' +
+        '<div style="font-size:12px;color:var(--ink-3);margin-top:6px;line-height:1.6;">审核通过后，活动将变为"进行中"状态，用户可参与兑换。请确认以下活动配置无误后再审核通过。</div>' +
+      '</div>' +
+      '<div style="padding:16px 24px;border-bottom:1px solid var(--border);">' +
+        '<div style="font-size:13px;font-weight:600;color:var(--ink);margin-bottom:10px;">基础信息</div>' +
+        '<table style="width:100%;border-collapse:collapse;border:1px solid var(--border);">' +
+          '<tbody><tr style="background:#fafafa;">' +
+            '<td style="padding:8px 16px;font-size:12px;color:var(--ink-3);font-weight:500;width:140px;">字段</td>' +
+            '<td style="padding:8px 16px;font-size:12px;color:var(--ink-3);font-weight:500;">待上线配置</td>' +
+          '</tr>' + baseRows + '</tbody>' +
+        '</table>' +
+      '</div>' +
+      '<div style="padding:16px 24px;">' +
+        '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">' +
+          '<div style="font-size:13px;font-weight:600;color:var(--ink);">奖品配置</div>' +
+          '<div style="font-size:12px;color:var(--ink-3);">共 ' + items.length + ' 个奖品</div>' +
+        '</div>' +
+        (items.length
+          ? '<table style="width:100%;border-collapse:collapse;border:1px solid var(--border);"><thead><tr style="background:#fafafa;">' +
+              '<th style="padding:8px 12px;text-align:left;font-size:12px;color:var(--ink-3);font-weight:500;">奖品ID</th>' +
+              '<th style="padding:8px 12px;text-align:left;font-size:12px;color:var(--ink-3);font-weight:500;">奖品名称</th>' +
+              '<th style="padding:8px 12px;text-align:left;font-size:12px;color:var(--ink-3);font-weight:500;">类型</th>' +
+              '<th style="padding:8px 12px;text-align:left;font-size:12px;color:var(--ink-3);font-weight:500;">标签</th>' +
+              '<th style="padding:8px 12px;text-align:left;font-size:12px;color:var(--ink-3);font-weight:500;">兑换积分</th>' +
+              '<th style="padding:8px 12px;text-align:left;font-size:12px;color:var(--ink-3);font-weight:500;">活动库存</th>' +
+              '<th style="padding:8px 12px;text-align:left;font-size:12px;color:var(--ink-3);font-weight:500;">每日库存</th>' +
+              '<th style="padding:8px 12px;text-align:left;font-size:12px;color:var(--ink-3);font-weight:500;">月限/人</th>' +
+              '<th style="padding:8px 12px;text-align:left;font-size:12px;color:var(--ink-3);font-weight:500;">日限/人</th>' +
+            '</tr></thead><tbody>' + prizeRows + '</tbody></table>'
+          : '<div style="font-size:12px;color:var(--ink-4);">暂未配置奖品</div>') +
       '</div>';
-    footerEl.innerHTML = '<button class="btn btn-outline" onclick="closeModal(\'refundModal\')">取消</button> <button class="btn btn-primary" onclick="approveActivity(' + id + ')">通过</button>';
-    document.getElementById('refundModal').classList.add('show');
   }
 
   function openActivityLogModal(id) {
@@ -4146,8 +4207,8 @@
 
   function submitActivityChange(id) {
     const a = allActivities.find(x => x.id === id);
-    if (!a || !a.pendingVersion) { showToast('暂无待审核变更，请先编辑活动或奖品配置', 'warning'); return; }
-    showConfirm('提交变更审核', '提交后变更将进入审核流程，审核通过前线上版本保持当前配置不变。确定提交吗？', function() {
+    if (!a || !a.pendingVersion) { showToast('暂无待生效变更，请先编辑活动或奖品配置', 'warning'); return; }
+    showConfirm('提交审核', '提交后变更将进入审核流程，审核通过前线上版本保持当前配置不变。确定提交吗？', function() {
       a.pendingSubmitted = true;
       a.auditLogs = a.auditLogs || [];
       a.auditLogs.unshift({ time: nowTimeStr(), auditor: '当前用户', action: '提交变更审核' });
@@ -4288,7 +4349,10 @@
 
   function approveChange() {
     const a = allActivities.find(x => x.id === currentChangeAuditActivityId);
-    if (!a || !a.pendingVersion) { closeModal('changeAuditModal'); return; }
+    if (!a) { closeModal('changeAuditModal'); return; }
+    // 待审核活动：通过后直接上线
+    if (a.status === 'pending') { approveActivity(a.id); return; }
+    if (!a.pendingVersion) { closeModal('changeAuditModal'); return; }
     const pv = a.pendingVersion;
     a.name = pv.name;
     a.timeRange = pv.timeRange;
@@ -4309,7 +4373,19 @@
 
   function rejectChange() {
     const a = allActivities.find(x => x.id === currentChangeAuditActivityId);
-    if (!a || !a.pendingVersion) { closeModal('changeAuditModal'); return; }
+    if (!a) { closeModal('changeAuditModal'); return; }
+    // 待审核活动：驳回后活动不予上线，从列表移除
+    if (a.status === 'pending') {
+      showConfirm('驳回活动', '驳回后该活动将不予上线，并从活动列表中移除。确定驳回吗？', function() {
+        const idx = allActivities.findIndex(function(x) { return x.id === a.id; });
+        if (idx !== -1) allActivities.splice(idx, 1);
+        renderActivities();
+        closeModal('changeAuditModal');
+        showToast('活动已驳回', 'success');
+      });
+      return;
+    }
+    if (!a.pendingVersion) { closeModal('changeAuditModal'); return; }
     showConfirm('驳回变更', '驳回后待生效版本将被丢弃，线上版本保持不变。确定驳回该变更吗？', function() {
       a.pendingVersion = null;
       a.pendingSubmitted = false;
@@ -4332,7 +4408,7 @@
     const timeStr = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0') + ' ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
     a.auditLogs.unshift({ time: timeStr, auditor: '管理员', action: '审核通过' });
     renderActivities();
-    closeModal('refundModal');
+    closeModal('changeAuditModal');
     showToast('审核通过，活动已上线', 'success');
   }
 
