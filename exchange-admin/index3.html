@@ -2187,6 +2187,9 @@
     </div>
     <div class="modal-body">
       <div class="form-grid">
+        <div class="form-group full" id="actLockTip" style="display:none;">
+          <div style="background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;border-radius:6px;padding:8px 12px;font-size:12px;line-height:1.6;">线上活动不支持修改活动名称、开始时间、支付方式、记账方式；如需调整这些字段，请结束本活动后重新创建。</div>
+        </div>
         <div class="form-group full">
           <label class="form-label">兑换活动名称<span class="required">*</span></label>
           <input class="form-control" id="act_name" placeholder="如：夏日狂欢兑换活动">
@@ -2324,8 +2327,8 @@
     <div class="modal-body" style="padding:0;" id="changeAuditBody"></div>
     <div class="modal-footer">
       <button class="btn btn-outline" onclick="closeModal('changeAuditModal')">取消</button>
-      <button class="btn btn-danger" id="changeAuditRejectBtn" onclick="rejectChange()">驳回</button>
-      <button class="btn btn-primary" id="changeAuditApproveBtn" onclick="approveChange()">通过并生效</button>
+      <button class="btn btn-danger" onclick="rejectChange()">驳回</button>
+      <button class="btn btn-primary" onclick="approveChange()">通过并生效</button>
     </div>
   </div>
 </div>
@@ -3620,9 +3623,8 @@
           <div class="td-actions-inner">
             ${isPending ? '<button class="btn btn-primary btn-sm" onclick="openActivityAuditModal(' + a.id + ')">审核</button>' : ''}
             ${!isPending ? '<button class="btn btn-text btn-sm" onclick="openActivityLogModal(' + a.id + ')">日志</button>' : ''}
-            ${isActive && a.pendingVersion ? '<button class="btn btn-text btn-sm" onclick="openPendingPreview(' + a.id + ')">待生效变更</button>' : ''}
+            ${isActive && a.pendingVersion ? '<button class="btn btn-text btn-sm" onclick="openChangeAuditModal(' + a.id + ')">待生效变更</button>' : ''}
             ${isActive && a.pendingVersion && !a.pendingSubmitted ? '<button class="btn btn-primary btn-sm" onclick="submitActivityChange(' + a.id + ')">提交变更审核</button>' : ''}
-            ${isActive && a.pendingSubmitted ? '<button class="btn btn-primary btn-sm" onclick="openChangeAuditModal(' + a.id + ')">审核变更</button>' : ''}
             ${isActive && !a.pendingSubmitted ? '<button class="btn btn-text btn-sm" onclick="openActivityConfig(' + a.id + ')">奖品配置</button>' : ''}
             ${!isTerminated ? '<button class="btn btn-text btn-sm" onclick="openActivityModal(' + a.id + ')">编辑</button>' : ''}
             <button class="btn btn-text btn-sm" onclick="copyActivity(${a.id})">复制</button>
@@ -3678,6 +3680,20 @@
     return sum === 100;
   }
 
+  // 线上活动（编辑走待审核草稿）锁定字段：名称、开始时间、支付方式、记账方式不可修改
+  function setActivityLockFields(lock) {
+    ['act_name', 'act_start'].forEach(function(fid) {
+      var el = document.getElementById(fid);
+      if (el) { el.disabled = lock; el.style.background = lock ? '#fafafa' : ''; el.style.cursor = lock ? 'not-allowed' : ''; }
+    });
+    document.querySelectorAll('input[name="act_payType"], input[name="act_accountType"]').forEach(function(rb) {
+      rb.disabled = lock;
+      rb.parentElement.style.color = lock ? 'var(--ink-4)' : '';
+    });
+    var tip = document.getElementById('actLockTip');
+    if (tip) tip.style.display = lock ? '' : 'none';
+  }
+
   function openActivityModal(id) {
     editingActivityId = id || null;
     document.querySelectorAll('input[name="act_channel"]').forEach(cb => cb.checked = false);
@@ -3686,6 +3702,7 @@
       const a = allActivities.find(x => x.id === id);
       if (!a) return;
       const usePendingDraft = a.status === 'active';
+      setActivityLockFields(usePendingDraft);
       document.getElementById('activityModalTitle').textContent = usePendingDraft ? '编辑活动（修改后保存为待审核草稿）' : '编辑活动';
       const draft = usePendingDraft && a.pendingVersion ? a.pendingVersion : a;
       document.getElementById('act_name').value = draft.name || '';
@@ -3714,6 +3731,7 @@
       toggleAccountField();
 
     } else {
+      setActivityLockFields(false);
       document.getElementById('activityModalTitle').textContent = '新建活动';
       document.getElementById('act_name').value = '';
       document.getElementById('act_start').value = '';
@@ -3751,13 +3769,14 @@
       const a = allActivities.find(x => x.id === editingActivityId);
       if (a) {
         if (a.status === 'active') {
+          // 名称、开始时间、支付方式、记账方式线上锁定，强制取线上现值，仅结束时间/渠道/会员折扣/奖品可变更
           a.pendingVersion = {
-            name,
-            timeRange: { start, end },
+            name: a.name,
+            timeRange: { start: (a.timeRange && a.timeRange.start) || start, end },
             channel: channels,
-            payType,
+            payType: a.payType,
             memberDiscount,
-            accountType,
+            accountType: a.accountType,
             items: a.pendingVersion && a.pendingVersion.items ? a.pendingVersion.items : JSON.parse(JSON.stringify(a.items || []))
           };
           a.pendingSubmitted = false;
@@ -4139,30 +4158,13 @@
 
   function fmtChangeLimit(v) { return (v === -1 || v === undefined || v === null || v === '') ? '不限' : v; }
 
+  // 待生效变更统一入口：变更预览与审核操作同一个弹窗，footer 始终提供驳回/通过按钮
   function openChangeAuditModal(id) {
-    const a = allActivities.find(x => x.id === id);
-    if (!a || !a.pendingVersion) { showToast('暂无待审核变更', 'warning'); return; }
-    currentChangeAuditActivityId = id;
-    document.getElementById('changeAuditTitle').textContent = '变更审核 - ' + a.name;
-    document.getElementById('changeAuditBody').innerHTML = renderChangeAuditBody(a);
-    const rejBtn = document.getElementById('changeAuditRejectBtn');
-    const appBtn = document.getElementById('changeAuditApproveBtn');
-    if (rejBtn) rejBtn.style.display = '';
-    if (appBtn) appBtn.style.display = '';
-    document.getElementById('changeAuditModal').classList.add('show');
-  }
-
-  // 待生效变更只读预览：与审核人看到的 diff 内容完全一致（所见即所审），仅隐藏操作按钮
-  function openPendingPreview(id) {
     const a = allActivities.find(x => x.id === id);
     if (!a || !a.pendingVersion) { showToast('暂无待生效变更', 'warning'); return; }
     currentChangeAuditActivityId = id;
-    document.getElementById('changeAuditTitle').textContent = '待生效变更预览 - ' + a.name;
+    document.getElementById('changeAuditTitle').textContent = '待生效变更 - ' + a.name;
     document.getElementById('changeAuditBody').innerHTML = renderChangeAuditBody(a);
-    const rejBtn = document.getElementById('changeAuditRejectBtn');
-    const appBtn = document.getElementById('changeAuditApproveBtn');
-    if (rejBtn) rejBtn.style.display = 'none';
-    if (appBtn) appBtn.style.display = 'none';
     document.getElementById('changeAuditModal').classList.add('show');
   }
 
