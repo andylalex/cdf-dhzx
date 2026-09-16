@@ -2324,8 +2324,8 @@
     <div class="modal-body" style="padding:0;" id="changeAuditBody"></div>
     <div class="modal-footer">
       <button class="btn btn-outline" onclick="closeModal('changeAuditModal')">取消</button>
-      <button class="btn btn-danger" onclick="rejectChange()">驳回</button>
-      <button class="btn btn-primary" onclick="approveChange()">通过并生效</button>
+      <button class="btn btn-danger" id="changeAuditRejectBtn" onclick="rejectChange()">驳回</button>
+      <button class="btn btn-primary" id="changeAuditApproveBtn" onclick="approveChange()">通过并生效</button>
     </div>
   </div>
 </div>
@@ -3620,7 +3620,7 @@
           <div class="td-actions-inner">
             ${isPending ? '<button class="btn btn-primary btn-sm" onclick="openActivityAuditModal(' + a.id + ')">审核</button>' : ''}
             ${!isPending ? '<button class="btn btn-text btn-sm" onclick="openActivityLogModal(' + a.id + ')">日志</button>' : ''}
-            ${isActive && a.pendingVersion ? '<button class="btn btn-text btn-sm" onclick="openActivityConfig(' + a.id + ', true)">待生效奖品</button>' : ''}
+            ${isActive && a.pendingVersion ? '<button class="btn btn-text btn-sm" onclick="openPendingPreview(' + a.id + ')">待生效变更</button>' : ''}
             ${isActive && a.pendingVersion && !a.pendingSubmitted ? '<button class="btn btn-primary btn-sm" onclick="submitActivityChange(' + a.id + ')">提交变更审核</button>' : ''}
             ${isActive && a.pendingSubmitted ? '<button class="btn btn-primary btn-sm" onclick="openChangeAuditModal(' + a.id + ')">审核变更</button>' : ''}
             ${isActive && !a.pendingSubmitted ? '<button class="btn btn-text btn-sm" onclick="openActivityConfig(' + a.id + ')">奖品配置</button>' : ''}
@@ -3791,14 +3791,13 @@
   }
 
   // ===== 活动奖品配置弹窗 =====
-  function openActivityConfig(activityId, isViewPending) {
+  function openActivityConfig(activityId) {
     currentConfigActivityId = activityId;
-    currentConfigMode = isViewPending ? 'viewPending' : 'edit';
+    currentConfigMode = 'edit';
     const a = allActivities.find(x => x.id === activityId);
     if (!a) return;
-    const isViewMode = currentConfigMode === 'viewPending';
-    const source = isViewMode ? (a.pendingVersion || {}) : (a.status === 'active' && a.pendingVersion ? a.pendingVersion : a);
-    document.querySelector('#activityConfigModal .modal-title').textContent = isViewMode ? '待生效奖品配置' : (a.status === 'active' ? '奖品配置（修改后保存为待审核草稿）' : '奖品配置');
+    const source = a.status === 'active' && a.pendingVersion ? a.pendingVersion : a;
+    document.querySelector('#activityConfigModal .modal-title').textContent = a.status === 'active' ? '奖品配置（修改后保存为待审核草稿）' : '奖品配置';
     document.getElementById('configActName').textContent = source.name || a.name || '-';
     const timeRange = source.timeRange ? (source.timeRange.start + ' ~ ' + source.timeRange.end) : '-';
     document.getElementById('configActTimeRange').textContent = timeRange;
@@ -3806,23 +3805,19 @@
     var labelEl = document.getElementById('configItemPayValueLabel');
     if (labelEl) labelEl.textContent = payLabel;
     const addBtn = document.querySelector('#activityConfigModal .btn-primary.btn-sm');
-    if (addBtn) addBtn.style.display = isViewMode ? 'none' : '';
+    if (addBtn) addBtn.style.display = '';
     const saveBtn = document.getElementById('activityConfigSaveBtn');
-    if (saveBtn) saveBtn.style.display = isViewMode ? 'none' : '';
+    if (saveBtn) saveBtn.style.display = '';
     renderConfigItems(a);
     document.getElementById('activityConfigModal').classList.add('show');
   }
 
   function getCurrentConfigItems(a) {
-    if (currentConfigMode === 'viewPending') {
-      return ((a.pendingVersion && a.pendingVersion.items) || []);
-    }
     return a.status === 'active' && a.pendingVersion ? (a.pendingVersion.items || []) : (a.items || []);
   }
 
   function renderConfigItems(a) {
     const tbody = document.getElementById('configItemBody');
-    const isViewMode = currentConfigMode === 'viewPending';
     const sourceItems = getCurrentConfigItems(a);
     if (!sourceItems || sourceItems.length === 0) {
       tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;color:var(--ink-4);padding:40px 0;">暂无数据</td></tr>';
@@ -3843,16 +3838,16 @@
       var tagOptionsHtml = '';
       activityTags.forEach(function(tag) {
         var checked = selectedTags.indexOf(tag) !== -1;
-        tagOptionsHtml += '<label style="display:flex;align-items:center;gap:4px;padding:3px 0;font-size:12px;cursor:pointer;white-space:nowrap;"><input type="checkbox" ' + (checked ? 'checked' : '') + (isViewMode ? ' disabled' : '') + ' onchange="toggleItemTag(' + a.id + ',' + idx + ',\'' + tag.replace(/'/g, "\\'") + '\',this.checked)"> ' + tag + '</label>';
+        tagOptionsHtml += '<label style="display:flex;align-items:center;gap:4px;padding:3px 0;font-size:12px;cursor:pointer;white-space:nowrap;"><input type="checkbox" ' + (checked ? 'checked' : '') + ' onchange="toggleItemTag(' + a.id + ',' + idx + ',\'' + tag.replace(/'/g, "\\'") + '\',this.checked)"> ' + tag + '</label>';
       });
       var tagSelectHtml = '<div class="tag-select-wrap" style="position:relative;">' +
-        '<div class="tag-select-trigger" id="tagTrigger_' + a.id + '_' + idx + '" ' + (isViewMode ? '' : 'onclick="openTagSelect(' + a.id + ',' + idx + ')"') + ' style="cursor:pointer;border:1px solid var(--border);border-radius:4px;padding:3px 8px;font-size:12px;background:' + (isViewMode ? '#fafafa;' : '#fff;') + 'min-height:24px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + tagDisplay + '</div>' +
+        '<div class="tag-select-trigger" id="tagTrigger_' + a.id + '_' + idx + '" onclick="openTagSelect(' + a.id + ',' + idx + ')" style="cursor:pointer;border:1px solid var(--border);border-radius:4px;padding:3px 8px;font-size:12px;background:#fff;min-height:24px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + tagDisplay + '</div>' +
         '<div class="tag-select-panel" id="tagPanel_' + a.id + '_' + idx + '" style="display:none;position:absolute;left:0;top:calc(100% + 2px);z-index:200;background:#fff;border:1px solid var(--border);border-radius:6px;padding:8px;box-shadow:0 4px 12px rgba(0,0,0,0.15);width:160px;">' +
         '<input type="text" oninput="filterTagOptions(' + a.id + ',' + idx + ',this.value)" placeholder="搜索标签" style="width:100%;padding:4px 6px;font-size:12px;border:1px solid var(--border);border-radius:3px;margin-bottom:6px;box-sizing:border-box;">' +
         '<div id="tagOptions_' + a.id + '_' + idx + '" style="max-height:140px;overflow-y:auto;">' + tagOptionsHtml + '</div>' +
         '</div></div>';
       var inputStyle = 'font-size:13px;padding:4px 8px;height:28px;';
-      var inputAttrs = isViewMode ? ' disabled style="' + inputStyle + 'background:#fafafa;' : ' style="' + inputStyle;
+      var inputAttrs = ' style="' + inputStyle;
       return '<tr>' +
         '<td><span style="font-size:12px;color:var(--ink-3);font-family:monospace;">' + (item.prizeId || '-') + '</span></td>' +
         '<td><span style="font-weight:500;font-size:13px;">' + item.name + '</span></td>' +
@@ -3863,7 +3858,7 @@
         '<td><input class="form-control" type="number" value="' + dayLimit + '"' + inputAttrs + 'width:70px;" placeholder="-1不限" onblur="updateItemLimit(' + a.id + ',' + idx + ',\'dayLimit\',this.value)"></td>' +
         '<td><div style="display:flex;flex-direction:column;gap:2px;"><input class="form-control" type="text" value="' + stock + '"' + inputAttrs + 'width:70px;" placeholder="-1为不限" onblur="updateItemStock(' + a.id + ',' + idx + ',this.value)"><span style="font-size:11px;color:var(--ink-4);">仓库: ' + warehouseStock + '</span></div></td>' +
         '<td><input class="form-control" type="number" value="' + dailyStock + '"' + inputAttrs + 'width:70px;" placeholder="-1不限" onblur="updateItemDailyStock(' + a.id + ',' + idx + ',this.value)"></td>' +
-        '<td class="td-actions">' + (isViewMode ? '<span style="font-size:12px;color:var(--ink-4);">只读</span>' : '<button class="btn btn-danger btn-sm" onclick="removeActivityItem(' + a.id + ',' + idx + ')">移除</button>') + '</td>' +
+        '<td class="td-actions"><button class="btn btn-danger btn-sm" onclick="removeActivityItem(' + a.id + ',' + idx + ')">移除</button></td>' +
       '</tr>';
     }).join('');
   }
@@ -4150,6 +4145,24 @@
     currentChangeAuditActivityId = id;
     document.getElementById('changeAuditTitle').textContent = '变更审核 - ' + a.name;
     document.getElementById('changeAuditBody').innerHTML = renderChangeAuditBody(a);
+    const rejBtn = document.getElementById('changeAuditRejectBtn');
+    const appBtn = document.getElementById('changeAuditApproveBtn');
+    if (rejBtn) rejBtn.style.display = '';
+    if (appBtn) appBtn.style.display = '';
+    document.getElementById('changeAuditModal').classList.add('show');
+  }
+
+  // 待生效变更只读预览：与审核人看到的 diff 内容完全一致（所见即所审），仅隐藏操作按钮
+  function openPendingPreview(id) {
+    const a = allActivities.find(x => x.id === id);
+    if (!a || !a.pendingVersion) { showToast('暂无待生效变更', 'warning'); return; }
+    currentChangeAuditActivityId = id;
+    document.getElementById('changeAuditTitle').textContent = '待生效变更预览 - ' + a.name;
+    document.getElementById('changeAuditBody').innerHTML = renderChangeAuditBody(a);
+    const rejBtn = document.getElementById('changeAuditRejectBtn');
+    const appBtn = document.getElementById('changeAuditApproveBtn');
+    if (rejBtn) rejBtn.style.display = 'none';
+    if (appBtn) appBtn.style.display = 'none';
     document.getElementById('changeAuditModal').classList.add('show');
   }
 
