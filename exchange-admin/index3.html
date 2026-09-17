@@ -1131,9 +1131,15 @@
             </select>
             <select class="form-input form-select" style="width:120px;" id="filterActStatus">
               <option value="">全部状态</option>
-              <option value="pending">待审核</option>
+              <option value="draft">草稿</option>
               <option value="active">进行中</option>
               <option value="terminated">已终止</option>
+            </select>
+            <select class="form-input form-select" style="width:120px;" id="filterActAuditStatus">
+              <option value="">全部审核</option>
+              <option value="pending">待审核</option>
+              <option value="approved">已通过</option>
+              <option value="rejected">已驳回</option>
             </select>
             <select class="form-input form-select" style="width:120px;" id="filterActAccountType">
               <option value="">全部记账</option>
@@ -1171,6 +1177,7 @@
                   <th>创建时间</th>
                   <th>创建人</th>
                   <th>状态</th>
+                  <th>审核状态</th>
                   <th>操作</th>
                 </tr>
               </thead>
@@ -1186,9 +1193,10 @@
         <td style="font-size:12px;color:var(--ink-2);">2026-07-18 14:30</td>
         <td style="font-size:12px;color:var(--ink-2);">管理员</td>
         <td><span class="status-dot on"></span>进行中</td>
+        <td><span class="status-dot" style="background:#f59e0b;"></span><span style="color:#f59e0b;">待审核</span></td>
         <td class="td-actions">
           <div class="td-actions-inner">
-            
+            <button class="btn btn-primary btn-sm" onclick="openChangeAuditModal(1)">审核</button>
             <button class="btn btn-text btn-sm" onclick="openActivityLogModal(1)">日志</button>
             <button class="btn btn-text btn-sm" onclick="openActivityConfig(1)">奖品配置</button>
             <button class="btn btn-text btn-sm" onclick="openActivityModal(1)">编辑</button>
@@ -1208,9 +1216,10 @@
         <td style="font-size:12px;color:var(--ink-2);">2026-07-19 09:00</td>
         <td style="font-size:12px;color:var(--ink-2);">管理员</td>
         <td><span class="status-dot on"></span>进行中</td>
+        <td><span class="status-dot" style="background:#16a34a;"></span><span style="color:#16a34a;">通过</span></td>
         <td class="td-actions">
           <div class="td-actions-inner">
-            
+            <button class="btn btn-primary btn-sm" onclick="submitActivityChange(2)">提交审核</button>
             <button class="btn btn-text btn-sm" onclick="openActivityLogModal(2)">日志</button>
             <button class="btn btn-text btn-sm" onclick="openActivityConfig(2)">奖品配置</button>
             <button class="btn btn-text btn-sm" onclick="openActivityModal(2)">编辑</button>
@@ -1220,28 +1229,6 @@
         </td>
       </tr><tr>
         <td style="font-family:monospace;font-size:12px;color:var(--ink-2);">3</td>
-        <td style="font-size:12px;"><span style="display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;background:#f3e5f5;color:#7b1fa2;">繁星-三亚国际免税城</span></td>
-        <td style="font-weight:500;">限时闪购活动</td>
-        <td><div style="font-size:12px;line-height:1.6;"><div style="color:var(--ink-3);">开始：2026-07-21 10:00</div><div style="color:var(--ink-3);">结束：2026-07-23 23:59</div></div></td>
-        <td style="font-size:12px;color:var(--ink-2);">APP</td>
-        <td><span class="tag tag-blue">积分</span></td>
-        <td style="font-size:13px;font-weight:500;text-align:center;">3</td>
-        <td style="font-size:12px;text-align:center;">非主营业务</td>
-        <td style="font-size:12px;color:var(--ink-2);">2026-07-20 11:00</td>
-        <td style="font-size:12px;color:var(--ink-2);">运营专员</td>
-        <td><span class="status-dot on"></span>进行中</td>
-        <td class="td-actions">
-          <div class="td-actions-inner">
-            
-            <button class="btn btn-text btn-sm" onclick="openActivityLogModal(3)">日志</button>
-            <button class="btn btn-text btn-sm" onclick="openActivityConfig(3)">奖品配置</button>
-            <button class="btn btn-text btn-sm" onclick="openActivityModal(3)">编辑</button>
-            <button class="btn btn-text btn-sm" onclick="copyActivity(3)">复制</button>
-            <button class="btn btn-danger btn-sm" onclick="terminateActivity(3)">终止</button>
-          </div>
-        </td>
-      </tr><tr>
-        <td style="font-family:monospace;font-size:12px;color:var(--ink-2);">4</td>
         <td style="font-size:12px;"><span style="display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;background:#e3f2fd;color:#1565c0;">千帆</span></td>
         <td style="font-weight:500;">年中大促活动</td>
         <td><div style="font-size:12px;line-height:1.6;"><div style="color:var(--ink-3);">开始：2026-07-18 10:00</div><div style="color:var(--ink-3);">结束：2026-07-18 23:59</div></div></td>
@@ -1251,107 +1238,16 @@
         <td style="font-size:12px;text-align:center;">主营业务</td>
         <td style="font-size:12px;color:var(--ink-2);">2026-07-17 16:00</td>
         <td style="font-size:12px;color:var(--ink-2);">管理员</td>
-        <td><span class="status-dot on"></span>进行中</td>
-        <td class="td-actions">
-          <div class="td-actions-inner">
-            
-            <button class="btn btn-text btn-sm" onclick="openActivityLogModal(4)">日志</button>
-            <button class="btn btn-text btn-sm" onclick="openActivityConfig(4)">奖品配置</button>
-            <button class="btn btn-text btn-sm" onclick="openActivityModal(4)">编辑</button>
-            <button class="btn btn-text btn-sm" onclick="copyActivity(4)">复制</button>
-            <button class="btn btn-danger btn-sm" onclick="terminateActivity(4)">终止</button>
-          </div>
-        </td>
-      </tr><tr>
-        <td style="font-family:monospace;font-size:12px;color:var(--ink-2);">5</td>
-        <td style="font-size:12px;"><span style="display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;background:#e3f2fd;color:#1565c0;">千帆</span></td>
-        <td style="font-weight:500;">春节限时兑换活动</td>
-        <td><div style="font-size:12px;line-height:1.6;"><div style="color:var(--ink-3);">开始：2026-01-20 10:00</div><div style="color:var(--ink-3);">结束：2026-02-10 23:59</div></div></td>
-        <td style="font-size:12px;color:var(--ink-2);">APP、微信小程序、H5</td>
-        <td><span class="tag tag-blue">积分</span></td>
-        <td style="font-size:13px;font-weight:500;text-align:center;">3</td>
-        <td style="font-size:12px;text-align:center;">主营业务</td>
-        <td style="font-size:12px;color:var(--ink-2);">2026-01-15 09:00</td>
-        <td style="font-size:12px;color:var(--ink-2);">管理员</td>
         <td><span class="status-dot off"></span><span style="color:var(--ink-4);">已终止</span></td>
+        <td><span class="status-dot" style="background:#16a34a;"></span><span style="color:#16a34a;">通过</span></td>
         <td class="td-actions">
           <div class="td-actions-inner">
-            
-            <button class="btn btn-text btn-sm" onclick="openActivityLogModal(5)">日志</button>
-            <button class="btn btn-text btn-sm" onclick="openActivityConfig(5)">奖品配置</button>
-            
-            <button class="btn btn-text btn-sm" onclick="copyActivity(5)">复制</button>
-            
+            <button class="btn btn-text btn-sm" onclick="openActivityLogModal(3)">日志</button>
+            <button class="btn btn-text btn-sm" onclick="copyActivity(3)">复制</button>
           </div>
         </td>
       </tr><tr>
-        <td style="font-family:monospace;font-size:12px;color:var(--ink-2);">6</td>
-        <td style="font-size:12px;"><span style="display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;background:#e3f2fd;color:#1565c0;">千帆</span></td>
-        <td style="font-weight:500;">每日签到</td>
-        <td><div style="font-size:12px;line-height:1.6;"><div style="color:var(--ink-3);">开始：2026-07-01 00:00</div><div style="color:var(--ink-3);">结束：2026-07-31 23:59</div></div></td>
-        <td style="font-size:12px;color:var(--ink-2);">APP、微信小程序</td>
-        <td><span class="tag tag-blue">积分</span></td>
-        <td style="font-size:13px;font-weight:500;text-align:center;">0</td>
-        <td style="font-size:12px;text-align:center;">非主营业务</td>
-        <td style="font-size:12px;color:var(--ink-2);">2026-06-28 10:00</td>
-        <td style="font-size:12px;color:var(--ink-2);">管理员</td>
-        <td><span class="status-dot on"></span>进行中</td>
-        <td class="td-actions">
-          <div class="td-actions-inner">
-            
-            <button class="btn btn-text btn-sm" onclick="openActivityLogModal(6)">日志</button>
-            <button class="btn btn-text btn-sm" onclick="openActivityConfig(6)">奖品配置</button>
-            <button class="btn btn-text btn-sm" onclick="openActivityModal(6)">编辑</button>
-            <button class="btn btn-text btn-sm" onclick="copyActivity(6)">复制</button>
-            <button class="btn btn-danger btn-sm" onclick="terminateActivity(6)">终止</button>
-          </div>
-        </td>
-      </tr><tr>
-        <td style="font-family:monospace;font-size:12px;color:var(--ink-2);">7</td>
-        <td style="font-size:12px;"><span style="display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;background:#e3f2fd;color:#1565c0;">千帆</span></td>
-        <td style="font-weight:500;">新人任务</td>
-        <td><div style="font-size:12px;line-height:1.6;"><div style="color:var(--ink-3);">开始：2026-07-01 00:00</div><div style="color:var(--ink-3);">结束：2026-12-31 23:59</div></div></td>
-        <td style="font-size:12px;color:var(--ink-2);">APP、H5</td>
-        <td><span class="tag tag-blue">积分</span></td>
-        <td style="font-size:13px;font-weight:500;text-align:center;">0</td>
-        <td style="font-size:12px;text-align:center;">非主营业务</td>
-        <td style="font-size:12px;color:var(--ink-2);">2026-06-25 10:00</td>
-        <td style="font-size:12px;color:var(--ink-2);">管理员</td>
-        <td><span class="status-dot on"></span>进行中</td>
-        <td class="td-actions">
-          <div class="td-actions-inner">
-            
-            <button class="btn btn-text btn-sm" onclick="openActivityLogModal(7)">日志</button>
-            <button class="btn btn-text btn-sm" onclick="openActivityConfig(7)">奖品配置</button>
-            <button class="btn btn-text btn-sm" onclick="openActivityModal(7)">编辑</button>
-            <button class="btn btn-text btn-sm" onclick="copyActivity(7)">复制</button>
-            <button class="btn btn-danger btn-sm" onclick="terminateActivity(7)">终止</button>
-          </div>
-        </td>
-      </tr><tr>
-        <td style="font-family:monospace;font-size:12px;color:var(--ink-2);">8</td>
-        <td style="font-size:12px;"><span style="display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;background:#f3e5f5;color:#7b1fa2;">繁星-三亚国际免税城</span></td>
-        <td style="font-weight:500;">周年庆转盘抽奖</td>
-        <td><div style="font-size:12px;line-height:1.6;"><div style="color:var(--ink-3);">开始：2026-07-15 00:00</div><div style="color:var(--ink-3);">结束：2026-07-25 23:59</div></div></td>
-        <td style="font-size:12px;color:var(--ink-2);">支付宝小程序、APP</td>
-        <td><span class="tag tag-gold">贝壳</span></td>
-        <td style="font-size:13px;font-weight:500;text-align:center;">0</td>
-        <td style="font-size:12px;text-align:center;">非主营业务</td>
-        <td style="font-size:12px;color:var(--ink-2);">2026-07-10 10:00</td>
-        <td style="font-size:12px;color:var(--ink-2);">运营专员</td>
-        <td><span class="status-dot on"></span>进行中</td>
-        <td class="td-actions">
-          <div class="td-actions-inner">
-            
-            <button class="btn btn-text btn-sm" onclick="openActivityLogModal(8)">日志</button>
-            <button class="btn btn-text btn-sm" onclick="openActivityConfig(8)">奖品配置</button>
-            <button class="btn btn-text btn-sm" onclick="openActivityModal(8)">编辑</button>
-            <button class="btn btn-text btn-sm" onclick="copyActivity(8)">复制</button>
-            <button class="btn btn-danger btn-sm" onclick="terminateActivity(8)">终止</button>
-          </div>
-        </td>
-      </tr><tr>
-        <td style="font-family:monospace;font-size:12px;color:var(--ink-2);">9</td>
+        <td style="font-family:monospace;font-size:12px;color:var(--ink-2);">4</td>
         <td style="font-size:12px;"><span style="display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;background:#e3f2fd;color:#1565c0;">千帆</span></td>
         <td style="font-weight:500;">七夕情人节活动</td>
         <td><div style="font-size:12px;line-height:1.6;"><div style="color:var(--ink-3);">开始：2026-08-01 10:00</div><div style="color:var(--ink-3);">结束：2026-08-07 23:59</div></div></td>
@@ -1361,19 +1257,18 @@
         <td style="font-size:12px;text-align:center;">主营业务</td>
         <td style="font-size:12px;color:var(--ink-2);">2026-07-30 15:30</td>
         <td style="font-size:12px;color:var(--ink-2);">运营专员</td>
+        <td><span class="status-dot" style="background:#94a3b8;"></span><span style="color:var(--ink-3);">草稿</span></td>
         <td><span class="status-dot" style="background:#f59e0b;"></span><span style="color:#f59e0b;">待审核</span></td>
         <td class="td-actions">
           <div class="td-actions-inner">
-            <button class="btn btn-primary btn-sm" onclick="openActivityAuditModal(9)">审核</button>
-            
-            <button class="btn btn-text btn-sm" onclick="openActivityConfig(9)">奖品配置</button>
-            <button class="btn btn-text btn-sm" onclick="openActivityModal(9)">编辑</button>
-            <button class="btn btn-text btn-sm" onclick="copyActivity(9)">复制</button>
-            <button class="btn btn-danger btn-sm" onclick="terminateActivity(9)">终止</button>
+            <button class="btn btn-primary btn-sm" onclick="openActivityAuditModal(4)">审核</button>
+            <button class="btn btn-text btn-sm" onclick="openActivityConfig(4)">奖品配置</button>
+            <button class="btn btn-text btn-sm" onclick="openActivityModal(4)">编辑</button>
+            <button class="btn btn-text btn-sm" onclick="copyActivity(4)">复制</button>
           </div>
         </td>
       </tr><tr>
-        <td style="font-family:monospace;font-size:12px;color:var(--ink-2);">10</td>
+        <td style="font-family:monospace;font-size:12px;color:var(--ink-2);">5</td>
         <td style="font-size:12px;"><span style="display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;background:#f3e5f5;color:#7b1fa2;">繁星-三亚国际免税城</span></td>
         <td style="font-weight:500;">八月会员日活动</td>
         <td><div style="font-size:12px;line-height:1.6;"><div style="color:var(--ink-3);">开始：2026-08-08 00:00</div><div style="color:var(--ink-3);">结束：2026-08-08 23:59</div></div></td>
@@ -1383,15 +1278,15 @@
         <td style="font-size:12px;text-align:center;">主营业务</td>
         <td style="font-size:12px;color:var(--ink-2);">2026-07-31 09:00</td>
         <td style="font-size:12px;color:var(--ink-2);">运营专员</td>
-        <td><span class="status-dot" style="background:#f59e0b;"></span><span style="color:#f59e0b;">待审核</span></td>
+        <td><span class="status-dot" style="background:#94a3b8;"></span><span style="color:var(--ink-3);">草稿</span></td>
+        <td><span class="status-dot" style="background:#dc2626;"></span><span style="color:#dc2626;">驳回</span></td>
         <td class="td-actions">
           <div class="td-actions-inner">
-            <button class="btn btn-primary btn-sm" onclick="openActivityAuditModal(10)">审核</button>
-            
-            <button class="btn btn-text btn-sm" onclick="openActivityConfig(10)">奖品配置</button>
-            <button class="btn btn-text btn-sm" onclick="openActivityModal(10)">编辑</button>
-            <button class="btn btn-text btn-sm" onclick="copyActivity(10)">复制</button>
-            <button class="btn btn-danger btn-sm" onclick="terminateActivity(10)">终止</button>
+            <button class="btn btn-primary btn-sm" onclick="submitDraftAudit(5)">提交审核</button>
+            <button class="btn btn-text btn-sm" onclick="openActivityLogModal(5)">日志</button>
+            <button class="btn btn-text btn-sm" onclick="openActivityConfig(5)">奖品配置</button>
+            <button class="btn btn-text btn-sm" onclick="openActivityModal(5)">编辑</button>
+            <button class="btn btn-text btn-sm" onclick="copyActivity(5)">复制</button>
           </div>
         </td>
       </tr></tbody>
@@ -2315,17 +2210,20 @@
   </div>
 </div>
 
-<!-- ===== 活动变更审核弹窗（二次审核：线上版本 vs 待生效版本） ===== -->
+<!-- ===== 活动审核弹窗（草稿审核：总览布局 / 变更审核：前后对比布局） ===== -->
 <div class="modal-mask" id="changeAuditModal">
   <div class="modal" style="width:1100px;max-width:95vw;">
     <div class="modal-header">
-      <div class="modal-title" id="changeAuditTitle">变更审核</div>
+      <div class="modal-title" id="changeAuditTitle">审核</div>
       <button class="modal-close" onclick="closeModal('changeAuditModal')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
       </button>
     </div>
     <div class="modal-body" style="padding:0;" id="changeAuditBody"></div>
-    <div class="modal-footer">
+    <div class="modal-footer" style="flex-wrap:wrap;">
+      <div id="changeRejectInputArea" style="display:none;width:100%;">
+        <input type="text" id="changeRejectReason" placeholder="请输入驳回原因（选填）" style="width:100%;padding:8px;border:1px solid var(--danger);border-radius:6px;font-size:13px;box-sizing:border-box;">
+      </div>
       <button class="btn btn-outline" onclick="closeModal('changeAuditModal')">取消</button>
       <button class="btn btn-danger" onclick="rejectChange()">驳回</button>
       <button class="btn btn-primary" onclick="approveChange()">通过并生效</button>
@@ -2350,6 +2248,7 @@
               <th style="width:140px;">操作类型</th>
               <th style="width:120px;">审核人</th>
               <th>审核时间</th>
+              <th>备注</th>
             </tr>
           </thead>
           <tbody id="activityLogList"><tr><td><span style="display:inline-block;padding:2px 10px;border-radius:4px;font-size:12px;font-weight:500;color:#16a34a;background:#f0fdf4;">审核通过</span></td><td style="font-size:13px;color:var(--ink-2);">管理员A</td><td style="font-size:12px;color:var(--ink-3);">2026-01-15 10:30</td></tr><tr><td><span style="display: inline-block; padding: 2px 10px; border-radius: 4px; font-size: 12px; font-weight: 500; color: var(--ink-4); background: rgb(245, 245, 245);">终止</span></td><td style="font-size:13px;color:var(--ink-2);">系统</td><td style="font-size:12px;color:var(--ink-3);">2026-02-11 00:00</td></tr></tbody>
@@ -3479,7 +3378,7 @@
 
   // ===== 活动管理 =====
   const allActivities = [
-    { id: 1, name: '夏日狂欢兑换活动', timeRange: { start: '2026-07-19 10:00', end: '2026-07-25 23:59' }, createdAt: '2026-07-18 14:30', createdBy: '管理员', status: 'active', rule: '每人每场限兑2件', channel: ['APP', '微信小程序'], payType: '积分', source: '千帆', memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 500000, actualCost: 149600, actualRevenue: 149600, costShare: { type: '混合分摊', platform: 20, store: 50, brand: 30 }, revenueShare: { type: '平台全额' }, auditLogs: [{ time: '2026-07-18 15:20', auditor: '管理员A', action: '审核通过' }],
+    { id: 1, name: '夏日狂欢兑换活动', timeRange: { start: '2026-07-19 10:00', end: '2026-07-25 23:59' }, createdAt: '2026-07-18 14:30', createdBy: '管理员', status: 'active', auditStatus: 'approved', rule: '每人每场限兑2件', channel: ['APP', '微信小程序'], payType: '积分', source: '千帆', memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 500000, actualCost: 149600, actualRevenue: 149600, costShare: { type: '混合分摊', platform: 20, store: 50, brand: 30 }, revenueShare: { type: '平台全额' }, auditLogs: [{ time: '2026-07-18 15:20', auditor: '管理员A', action: '审核通过' }, { time: '2026-07-19 09:10', auditor: '当前用户', action: '提交变更审核' }],
       pendingVersion: {
         name: '夏日狂欢兑换活动',
         timeRange: { start: '2026-07-19 10:00', end: '2026-07-30 23:59' },
@@ -3495,7 +3394,7 @@
           { prizeId: 'PRIZE-0021', name: '新增样品口红', type: '实物礼品', price: 1200, stock: 10, dailyStock: 5, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['新人专享'] },
         ]
       },
-      pendingSubmitted: false,
+      pendingSubmitted: true,
       pendingChangeNote: '延长活动结束时间、调整部分奖品库存与每日库存，并新增一个奖品。',
       items: [
         { prizeId: 'PRIZE-0001', name: '雅诗兰黛粉底液 30ml', type: '实物礼品', price: 8800, stock: 50, dailyStock: -1, exchanged: 12, monthLimit: -1, dayLimit: -1, tags: ['限时', '会员专属'] },
@@ -3504,43 +3403,42 @@
         { prizeId: 'PRIZE-0008', name: '中免海南限定化妆包', type: '实物礼品', price: 2800, stock: -1, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['品牌联合'] },
       ]
     },
-    { id: 2, name: '会员专属兑换活动', timeRange: { start: '2026-07-20 10:00', end: '2026-07-27 23:59' }, createdAt: '2026-07-19 09:00', createdBy: '管理员', status: 'active', rule: '仅限银卡及以上会员参与', channel: ['APP', 'H5'], payType: '贝壳', source: '千帆', memberDiscount: { normal: 100, silver: 90, gold: 85, platinum: 80, diamond: 75 }, accountType: '主营业务', budgetLimit: 300000, actualCost: 0, actualRevenue: 0, costShare: { type: '平台全额' }, revenueShare: { type: '平台全额' }, auditLogs: [{ time: '2026-07-19 10:15', auditor: '运营专员', action: '审核通过' }],
+    { id: 2, name: '会员专属兑换活动', timeRange: { start: '2026-07-20 10:00', end: '2026-07-27 23:59' }, createdAt: '2026-07-19 09:00', createdBy: '管理员', status: 'active', auditStatus: 'approved', rule: '仅限银卡及以上会员参与', channel: ['APP', 'H5'], payType: '贝壳', source: '千帆', memberDiscount: { normal: 100, silver: 90, gold: 85, platinum: 80, diamond: 75 }, accountType: '主营业务', budgetLimit: 300000, actualCost: 0, actualRevenue: 0, costShare: { type: '平台全额' }, revenueShare: { type: '平台全额' }, auditLogs: [{ time: '2026-07-19 10:15', auditor: '运营专员', action: '审核通过' }],
+      pendingVersion: {
+        name: '会员专属兑换活动',
+        timeRange: { start: '2026-07-20 10:00', end: '2026-07-30 23:59' },
+        channel: ['APP', 'H5', '微信小程序'],
+        payType: '贝壳',
+        memberDiscount: { normal: 100, silver: 90, gold: 85, platinum: 80, diamond: 75 },
+        accountType: '主营业务',
+        items: [
+          { prizeId: 'PRIZE-0006', name: 'SK-II 神仙水 230ml', type: '实物礼品', price: 12000, stock: 40, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['会员专属'] },
+          { prizeId: 'PRIZE-0013', name: 'CDF 200元代金券', type: '优惠券-优选单券', price: 1000, stock: -1, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['会员专属', '满减活动'] },
+          { prizeId: 'PRIZE-0014', name: '免税店专属折扣券', type: '优惠券-券中心', price: 80, stock: 500, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['满减活动'] },
+        ]
+      },
+      pendingSubmitted: false,
       items: [
         { prizeId: 'PRIZE-0006', name: 'SK-II 神仙水 230ml', type: '实物礼品', price: 12000, stock: 40, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['会员专属'] },
         { prizeId: 'PRIZE-0013', name: 'CDF 200元代金券', type: '优惠券-优选单券', price: 1000, stock: -1, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['会员专属', '满减活动'] },
         { prizeId: 'PRIZE-0014', name: '免税店专属折扣券', type: '优惠券-券中心', price: 80, stock: 500, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['满减活动'] },
       ]
     },
-    { id: 3, name: '限时闪购活动', timeRange: { start: '2026-07-21 10:00', end: '2026-07-23 23:59' }, createdAt: '2026-07-20 11:00', createdBy: '运营专员', status: 'active', rule: '每人每场限兑3件', channel: ['APP'], payType: '积分', source: '繁星-三亚国际免税城', memberDiscount: { normal: 100, silver: 100, gold: 100, platinum: 100, diamond: 100 }, accountType: '非主营业务', budgetLimit: 200000, actualCost: 0, actualRevenue: 0, costShare: { type: '门店全额' }, revenueShare: { type: '门店全额' }, auditLogs: [{ time: '2026-07-20 14:30', auditor: '管理员B', action: '审核通过' }],
-      items: [
-        { prizeId: 'PRIZE-0015', name: '资生堂红腰子 75ml', type: '实物礼品', price: 9500, stock: 60, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['限时', '品牌联合'] },
-        { prizeId: 'PRIZE-0007', name: '迪奥口红套装', type: '实物礼品', price: 3500, stock: -1, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['限时'] },
-        { prizeId: 'PRIZE-0016', name: '全场通用88折券', type: '优惠券-券中心', price: 200, stock: -1, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['限时', '满减活动'] },
-      ]
-    },
-    { id: 4, name: '年中大促活动', timeRange: { start: '2026-07-18 10:00', end: '2026-07-18 23:59' }, createdAt: '2026-07-17 16:00', createdBy: '管理员', status: 'active', rule: '', channel: ['微信小程序', '支付宝小程序', 'H5'], payType: '贝壳', source: '千帆', memberDiscount: { normal: 100, silver: 100, gold: 100, platinum: 100, diamond: 100 }, accountType: '主营业务', budgetLimit: 800000, actualCost: 446700, actualRevenue: 446700, costShare: { type: '混合分摊', platform: 20, store: 40, brand: 40 }, revenueShare: { type: '混合分摊', platform: 20, store: 40, brand: 40 }, auditLogs: [{ time: '2026-07-17 18:00', auditor: '管理员A', action: '审核通过' }],
+    { id: 3, name: '年中大促活动', timeRange: { start: '2026-07-18 10:00', end: '2026-07-18 23:59' }, createdAt: '2026-07-17 16:00', createdBy: '管理员', status: 'terminated', auditStatus: 'approved', rule: '', channel: ['微信小程序', '支付宝小程序', 'H5'], payType: '贝壳', source: '千帆', memberDiscount: { normal: 100, silver: 100, gold: 100, platinum: 100, diamond: 100 }, accountType: '主营业务', budgetLimit: 800000, actualCost: 446700, actualRevenue: 446700, costShare: { type: '混合分摊', platform: 20, store: 40, brand: 40 }, revenueShare: { type: '混合分摊', platform: 20, store: 40, brand: 40 }, auditLogs: [{ time: '2026-07-17 18:00', auditor: '管理员A', action: '审核通过' }, { time: '2026-07-19 00:30', auditor: '管理员', action: '终止' }],
       items: [
         { prizeId: 'PRIZE-0017', name: '海蓝之谜面霜 30ml', type: '实物礼品', price: 15000, stock: 20, dailyStock: -1, exchanged: 20, monthLimit: -1, dayLimit: -1, tags: ['节日活动'] },
         { prizeId: 'PRIZE-0018', name: 'CDF 50元无门槛券', type: '优惠券-优选单券', price: 300, stock: -1, dailyStock: -1, exchanged: 489, monthLimit: -1, dayLimit: -1, tags: ['新人专享'] },
       ]
     },
-    { id: 5, name: '春节限时兑换活动', timeRange: { start: '2026-01-20 10:00', end: '2026-02-10 23:59' }, createdAt: '2026-01-15 09:00', createdBy: '管理员', status: 'terminated', rule: '每人每场限兑2件', channel: ['APP', '微信小程序', 'H5'], payType: '积分', source: '千帆', memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 600000, actualCost: 2070000, actualRevenue: 2070000, costShare: { type: '平台全额' }, revenueShare: { type: '平台全额' }, auditLogs: [{ time: '2026-01-15 10:30', auditor: '管理员A', action: '审核通过' }, { time: '2026-02-11 00:00', auditor: '系统', action: '自动终止' }],
-      items: [
-        { prizeId: 'PRIZE-0001', name: '雅诗兰黛持妆粉底液 30ml', type: '实物礼品', price: 8800, stock: 100, dailyStock: -1, exchanged: 95, monthLimit: -1, dayLimit: -1 },
-        { prizeId: 'PRIZE-0002', name: '兰蔻小黑瓶精华肌底液 20ml', type: '实物礼品', price: 12800, stock: 50, dailyStock: -1, exchanged: 48, monthLimit: -1, dayLimit: -1 },
-        { prizeId: 'PRIZE-0011', name: 'CDF 100元代金券', type: '优惠券-优选单券', price: 500, stock: 200, dailyStock: -1, exchanged: 200, monthLimit: -1, dayLimit: -1 },
-      ]
-    },
-    { id: 6, name: '每日签到', timeRange: { start: '2026-07-01 00:00', end: '2026-07-31 23:59' }, createdAt: '2026-06-28 10:00', createdBy: '管理员', status: 'active', rule: '每日签到获得奖励', channel: ['APP', '微信小程序'], payType: '积分', source: '千帆', memberDiscount: { normal: 100, silver: 100, gold: 100, platinum: 100, diamond: 100 }, accountType: '非主营业务', budgetLimit: 50000, actualCost: 800, actualRevenue: 800, costShare: { type: '平台全额' }, revenueShare: { type: '平台全额' }, auditLogs: [{ time: '2026-06-28 15:00', auditor: '管理员A', action: '审核通过' }], items: [] },
-    { id: 7, name: '新人任务', timeRange: { start: '2026-07-01 00:00', end: '2026-12-31 23:59' }, createdAt: '2026-06-25 10:00', createdBy: '管理员', status: 'active', rule: '新人专享任务', channel: ['APP', 'H5'], payType: '积分', source: '千帆', memberDiscount: { normal: 100, silver: 100, gold: 100, platinum: 100, diamond: 100 }, accountType: '非主营业务', budgetLimit: 30000, actualCost: 200, actualRevenue: 200, costShare: { type: '平台全额' }, revenueShare: { type: '平台全额' }, auditLogs: [{ time: '2026-06-25 14:20', auditor: '运营专员', action: '审核通过' }], items: [] },
-    { id: 8, name: '周年庆转盘抽奖', timeRange: { start: '2026-07-15 00:00', end: '2026-07-25 23:59' }, createdAt: '2026-07-10 10:00', createdBy: '运营专员', status: 'active', rule: '周年庆转盘抽奖活动', channel: ['支付宝小程序', 'APP'], payType: '贝壳', source: '繁星-三亚国际免税城', memberDiscount: { normal: 100, silver: 100, gold: 100, platinum: 100, diamond: 100 }, accountType: '非主营业务', budgetLimit: 100000, actualCost: 6000, actualRevenue: 6000, costShare: { type: '混合分摊', platform: 20, store: 40, brand: 40 }, revenueShare: { type: '混合分摊', platform: 20, store: 40, brand: 40 }, auditLogs: [{ time: '2026-07-10 16:30', auditor: '管理员B', action: '审核通过' }], items: [] },
-    { id: 9, name: '七夕情人节活动', timeRange: { start: '2026-08-01 10:00', end: '2026-08-07 23:59' }, createdAt: '2026-07-30 15:30', createdBy: '运营专员', status: 'pending', rule: '情人节限定礼品兑换', channel: ['APP', '微信小程序', 'H5'], payType: '积分', source: '千帆', memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 300000, actualCost: 0, actualRevenue: 0, costShare: { type: '平台全额' }, revenueShare: { type: '平台全额' }, auditLogs: [],
+    { id: 4, name: '七夕情人节活动', timeRange: { start: '2026-08-01 10:00', end: '2026-08-07 23:59' }, createdAt: '2026-07-30 15:30', createdBy: '运营专员', status: 'draft', auditStatus: 'pending', rule: '情人节限定礼品兑换', channel: ['APP', '微信小程序', 'H5'], payType: '积分', source: '千帆', memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 300000, actualCost: 0, actualRevenue: 0, costShare: { type: '平台全额' }, revenueShare: { type: '平台全额' }, auditLogs: [],
       items: [
         { prizeId: 'PRIZE-0019', name: '限定款情侣对戒', type: '实物礼品', price: 9999, stock: 30, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['节日活动', '限时'] },
         { prizeId: 'PRIZE-0020', name: '迪奥真我香水 50ml', type: '实物礼品', price: 8500, stock: 50, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['节日活动'] },
       ]
     },
-    { id: 10, name: '八月会员日活动', timeRange: { start: '2026-08-08 00:00', end: '2026-08-08 23:59' }, createdAt: '2026-07-31 09:00', createdBy: '运营专员', status: 'pending', rule: '会员日专享折扣', channel: ['APP'], payType: '贝壳', source: '繁星-三亚国际免税城', memberDiscount: { normal: 100, silver: 90, gold: 80, platinum: 70, diamond: 60 }, accountType: '主营业务', budgetLimit: 150000, actualCost: 0, actualRevenue: 0, costShare: { type: '混合分摊', platform: 30, store: 40, brand: 30 }, revenueShare: { type: '混合分成', platform: 30, store: 40, brand: 30 }, auditLogs: [], items: [] },
+    { id: 5, name: '八月会员日活动', timeRange: { start: '2026-08-08 00:00', end: '2026-08-08 23:59' }, createdAt: '2026-07-31 09:00', createdBy: '运营专员', status: 'draft', auditStatus: 'rejected', rule: '会员日专享折扣', channel: ['APP'], payType: '贝壳', source: '繁星-三亚国际免税城', memberDiscount: { normal: 100, silver: 90, gold: 80, platinum: 70, diamond: 60 }, accountType: '主营业务', budgetLimit: 150000, actualCost: 0, actualRevenue: 0, costShare: { type: '混合分摊', platform: 30, store: 40, brand: 30 }, revenueShare: { type: '混合分成', platform: 30, store: 40, brand: 30 }, auditLogs: [{ time: '2026-07-31 14:20', auditor: '管理员B', action: '提交审核', note: '' }, { time: '2026-07-31 16:00', auditor: '管理员B', action: '驳回', note: '预算超限且会员折扣力度过大，请调整后重新提交' }],
+      items: []
+    },
   ];
 
   let editingActivityId = null;
@@ -3555,6 +3453,7 @@
     const channelFilter = document.getElementById('filterActChannel')?.value || '';
     const payFilter = document.getElementById('filterActPayType')?.value || '';
     const statusFilter = document.getElementById('filterActStatus')?.value || '';
+    const auditStatusFilter = document.getElementById('filterActAuditStatus')?.value || '';
     const dateStart = document.getElementById('filterActDateStart')?.value || '';
     const dateEnd = document.getElementById('filterActDateEnd')?.value || '';
     const accountTypeFilter = document.getElementById('filterActAccountType')?.value || '';
@@ -3565,6 +3464,7 @@
       if (channelFilter && !(a.channel || []).includes(channelFilter)) return false;
       if (payFilter && a.payType !== payFilter) return false;
       if (statusFilter && a.status !== statusFilter) return false;
+      if (auditStatusFilter && (a.auditStatus || '') !== auditStatusFilter) return false;
       if (accountTypeFilter && (a.accountType || '主营业务') !== accountTypeFilter) return false;
       if (dateStart && (!a.createdAt || a.createdAt.substring(0,10) < dateStart)) return false;
       if (dateEnd && (!a.createdAt || a.createdAt.substring(0,10) > dateEnd)) return false;
@@ -3573,23 +3473,25 @@
 
     const tbody = document.getElementById('activityTableBody');
     tbody.innerHTML = filtered.map(a => {
-      const statusMap = { pending: ['待审核', 'warn'], active: ['进行中', 'on'], terminated: ['已终止', 'terminated'] };
-      const [statusText, statusDot] = statusMap[a.status] || ['进行中', 'on'];
       const isTerminated = a.status === 'terminated';
-      const isPending = a.status === 'pending';
+      const isDraft = a.status === 'draft';
       const isActive = a.status === 'active';
-      const hasPendingVersion = isActive && a.pendingVersion;
-      const hasPendingSubmitted = hasPendingVersion && a.pendingSubmitted;
       let statusHtml;
       if (isTerminated) {
         statusHtml = '<span class="status-dot off"></span><span style="color:var(--ink-4);">已终止</span>';
-      } else if (isPending) {
-        statusHtml = '<span class="status-dot" style="background:#f59e0b;"></span><span style="color:#f59e0b;">待审核</span>';
-      } else if (hasPendingSubmitted) {
-        statusHtml = '<span class="status-dot on"></span>进行中 <span style="display:inline-block;margin-left:4px;padding:1px 6px;border-radius:4px;font-size:11px;background:#eff6ff;color:#3b82f6;">变更审核中</span>';
+      } else if (isDraft) {
+        statusHtml = '<span class="status-dot" style="background:#94a3b8;"></span><span style="color:var(--ink-3);">草稿</span>';
       } else {
-        statusHtml = '<span class="status-dot on"></span>' + statusText;
+        statusHtml = '<span class="status-dot on"></span>进行中';
       }
+      // 审核状态
+      const auditStatusMap = {
+        pending: '<span class="status-dot" style="background:#f59e0b;"></span><span style="color:#f59e0b;">待审核</span>',
+        approved: '<span class="status-dot" style="background:#16a34a;"></span><span style="color:#16a34a;">通过</span>',
+        rejected: '<span class="status-dot" style="background:#dc2626;"></span><span style="color:#dc2626;">驳回</span>'
+      };
+      const auditStatusHtml = auditStatusMap[a.auditStatus] || '<span style="color:var(--ink-4);">-</span>';
+      const hasLogs = (a.auditLogs || []).length > 0;
       // 平台badge
       const platformBadge = a.source === '千帆'
         ? '<span style="display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;background:#e3f2fd;color:#1565c0;">千帆</span>'
@@ -3617,16 +3519,18 @@
         <td style="font-size:12px;color:var(--ink-2);">${a.createdAt || '-'}</td>
         <td style="font-size:12px;color:var(--ink-2);">${a.createdBy || '-'}</td>
         <td>${statusHtml}</td>
+        <td>${auditStatusHtml}</td>
         <td class="td-actions">
           <div class="td-actions-inner">
-            ${isPending ? '<button class="btn btn-primary btn-sm" onclick="openActivityAuditModal(' + a.id + ')">审核</button>' : ''}
-            ${!isPending ? '<button class="btn btn-text btn-sm" onclick="openActivityLogModal(' + a.id + ')">日志</button>' : ''}
             ${isActive && a.pendingSubmitted ? '<button class="btn btn-primary btn-sm" onclick="openChangeAuditModal(' + a.id + ')">审核</button>' : ''}
-            ${isActive && a.pendingVersion && !a.pendingSubmitted ? '<button class="btn btn-primary btn-sm" onclick="submitActivityChange(' + a.id + ')">提交审核</button>' : ''}
-            ${isActive && !a.pendingSubmitted ? '<button class="btn btn-text btn-sm" onclick="openActivityConfig(' + a.id + ')">奖品配置</button>' : ''}
+            ${isActive && !a.pendingSubmitted ? '<button class="btn btn-primary btn-sm" onclick="submitActivityChange(' + a.id + ')">提交审核</button>' : ''}
+            ${isDraft && a.auditStatus === 'pending' ? '<button class="btn btn-primary btn-sm" onclick="openActivityAuditModal(' + a.id + ')">审核</button>' : ''}
+            ${isDraft && a.auditStatus === 'rejected' ? '<button class="btn btn-primary btn-sm" onclick="submitDraftAudit(' + a.id + ')">提交审核</button>' : ''}
+            ${hasLogs ? '<button class="btn btn-text btn-sm" onclick="openActivityLogModal(' + a.id + ')">日志</button>' : ''}
+            ${!isTerminated ? '<button class="btn btn-text btn-sm" onclick="openActivityConfig(' + a.id + ')">奖品配置</button>' : ''}
             ${!isTerminated ? '<button class="btn btn-text btn-sm" onclick="openActivityModal(' + a.id + ')">编辑</button>' : ''}
             <button class="btn btn-text btn-sm" onclick="copyActivity(${a.id})">复制</button>
-            ${!isTerminated ? '<button class="btn btn-danger btn-sm" onclick="terminateActivity(' + a.id + ')">终止</button>' : ''}
+            ${isActive ? '<button class="btn btn-danger btn-sm" onclick="terminateActivity(' + a.id + ')">终止</button>' : ''}
           </div>
         </td>
       </tr>`;
@@ -3795,7 +3699,7 @@
       const newId = allActivities.length > 0 ? Math.max(...allActivities.map(a => a.id)) + 1 : 1;
       const now = new Date();
       const createdAt = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0') + ' ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
-      allActivities.push({ id: newId, name, timeRange: { start, end }, createdAt, createdBy: '管理员', status: 'pending', channel: channels, payType, accountType, memberDiscount, items: [] });
+      allActivities.push({ id: newId, name, timeRange: { start, end }, createdAt, createdBy: '管理员', status: 'draft', auditStatus: 'pending', channel: channels, payType, accountType, memberDiscount, items: [] });
       showToast('活动已创建', 'success');
     }
     closeModal('activityModal');
@@ -4083,12 +3987,13 @@
     const a = allActivities.find(x => x.id === id);
     if (!a) return;
     currentChangeAuditActivityId = id;
-    document.getElementById('changeAuditTitle').textContent = '活动审核 - ' + a.name;
+    document.getElementById('changeAuditTitle').textContent = '审核-' + a.name;
     document.getElementById('changeAuditBody').innerHTML = renderActivityAuditBody(a);
+    resetChangeRejectInput();
     document.getElementById('changeAuditModal').classList.add('show');
   }
 
-  // 待审核活动信息总览：基础信息 + 奖品配置全量展示（无双列对比）
+  // 草稿审核信息总览：基础信息 + 奖品配置全量展示（顶部无提示横幅）
   function renderActivityAuditBody(a) {
     const mdMap = { normal: '普通', silver: '白银', gold: '黄金', platinum: '铂金', diamond: '钻石' };
     const fmtMd = function(md) { return Object.keys(mdMap).map(function(k) { return mdMap[k] + (md && md[k] !== undefined ? md[k] : '-') + '%'; }).join('，'); };
@@ -4122,10 +4027,13 @@
         '<td style="padding:8px 12px;font-size:12px;color:var(--ink-2);border-top:1px solid var(--border);">' + fmtL(it.dayLimit) + '</td>' +
       '</tr>';
     }).join('');
-    return '<div style="padding:16px 24px;background:#fff0e6;border-bottom:1px solid var(--border);border-left:3px solid #f59e0b;">' +
-        '<div style="font-size:13px;color:#d97706;font-weight:500;">审核提示</div>' +
-        '<div style="font-size:12px;color:var(--ink-3);margin-top:6px;line-height:1.6;">审核通过后，活动将变为"进行中"状态，用户可参与兑换。请确认以下活动配置无误后再审核通过。</div>' +
-      '</div>' +
+    const lastRejectLog = (a.auditLogs || []).find(function(l) { return l.action === '驳回' && l.note; });
+    return (lastRejectLog
+        ? '<div style="padding:12px 24px;background:#fef2f2;border-bottom:1px solid var(--border);border-left:3px solid #dc2626;">' +
+            '<div style="font-size:13px;color:#dc2626;font-weight:500;">上次驳回原因</div>' +
+            '<div style="font-size:12px;color:var(--ink-3);margin-top:4px;line-height:1.6;">' + lastRejectLog.note + '</div>' +
+          '</div>'
+        : '') +
       '<div style="padding:16px 24px;border-bottom:1px solid var(--border);">' +
         '<div style="font-size:13px;font-weight:600;color:var(--ink);margin-bottom:10px;">基础信息</div>' +
         '<table style="width:100%;border-collapse:collapse;border:1px solid var(--border);">' +
@@ -4162,7 +4070,7 @@
     const logs = a.auditLogs || [];
     const listEl = document.getElementById('activityLogList');
     if (logs.length === 0) {
-      listEl.innerHTML = '<tr><td colspan="3" style="text-align:center;color:var(--ink-4);padding:40px 0;font-size:13px;">暂无日志记录</td></tr>';
+      listEl.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--ink-4);padding:40px 0;font-size:13px;">暂无日志记录</td></tr>';
     } else {
       listEl.innerHTML = logs.map(function(log) {
         const colorMap = {
@@ -4170,16 +4078,20 @@
           '审核驳回': 'color:#dc2626;background:#fef2f2;',
           '变更审核通过': 'color:#16a34a;background:#f0fdf4;',
           '变更审核驳回': 'color:#dc2626;background:#fef2f2;',
+          '提交审核': 'color:#7c3aed;background:#f5f3ff;',
           '提交变更审核': 'color:#7c3aed;background:#f5f3ff;',
           '保存待审核变更': 'color:#d97706;background:#fff7ed;',
+          '驳回': 'color:#dc2626;background:#fef2f2;',
           '自动终止': 'color:var(--ink-4);background:#f5f5f5;',
           '终止': 'color:var(--ink-4);background:#f5f5f5;'
         };
         const actionColor = colorMap[log.action] || 'color:var(--primary);background:#eff6ff;';
+        const isReject = log.action === '驳回' || log.action === '审核驳回' || log.action === '变更审核驳回';
         return '<tr>' +
           '<td><span style="display:inline-block;padding:2px 10px;border-radius:4px;font-size:12px;font-weight:500;' + actionColor + '">' + log.action + '</span></td>' +
           '<td style="font-size:13px;color:var(--ink-2);">' + (log.auditor || '-') + '</td>' +
           '<td style="font-size:12px;color:var(--ink-3);">' + log.time + '</td>' +
+          '<td style="font-size:12px;color:var(--ink-3);">' + (log.note ? (isReject ? '<span style="color:#dc2626;">' + log.note + '</span>' : log.note) : '-') + '</td>' +
         '</tr>';
       }).join('');
     }
@@ -4217,141 +4129,160 @@
     });
   }
 
+  function submitDraftAudit(id) {
+    const a = allActivities.find(x => x.id === id);
+    if (!a || a.status !== 'draft') { showToast('仅草稿状态的活动可提交审核', 'warning'); return; }
+    if (a.auditStatus === 'pending') { showToast('该活动已在审核中，请勿重复提交', 'warning'); return; }
+    showConfirm('提交审核', '提交后活动将进入审核流程，审核通过后变为"进行中"。确定提交吗？', function() {
+      a.auditStatus = 'pending';
+      a.auditLogs = a.auditLogs || [];
+      a.auditLogs.unshift({ time: nowTimeStr(), auditor: '当前用户', action: '提交审核' });
+      renderActivities();
+      showToast('已提交审核，请等待管理员审核', 'success');
+    });
+  }
+
   function fmtChangeLimit(v) { return (v === -1 || v === undefined || v === null || v === '') ? '不限' : v; }
 
-  // 待生效变更统一入口：变更预览与审核操作同一个弹窗，footer 始终提供驳回/通过按钮
+  // 变更审核统一入口：基础信息与奖品信息均按「变更前（线上）/ 变更后（待生效）」逐项对比展示，footer 始终提供驳回/通过按钮
   function openChangeAuditModal(id) {
     const a = allActivities.find(x => x.id === id);
     if (!a || !a.pendingVersion) { showToast('暂无待生效变更', 'warning'); return; }
     currentChangeAuditActivityId = id;
-    document.getElementById('changeAuditTitle').textContent = '待生效变更 - ' + a.name;
+    document.getElementById('changeAuditTitle').textContent = '审核-' + a.name;
     document.getElementById('changeAuditBody').innerHTML = renderChangeAuditBody(a);
+    resetChangeRejectInput();
     document.getElementById('changeAuditModal').classList.add('show');
   }
 
+  // 变更审核：基础信息 + 奖品信息「变更前（线上）/ 变更后（待生效）」逐项对比
   function renderChangeAuditBody(a) {
-    const pv = a.pendingVersion;
     const mdMap = { normal: '普通', silver: '白银', gold: '黄金', platinum: '铂金', diamond: '钻石' };
     const fmtMd = function(md) { return Object.keys(mdMap).map(function(k) { return mdMap[k] + (md && md[k] !== undefined ? md[k] : '-') + '%'; }).join('，'); };
-    const fields = [
-      { label: '活动名称', cur: a.name, next: pv.name },
-      { label: '活动时间', cur: a.timeRange.start + ' ~ ' + a.timeRange.end, next: pv.timeRange ? (pv.timeRange.start + ' ~ ' + pv.timeRange.end) : '-' },
-      { label: '活动渠道', cur: (a.channel || []).join('、'), next: (pv.channel || []).join('、') },
-      { label: '支付方式', cur: a.payType, next: pv.payType },
-      { label: '会员折扣', cur: fmtMd(a.memberDiscount), next: fmtMd(pv.memberDiscount) },
-      { label: '入账类型', cur: a.accountType, next: pv.accountType }
+    const fmtL = fmtChangeLimit;
+    const tagsStr = function(t) { return (t && t.length) ? t.join('、') : '无'; };
+    const timeStr = function(tr) { return tr ? (tr.start + ' ~ ' + tr.end) : '-'; };
+    const payStr = function(p) { return p === '贝壳' ? '积分 + 贝壳' : '积分'; };
+    const accStr = function(v) { return v === '主营业务' ? '主营业务' : '非主营业务'; };
+    const pv = a.pendingVersion;
+
+    // ---- 基础信息：字段级前后对比，变更字段高亮 ----
+    const baseFields = [
+      ['活动名称', a.name, pv.name],
+      ['活动时间', timeStr(a.timeRange), timeStr(pv.timeRange)],
+      ['活动渠道', (a.channel || []).join('、') || '-', (pv.channel || []).join('、') || '-'],
+      ['支付方式', payStr(a.payType), payStr(pv.payType)],
+      ['会员折扣', fmtMd(a.memberDiscount), fmtMd(pv.memberDiscount)],
+      ['入账类型', accStr(a.accountType), accStr(pv.accountType)]
     ];
-    const baseRows = fields.map(function(f) {
-      const changed = String(f.cur) !== String(f.next);
+    const baseRows = baseFields.map(function(f) {
+      const changed = f[1] !== f[2];
       return '<tr style="' + (changed ? 'background:#fff7ed;' : '') + '">' +
-        '<td style="padding:8px 16px;font-size:13px;color:var(--ink-2);white-space:nowrap;">' + f.label + (changed ? ' <span style="color:#ea580c;">*</span>' : '') + '</td>' +
-        '<td style="padding:8px 16px;font-size:13px;color:var(--ink-3);">' + f.cur + '</td>' +
-        '<td style="padding:8px 16px;font-size:13px;' + (changed ? 'color:#ea580c;font-weight:600;' : 'color:var(--ink-2);') + '">' + f.next + '</td>' +
+        '<td style="padding:8px 16px;font-size:13px;color:var(--ink-2);white-space:nowrap;border-top:1px solid var(--border);">' + f[0] + '</td>' +
+        '<td style="padding:8px 16px;font-size:13px;border-top:1px solid var(--border);' + (changed ? 'color:#dc2626;' : 'color:var(--ink-2);') + '">' + f[1] + '</td>' +
+        '<td style="padding:8px 16px;font-size:13px;border-top:1px solid var(--border);' + (changed ? 'color:#d97706;font-weight:600;' : 'color:var(--ink-2);') + '">' + f[2] + '</td>' +
       '</tr>';
     }).join('');
 
-    // ===== 奖品差异计算 =====
-    const curItems = a.items || [];
-    const nextItems = pv.items || [];
-    const curMap = {}; curItems.forEach(function(it) { curMap[it.prizeId] = it; });
-    const nextMap = {}; nextItems.forEach(function(it) { nextMap[it.prizeId] = it; });
-    const fieldDefs = [
-      { key: 'price', label: '兑换积分', fmt: function(v) { return v; } },
-      { key: 'stock', label: '活动库存', fmt: fmtChangeLimit },
-      { key: 'dailyStock', label: '每日库存', fmt: fmtChangeLimit },
-      { key: 'monthLimit', label: '月限/人', fmt: fmtChangeLimit },
-      { key: 'dayLimit', label: '日限/人', fmt: fmtChangeLimit }
+    // ---- 奖品信息：按 prizeId 匹配，逐项展示变更前后 ----
+    const prizeAttrs = [
+      ['name', '奖品名称', function(v) { return v || '-'; }],
+      ['type', '类型', function(v) { return v || '-'; }],
+      ['tags', '标签', tagsStr],
+      ['price', '兑换积分', function(v) { return v === undefined || v === null ? '-' : v; }],
+      ['stock', '活动库存', fmtL],
+      ['dailyStock', '每日库存', fmtL],
+      ['monthLimit', '月限/人', fmtL],
+      ['dayLimit', '日限/人', fmtL]
     ];
-    const tagsStr = function(t) { return (t && t.length) ? t.join('、') : '无'; };
-    const itemFieldDiffs = function(curIt, nextIt) {
-      const diffs = [];
-      fieldDefs.forEach(function(fd) {
-        const cv = curIt[fd.key], nv = nextIt[fd.key];
-        if (String(cv) !== String(nv)) diffs.push({ label: fd.label, cur: fd.fmt(cv), next: fd.fmt(nv) });
-      });
-      if (tagsStr(curIt.tags) !== tagsStr(nextIt.tags)) diffs.push({ label: '奖品标签', cur: tagsStr(curIt.tags), next: tagsStr(nextIt.tags) });
-      return diffs;
-    };
-    const entries = [];
-    curItems.forEach(function(it) {
-      const nt = nextMap[it.prizeId];
-      if (!nt) { entries.push({ type: 'removed', cur: it, next: null, diffs: [] }); return; }
-      const diffs = itemFieldDiffs(it, nt);
-      entries.push({ type: diffs.length ? 'modified' : 'unchanged', cur: it, next: nt, diffs: diffs });
-    });
-    nextItems.forEach(function(it) {
-      if (!curMap[it.prizeId]) entries.push({ type: 'added', cur: null, next: it, diffs: [] });
-    });
-    const badgeMap = {
-      added: { text: '新增', style: 'color:#16a34a;background:#f0fdf4;border:1px solid #bbf7d0;' },
-      removed: { text: '移除', style: 'color:#dc2626;background:#fef2f2;border:1px solid #fecaca;' },
-      modified: { text: '修改', style: 'color:#ea580c;background:#fff7ed;border:1px solid #fed7aa;' },
-      unchanged: { text: '未变更', style: 'color:var(--ink-4);background:#f5f5f5;border:1px solid var(--border);' }
-    };
-    const summary = { added: 0, removed: 0, modified: 0, unchanged: 0 };
-    entries.forEach(function(e) { summary[e.type]++; });
-    const itemBlocks = entries.map(function(e) {
-      const b = badgeMap[e.type];
-      const it = e.next || e.cur;
-      let detailHtml = '';
-      if (e.type === 'modified') {
-        detailHtml = '<table style="width:100%;border-collapse:collapse;margin-top:8px;">' +
-          '<thead><tr style="background:#fafafa;">' +
-            '<th style="padding:5px 12px;text-align:left;font-size:12px;color:var(--ink-3);font-weight:500;width:110px;">字段</th>' +
-            '<th style="padding:5px 12px;text-align:left;font-size:12px;color:var(--ink-3);font-weight:500;">线上版本</th>' +
-            '<th style="padding:5px 12px;text-align:left;font-size:12px;color:var(--ink-3);font-weight:500;">待生效版本</th>' +
-          '</tr></thead><tbody>' +
-          e.diffs.map(function(d) {
-            return '<tr>' +
-              '<td style="padding:5px 12px;font-size:12px;color:var(--ink-2);border-top:1px solid var(--border);">' + d.label + '</td>' +
-              '<td style="padding:5px 12px;font-size:12px;color:var(--ink-3);border-top:1px solid var(--border);">' + d.cur + '</td>' +
-              '<td style="padding:5px 12px;font-size:12px;color:#ea580c;font-weight:600;border-top:1px solid var(--border);">' + d.next + '</td>' +
-            '</tr>';
-          }).join('') +
-        '</tbody></table>';
-      } else if (e.type === 'added') {
-        detailHtml = '<div style="margin-top:6px;font-size:12px;color:var(--ink-3);">兑换积分：' + it.price + '，活动库存：' + fmtChangeLimit(it.stock) + '，每日库存：' + fmtChangeLimit(it.dailyStock) + '，月限/人：' + fmtChangeLimit(it.monthLimit) + '，日限/人：' + fmtChangeLimit(it.dayLimit) + '，标签：' + tagsStr(it.tags) + '</div>';
-      } else if (e.type === 'removed') {
-        detailHtml = '<div style="margin-top:6px;font-size:12px;color:var(--ink-4);">原配置：兑换积分 ' + it.price + '，活动库存 ' + fmtChangeLimit(it.stock) + '，每日库存 ' + fmtChangeLimit(it.dailyStock) + '</div>';
-      }
-      return '<div style="border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin-bottom:8px;' + (e.type === 'unchanged' ? 'opacity:0.75;' : '') + '">' +
-        '<div style="display:flex;align-items:center;gap:8px;">' +
-          '<span style="font-size:12px;color:var(--ink-3);font-family:monospace;">' + it.prizeId + '</span>' +
-          '<span style="font-weight:500;font-size:13px;">' + it.name + '</span>' +
-          '<span style="font-size:11px;padding:1px 8px;border-radius:4px;' + b.style + '">' + b.text + '</span>' +
-        '</div>' + detailHtml +
-      '</div>';
-    }).join('');
+    const oldItems = a.items || [];
+    const newItems = (pv && pv.items) || [];
+    const oldMap = {}; oldItems.forEach(function(it) { oldMap[it.prizeId] = it; });
+    const newMap = {}; newItems.forEach(function(it) { newMap[it.prizeId] = it; });
 
-    return '<div style="padding:16px 24px;background:#fff7ed;border-bottom:1px solid var(--border);border-left:3px solid #f59e0b;">' +
-        '<div style="font-size:13px;color:#d97706;font-weight:500;">变更说明</div>' +
-        '<div style="font-size:12px;color:var(--ink-3);margin-top:6px;line-height:1.6;">' + (a.pendingChangeNote || '运营未填写变更说明') + '</div>' +
-        '<div style="font-size:12px;color:var(--ink-4);margin-top:6px;line-height:1.6;">审核期间线上版本保持当前配置不变，用户侧正常可见、可兑换；通过后待生效版本立即覆盖线上。</div>' +
-      '</div>' +
-      '<div style="padding:16px 24px;border-bottom:1px solid var(--border);">' +
-        '<div style="font-size:13px;font-weight:600;color:var(--ink);margin-bottom:10px;">基础信息变更（橙色底为变更项）</div>' +
-        '<table style="width:100%;border-collapse:collapse;border:1px solid var(--border);">' +
-          '<thead><tr style="background:#fafafa;">' +
-            '<th style="padding:8px 16px;text-align:left;font-size:12px;color:var(--ink-3);font-weight:500;width:140px;">字段</th>' +
-            '<th style="padding:8px 16px;text-align:left;font-size:12px;color:var(--ink-3);font-weight:500;">线上版本（当前生效）</th>' +
-            '<th style="padding:8px 16px;text-align:left;font-size:12px;color:var(--ink-3);font-weight:500;">待生效版本</th>' +
-          '</tr></thead><tbody>' + baseRows + '</tbody>' +
-        '</table>' +
+    const badge = function(status) {
+      const map = {
+        '新增': 'color:#16a34a;background:#f0fdf4;',
+        '移除': 'color:#dc2626;background:#fef2f2;',
+        '修改': 'color:#d97706;background:#fff7ed;',
+        '未变更': 'color:var(--ink-4);background:#f5f5f5;'
+      };
+      return '<span style="display:inline-block;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:500;white-space:nowrap;' + map[status] + '">' + status + '</span>';
+    };
+
+    // 单侧属性行；other 存在时高亮差异项（旧值红、新值橙）
+    const itemLines = function(it, other, isNewSide) {
+      return prizeAttrs.map(function(attr) {
+        const v = attr[2](it[attr[0]]);
+        const changed = !!other && attr[2](other[attr[0]]) !== v;
+        const style = changed ? (isNewSide ? 'color:#d97706;font-weight:600;' : 'color:#dc2626;') : 'color:var(--ink-2);';
+        return '<div style="font-size:12px;line-height:1.9;' + style + '">' + attr[1] + '：' + v + '</div>';
+      }).join('');
+    };
+
+    let modifiedCnt = 0, addedCnt = 0, removedCnt = 0, sameCnt = 0;
+    let prizeRows = '';
+    oldItems.forEach(function(oit) {
+      const nit = newMap[oit.prizeId];
+      let status;
+      if (!nit) {
+        status = '移除'; removedCnt++;
+      } else {
+        const hasChanged = prizeAttrs.some(function(attr) { return attr[2](oit[attr[0]]) !== attr[2](nit[attr[0]]); });
+        status = hasChanged ? '修改' : '未变更';
+        if (hasChanged) modifiedCnt++; else sameCnt++;
+      }
+      prizeRows += '<tr>' +
+        '<td style="padding:10px 12px;border-top:1px solid var(--border);vertical-align:top;white-space:nowrap;">' + badge(status) + '</td>' +
+        '<td style="padding:10px 12px;border-top:1px solid var(--border);vertical-align:top;font-size:12px;color:var(--ink-3);font-family:monospace;white-space:nowrap;">' + oit.prizeId + '</td>' +
+        '<td style="padding:10px 12px;border-top:1px solid var(--border);vertical-align:top;width:50%;">' + itemLines(oit, nit, false) + '</td>' +
+        '<td style="padding:10px 12px;border-top:1px solid var(--border);vertical-align:top;width:50%;">' + (nit ? itemLines(nit, oit, true) : '<div style="font-size:12px;line-height:1.9;color:var(--ink-4);">—（已移除）</div>') + '</td>' +
+      '</tr>';
+    });
+    newItems.forEach(function(nit) {
+      if (oldMap[nit.prizeId]) return;
+      addedCnt++;
+      prizeRows += '<tr>' +
+        '<td style="padding:10px 12px;border-top:1px solid var(--border);vertical-align:top;white-space:nowrap;">' + badge('新增') + '</td>' +
+        '<td style="padding:10px 12px;border-top:1px solid var(--border);vertical-align:top;font-size:12px;color:var(--ink-3);font-family:monospace;white-space:nowrap;">' + nit.prizeId + '</td>' +
+        '<td style="padding:10px 12px;border-top:1px solid var(--border);vertical-align:top;width:50%;"><div style="font-size:12px;line-height:1.9;color:var(--ink-4);">—（新增）</div></td>' +
+        '<td style="padding:10px 12px;border-top:1px solid var(--border);vertical-align:top;width:50%;">' + itemLines(nit, null, true) + '</td>' +
+      '</tr>';
+    });
+    const summaryText = '变更 ' + (modifiedCnt + addedCnt + removedCnt) + ' 项：修改 ' + modifiedCnt + ' / 新增 ' + addedCnt + ' / 移除 ' + removedCnt + '，未变更 ' + sameCnt + ' 项';
+
+    return '<div style="padding:16px 24px;border-bottom:1px solid var(--border);">' +
+        '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">' +
+          '<div style="font-size:13px;font-weight:600;color:var(--ink);">基础信息变更</div>' +
+          '<div style="font-size:12px;color:var(--ink-3);">变更前为线上当前配置，变更后为待生效配置</div>' +
+        '</div>' +
+        '<table style="width:100%;border-collapse:collapse;border:1px solid var(--border);"><tbody>' +
+          '<tr style="background:#fafafa;">' +
+            '<td style="padding:8px 16px;font-size:12px;color:var(--ink-3);font-weight:500;width:140px;">字段</td>' +
+            '<td style="padding:8px 16px;font-size:12px;color:var(--ink-3);font-weight:500;">变更前（线上）</td>' +
+            '<td style="padding:8px 16px;font-size:12px;color:var(--ink-3);font-weight:500;">变更后（待生效）</td>' +
+          '</tr>' + baseRows +
+        '</tbody></table>' +
       '</div>' +
       '<div style="padding:16px 24px;">' +
         '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">' +
-          '<div style="font-size:13px;font-weight:600;color:var(--ink);">奖品配置变更</div>' +
-          '<div style="font-size:12px;color:var(--ink-3);">共 ' + entries.length + ' 个奖品：新增 ' + summary.added + '、移除 ' + summary.removed + '、修改 ' + summary.modified + '、未变更 ' + summary.unchanged + '</div>' +
+          '<div style="font-size:13px;font-weight:600;color:var(--ink);">奖品信息变更</div>' +
+          '<div style="font-size:12px;color:var(--ink-3);">' + summaryText + '</div>' +
         '</div>' +
-        (itemBlocks || '<div style="font-size:12px;color:var(--ink-4);">奖品列表无变化</div>') +
+        '<table style="width:100%;border-collapse:collapse;border:1px solid var(--border);"><thead><tr style="background:#fafafa;">' +
+            '<th style="padding:8px 12px;text-align:left;font-size:12px;color:var(--ink-3);font-weight:500;">状态</th>' +
+            '<th style="padding:8px 12px;text-align:left;font-size:12px;color:var(--ink-3);font-weight:500;">奖品ID</th>' +
+            '<th style="padding:8px 12px;text-align:left;font-size:12px;color:var(--ink-3);font-weight:500;">变更前（线上）</th>' +
+            '<th style="padding:8px 12px;text-align:left;font-size:12px;color:var(--ink-3);font-weight:500;">变更后（待生效）</th>' +
+          '</tr></thead><tbody>' + prizeRows + '</tbody></table>' +
       '</div>';
   }
 
   function approveChange() {
     const a = allActivities.find(x => x.id === currentChangeAuditActivityId);
     if (!a) { closeModal('changeAuditModal'); return; }
-    // 待审核活动：通过后直接上线
-    if (a.status === 'pending') { approveActivity(a.id); return; }
+    // 草稿待审核活动：通过后直接上线
+    if (a.status === 'draft') { approveActivity(a.id); return; }
     if (!a.pendingVersion) { closeModal('changeAuditModal'); return; }
     const pv = a.pendingVersion;
     a.name = pv.name;
@@ -4374,11 +4305,23 @@
   function rejectChange() {
     const a = allActivities.find(x => x.id === currentChangeAuditActivityId);
     if (!a) { closeModal('changeAuditModal'); return; }
-    // 待审核活动：驳回后活动不予上线，从列表移除
-    if (a.status === 'pending') {
-      showConfirm('驳回活动', '驳回后该活动将不予上线，并从活动列表中移除。确定驳回吗？', function() {
-        const idx = allActivities.findIndex(function(x) { return x.id === a.id; });
-        if (idx !== -1) allActivities.splice(idx, 1);
+    // 第一步：先展开驳回原因输入框，再次点击驳回才弹出确认
+    const area = document.getElementById('changeRejectInputArea');
+    if (area && area.style.display === 'none') {
+      area.style.display = 'block';
+      const input = document.getElementById('changeRejectReason');
+      if (input) input.focus();
+      return;
+    }
+    const reasonEl = document.getElementById('changeRejectReason');
+    const reason = reasonEl ? reasonEl.value.trim() : '';
+    // 草稿待审核活动：驳回后保留在列表中，状态置为已驳回，可修改后重新提交
+    if (a.status === 'draft') {
+      showConfirm('驳回活动', '驳回后该活动将保留在列表中，状态置为"已驳回"，可修改后重新提交审核。确定驳回吗？', function() {
+        a.auditStatus = 'rejected';
+        a.auditLogs = a.auditLogs || [];
+        a.auditLogs.unshift({ time: nowTimeStr(), auditor: '管理员', action: '驳回', note: reason });
+        resetChangeRejectInput();
         renderActivities();
         closeModal('changeAuditModal');
         showToast('活动已驳回', 'success');
@@ -4391,17 +4334,26 @@
       a.pendingSubmitted = false;
       delete a.pendingChangeNote;
       a.auditLogs = a.auditLogs || [];
-      a.auditLogs.unshift({ time: nowTimeStr(), auditor: '管理员', action: '变更审核驳回' });
+      a.auditLogs.unshift({ time: nowTimeStr(), auditor: '管理员', action: '变更审核驳回', note: reason });
+      resetChangeRejectInput();
       renderActivities();
       closeModal('changeAuditModal');
       showToast('变更已驳回，线上版本未受影响', 'success');
     });
   }
 
+  function resetChangeRejectInput() {
+    const area = document.getElementById('changeRejectInputArea');
+    if (area) area.style.display = 'none';
+    const input = document.getElementById('changeRejectReason');
+    if (input) input.value = '';
+  }
+
   function approveActivity(id) {
     const a = allActivities.find(x => x.id === id);
     if (!a) return;
     a.status = 'active';
+    a.auditStatus = 'approved';
     // 记录审核日志
     if (!a.auditLogs) a.auditLogs = [];
     const now = new Date();
@@ -4424,7 +4376,12 @@
       newAct.name = a.name + ' - 副本';
       newAct.createdAt = createdAt;
       newAct.createdBy = '管理员';
-      newAct.status = 'active';
+      newAct.status = 'draft';
+      newAct.auditStatus = 'pending';
+      newAct.auditLogs = [];
+      newAct.pendingVersion = null;
+      newAct.pendingSubmitted = false;
+      delete newAct.pendingChangeNote;
       newAct.items = [];
       allActivities.push(newAct);
       renderActivities();
@@ -7271,6 +7228,7 @@
   document.getElementById('filterActChannel')?.addEventListener('change', renderActivities);
   document.getElementById('filterActPayType')?.addEventListener('change', renderActivities);
   document.getElementById('filterActStatus')?.addEventListener('change', renderActivities);
+  document.getElementById('filterActAuditStatus')?.addEventListener('change', renderActivities);
   document.getElementById('filterActAccountType')?.addEventListener('change', renderActivities);
 </script>
 <script>
