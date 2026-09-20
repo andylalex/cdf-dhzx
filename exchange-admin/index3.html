@@ -1290,6 +1290,27 @@
             <button class="btn btn-text btn-sm" onclick="copyActivity(5)">复制</button>
           </div>
         </td>
+      </tr><tr>
+        <td style="font-family:monospace;font-size:12px;color:var(--ink-2);">6</td>
+        <td style="font-size:12px;"><span style="display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;background:#e3f2fd;color:#1565c0;">千帆</span></td>
+        <td style="font-weight:500;">国庆黄金周兑换活动</td>
+        <td><div style="font-size:12px;line-height:1.6;"><div style="color:var(--ink-3);">开始：2026-10-01 00:00</div><div style="color:var(--ink-3);">结束：2026-10-07 23:59</div></div></td>
+        <td style="font-size:12px;color:var(--ink-2);">APP、微信小程序、H5</td>
+        <td><span class="tag tag-blue">积分</span></td>
+        <td style="font-size:13px;font-weight:500;text-align:center;">2</td>
+        <td style="font-size:12px;text-align:center;">主营业务</td>
+        <td style="font-size:12px;color:var(--ink-2);">2026-09-20 10:00</td>
+        <td style="font-size:12px;color:var(--ink-2);">运营专员</td>
+        <td><span class="status-dot" style="background:#94a3b8;"></span><span style="color:var(--ink-3);">草稿</span></td>
+        <td><span class="status-dot" style="background:#2563eb;"></span><span style="color:#2563eb;">待提交</span></td>
+        <td class="td-actions">
+          <div class="td-actions-inner">
+            <button class="btn btn-primary btn-sm" onclick="submitDraftAudit(6)">提交审核</button>
+            <button class="btn btn-text btn-sm" onclick="openActivityConfig(6)">奖品配置</button>
+            <button class="btn btn-text btn-sm" onclick="openActivityModal(6)">编辑</button>
+            <button class="btn btn-text btn-sm" onclick="copyActivity(6)">复制</button>
+          </div>
+        </td>
       </tr></tbody>
             </table>
           </div>
@@ -3440,6 +3461,12 @@
     { id: 5, name: '八月会员日活动', timeRange: { start: '2026-08-08 00:00', end: '2026-08-08 23:59' }, createdAt: '2026-07-31 09:00', createdBy: '运营专员', status: 'draft', auditStatus: 'rejected', rule: '会员日专享折扣', channel: ['APP'], payType: '贝壳', source: '繁星-三亚国际免税城', memberDiscount: { normal: 100, silver: 90, gold: 80, platinum: 70, diamond: 60 }, accountType: '主营业务', budgetLimit: 150000, actualCost: 0, actualRevenue: 0, costShare: { type: '混合分摊', platform: 30, store: 40, brand: 30 }, revenueShare: { type: '混合分成', platform: 30, store: 40, brand: 30 }, auditLogs: [{ time: '2026-07-31 14:20', auditor: '管理员B', action: '提交审核', note: '' }, { time: '2026-07-31 16:00', auditor: '管理员B', action: '驳回', note: '预算超限且会员折扣力度过大，请调整后重新提交' }],
       items: []
     },
+    { id: 6, name: '国庆黄金周兑换活动', timeRange: { start: '2026-10-01 00:00', end: '2026-10-07 23:59' }, createdAt: '2026-09-20 10:00', createdBy: '运营专员', status: 'draft', auditStatus: 'pendingSubmit', rule: '黄金周限时礼品兑换', channel: ['APP', '微信小程序', 'H5'], payType: '积分', source: '千帆', memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 400000, actualCost: 0, actualRevenue: 0, costShare: { type: '平台全额' }, revenueShare: { type: '平台全额' }, auditLogs: [],
+      items: [
+        { prizeId: 'PRIZE-0022', name: '黄金周限定礼盒', type: '实物礼品', price: 15800, stock: 100, dailyStock: -1, exchanged: 0, monthLimit: 1, dayLimit: 1, tags: ['节日活动', '限时'] },
+        { prizeId: 'PRIZE-0023', name: 'CDF 黄金周代金券', type: '优惠券-优选单券', price: 800, stock: -1, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['满减活动'] },
+      ]
+    },
   ];
 
   let editingActivityId = null;
@@ -3465,9 +3492,9 @@
       if (channelFilter && !(a.channel || []).includes(channelFilter)) return false;
       if (payFilter && a.payType !== payFilter) return false;
       if (statusFilter && a.status !== statusFilter) return false;
-      // 审核状态筛选：与列表徽章语义一致（待提交/待审核涵盖进行中活动的待生效变更）
+      // 审核状态筛选：与列表徽章语义一致（待提交=草稿未提交审核 或 进行中未提交变更；待审核=草稿待审 或 进行中已提交变更）
       if (auditStatusFilter === 'pendingSubmit') {
-        if (!(a.status === 'active' && a.pendingVersion && !a.pendingSubmitted)) return false;
+        if (!((a.auditStatus || '') === 'pendingSubmit' || (a.status === 'active' && a.pendingVersion && !a.pendingSubmitted))) return false;
       } else if (auditStatusFilter === 'pending') {
         if (!((a.auditStatus || '') === 'pending' || (a.status === 'active' && a.pendingVersion && a.pendingSubmitted))) return false;
       } else if (auditStatusFilter === 'approved' || auditStatusFilter === 'rejected') {
@@ -3492,13 +3519,13 @@
       } else {
         statusHtml = '<span class="status-dot on"></span>进行中';
       }
-      // 审核状态：进行中活动有待生效变更时——未提交显示「待提交」，已提交待审显示「待审核」（与草稿待审核同一状态同一配色）
+      // 审核状态：待提交=草稿未提交审核(蓝) 或 进行中未提交变更(蓝)；已提交待审显示「待审核」（草稿待审与进行中已提交变更同一状态同一配色）
       const auditStatusMap = {
         pending: '<span class="status-dot" style="background:#f59e0b;"></span><span style="color:#f59e0b;">待审核</span>',
         approved: '<span class="status-dot" style="background:#16a34a;"></span><span style="color:#16a34a;">通过</span>',
         rejected: '<span class="status-dot" style="background:#dc2626;"></span><span style="color:#dc2626;">驳回</span>'
       };
-      const hasPendingSubmit = isActive && a.pendingVersion && !a.pendingSubmitted;
+      const hasPendingSubmit = (isActive && a.pendingVersion && !a.pendingSubmitted) || (isDraft && (a.auditStatus || '') === 'pendingSubmit');
       const hasPendingAudit = isActive && a.pendingVersion && a.pendingSubmitted;
       const auditStatusHtml = hasPendingSubmit
         ? '<span class="status-dot" style="background:#2563eb;"></span><span style="color:#2563eb;">待提交</span>'
@@ -3536,6 +3563,7 @@
           <div class="td-actions-inner">
             ${isActive && a.pendingVersion && a.pendingSubmitted ? '<button class="btn btn-primary btn-sm" onclick="openChangeAuditModal(' + a.id + ')">审核</button>' : ''}
             ${isActive && a.pendingVersion && !a.pendingSubmitted ? '<button class="btn btn-primary btn-sm" onclick="submitActivityChange(' + a.id + ')">提交审核</button>' : ''}
+            ${isDraft && a.auditStatus === 'pendingSubmit' ? '<button class="btn btn-primary btn-sm" onclick="submitDraftAudit(' + a.id + ')">提交审核</button>' : ''}
             ${isDraft && a.auditStatus === 'pending' ? '<button class="btn btn-primary btn-sm" onclick="openActivityAuditModal(' + a.id + ')">审核</button>' : ''}
             ${isDraft && a.auditStatus === 'rejected' ? '<button class="btn btn-primary btn-sm" onclick="submitDraftAudit(' + a.id + ')">提交审核</button>' : ''}
             ${hasLogs ? '<button class="btn btn-text btn-sm" onclick="openActivityLogModal(' + a.id + ')">日志</button>' : ''}
@@ -3711,7 +3739,7 @@
       const newId = allActivities.length > 0 ? Math.max(...allActivities.map(a => a.id)) + 1 : 1;
       const now = new Date();
       const createdAt = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0') + ' ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
-      allActivities.push({ id: newId, name, timeRange: { start, end }, createdAt, createdBy: '管理员', status: 'draft', auditStatus: 'pending', channel: channels, payType, accountType, memberDiscount, items: [] });
+      allActivities.push({ id: newId, name, timeRange: { start, end }, createdAt, createdBy: '管理员', status: 'draft', auditStatus: 'pendingSubmit', channel: channels, payType, accountType, memberDiscount, items: [] });
       showToast('活动已创建', 'success');
     }
     closeModal('activityModal');
@@ -4389,7 +4417,7 @@
       newAct.createdAt = createdAt;
       newAct.createdBy = '管理员';
       newAct.status = 'draft';
-      newAct.auditStatus = 'pending';
+      newAct.auditStatus = 'pendingSubmit';
       newAct.auditLogs = [];
       newAct.pendingVersion = null;
       newAct.pendingSubmitted = false;
