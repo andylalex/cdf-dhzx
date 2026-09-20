@@ -1137,6 +1137,7 @@
             </select>
             <select class="form-input form-select" style="width:120px;" id="filterActAuditStatus">
               <option value="">全部审核</option>
+              <option value="pendingSubmit">待提交</option>
               <option value="pending">待审核</option>
               <option value="approved">已通过</option>
               <option value="rejected">已驳回</option>
@@ -1216,7 +1217,7 @@
         <td style="font-size:12px;color:var(--ink-2);">2026-07-19 09:00</td>
         <td style="font-size:12px;color:var(--ink-2);">管理员</td>
         <td><span class="status-dot on"></span>进行中</td>
-        <td><span class="status-dot" style="background:#f59e0b;"></span><span style="color:#f59e0b;">待审核</span></td>
+        <td><span class="status-dot" style="background:#2563eb;"></span><span style="color:#2563eb;">待提交</span></td>
         <td class="td-actions">
           <div class="td-actions-inner">
             <button class="btn btn-primary btn-sm" onclick="submitActivityChange(2)">提交审核</button>
@@ -3464,7 +3465,14 @@
       if (channelFilter && !(a.channel || []).includes(channelFilter)) return false;
       if (payFilter && a.payType !== payFilter) return false;
       if (statusFilter && a.status !== statusFilter) return false;
-      if (auditStatusFilter && (a.auditStatus || '') !== auditStatusFilter) return false;
+      // 审核状态筛选：与列表徽章语义一致（待提交/待审核涵盖进行中活动的待生效变更）
+      if (auditStatusFilter === 'pendingSubmit') {
+        if (!(a.status === 'active' && a.pendingVersion && !a.pendingSubmitted)) return false;
+      } else if (auditStatusFilter === 'pending') {
+        if (!((a.auditStatus || '') === 'pending' || (a.status === 'active' && a.pendingVersion && a.pendingSubmitted))) return false;
+      } else if (auditStatusFilter === 'approved' || auditStatusFilter === 'rejected') {
+        if ((a.auditStatus || '') !== auditStatusFilter || (a.status === 'active' && a.pendingVersion)) return false;
+      } else if (auditStatusFilter && (a.auditStatus || '') !== auditStatusFilter) return false;
       if (accountTypeFilter && (a.accountType || '主营业务') !== accountTypeFilter) return false;
       if (dateStart && (!a.createdAt || a.createdAt.substring(0,10) < dateStart)) return false;
       if (dateEnd && (!a.createdAt || a.createdAt.substring(0,10) > dateEnd)) return false;
@@ -3484,16 +3492,17 @@
       } else {
         statusHtml = '<span class="status-dot on"></span>进行中';
       }
-      // 审核状态：进行中活动存在未提交的待生效更新时同样显示「待审核」（与草稿待审核同一状态同一配色）
+      // 审核状态：进行中活动有待生效变更时——未提交显示「待提交」，已提交待审显示「待审核」（与草稿待审核同一状态同一配色）
       const auditStatusMap = {
         pending: '<span class="status-dot" style="background:#f59e0b;"></span><span style="color:#f59e0b;">待审核</span>',
         approved: '<span class="status-dot" style="background:#16a34a;"></span><span style="color:#16a34a;">通过</span>',
         rejected: '<span class="status-dot" style="background:#dc2626;"></span><span style="color:#dc2626;">驳回</span>'
       };
-      const hasUnsubmittedChange = isActive && a.pendingVersion && !a.pendingSubmitted;
-      const auditStatusHtml = hasUnsubmittedChange
-        ? auditStatusMap.pending
-        : (auditStatusMap[a.auditStatus] || '<span style="color:var(--ink-4);">-</span>');
+      const hasPendingSubmit = isActive && a.pendingVersion && !a.pendingSubmitted;
+      const hasPendingAudit = isActive && a.pendingVersion && a.pendingSubmitted;
+      const auditStatusHtml = hasPendingSubmit
+        ? '<span class="status-dot" style="background:#2563eb;"></span><span style="color:#2563eb;">待提交</span>'
+        : (hasPendingAudit ? auditStatusMap.pending : (auditStatusMap[a.auditStatus] || '<span style="color:var(--ink-4);">-</span>'));
       const hasLogs = (a.auditLogs || []).length > 0;
       // 平台badge
       const platformBadge = a.source === '千帆'
