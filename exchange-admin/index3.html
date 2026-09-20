@@ -3723,7 +3723,7 @@
           };
           a.pendingSubmitted = false;
           a.auditLogs = a.auditLogs || [];
-          a.auditLogs.push({ time: new Date().toLocaleString('zh-CN', { hour12: false }), auditor: '当前用户', action: '保存待审核变更' });
+          a.auditLogs.push({ time: new Date().toLocaleString('zh-CN', { hour12: false }), auditor: '当前用户', action: '编辑', note: describePrizeChanges(a.items || [], (a.pendingVersion && a.pendingVersion.items) || []) });
           showToast('已保存为待审核草稿，线上版本不受影响', 'success');
         } else {
           a.name = name;
@@ -4120,6 +4120,7 @@
           '变更审核驳回': 'color:#dc2626;background:#fef2f2;',
           '提交审核': 'color:#7c3aed;background:#f5f3ff;',
           '提交变更审核': 'color:#7c3aed;background:#f5f3ff;',
+          '编辑': 'color:#2563eb;background:#eff6ff;',
           '保存待审核变更': 'color:#d97706;background:#fff7ed;',
           '驳回': 'color:#dc2626;background:#fef2f2;',
           '自动终止': 'color:var(--ink-4);background:#f5f5f5;',
@@ -4148,7 +4149,7 @@
     const a = allActivities.find(x => x.id === currentConfigActivityId);
     if (a && a.status === 'active' && currentConfigMode === 'edit') {
       a.auditLogs = a.auditLogs || [];
-      a.auditLogs.unshift({ time: nowTimeStr(), auditor: '当前用户', action: '保存待审核变更' });
+      a.auditLogs.unshift({ time: nowTimeStr(), auditor: '当前用户', action: '编辑', note: describePrizeChanges(a.items || [], (a.pendingVersion && a.pendingVersion.items) || []) });
       showToast('已保存为待审核草稿，线上版本不受影响', 'success');
     } else {
       showToast('奖品配置已保存', 'success');
@@ -4183,6 +4184,36 @@
   }
 
   function fmtChangeLimit(v) { return (v === -1 || v === undefined || v === null || v === '') ? '不限' : v; }
+
+  // 生成「变更的奖品信息」备注文本：按 prizeId/名称对齐线上与待生效版本，逐条列出新增/移除/修改，无变更返回 null
+  function describePrizeChanges(onlineItems, pendingItems) {
+    const online = onlineItems || [];
+    const pending = pendingItems || [];
+    const keyOf = function(it) { return String((it && it.prizeId) != null ? it.prizeId : (it && it.name)); };
+    const nameOf = function(it) { return (it && it.name) || ('奖品' + keyOf(it)); };
+    const onlineMap = {};
+    online.forEach(function(it) { onlineMap[keyOf(it)] = it; });
+    const pendingMap = {};
+    pending.forEach(function(it) { pendingMap[keyOf(it)] = it; });
+    const fieldMap = { price: '价格', stock: '活动库存', dailyStock: '每日库存', monthLimit: '月限/人', dayLimit: '日限/人', tags: '标签' };
+    const parts = [];
+    pending.forEach(function(it) {
+      const k = keyOf(it);
+      if (!onlineMap[k]) { parts.push('新增奖品：' + nameOf(it)); return; }
+      const o = onlineMap[k];
+      const diffs = [];
+      Object.keys(fieldMap).forEach(function(f) {
+        const ov = (o[f] === undefined || o[f] === null) ? '' : o[f];
+        const nv = (it[f] === undefined || it[f] === null) ? '' : it[f];
+        if (String(ov) !== String(nv)) diffs.push(fieldMap[f] + ' ' + ov + '→' + nv);
+      });
+      if (diffs.length) parts.push(nameOf(it) + '：' + diffs.join('、'));
+    });
+    online.forEach(function(it) {
+      if (!pendingMap[keyOf(it)]) parts.push('移除奖品：' + nameOf(it));
+    });
+    return parts.length ? parts.join('；') : null;
+  }
 
   // 变更审核统一入口：基础信息与奖品信息均按「变更前（线上）/ 变更后（待生效）」逐项对比展示，footer 始终提供驳回/通过按钮
   function openChangeAuditModal(id) {
