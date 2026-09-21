@@ -1185,70 +1185,26 @@
               <tbody id="activityTableBody"><tr>
         <td style="font-family:monospace;font-size:12px;color:var(--ink-2);">1</td>
         <td style="font-size:12px;"><span style="display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;background:#e3f2fd;color:#1565c0;">千帆</span></td>
-        <td style="font-weight:500;">夏日狂欢兑换活动</td>
-        <td><div style="font-size:12px;line-height:1.6;"><div style="color:var(--ink-3);">开始：2026-07-19 10:00</div><div style="color:var(--ink-3);">结束：2026-07-25 23:59</div></div></td>
-        <td style="font-size:12px;color:var(--ink-2);">APP、微信小程序</td>
+        <td style="font-weight:500;">国庆黄金周兑换活动</td>
+        <td><div style="font-size:12px;line-height:1.6;"><div style="color:var(--ink-3);">开始：2026-10-01 00:00</div><div style="color:var(--ink-3);">结束：2026-10-07 23:59</div></div></td>
+        <td style="font-size:12px;color:var(--ink-2);">APP、微信小程序、H5</td>
         <td><span class="tag tag-blue">积分</span></td>
-        <td style="font-size:13px;font-weight:500;text-align:center;">4</td>
+        <td style="font-size:13px;font-weight:500;text-align:center;">2</td>
         <td style="font-size:12px;text-align:center;">主营业务</td>
-        <td style="font-size:12px;color:var(--ink-2);">2026-07-18 14:30</td>
-        <td style="font-size:12px;color:var(--ink-2);">管理员</td>
-        <td><span class="status-dot on"></span>进行中</td>
-        <td><span class="status-dot" style="background:#f59e0b;"></span><span style="color:#f59e0b;">待审核</span></td>
+        <td style="font-size:12px;color:var(--ink-2);">2026-09-20 10:00</td>
+        <td style="font-size:12px;color:var(--ink-2);">运营专员</td>
+        <td><span class="status-dot" style="background:#94a3b8;"></span><span style="color:var(--ink-3);">草稿</span></td>
+        <td><span class="status-dot" style="background:#2563eb;"></span><span style="color:#2563eb;">待提交</span></td>
         <td class="td-actions">
           <div class="td-actions-inner">
-            <button class="btn btn-primary btn-sm" onclick="openChangeAuditModal(1)">审核</button>
-            <button class="btn btn-text btn-sm" onclick="openActivityLogModal(1)">日志</button>
+            <button class="btn btn-primary btn-sm" onclick="submitDraftAudit(1)">提交审核</button>
             <button class="btn btn-text btn-sm" onclick="openActivityConfig(1)">奖品配置</button>
             <button class="btn btn-text btn-sm" onclick="openActivityModal(1)">编辑</button>
             <button class="btn btn-text btn-sm" onclick="copyActivity(1)">复制</button>
-            <button class="btn btn-danger btn-sm" onclick="terminateActivity(1)">终止</button>
           </div>
         </td>
       </tr><tr>
         <td style="font-family:monospace;font-size:12px;color:var(--ink-2);">2</td>
-        <td style="font-size:12px;"><span style="display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;background:#e3f2fd;color:#1565c0;">千帆</span></td>
-        <td style="font-weight:500;">会员专属兑换活动</td>
-        <td><div style="font-size:12px;line-height:1.6;"><div style="color:var(--ink-3);">开始：2026-07-20 10:00</div><div style="color:var(--ink-3);">结束：2026-07-27 23:59</div></div></td>
-        <td style="font-size:12px;color:var(--ink-2);">APP、H5</td>
-        <td><span class="tag tag-gold">贝壳</span></td>
-        <td style="font-size:13px;font-weight:500;text-align:center;">3</td>
-        <td style="font-size:12px;text-align:center;">主营业务</td>
-        <td style="font-size:12px;color:var(--ink-2);">2026-07-19 09:00</td>
-        <td style="font-size:12px;color:var(--ink-2);">管理员</td>
-        <td><span class="status-dot on"></span>进行中</td>
-        <td><span class="status-dot" style="background:#2563eb;"></span><span style="color:#2563eb;">待提交</span></td>
-        <td class="td-actions">
-          <div class="td-actions-inner">
-            <button class="btn btn-primary btn-sm" onclick="submitActivityChange(2)">提交审核</button>
-            <button class="btn btn-text btn-sm" onclick="openActivityLogModal(2)">日志</button>
-            <button class="btn btn-text btn-sm" onclick="openActivityConfig(2)">奖品配置</button>
-            <button class="btn btn-text btn-sm" onclick="openActivityModal(2)">编辑</button>
-            <button class="btn btn-text btn-sm" onclick="copyActivity(2)">复制</button>
-            <button class="btn btn-danger btn-sm" onclick="terminateActivity(2)">终止</button>
-          </div>
-        </td>
-      </tr><tr>
-        <td style="font-family:monospace;font-size:12px;color:var(--ink-2);">3</td>
-        <td style="font-size:12px;"><span style="display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;background:#e3f2fd;color:#1565c0;">千帆</span></td>
-        <td style="font-weight:500;">年中大促活动</td>
-        <td><div style="font-size:12px;line-height:1.6;"><div style="color:var(--ink-3);">开始：2026-07-18 10:00</div><div style="color:var(--ink-3);">结束：2026-07-18 23:59</div></div></td>
-        <td style="font-size:12px;color:var(--ink-2);">微信小程序、支付宝小程序、H5</td>
-        <td><span class="tag tag-gold">贝壳</span></td>
-        <td style="font-size:13px;font-weight:500;text-align:center;">2</td>
-        <td style="font-size:12px;text-align:center;">主营业务</td>
-        <td style="font-size:12px;color:var(--ink-2);">2026-07-17 16:00</td>
-        <td style="font-size:12px;color:var(--ink-2);">管理员</td>
-        <td><span class="status-dot off"></span><span style="color:var(--ink-4);">已终止</span></td>
-        <td><span class="status-dot" style="background:#16a34a;"></span><span style="color:#16a34a;">通过</span></td>
-        <td class="td-actions">
-          <div class="td-actions-inner">
-            <button class="btn btn-text btn-sm" onclick="openActivityLogModal(3)">日志</button>
-            <button class="btn btn-text btn-sm" onclick="copyActivity(3)">复制</button>
-          </div>
-        </td>
-      </tr><tr>
-        <td style="font-family:monospace;font-size:12px;color:var(--ink-2);">4</td>
         <td style="font-size:12px;"><span style="display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;background:#e3f2fd;color:#1565c0;">千帆</span></td>
         <td style="font-weight:500;">七夕情人节活动</td>
         <td><div style="font-size:12px;line-height:1.6;"><div style="color:var(--ink-3);">开始：2026-08-01 10:00</div><div style="color:var(--ink-3);">结束：2026-08-07 23:59</div></div></td>
@@ -1262,14 +1218,104 @@
         <td><span class="status-dot" style="background:#f59e0b;"></span><span style="color:#f59e0b;">待审核</span></td>
         <td class="td-actions">
           <div class="td-actions-inner">
-            <button class="btn btn-primary btn-sm" onclick="openActivityAuditModal(4)">审核</button>
+            <button class="btn btn-primary btn-sm" onclick="openActivityAuditModal(2)">审核</button>
+            <button class="btn btn-text btn-sm" onclick="openActivityConfig(2)">奖品配置</button>
+            <button class="btn btn-text btn-sm" onclick="openActivityModal(2)">编辑</button>
+            <button class="btn btn-text btn-sm" onclick="copyActivity(2)">复制</button>
+          </div>
+        </td>
+      </tr><tr>
+        <td style="font-family:monospace;font-size:12px;color:var(--ink-2);">3</td>
+        <td style="font-size:12px;"><span style="display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;background:#e3f2fd;color:#1565c0;">千帆</span></td>
+        <td style="font-weight:500;">中秋好礼兑换活动</td>
+        <td><div style="font-size:12px;line-height:1.6;"><div style="color:var(--ink-3);">开始：2026-09-10 00:00</div><div style="color:var(--ink-3);">结束：2026-09-30 23:59</div></div></td>
+        <td style="font-size:12px;color:var(--ink-2);">APP、微信小程序、H5</td>
+        <td><span class="tag tag-blue">积分</span></td>
+        <td style="font-size:13px;font-weight:500;text-align:center;">2</td>
+        <td style="font-size:12px;text-align:center;">主营业务</td>
+        <td style="font-size:12px;color:var(--ink-2);">2026-09-08 11:00</td>
+        <td style="font-size:12px;color:var(--ink-2);">运营专员</td>
+        <td><span class="status-dot on"></span>进行中</td>
+        <td><span class="status-dot" style="background:#16a34a;"></span><span style="color:#16a34a;">已通过</span></td>
+        <td class="td-actions">
+          <div class="td-actions-inner">
+            <button class="btn btn-text btn-sm" onclick="openActivityLogModal(3)">日志</button>
+            <button class="btn btn-text btn-sm" onclick="openActivityConfig(3)">奖品配置</button>
+            <button class="btn btn-text btn-sm" onclick="openActivityModal(3)">编辑</button>
+            <button class="btn btn-text btn-sm" onclick="copyActivity(3)">复制</button>
+            <button class="btn btn-danger btn-sm" onclick="terminateActivity(3)">终止</button>
+          </div>
+        </td>
+      </tr><tr>
+        <td style="font-family:monospace;font-size:12px;color:var(--ink-2);">4</td>
+        <td style="font-size:12px;"><span style="display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;background:#e3f2fd;color:#1565c0;">千帆</span></td>
+        <td style="font-weight:500;">会员专属兑换活动</td>
+        <td><div style="font-size:12px;line-height:1.6;"><div style="color:var(--ink-3);">开始：2026-07-20 10:00</div><div style="color:var(--ink-3);">结束：2026-07-27 23:59</div></div></td>
+        <td style="font-size:12px;color:var(--ink-2);">APP、H5</td>
+        <td><span class="tag tag-gold">贝壳</span></td>
+        <td style="font-size:13px;font-weight:500;text-align:center;">3</td>
+        <td style="font-size:12px;text-align:center;">主营业务</td>
+        <td style="font-size:12px;color:var(--ink-2);">2026-07-19 09:00</td>
+        <td style="font-size:12px;color:var(--ink-2);">管理员</td>
+        <td><span class="status-dot on"></span>进行中</td>
+        <td><span class="status-dot" style="background:#2563eb;"></span><span style="color:#2563eb;">待提交</span></td>
+        <td class="td-actions">
+          <div class="td-actions-inner">
+            <button class="btn btn-primary btn-sm" onclick="submitActivityChange(4)">提交审核</button>
+            <button class="btn btn-text btn-sm" onclick="openActivityLogModal(4)">日志</button>
             <button class="btn btn-text btn-sm" onclick="openActivityConfig(4)">奖品配置</button>
             <button class="btn btn-text btn-sm" onclick="openActivityModal(4)">编辑</button>
             <button class="btn btn-text btn-sm" onclick="copyActivity(4)">复制</button>
+            <button class="btn btn-danger btn-sm" onclick="terminateActivity(4)">终止</button>
           </div>
         </td>
       </tr><tr>
         <td style="font-family:monospace;font-size:12px;color:var(--ink-2);">5</td>
+        <td style="font-size:12px;"><span style="display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;background:#e3f2fd;color:#1565c0;">千帆</span></td>
+        <td style="font-weight:500;">夏日狂欢兑换活动</td>
+        <td><div style="font-size:12px;line-height:1.6;"><div style="color:var(--ink-3);">开始：2026-07-19 10:00</div><div style="color:var(--ink-3);">结束：2026-07-25 23:59</div></div></td>
+        <td style="font-size:12px;color:var(--ink-2);">APP、微信小程序</td>
+        <td><span class="tag tag-blue">积分</span></td>
+        <td style="font-size:13px;font-weight:500;text-align:center;">4</td>
+        <td style="font-size:12px;text-align:center;">主营业务</td>
+        <td style="font-size:12px;color:var(--ink-2);">2026-07-18 14:30</td>
+        <td style="font-size:12px;color:var(--ink-2);">管理员</td>
+        <td><span class="status-dot on"></span>进行中</td>
+        <td><span class="status-dot" style="background:#f59e0b;"></span><span style="color:#f59e0b;">待审核</span></td>
+        <td class="td-actions">
+          <div class="td-actions-inner">
+            <button class="btn btn-primary btn-sm" onclick="openChangeAuditModal(5)">审核</button>
+            <button class="btn btn-text btn-sm" onclick="openActivityLogModal(5)">日志</button>
+            <button class="btn btn-text btn-sm" onclick="openActivityConfig(5)">奖品配置</button>
+            <button class="btn btn-text btn-sm" onclick="openActivityModal(5)">编辑</button>
+            <button class="btn btn-text btn-sm" onclick="copyActivity(5)">复制</button>
+            <button class="btn btn-danger btn-sm" onclick="terminateActivity(5)">终止</button>
+          </div>
+        </td>
+      </tr><tr>
+        <td style="font-family:monospace;font-size:12px;color:var(--ink-2);">6</td>
+        <td style="font-size:12px;"><span style="display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;background:#f3e5f5;color:#7b1fa2;">繁星-三亚国际免税城</span></td>
+        <td style="font-weight:500;">金秋焕新季兑换活动</td>
+        <td><div style="font-size:12px;line-height:1.6;"><div style="color:var(--ink-3);">开始：2026-09-05 00:00</div><div style="color:var(--ink-3);">结束：2026-09-28 23:59</div></div></td>
+        <td style="font-size:12px;color:var(--ink-2);">APP、H5</td>
+        <td><span class="tag tag-gold">贝壳</span></td>
+        <td style="font-size:13px;font-weight:500;text-align:center;">2</td>
+        <td style="font-size:12px;text-align:center;">主营业务</td>
+        <td style="font-size:12px;color:var(--ink-2);">2026-09-01 10:30</td>
+        <td style="font-size:12px;color:var(--ink-2);">运营专员</td>
+        <td><span class="status-dot on"></span>进行中</td>
+        <td><span class="status-dot" style="background:#16a34a;"></span><span style="color:#16a34a;">已通过</span></td>
+        <td class="td-actions">
+          <div class="td-actions-inner">
+            <button class="btn btn-text btn-sm" onclick="openActivityLogModal(6)">日志</button>
+            <button class="btn btn-text btn-sm" onclick="openActivityConfig(6)">奖品配置</button>
+            <button class="btn btn-text btn-sm" onclick="openActivityModal(6)">编辑</button>
+            <button class="btn btn-text btn-sm" onclick="copyActivity(6)">复制</button>
+            <button class="btn btn-danger btn-sm" onclick="terminateActivity(6)">终止</button>
+          </div>
+        </td>
+      </tr><tr>
+        <td style="font-family:monospace;font-size:12px;color:var(--ink-2);">7</td>
         <td style="font-size:12px;"><span style="display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;background:#f3e5f5;color:#7b1fa2;">繁星-三亚国际免税城</span></td>
         <td style="font-weight:500;">八月会员日活动</td>
         <td><div style="font-size:12px;line-height:1.6;"><div style="color:var(--ink-3);">开始：2026-08-08 00:00</div><div style="color:var(--ink-3);">结束：2026-08-08 23:59</div></div></td>
@@ -1280,35 +1326,55 @@
         <td style="font-size:12px;color:var(--ink-2);">2026-07-31 09:00</td>
         <td style="font-size:12px;color:var(--ink-2);">运营专员</td>
         <td><span class="status-dot" style="background:#94a3b8;"></span><span style="color:var(--ink-3);">草稿</span></td>
-        <td><span class="status-dot" style="background:#dc2626;"></span><span style="color:#dc2626;">驳回</span></td>
+        <td><span class="status-dot" style="background:#dc2626;"></span><span style="color:#dc2626;">已驳回</span></td>
         <td class="td-actions">
           <div class="td-actions-inner">
-            <button class="btn btn-primary btn-sm" onclick="submitDraftAudit(5)">提交审核</button>
-            <button class="btn btn-text btn-sm" onclick="openActivityLogModal(5)">日志</button>
-            <button class="btn btn-text btn-sm" onclick="openActivityConfig(5)">奖品配置</button>
-            <button class="btn btn-text btn-sm" onclick="openActivityModal(5)">编辑</button>
-            <button class="btn btn-text btn-sm" onclick="copyActivity(5)">复制</button>
+            <button class="btn btn-primary btn-sm" onclick="submitDraftAudit(7)">提交审核</button>
+            <button class="btn btn-text btn-sm" onclick="openActivityLogModal(7)">日志</button>
+            <button class="btn btn-text btn-sm" onclick="openActivityConfig(7)">奖品配置</button>
+            <button class="btn btn-text btn-sm" onclick="openActivityModal(7)">编辑</button>
+            <button class="btn btn-text btn-sm" onclick="copyActivity(7)">复制</button>
           </div>
         </td>
       </tr><tr>
-        <td style="font-family:monospace;font-size:12px;color:var(--ink-2);">6</td>
+        <td style="font-family:monospace;font-size:12px;color:var(--ink-2);">8</td>
         <td style="font-size:12px;"><span style="display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;background:#e3f2fd;color:#1565c0;">千帆</span></td>
-        <td style="font-weight:500;">国庆黄金周兑换活动</td>
-        <td><div style="font-size:12px;line-height:1.6;"><div style="color:var(--ink-3);">开始：2026-10-01 00:00</div><div style="color:var(--ink-3);">结束：2026-10-07 23:59</div></div></td>
-        <td style="font-size:12px;color:var(--ink-2);">APP、微信小程序、H5</td>
+        <td style="font-weight:500;">国庆预热专场</td>
+        <td><div style="font-size:12px;line-height:1.6;"><div style="color:var(--ink-3);">开始：2026-09-12 00:00</div><div style="color:var(--ink-3);">结束：2026-09-26 23:59</div></div></td>
+        <td style="font-size:12px;color:var(--ink-2);">APP、微信小程序</td>
         <td><span class="tag tag-blue">积分</span></td>
         <td style="font-size:13px;font-weight:500;text-align:center;">2</td>
         <td style="font-size:12px;text-align:center;">主营业务</td>
-        <td style="font-size:12px;color:var(--ink-2);">2026-09-20 10:00</td>
+        <td style="font-size:12px;color:var(--ink-2);">2026-09-05 14:00</td>
         <td style="font-size:12px;color:var(--ink-2);">运营专员</td>
-        <td><span class="status-dot" style="background:#94a3b8;"></span><span style="color:var(--ink-3);">草稿</span></td>
-        <td><span class="status-dot" style="background:#2563eb;"></span><span style="color:#2563eb;">待提交</span></td>
+        <td><span class="status-dot on"></span>进行中</td>
+        <td><span class="status-dot" style="background:#dc2626;"></span><span style="color:#dc2626;">已驳回</span></td>
         <td class="td-actions">
           <div class="td-actions-inner">
-            <button class="btn btn-primary btn-sm" onclick="submitDraftAudit(6)">提交审核</button>
-            <button class="btn btn-text btn-sm" onclick="openActivityConfig(6)">奖品配置</button>
-            <button class="btn btn-text btn-sm" onclick="openActivityModal(6)">编辑</button>
-            <button class="btn btn-text btn-sm" onclick="copyActivity(6)">复制</button>
+            <button class="btn btn-text btn-sm" onclick="openActivityLogModal(8)">日志</button>
+            <button class="btn btn-text btn-sm" onclick="openActivityConfig(8)">奖品配置</button>
+            <button class="btn btn-text btn-sm" onclick="openActivityModal(8)">编辑</button>
+            <button class="btn btn-text btn-sm" onclick="copyActivity(8)">复制</button>
+            <button class="btn btn-danger btn-sm" onclick="terminateActivity(8)">终止</button>
+          </div>
+        </td>
+      </tr><tr>
+        <td style="font-family:monospace;font-size:12px;color:var(--ink-2);">9</td>
+        <td style="font-size:12px;"><span style="display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;background:#e3f2fd;color:#1565c0;">千帆</span></td>
+        <td style="font-weight:500;">年中大促活动</td>
+        <td><div style="font-size:12px;line-height:1.6;"><div style="color:var(--ink-3);">开始：2026-07-18 10:00</div><div style="color:var(--ink-3);">结束：2026-07-18 23:59</div></div></td>
+        <td style="font-size:12px;color:var(--ink-2);">微信小程序、支付宝小程序、H5</td>
+        <td><span class="tag tag-gold">贝壳</span></td>
+        <td style="font-size:13px;font-weight:500;text-align:center;">2</td>
+        <td style="font-size:12px;text-align:center;">主营业务</td>
+        <td style="font-size:12px;color:var(--ink-2);">2026-07-17 16:00</td>
+        <td style="font-size:12px;color:var(--ink-2);">管理员</td>
+        <td><span class="status-dot off"></span><span style="color:var(--ink-4);">已终止</span></td>
+        <td><span class="status-dot" style="background:#16a34a;"></span><span style="color:#16a34a;">已通过</span></td>
+        <td class="td-actions">
+          <div class="td-actions-inner">
+            <button class="btn btn-text btn-sm" onclick="openActivityLogModal(9)">日志</button>
+            <button class="btn btn-text btn-sm" onclick="copyActivity(9)">复制</button>
           </div>
         </td>
       </tr></tbody>
@@ -2232,7 +2298,7 @@
   </div>
 </div>
 
-<!-- ===== 活动审核弹窗（草稿审核：总览布局 / 变更审核：前后对比布局） ===== -->
+<!-- ===== 活动审核弹窗（草稿审核 / 变更审核共用，统一为前后对比布局） ===== -->
 <div class="modal-mask" id="changeAuditModal">
   <div class="modal" style="width:1100px;max-width:95vw;">
     <div class="modal-header">
@@ -3400,7 +3466,51 @@
 
   // ===== 活动管理 =====
   const allActivities = [
-    { id: 1, name: '夏日狂欢兑换活动', timeRange: { start: '2026-07-19 10:00', end: '2026-07-25 23:59' }, createdAt: '2026-07-18 14:30', createdBy: '管理员', status: 'active', auditStatus: 'approved', rule: '每人每场限兑2件', channel: ['APP', '微信小程序'], payType: '积分', source: '千帆', memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 500000, actualCost: 149600, actualRevenue: 149600, costShare: { type: '混合分摊', platform: 20, store: 50, brand: 30 }, revenueShare: { type: '平台全额' }, auditLogs: [{ time: '2026-07-18 15:20', auditor: '管理员A', action: '审核通过' }, { time: '2026-07-19 09:10', auditor: '当前用户', action: '提交变更审核' }],
+    // 场景1 创建活动：草稿/待提交
+    { id: 1, name: '国庆黄金周兑换活动', timeRange: { start: '2026-10-01 00:00', end: '2026-10-07 23:59' }, createdAt: '2026-09-20 10:00', createdBy: '运营专员', status: 'draft', auditStatus: 'pendingSubmit', rule: '黄金周限时礼品兑换', channel: ['APP', '微信小程序', 'H5'], payType: '积分', source: '千帆', memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 400000, actualCost: 0, actualRevenue: 0, costShare: { type: '平台全额' }, revenueShare: { type: '平台全额' }, auditLogs: [],
+      items: [
+        { prizeId: 'PRIZE-0022', name: '黄金周限定礼盒', type: '实物礼品', price: 15800, stock: 100, dailyStock: -1, exchanged: 0, monthLimit: 1, dayLimit: 1, tags: ['节日活动', '限时'] },
+        { prizeId: 'PRIZE-0023', name: 'CDF 黄金周代金券', type: '优惠券-优选单券', price: 800, stock: -1, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['满减活动'] },
+      ]
+    },
+    // 场景2 提交审核：草稿/待审核
+    { id: 2, name: '七夕情人节活动', timeRange: { start: '2026-08-01 10:00', end: '2026-08-07 23:59' }, createdAt: '2026-07-30 15:30', createdBy: '运营专员', status: 'draft', auditStatus: 'pending', rule: '情人节限定礼品兑换', channel: ['APP', '微信小程序', 'H5'], payType: '积分', source: '千帆', memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 300000, actualCost: 0, actualRevenue: 0, costShare: { type: '平台全额' }, revenueShare: { type: '平台全额' }, auditLogs: [],
+      items: [
+        { prizeId: 'PRIZE-0019', name: '限定款情侣对戒', type: '实物礼品', price: 9999, stock: 30, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['节日活动', '限时'] },
+        { prizeId: 'PRIZE-0020', name: '迪奥真我香水 50ml', type: '实物礼品', price: 8500, stock: 50, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['节日活动'] },
+      ]
+    },
+    // 场景3 审核通过：进行中/已通过（无待生效版本）
+    { id: 3, name: '中秋好礼兑换活动', timeRange: { start: '2026-09-10 00:00', end: '2026-09-30 23:59' }, createdAt: '2026-09-08 11:00', createdBy: '运营专员', status: 'active', auditStatus: 'approved', rule: '中秋限定好礼兑换', channel: ['APP', '微信小程序', 'H5'], payType: '积分', source: '千帆', memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 350000, actualCost: 52600, actualRevenue: 52600, costShare: { type: '混合分摊', platform: 20, store: 50, brand: 30 }, revenueShare: { type: '平台全额' }, auditLogs: [{ time: '2026-09-08 15:40', auditor: '运营专员', action: '提交审核' }, { time: '2026-09-08 17:10', auditor: '管理员A', action: '审核通过' }],
+      items: [
+        { prizeId: 'PRIZE-0024', name: '中秋月饼礼盒', type: '实物礼品', price: 6800, stock: 80, dailyStock: 20, exchanged: 6, monthLimit: 1, dayLimit: 1, tags: ['节日活动', '限时'] },
+        { prizeId: 'PRIZE-0011', name: 'CDF 100元代金券', type: '优惠券-优选单券', price: 500, stock: -1, dailyStock: -1, exchanged: 21, monthLimit: -1, dayLimit: -1, tags: ['节日活动'] },
+      ]
+    },
+    // 场景4 二次编辑：进行中/待提交（有待生效版本，未提交变更审核）
+    { id: 4, name: '会员专属兑换活动', timeRange: { start: '2026-07-20 10:00', end: '2026-07-27 23:59' }, createdAt: '2026-07-19 09:00', createdBy: '管理员', status: 'active', auditStatus: 'approved', rule: '仅限银卡及以上会员参与', channel: ['APP', 'H5'], payType: '贝壳', source: '千帆', memberDiscount: { normal: 100, silver: 90, gold: 85, platinum: 80, diamond: 75 }, accountType: '主营业务', budgetLimit: 300000, actualCost: 0, actualRevenue: 0, costShare: { type: '平台全额' }, revenueShare: { type: '平台全额' }, auditLogs: [{ time: '2026-07-19 10:15', auditor: '运营专员', action: '审核通过' }],
+      pendingVersion: {
+        name: '会员专属兑换活动',
+        timeRange: { start: '2026-07-20 10:00', end: '2026-07-30 23:59' },
+        channel: ['APP', 'H5', '微信小程序'],
+        payType: '贝壳',
+        memberDiscount: { normal: 100, silver: 90, gold: 85, platinum: 80, diamond: 75 },
+        accountType: '主营业务',
+        items: [
+          { prizeId: 'PRIZE-0006', name: 'SK-II 神仙水 230ml', type: '实物礼品', price: 12000, stock: 40, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['会员专属'] },
+          { prizeId: 'PRIZE-0013', name: 'CDF 200元代金券', type: '优惠券-优选单券', price: 1000, stock: -1, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['会员专属', '满减活动'] },
+          { prizeId: 'PRIZE-0014', name: '免税店专属折扣券', type: '优惠券-券中心', price: 80, stock: 500, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['满减活动'] },
+        ]
+      },
+      pendingSubmitted: false,
+      items: [
+        { prizeId: 'PRIZE-0006', name: 'SK-II 神仙水 230ml', type: '实物礼品', price: 12000, stock: 40, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['会员专属'] },
+        { prizeId: 'PRIZE-0013', name: 'CDF 200元代金券', type: '优惠券-优选单券', price: 1000, stock: -1, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['会员专属', '满减活动'] },
+        { prizeId: 'PRIZE-0014', name: '免税店专属折扣券', type: '优惠券-券中心', price: 80, stock: 500, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['满减活动'] },
+      ]
+    },
+    // 场景5 二级提交审核：进行中/待审核（有待生效版本，已提交变更审核）
+    { id: 5, name: '夏日狂欢兑换活动', timeRange: { start: '2026-07-19 10:00', end: '2026-07-25 23:59' }, createdAt: '2026-07-18 14:30', createdBy: '管理员', status: 'active', auditStatus: 'approved', rule: '每人每场限兑2件', channel: ['APP', '微信小程序'], payType: '积分', source: '千帆', memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 500000, actualCost: 149600, actualRevenue: 149600, costShare: { type: '混合分摊', platform: 20, store: 50, brand: 30 }, revenueShare: { type: '平台全额' }, auditLogs: [{ time: '2026-07-18 15:20', auditor: '管理员A', action: '审核通过' }, { time: '2026-07-19 09:10', auditor: '当前用户', action: '提交变更审核' }],
       pendingVersion: {
         name: '夏日狂欢兑换活动',
         timeRange: { start: '2026-07-19 10:00', end: '2026-07-30 23:59' },
@@ -3425,46 +3535,29 @@
         { prizeId: 'PRIZE-0008', name: '中免海南限定化妆包', type: '实物礼品', price: 2800, stock: -1, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['品牌联合'] },
       ]
     },
-    { id: 2, name: '会员专属兑换活动', timeRange: { start: '2026-07-20 10:00', end: '2026-07-27 23:59' }, createdAt: '2026-07-19 09:00', createdBy: '管理员', status: 'active', auditStatus: 'approved', rule: '仅限银卡及以上会员参与', channel: ['APP', 'H5'], payType: '贝壳', source: '千帆', memberDiscount: { normal: 100, silver: 90, gold: 85, platinum: 80, diamond: 75 }, accountType: '主营业务', budgetLimit: 300000, actualCost: 0, actualRevenue: 0, costShare: { type: '平台全额' }, revenueShare: { type: '平台全额' }, auditLogs: [{ time: '2026-07-19 10:15', auditor: '运营专员', action: '审核通过' }],
-      pendingVersion: {
-        name: '会员专属兑换活动',
-        timeRange: { start: '2026-07-20 10:00', end: '2026-07-30 23:59' },
-        channel: ['APP', 'H5', '微信小程序'],
-        payType: '贝壳',
-        memberDiscount: { normal: 100, silver: 90, gold: 85, platinum: 80, diamond: 75 },
-        accountType: '主营业务',
-        items: [
-          { prizeId: 'PRIZE-0006', name: 'SK-II 神仙水 230ml', type: '实物礼品', price: 12000, stock: 40, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['会员专属'] },
-          { prizeId: 'PRIZE-0013', name: 'CDF 200元代金券', type: '优惠券-优选单券', price: 1000, stock: -1, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['会员专属', '满减活动'] },
-          { prizeId: 'PRIZE-0014', name: '免税店专属折扣券', type: '优惠券-券中心', price: 80, stock: 500, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['满减活动'] },
-        ]
-      },
-      pendingSubmitted: false,
+    // 场景6 二次审核通过：进行中/已通过（变更已生效，无待生效版本）
+    { id: 6, name: '金秋焕新季兑换活动', timeRange: { start: '2026-09-05 00:00', end: '2026-09-28 23:59' }, createdAt: '2026-09-01 10:30', createdBy: '运营专员', status: 'active', auditStatus: 'approved', rule: '秋季焕新好物兑换', channel: ['APP', 'H5'], payType: '贝壳', source: '繁星-三亚国际免税城', memberDiscount: { normal: 100, silver: 92, gold: 88, platinum: 84, diamond: 80 }, accountType: '主营业务', budgetLimit: 280000, actualCost: 31200, actualRevenue: 31200, costShare: { type: '混合分摊', platform: 30, store: 40, brand: 30 }, revenueShare: { type: '混合分成', platform: 30, store: 40, brand: 30 }, auditLogs: [{ time: '2026-09-01 16:00', auditor: '管理员B', action: '审核通过' }, { time: '2026-09-10 11:20', auditor: '运营专员', action: '提交变更审核' }, { time: '2026-09-10 15:00', auditor: '管理员B', action: '变更审核通过' }],
       items: [
-        { prizeId: 'PRIZE-0006', name: 'SK-II 神仙水 230ml', type: '实物礼品', price: 12000, stock: 40, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['会员专属'] },
-        { prizeId: 'PRIZE-0013', name: 'CDF 200元代金券', type: '优惠券-优选单券', price: 1000, stock: -1, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['会员专属', '满减活动'] },
-        { prizeId: 'PRIZE-0014', name: '免税店专属折扣券', type: '优惠券-券中心', price: 80, stock: 500, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['满减活动'] },
+        { prizeId: 'PRIZE-0006', name: 'SK-II 神仙水 230ml', type: '实物礼品', price: 12000, stock: 36, dailyStock: -1, exchanged: 2, monthLimit: -1, dayLimit: -1, tags: ['会员专属'] },
+        { prizeId: 'PRIZE-0014', name: '免税店专属折扣券', type: '优惠券-券中心', price: 80, stock: 420, dailyStock: -1, exchanged: 30, monthLimit: -1, dayLimit: -1, tags: ['满减活动'] },
       ]
     },
-    { id: 3, name: '年中大促活动', timeRange: { start: '2026-07-18 10:00', end: '2026-07-18 23:59' }, createdAt: '2026-07-17 16:00', createdBy: '管理员', status: 'terminated', auditStatus: 'approved', rule: '', channel: ['微信小程序', '支付宝小程序', 'H5'], payType: '贝壳', source: '千帆', memberDiscount: { normal: 100, silver: 100, gold: 100, platinum: 100, diamond: 100 }, accountType: '主营业务', budgetLimit: 800000, actualCost: 446700, actualRevenue: 446700, costShare: { type: '混合分摊', platform: 20, store: 40, brand: 40 }, revenueShare: { type: '混合分摊', platform: 20, store: 40, brand: 40 }, auditLogs: [{ time: '2026-07-17 18:00', auditor: '管理员A', action: '审核通过' }, { time: '2026-07-19 00:30', auditor: '管理员', action: '终止' }],
+    // 场景7 驳回（新建）：草稿/已驳回
+    { id: 7, name: '八月会员日活动', timeRange: { start: '2026-08-08 00:00', end: '2026-08-08 23:59' }, createdAt: '2026-07-31 09:00', createdBy: '运营专员', status: 'draft', auditStatus: 'rejected', rule: '会员日专享折扣', channel: ['APP'], payType: '贝壳', source: '繁星-三亚国际免税城', memberDiscount: { normal: 100, silver: 90, gold: 80, platinum: 70, diamond: 60 }, accountType: '主营业务', budgetLimit: 150000, actualCost: 0, actualRevenue: 0, costShare: { type: '混合分摊', platform: 30, store: 40, brand: 30 }, revenueShare: { type: '混合分成', platform: 30, store: 40, brand: 30 }, auditLogs: [{ time: '2026-07-31 14:20', auditor: '管理员B', action: '提交审核', note: '' }, { time: '2026-07-31 16:00', auditor: '管理员B', action: '驳回', note: '预算超限且会员折扣力度过大，请调整后重新提交' }],
+      items: []
+    },
+    // 场景8 驳回（二次编辑）：进行中/已驳回（线上版本不变更，可再次编辑后重新提交）
+    { id: 8, name: '国庆预热专场', timeRange: { start: '2026-09-12 00:00', end: '2026-09-26 23:59' }, createdAt: '2026-09-05 14:00', createdBy: '运营专员', status: 'active', auditStatus: 'rejected', rule: '国庆预热抢先兑', channel: ['APP', '微信小程序'], payType: '积分', source: '千帆', memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 500000, actualCost: 88400, actualRevenue: 88400, costShare: { type: '混合分摊', platform: 20, store: 50, brand: 30 }, revenueShare: { type: '平台全额' }, auditLogs: [{ time: '2026-09-05 18:00', auditor: '管理员A', action: '审核通过' }, { time: '2026-09-15 10:30', auditor: '运营专员', action: '提交变更审核' }, { time: '2026-09-15 14:00', auditor: '管理员A', action: '变更审核驳回', note: '变更后预算超限，请调整后重新提交' }],
+      items: [
+        { prizeId: 'PRIZE-0025', name: '国庆预热惊喜盲盒', type: '实物礼品', price: 4900, stock: 60, dailyStock: 10, exchanged: 8, monthLimit: 1, dayLimit: 1, tags: ['限时'] },
+        { prizeId: 'PRIZE-0012', name: '海南免税95折券', type: '优惠券-券中心', price: 300, stock: 260, dailyStock: -1, exchanged: 40, monthLimit: -1, dayLimit: -1, tags: ['节日活动'] },
+      ]
+    },
+    // 场景9 手动终止/活动结束时间到：已终止/全部审核状态
+    { id: 9, name: '年中大促活动', timeRange: { start: '2026-07-18 10:00', end: '2026-07-18 23:59' }, createdAt: '2026-07-17 16:00', createdBy: '管理员', status: 'terminated', auditStatus: 'approved', rule: '', channel: ['微信小程序', '支付宝小程序', 'H5'], payType: '贝壳', source: '千帆', memberDiscount: { normal: 100, silver: 100, gold: 100, platinum: 100, diamond: 100 }, accountType: '主营业务', budgetLimit: 800000, actualCost: 446700, actualRevenue: 446700, costShare: { type: '混合分摊', platform: 20, store: 40, brand: 40 }, revenueShare: { type: '混合分摊', platform: 20, store: 40, brand: 40 }, auditLogs: [{ time: '2026-07-17 18:00', auditor: '管理员A', action: '审核通过' }, { time: '2026-07-19 00:30', auditor: '管理员', action: '终止' }],
       items: [
         { prizeId: 'PRIZE-0017', name: '海蓝之谜面霜 30ml', type: '实物礼品', price: 15000, stock: 20, dailyStock: -1, exchanged: 20, monthLimit: -1, dayLimit: -1, tags: ['节日活动'] },
         { prizeId: 'PRIZE-0018', name: 'CDF 50元无门槛券', type: '优惠券-优选单券', price: 300, stock: -1, dailyStock: -1, exchanged: 489, monthLimit: -1, dayLimit: -1, tags: ['新人专享'] },
-      ]
-    },
-    { id: 4, name: '七夕情人节活动', timeRange: { start: '2026-08-01 10:00', end: '2026-08-07 23:59' }, createdAt: '2026-07-30 15:30', createdBy: '运营专员', status: 'draft', auditStatus: 'pending', rule: '情人节限定礼品兑换', channel: ['APP', '微信小程序', 'H5'], payType: '积分', source: '千帆', memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 300000, actualCost: 0, actualRevenue: 0, costShare: { type: '平台全额' }, revenueShare: { type: '平台全额' }, auditLogs: [],
-      items: [
-        { prizeId: 'PRIZE-0019', name: '限定款情侣对戒', type: '实物礼品', price: 9999, stock: 30, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['节日活动', '限时'] },
-        { prizeId: 'PRIZE-0020', name: '迪奥真我香水 50ml', type: '实物礼品', price: 8500, stock: 50, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['节日活动'] },
-      ]
-    },
-    { id: 5, name: '八月会员日活动', timeRange: { start: '2026-08-08 00:00', end: '2026-08-08 23:59' }, createdAt: '2026-07-31 09:00', createdBy: '运营专员', status: 'draft', auditStatus: 'rejected', rule: '会员日专享折扣', channel: ['APP'], payType: '贝壳', source: '繁星-三亚国际免税城', memberDiscount: { normal: 100, silver: 90, gold: 80, platinum: 70, diamond: 60 }, accountType: '主营业务', budgetLimit: 150000, actualCost: 0, actualRevenue: 0, costShare: { type: '混合分摊', platform: 30, store: 40, brand: 30 }, revenueShare: { type: '混合分成', platform: 30, store: 40, brand: 30 }, auditLogs: [{ time: '2026-07-31 14:20', auditor: '管理员B', action: '提交审核', note: '' }, { time: '2026-07-31 16:00', auditor: '管理员B', action: '驳回', note: '预算超限且会员折扣力度过大，请调整后重新提交' }],
-      items: []
-    },
-    { id: 6, name: '国庆黄金周兑换活动', timeRange: { start: '2026-10-01 00:00', end: '2026-10-07 23:59' }, createdAt: '2026-09-20 10:00', createdBy: '运营专员', status: 'draft', auditStatus: 'pendingSubmit', rule: '黄金周限时礼品兑换', channel: ['APP', '微信小程序', 'H5'], payType: '积分', source: '千帆', memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 400000, actualCost: 0, actualRevenue: 0, costShare: { type: '平台全额' }, revenueShare: { type: '平台全额' }, auditLogs: [],
-      items: [
-        { prizeId: 'PRIZE-0022', name: '黄金周限定礼盒', type: '实物礼品', price: 15800, stock: 100, dailyStock: -1, exchanged: 0, monthLimit: 1, dayLimit: 1, tags: ['节日活动', '限时'] },
-        { prizeId: 'PRIZE-0023', name: 'CDF 黄金周代金券', type: '优惠券-优选单券', price: 800, stock: -1, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['满减活动'] },
       ]
     },
   ];
@@ -3522,8 +3615,8 @@
       // 审核状态：待提交=草稿未提交审核(蓝) 或 进行中未提交变更(蓝)；已提交待审显示「待审核」（草稿待审与进行中已提交变更同一状态同一配色）
       const auditStatusMap = {
         pending: '<span class="status-dot" style="background:#f59e0b;"></span><span style="color:#f59e0b;">待审核</span>',
-        approved: '<span class="status-dot" style="background:#16a34a;"></span><span style="color:#16a34a;">通过</span>',
-        rejected: '<span class="status-dot" style="background:#dc2626;"></span><span style="color:#dc2626;">驳回</span>'
+        approved: '<span class="status-dot" style="background:#16a34a;"></span><span style="color:#16a34a;">已通过</span>',
+        rejected: '<span class="status-dot" style="background:#dc2626;"></span><span style="color:#dc2626;">已驳回</span>'
       };
       const hasPendingSubmit = (isActive && a.pendingVersion && !a.pendingSubmitted) || (isDraft && (a.auditStatus || '') === 'pendingSubmit');
       const hasPendingAudit = isActive && a.pendingVersion && a.pendingSubmitted;
@@ -4010,19 +4103,32 @@
   function terminateActivity(id) {
     const a = allActivities.find(x => x.id === id);
     if (!a) return;
-    showConfirm('终止活动', '活动终止后不可恢复，确定要终止该活动吗？', function() {
+    // 二次确认：确认文案说明库存恢复与页面运营联动，并强制填写终止原因（必填）
+    document.getElementById('confirmTitle').textContent = '终止活动';
+    document.getElementById('confirmMessage').innerHTML =
+      '<span style="display:block;font-size:13px;color:var(--ink-2);line-height:1.7;margin-bottom:10px;">活动终止后不可恢复，剩余活动库存将恢复至奖品仓库，并联动「页面运营」同步为已终止。请填写终止原因：</span>' +
+      '<textarea id="terminateReasonInput" placeholder="终止原因（必填）" style="width:100%;min-height:72px;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;box-sizing:border-box;resize:vertical;font-family:inherit;"></textarea>';
+    document.getElementById('confirmModal').classList.add('show');
+    document.getElementById('confirmOkBtn').onclick = function() {
+      const reason = (document.getElementById('terminateReasonInput')?.value || '').trim();
+      if (!reason) { showToast('请填写终止原因', 'error'); return; }
+      closeModal('confirmModal');
       a.status = 'terminated';
-      // 记录终止日志
+      // 终止后清理待生效的变更数据（不可恢复）
+      delete a.pendingVersion;
+      a.pendingSubmitted = false;
+      delete a.pendingChangeNote;
+      // 记录终止日志（含原因）
       if (!a.auditLogs) a.auditLogs = [];
       const now = new Date();
       const timeStr = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0') + ' ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
-      a.auditLogs.unshift({ time: timeStr, auditor: '管理员', action: '终止' });
+      a.auditLogs.unshift({ time: timeStr, auditor: '管理员', action: '终止', note: reason });
       renderActivities();
-      showToast('活动已终止', 'success');
-    });
+      showToast('活动已终止，剩余库存已恢复至奖品仓库', 'success');
+    };
   }
 
-  // 活动审核：与变更审核共用 changeAuditModal，展示活动完整信息总览
+  // 活动审核（草稿）：与变更审核共用 changeAuditModal，布局统一为「变更前/变更后」对比样式；草稿无线上版本，变更前以「—」占位、全部视为新增
   function openActivityAuditModal(id) {
     const a = allActivities.find(x => x.id === id);
     if (!a) return;
@@ -4033,74 +4139,85 @@
     document.getElementById('changeAuditModal').classList.add('show');
   }
 
-  // 草稿审核信息总览：基础信息 + 奖品配置全量展示（顶部无提示横幅）
+  // 草稿审核：布局与变更审核统一（第5条场景样式）——基础信息与奖品信息均按「变更前（线上）/ 变更后（待生效）」对比展示；草稿无线上版本，变更前以「—」占位并全部视为新增
   function renderActivityAuditBody(a) {
     const mdMap = { normal: '普通', silver: '白银', gold: '黄金', platinum: '铂金', diamond: '钻石' };
     const fmtMd = function(md) { return Object.keys(mdMap).map(function(k) { return mdMap[k] + (md && md[k] !== undefined ? md[k] : '-') + '%'; }).join('，'); };
     const fmtL = fmtChangeLimit;
     const tagsStr = function(t) { return (t && t.length) ? t.join('、') : '无'; };
-    const fields = [
+    const timeStr = function(tr) { return tr ? (tr.start + ' ~ ' + tr.end) : '-'; };
+    const payStr = function(p) { return p === '贝壳' ? '积分 + 贝壳' : '积分'; };
+    const accStr = function(v) { return v === '主营业务' ? '主营业务' : '非主营业务'; };
+
+    // ---- 基础信息：新活动无线上版本，变更前统一为「—」，变更后为待上线配置，全部按变更高亮 ----
+    const baseFields = [
       ['活动名称', a.name],
-      ['活动时间', a.timeRange ? (a.timeRange.start + ' ~ ' + a.timeRange.end) : '-'],
+      ['活动时间', timeStr(a.timeRange)],
       ['活动渠道', (a.channel || []).join('、') || '-'],
-      ['支付方式', a.payType === '贝壳' ? '积分 + 贝壳' : '积分'],
+      ['支付方式', payStr(a.payType)],
       ['会员折扣', fmtMd(a.memberDiscount)],
-      ['入账类型', a.accountType === '主营业务' ? '主营业务' : '非主营业务']
+      ['入账类型', accStr(a.accountType)]
     ];
-    const baseRows = fields.map(function(f) {
-      return '<tr>' +
+    const baseRows = baseFields.map(function(f) {
+      return '<tr style="background:#fff7ed;">' +
         '<td style="padding:8px 16px;font-size:13px;color:var(--ink-2);white-space:nowrap;border-top:1px solid var(--border);">' + f[0] + '</td>' +
-        '<td style="padding:8px 16px;font-size:13px;color:var(--ink-2);border-top:1px solid var(--border);">' + f[1] + '</td>' +
+        '<td style="padding:8px 16px;font-size:13px;color:#dc2626;border-top:1px solid var(--border);">—</td>' +
+        '<td style="padding:8px 16px;font-size:13px;color:#d97706;font-weight:600;border-top:1px solid var(--border);">' + f[1] + '</td>' +
       '</tr>';
     }).join('');
+
+    // ---- 奖品信息：全部为新增，逐项展示待上线配置 ----
+    const prizeAttrs = [
+      ['name', '奖品名称', function(v) { return v || '-'; }],
+      ['type', '类型', function(v) { return v || '-'; }],
+      ['tags', '标签', tagsStr],
+      ['price', '兑换积分', function(v) { return v === undefined || v === null ? '-' : v; }],
+      ['stock', '活动库存', fmtL],
+      ['dailyStock', '每日库存', fmtL],
+      ['monthLimit', '月限/人', fmtL],
+      ['dayLimit', '日限/人', fmtL]
+    ];
     const items = a.items || [];
+    const newBadge = '<span style="display:inline-block;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:500;white-space:nowrap;color:#16a34a;background:#f0fdf4;">新增</span>';
+    const itemLines = function(it) {
+      return prizeAttrs.map(function(attr) {
+        return '<div style="font-size:12px;line-height:1.9;color:#d97706;font-weight:600;">' + attr[1] + '：' + attr[2](it[attr[0]]) + '</div>';
+      }).join('');
+    };
     const prizeRows = items.map(function(it) {
       return '<tr>' +
-        '<td style="padding:8px 12px;font-size:12px;color:var(--ink-3);font-family:monospace;border-top:1px solid var(--border);">' + it.prizeId + '</td>' +
-        '<td style="padding:8px 12px;font-size:13px;font-weight:500;border-top:1px solid var(--border);">' + it.name + '</td>' +
-        '<td style="padding:8px 12px;font-size:12px;color:var(--ink-3);border-top:1px solid var(--border);">' + (it.type || '-') + '</td>' +
-        '<td style="padding:8px 12px;font-size:12px;color:var(--ink-3);border-top:1px solid var(--border);">' + tagsStr(it.tags) + '</td>' +
-        '<td style="padding:8px 12px;font-size:13px;font-weight:600;border-top:1px solid var(--border);">' + it.price + '</td>' +
-        '<td style="padding:8px 12px;font-size:12px;color:var(--ink-2);border-top:1px solid var(--border);">' + fmtL(it.stock) + '</td>' +
-        '<td style="padding:8px 12px;font-size:12px;color:var(--ink-2);border-top:1px solid var(--border);">' + fmtL(it.dailyStock) + '</td>' +
-        '<td style="padding:8px 12px;font-size:12px;color:var(--ink-2);border-top:1px solid var(--border);">' + fmtL(it.monthLimit) + '</td>' +
-        '<td style="padding:8px 12px;font-size:12px;color:var(--ink-2);border-top:1px solid var(--border);">' + fmtL(it.dayLimit) + '</td>' +
+        '<td style="padding:10px 12px;border-top:1px solid var(--border);vertical-align:top;white-space:nowrap;">' + newBadge + '</td>' +
+        '<td style="padding:10px 12px;border-top:1px solid var(--border);vertical-align:top;font-size:12px;color:var(--ink-3);font-family:monospace;white-space:nowrap;">' + it.prizeId + '</td>' +
+        '<td style="padding:10px 12px;border-top:1px solid var(--border);vertical-align:top;width:50%;"><div style="font-size:12px;line-height:1.9;color:var(--ink-4);">—（新增）</div></td>' +
+        '<td style="padding:10px 12px;border-top:1px solid var(--border);vertical-align:top;width:50%;">' + itemLines(it) + '</td>' +
       '</tr>';
     }).join('');
-    const lastRejectLog = (a.auditLogs || []).find(function(l) { return l.action === '驳回' && l.note; });
-    return (lastRejectLog
-        ? '<div style="padding:12px 24px;background:#fef2f2;border-bottom:1px solid var(--border);border-left:3px solid #dc2626;">' +
-            '<div style="font-size:13px;color:#dc2626;font-weight:500;">上次驳回原因</div>' +
-            '<div style="font-size:12px;color:var(--ink-3);margin-top:4px;line-height:1.6;">' + lastRejectLog.note + '</div>' +
-          '</div>'
-        : '') +
-      '<div style="padding:16px 24px;border-bottom:1px solid var(--border);">' +
-        '<div style="font-size:13px;font-weight:600;color:var(--ink);margin-bottom:10px;">基础信息</div>' +
-        '<table style="width:100%;border-collapse:collapse;border:1px solid var(--border);">' +
-          '<tbody><tr style="background:#fafafa;">' +
+    const summaryText = '变更 ' + items.length + ' 项：修改 0 / 新增 ' + items.length + ' / 移除 0，未变更 0 项';
+
+    return '<div style="padding:16px 24px;border-bottom:1px solid var(--border);">' +
+        '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">' +
+          '<div style="font-size:13px;font-weight:600;color:var(--ink);">基础信息变更</div>' +
+          '<div style="font-size:12px;color:var(--ink-3);">新活动无线上版本，变更后为待上线配置</div>' +
+        '</div>' +
+        '<table style="width:100%;border-collapse:collapse;border:1px solid var(--border);"><tbody>' +
+          '<tr style="background:#fafafa;">' +
             '<td style="padding:8px 16px;font-size:12px;color:var(--ink-3);font-weight:500;width:140px;">字段</td>' +
-            '<td style="padding:8px 16px;font-size:12px;color:var(--ink-3);font-weight:500;">待上线配置</td>' +
-          '</tr>' + baseRows + '</tbody>' +
-        '</table>' +
+            '<td style="padding:8px 16px;font-size:12px;color:var(--ink-3);font-weight:500;">变更前（线上）</td>' +
+            '<td style="padding:8px 16px;font-size:12px;color:var(--ink-3);font-weight:500;">变更后（待生效）</td>' +
+          '</tr>' + baseRows +
+        '</tbody></table>' +
       '</div>' +
       '<div style="padding:16px 24px;">' +
         '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">' +
-          '<div style="font-size:13px;font-weight:600;color:var(--ink);">奖品配置</div>' +
-          '<div style="font-size:12px;color:var(--ink-3);">共 ' + items.length + ' 个奖品</div>' +
+          '<div style="font-size:13px;font-weight:600;color:var(--ink);">奖品信息变更</div>' +
+          '<div style="font-size:12px;color:var(--ink-3);">' + summaryText + '</div>' +
         '</div>' +
-        (items.length
-          ? '<table style="width:100%;border-collapse:collapse;border:1px solid var(--border);"><thead><tr style="background:#fafafa;">' +
-              '<th style="padding:8px 12px;text-align:left;font-size:12px;color:var(--ink-3);font-weight:500;">奖品ID</th>' +
-              '<th style="padding:8px 12px;text-align:left;font-size:12px;color:var(--ink-3);font-weight:500;">奖品名称</th>' +
-              '<th style="padding:8px 12px;text-align:left;font-size:12px;color:var(--ink-3);font-weight:500;">类型</th>' +
-              '<th style="padding:8px 12px;text-align:left;font-size:12px;color:var(--ink-3);font-weight:500;">标签</th>' +
-              '<th style="padding:8px 12px;text-align:left;font-size:12px;color:var(--ink-3);font-weight:500;">兑换积分</th>' +
-              '<th style="padding:8px 12px;text-align:left;font-size:12px;color:var(--ink-3);font-weight:500;">活动库存</th>' +
-              '<th style="padding:8px 12px;text-align:left;font-size:12px;color:var(--ink-3);font-weight:500;">每日库存</th>' +
-              '<th style="padding:8px 12px;text-align:left;font-size:12px;color:var(--ink-3);font-weight:500;">月限/人</th>' +
-              '<th style="padding:8px 12px;text-align:left;font-size:12px;color:var(--ink-3);font-weight:500;">日限/人</th>' +
-            '</tr></thead><tbody>' + prizeRows + '</tbody></table>'
-          : '<div style="font-size:12px;color:var(--ink-4);">暂未配置奖品</div>') +
+        '<table style="width:100%;border-collapse:collapse;border:1px solid var(--border);"><thead><tr style="background:#fafafa;">' +
+            '<th style="padding:8px 12px;text-align:left;font-size:12px;color:var(--ink-3);font-weight:500;">状态</th>' +
+            '<th style="padding:8px 12px;text-align:left;font-size:12px;color:var(--ink-3);font-weight:500;">奖品ID</th>' +
+            '<th style="padding:8px 12px;text-align:left;font-size:12px;color:var(--ink-3);font-weight:500;">变更前（线上）</th>' +
+            '<th style="padding:8px 12px;text-align:left;font-size:12px;color:var(--ink-3);font-weight:500;">变更后（待生效）</th>' +
+          '</tr></thead><tbody>' + prizeRows + '</tbody></table>' +
       '</div>';
   }
 
@@ -4438,7 +4555,7 @@
   function copyActivity(id) {
     const a = allActivities.find(x => x.id === id);
     if (!a) return;
-    showConfirm('复制活动', '确定要复制活动「' + a.name + '」吗？', function() {
+    showConfirm('复制活动', '确定要复制活动「' + a.name + '」吗？奖品配置将一并复制，活动库存重置为 0。', function() {
       const newId = allActivities.length > 0 ? Math.max(...allActivities.map(x => x.id)) + 1 : 1;
       const now = new Date();
       const createdAt = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0') + ' ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
@@ -4453,7 +4570,8 @@
       newAct.pendingVersion = null;
       newAct.pendingSubmitted = false;
       delete newAct.pendingChangeNote;
-      newAct.items = [];
+      // 复制连同奖品配置；各奖品活动库存重置为 0，需重新配置后方可兑换
+      (newAct.items || []).forEach(function(it) { it.stock = 0; });
       allActivities.push(newAct);
       renderActivities();
       showToast('活动已复制', 'success');
