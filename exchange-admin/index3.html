@@ -2436,8 +2436,8 @@
       </button>
     </div>
     <div class="modal-body">
-      <div style="display:flex;gap:12px;margin-bottom:12px;">
-        <div class="form-group full" style="margin-bottom:0;">
+      <div style="display:flex;gap:12px;margin-bottom:12px;align-items:flex-end;">
+        <div class="form-group full" style="margin-bottom:0;flex:1;min-width:0;">
           <label class="form-label">奖品类型筛选</label>
           <select class="form-control form-select" id="addPrizeType" onchange="onAddPrizeTypeChange()">
             <option value="">全部</option>
@@ -2446,7 +2446,7 @@
             <option value="实物礼品">实物礼品</option>
           </select>
         </div>
-        <div class="form-group full" style="margin-bottom:0;">
+        <div class="form-group full" style="margin-bottom:0;flex:1;min-width:0;">
           <label class="form-label">搜索奖品</label>
           <input class="form-control" id="addPrizeSearch" placeholder="输入奖品名称搜索" oninput="onAddPrizeTypeChange()">
         </div>
