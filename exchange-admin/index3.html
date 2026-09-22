@@ -3516,7 +3516,7 @@
       ]
     },
     // 场景5 二级提交审核：进行中/待审核（有待生效版本，已提交变更审核）
-    { id: 5, name: '夏日狂欢兑换活动', timeRange: { start: '2026-07-19 10:00', end: '2026-07-25 23:59' }, createdAt: '2026-07-18 14:30', createdBy: '管理员', status: 'active', auditStatus: 'approved', rule: '每人每场限兑2件', channel: ['APP', '微信小程序'], payType: '积分', source: '千帆', memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 500000, actualCost: 149600, actualRevenue: 149600, costShare: { type: '混合分摊', platform: 20, store: 50, brand: 30 }, revenueShare: { type: '平台全额' }, auditLogs: [{ time: '2026-07-18 15:20', auditor: '管理员A', action: '审核通过' }, { time: '2026-07-19 09:10', auditor: '当前用户', action: '提交变更审核' }],
+    { id: 5, name: '夏日狂欢兑换活动', timeRange: { start: '2026-07-19 10:00', end: '2026-07-25 23:59' }, createdAt: '2026-07-18 14:30', createdBy: '管理员', status: 'active', auditStatus: 'approved', rule: '每人每场限兑2件', channel: ['APP', '微信小程序'], payType: '积分', source: '千帆', memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 500000, actualCost: 149600, actualRevenue: 149600, costShare: { type: '混合分摊', platform: 20, store: 50, brand: 30 }, revenueShare: { type: '平台全额' }, auditLogs: [{ time: '2026-07-18 15:20', auditor: '管理员A', action: '审核通过' }, { time: '2026-07-19 09:10', auditor: '当前用户', action: '提交变更审核' }, { time: '2026-07-19 14:35', auditor: '当前用户', action: '移除', note: '移除奖品「中免海南限定化妆包（PRIZE-0008）」' }],
       pendingVersion: {
         name: '夏日狂欢兑换活动',
         timeRange: { start: '2026-07-19 10:00', end: '2026-07-30 23:59' },
@@ -4273,7 +4273,8 @@
           '保存待审核变更': 'color:#d97706;background:#fff7ed;',
           '驳回': 'color:#dc2626;background:#fef2f2;',
           '自动终止': 'color:var(--ink-4);background:#f5f5f5;',
-          '终止': 'color:var(--ink-4);background:#f5f5f5;'
+          '终止': 'color:var(--ink-4);background:#f5f5f5;',
+          '移除': 'color:#e11d48;background:#fff1f2;'
         };
         const actionColor = colorMap[log.action] || 'color:var(--primary);background:#eff6ff;';
         const isReject = log.action === '驳回' || log.action === '审核驳回' || log.action === '变更审核驳回';
