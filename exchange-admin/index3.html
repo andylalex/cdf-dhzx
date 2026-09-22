@@ -1239,6 +1239,7 @@
         <td><span class="status-dot" style="background:#16a34a;"></span><span style="color:#16a34a;">已通过</span></td>
         <td class="td-actions">
           <div class="td-actions-inner">
+            <button class="btn btn-primary btn-sm" onclick="resubmitActivity(3)">重新提交审核</button>
             <button class="btn btn-text btn-sm" onclick="openActivityLogModal(3)">日志</button>
             <button class="btn btn-text btn-sm" onclick="openActivityConfig(3)">奖品配置</button>
             <button class="btn btn-text btn-sm" onclick="openActivityModal(3)">编辑</button>
@@ -1307,6 +1308,7 @@
         <td><span class="status-dot" style="background:#16a34a;"></span><span style="color:#16a34a;">已通过</span></td>
         <td class="td-actions">
           <div class="td-actions-inner">
+            <button class="btn btn-primary btn-sm" onclick="resubmitActivity(6)">重新提交审核</button>
             <button class="btn btn-text btn-sm" onclick="openActivityLogModal(6)">日志</button>
             <button class="btn btn-text btn-sm" onclick="openActivityConfig(6)">奖品配置</button>
             <button class="btn btn-text btn-sm" onclick="openActivityModal(6)">编辑</button>
@@ -1351,6 +1353,7 @@
         <td><span class="status-dot" style="background:#dc2626;"></span><span style="color:#dc2626;">已驳回</span></td>
         <td class="td-actions">
           <div class="td-actions-inner">
+            <button class="btn btn-primary btn-sm" onclick="resubmitActivity(8)">重新提交审核</button>
             <button class="btn btn-text btn-sm" onclick="openActivityLogModal(8)">日志</button>
             <button class="btn btn-text btn-sm" onclick="openActivityConfig(8)">奖品配置</button>
             <button class="btn btn-text btn-sm" onclick="openActivityModal(8)">编辑</button>
@@ -3546,8 +3549,23 @@
     { id: 7, name: '八月会员日活动', timeRange: { start: '2026-08-08 00:00', end: '2026-08-08 23:59' }, createdAt: '2026-07-31 09:00', createdBy: '运营专员', status: 'draft', auditStatus: 'rejected', rule: '会员日专享折扣', channel: ['APP'], payType: '贝壳', source: '繁星-三亚国际免税城', memberDiscount: { normal: 100, silver: 90, gold: 80, platinum: 70, diamond: 60 }, accountType: '主营业务', budgetLimit: 150000, actualCost: 0, actualRevenue: 0, costShare: { type: '混合分摊', platform: 30, store: 40, brand: 30 }, revenueShare: { type: '混合分成', platform: 30, store: 40, brand: 30 }, auditLogs: [{ time: '2026-07-31 14:20', auditor: '管理员B', action: '提交审核', note: '' }, { time: '2026-07-31 16:00', auditor: '管理员B', action: '驳回', note: '预算超限且会员折扣力度过大，请调整后重新提交' }],
       items: []
     },
-    // 场景8 驳回（二次编辑）：进行中/已驳回（线上版本不变更，可再次编辑后重新提交）
+    // 场景8 驳回（二次编辑）：进行中/已驳回（线上版本不变更，待生效版本保留，可直接重新提交审核或编辑后再次提交）
     { id: 8, name: '国庆预热专场', timeRange: { start: '2026-09-12 00:00', end: '2026-09-26 23:59' }, createdAt: '2026-09-05 14:00', createdBy: '运营专员', status: 'active', auditStatus: 'rejected', rule: '国庆预热抢先兑', channel: ['APP', '微信小程序'], payType: '积分', source: '千帆', memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 500000, actualCost: 88400, actualRevenue: 88400, costShare: { type: '混合分摊', platform: 20, store: 50, brand: 30 }, revenueShare: { type: '平台全额' }, auditLogs: [{ time: '2026-09-05 18:00', auditor: '管理员A', action: '审核通过' }, { time: '2026-09-15 10:30', auditor: '运营专员', action: '提交变更审核' }, { time: '2026-09-15 14:00', auditor: '管理员A', action: '变更审核驳回', note: '变更后预算超限，请调整后重新提交' }],
+      pendingVersion: {
+        name: '国庆预热专场',
+        timeRange: { start: '2026-09-12 00:00', end: '2026-10-08 23:59' },
+        channel: ['APP', '微信小程序', 'H5'],
+        payType: '积分',
+        memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 },
+        accountType: '主营业务',
+        items: [
+          { prizeId: 'PRIZE-0025', name: '国庆预热惊喜盲盒', type: '实物礼品', price: 4900, stock: 200, dailyStock: 10, exchanged: 0, monthLimit: 1, dayLimit: 1, tags: ['限时'] },
+          { prizeId: 'PRIZE-0012', name: '海南免税95折券', type: '优惠券-券中心', price: 300, stock: 500, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['节日活动'] },
+        ]
+      },
+      pendingSubmitted: false,
+      pendingRejected: true,
+      pendingChangeNote: '延长活动结束时间、扩大奖品活动库存，并新增 H5 渠道。',
       items: [
         { prizeId: 'PRIZE-0025', name: '国庆预热惊喜盲盒', type: '实物礼品', price: 4900, stock: 60, dailyStock: 10, exchanged: 8, monthLimit: 1, dayLimit: 1, tags: ['限时'] },
         { prizeId: 'PRIZE-0012', name: '海南免税95折券', type: '优惠券-券中心', price: 300, stock: 260, dailyStock: -1, exchanged: 40, monthLimit: -1, dayLimit: -1, tags: ['节日活动'] },
@@ -3618,11 +3636,15 @@
         approved: '<span class="status-dot" style="background:#16a34a;"></span><span style="color:#16a34a;">已通过</span>',
         rejected: '<span class="status-dot" style="background:#dc2626;"></span><span style="color:#dc2626;">已驳回</span>'
       };
-      const hasPendingSubmit = (isActive && a.pendingVersion && !a.pendingSubmitted) || (isDraft && (a.auditStatus || '') === 'pendingSubmit');
+      // 被驳回的待生效版本：徽章显示已驳回（保留待生效版本，可直接重新提交审核或编辑后再次提交）
+      const hasPendingRejected = isActive && a.pendingVersion && a.pendingRejected && !a.pendingSubmitted;
+      const hasPendingSubmit = !hasPendingRejected && ((isActive && a.pendingVersion && !a.pendingSubmitted) || (isDraft && (a.auditStatus || '') === 'pendingSubmit'));
       const hasPendingAudit = isActive && a.pendingVersion && a.pendingSubmitted;
-      const auditStatusHtml = hasPendingSubmit
+      const auditStatusHtml = hasPendingRejected
+        ? auditStatusMap.rejected
+        : (hasPendingSubmit
         ? '<span class="status-dot" style="background:#2563eb;"></span><span style="color:#2563eb;">待提交</span>'
-        : (hasPendingAudit ? auditStatusMap.pending : (auditStatusMap[a.auditStatus] || '<span style="color:var(--ink-4);">-</span>'));
+        : (hasPendingAudit ? auditStatusMap.pending : (auditStatusMap[a.auditStatus] || '<span style="color:var(--ink-4);">-</span>')));
       const hasLogs = (a.auditLogs || []).length > 0;
       // 平台badge
       const platformBadge = a.source === '千帆'
@@ -3655,10 +3677,11 @@
         <td class="td-actions">
           <div class="td-actions-inner">
             ${isActive && a.pendingVersion && a.pendingSubmitted ? '<button class="btn btn-primary btn-sm" onclick="openChangeAuditModal(' + a.id + ')">审核</button>' : ''}
-            ${isActive && a.pendingVersion && !a.pendingSubmitted ? '<button class="btn btn-primary btn-sm" onclick="submitActivityChange(' + a.id + ')">提交审核</button>' : ''}
+            ${isActive && a.pendingVersion && !a.pendingSubmitted ? '<button class="btn btn-primary btn-sm" onclick="' + (a.pendingRejected ? 'resubmitActivity' : 'submitActivityChange') + '(' + a.id + ')">' + (a.pendingRejected ? '重新提交审核' : '提交审核') + '</button>' : ''}
+            ${isActive && !a.pendingVersion && (a.auditStatus === 'approved' || a.auditStatus === 'rejected') ? '<button class="btn btn-primary btn-sm" onclick="resubmitActivity(' + a.id + ')">重新提交审核</button>' : ''}
             ${isDraft && a.auditStatus === 'pendingSubmit' ? '<button class="btn btn-primary btn-sm" onclick="submitDraftAudit(' + a.id + ')">提交审核</button>' : ''}
             ${isDraft && a.auditStatus === 'pending' ? '<button class="btn btn-primary btn-sm" onclick="openActivityAuditModal(' + a.id + ')">审核</button>' : ''}
-            ${isDraft && a.auditStatus === 'rejected' ? '<button class="btn btn-primary btn-sm" onclick="submitDraftAudit(' + a.id + ')">提交审核</button>' : ''}
+            ${isDraft && a.auditStatus === 'rejected' ? '<button class="btn btn-primary btn-sm" onclick="submitDraftAudit(' + a.id + ')">重新提交审核</button>' : ''}
             ${hasLogs ? '<button class="btn btn-text btn-sm" onclick="openActivityLogModal(' + a.id + ')">日志</button>' : ''}
             ${!isTerminated ? '<button class="btn btn-text btn-sm" onclick="openActivityConfig(' + a.id + ')">奖品配置</button>' : ''}
             ${!isTerminated ? '<button class="btn btn-text btn-sm" onclick="openActivityModal(' + a.id + ')">编辑</button>' : ''}
@@ -3815,6 +3838,7 @@
             items: a.pendingVersion && a.pendingVersion.items ? a.pendingVersion.items : JSON.parse(JSON.stringify(a.items || []))
           };
           a.pendingSubmitted = false;
+          delete a.pendingRejected;
           a.auditLogs = a.auditLogs || [];
           a.auditLogs.push({ time: new Date().toLocaleString('zh-CN', { hour12: false }), auditor: '当前用户', action: '编辑', note: describePrizeChanges(a.items || [], (a.pendingVersion && a.pendingVersion.items) || []) });
           showToast('已保存为待审核草稿，线上版本不受影响', 'success');
@@ -4237,6 +4261,7 @@
           '变更审核驳回': 'color:#dc2626;background:#fef2f2;',
           '提交审核': 'color:#7c3aed;background:#f5f3ff;',
           '提交变更审核': 'color:#7c3aed;background:#f5f3ff;',
+          '重新提交变更审核': 'color:#7c3aed;background:#f5f3ff;',
           '编辑': 'color:#2563eb;background:#eff6ff;',
           '保存待审核变更': 'color:#d97706;background:#fff7ed;',
           '驳回': 'color:#dc2626;background:#fef2f2;',
@@ -4265,6 +4290,9 @@
   function saveActivityConfig() {
     const a = allActivities.find(x => x.id === currentConfigActivityId);
     if (a && a.status === 'active' && currentConfigMode === 'edit') {
+      // 编辑配置后回到待提交状态，清除已驳回标记
+      delete a.pendingRejected;
+      a.pendingSubmitted = false;
       a.auditLogs = a.auditLogs || [];
       a.auditLogs.unshift({ time: nowTimeStr(), auditor: '当前用户', action: '编辑', note: describePrizeChanges(a.items || [], (a.pendingVersion && a.pendingVersion.items) || []) });
       showToast('已保存为待审核草稿，线上版本不受影响', 'success');
@@ -4297,6 +4325,48 @@
       a.auditLogs.unshift({ time: nowTimeStr(), auditor: '当前用户', action: '提交审核' });
       renderActivities();
       showToast('已提交审核，请等待管理员审核', 'success');
+    });
+  }
+
+  // 重新提交审核：进行中（已通过/已驳回）活动可直接提交审核，无需先编辑
+  // 有已驳回的待生效版本：原样重新提交；无待生效版本：以当前线上配置生成待生效版本提交复核
+  function resubmitActivity(id) {
+    const a = allActivities.find(x => x.id === id);
+    if (!a || a.status !== 'active') { showToast('仅进行中的活动可重新提交审核', 'warning'); return; }
+    if (a.pendingSubmitted) { showToast('该活动已在审核中，请勿重复提交', 'warning'); return; }
+    if (a.pendingVersion && !a.pendingRejected) {
+      // 有待生效且未被驳回的变更：走常规变更提交
+      submitActivityChange(id);
+      return;
+    }
+    if (a.pendingVersion && a.pendingRejected) {
+      showConfirm('重新提交审核', '将按被驳回的待生效版本重新提交审核（未修改原样提交），审核通过前线上版本保持不变。确定提交吗？', function() {
+        a.pendingRejected = false;
+        a.pendingSubmitted = true;
+        a.auditStatus = 'approved';
+        a.auditLogs = a.auditLogs || [];
+        a.auditLogs.unshift({ time: nowTimeStr(), auditor: '当前用户', action: '重新提交变更审核' });
+        renderActivities();
+        showToast('已重新提交审核，请等待管理员审核', 'success');
+      });
+      return;
+    }
+    showConfirm('重新提交审核', '将按当前线上配置生成待生效版本并提交审核，审核通过前线上版本保持不变。确定提交吗？', function() {
+      a.pendingVersion = {
+        name: a.name,
+        timeRange: JSON.parse(JSON.stringify(a.timeRange || {})),
+        channel: JSON.parse(JSON.stringify(a.channel || [])),
+        payType: a.payType,
+        memberDiscount: JSON.parse(JSON.stringify(a.memberDiscount || {})),
+        accountType: a.accountType,
+        items: JSON.parse(JSON.stringify(a.items || []))
+      };
+      a.pendingSubmitted = true;
+      delete a.pendingRejected;
+      a.auditLogs = a.auditLogs || [];
+      a.auditLogs.unshift({ time: nowTimeStr(), auditor: '当前用户', action: '提交变更审核' });
+      renderActivities();
+      showToast('已重新提交审核，请等待管理员审核', 'success');
     });
   }
 
@@ -4482,6 +4552,7 @@
     a.items = JSON.parse(JSON.stringify(pv.items || []));
     a.pendingVersion = null;
     a.pendingSubmitted = false;
+    delete a.pendingRejected;
     delete a.pendingChangeNote;
     a.auditLogs = a.auditLogs || [];
     a.auditLogs.unshift({ time: nowTimeStr(), auditor: '管理员', action: '变更审核通过' });
@@ -4517,16 +4588,17 @@
       return;
     }
     if (!a.pendingVersion) { closeModal('changeAuditModal'); return; }
-    showConfirm('驳回变更', '驳回后待生效版本将被丢弃，线上版本保持不变。确定驳回该变更吗？', function() {
-      a.pendingVersion = null;
+    showConfirm('驳回变更', '驳回后待生效版本将保留为"已驳回"状态，可直接重新提交审核或编辑调整后再次提交，线上版本保持不变。确定驳回该变更吗？', function() {
+      // 保留待生效版本并标记已驳回：支持不修改直接重新提交审核
       a.pendingSubmitted = false;
-      delete a.pendingChangeNote;
+      a.pendingRejected = true;
+      a.auditStatus = 'rejected';
       a.auditLogs = a.auditLogs || [];
       a.auditLogs.unshift({ time: nowTimeStr(), auditor: '管理员', action: '变更审核驳回', note: reason });
       resetChangeRejectInput();
       renderActivities();
       closeModal('changeAuditModal');
-      showToast('变更已驳回，线上版本未受影响', 'success');
+      showToast('变更已驳回，可直接重新提交审核', 'success');
     });
   }
 
