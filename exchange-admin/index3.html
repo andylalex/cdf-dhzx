@@ -2803,6 +2803,12 @@
       </button>
     </div>
     <div class="modal-body" style="padding:0;">
+      <div style="padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;">
+        <span style="font-size:13px;color:var(--ink-2);white-space:nowrap;">总库存</span>
+        <input id="stockEditInput" type="text" placeholder="填写库存数量，-1 表示不限" style="width:220px;padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;color:var(--ink-1);">
+        <button class="btn btn-primary" onclick="saveStockEdit()">保存</button>
+        <span style="font-size:12px;color:var(--ink-3);">剩余库存将同步收敛，且不小于已售合计</span>
+      </div>
       <div style="max-height:400px;overflow-y:auto;">
         <table style="width:100%;border-collapse:collapse;">
           <thead style="position:sticky;top:0;background:#fff;z-index:2;">
@@ -2810,15 +2816,13 @@
               <th style="padding:12px 16px;text-align:left;font-size:12px;font-weight:600;color:var(--ink-3);">活动</th>
               <th style="padding:12px 16px;text-align:right;font-size:12px;font-weight:600;color:var(--ink-3);width:90px;">剩余</th>
               <th style="padding:12px 16px;text-align:right;font-size:12px;font-weight:600;color:var(--ink-3);width:90px;">已售</th>
-              <th style="padding:12px 16px;text-align:right;font-size:12px;font-weight:600;color:var(--ink-3);width:90px;">占用</th>
-              <th style="padding:12px 16px;text-align:right;font-size:12px;font-weight:600;color:var(--ink-3);width:90px;">总库存</th>
+              <th style="padding:12px 16px;text-align:right;font-size:12px;font-weight:600;color:var(--ink-3);width:90px;">活动库存</th>
             </tr>
           </thead>
           <tbody id="stockTableBody" style="font-size:13px;color:var(--ink-2);">
           </tbody>
         </table>
       </div>
-      <div id="stockSummaryBar" style="padding:10px 16px;border-top:1px solid var(--border);font-size:12px;color:var(--ink-3);"></div>
     </div>
     <div class="modal-footer">
       <button class="btn btn-outline" onclick="closeModal('stockModal')">关闭</button>
@@ -3029,16 +3033,12 @@
     ended: { txt: '已结束', color: '#6b7280', bg: '#f3f4f6' },
     terminated: { txt: '已终止', color: '#374151', bg: '#e5e7eb' }
   };
-  // 页面运营显示状态：由活动运行状态 × 上下架组合得出
+  // 页面运营显示状态：活动状态优先（未开始 > 显示/隐藏 > 已结束）
   function getCenterPrizeDisplayStatus(p) {
-    if (p.pending) return { txt: '待上架', color: '#f59e0b', bg: '#fff3e0' };
     var st = p.activityStatus;
-    if (st === 'terminated') return ACT_RUN_STATUS_META.terminated;
-    if (st === 'ended') return ACT_RUN_STATUS_META.ended;
-    if (st === 'notstarted') {
-      return p.visible ? ACT_RUN_STATUS_META.notstarted : { txt: '已下架', color: '#9ca3af', bg: '#f3f4f6' };
-    }
-    return p.visible ? { txt: '显示中', color: '#2e7d32', bg: '#e8f5e9' } : { txt: '已下架', color: '#9ca3af', bg: '#f3f4f6' };
+    if (st === 'terminated' || st === 'ended') return { txt: '已结束', color: '#374151', bg: '#e5e7eb' };
+    if (st === 'notstarted') return { txt: '未开始', color: '#1565c0', bg: '#e3f2fd' };
+    return p.visible ? { txt: '显示', color: '#2e7d32', bg: '#e8f5e9' } : { txt: '隐藏', color: '#9ca3af', bg: '#f3f4f6' };
   }
 
   // ===== 商品数据 =====
@@ -3436,17 +3436,16 @@
     document.getElementById('logModal').classList.add('show');
   }
 
+  var stockEditProductId = null;
+
   function openStockModal(productId) {
     const p = allProducts.find(x => x.id === productId);
     if (!p) return;
+    stockEditProductId = productId;
     const pid = p.prizeId || ('PRIZE-' + String(p.id).padStart(4, '0'));
     document.getElementById('stockModalTitle').textContent = '库存明细 - ' + p.name + '（' + pid + '）';
+    document.getElementById('stockEditInput').value = (p.totalStock === -1) ? '-1' : p.totalStock;
 
-    const holdStatuses = ['待发货', '待收货', '待使用'];
-    function holdOf(actName) {
-      return allOrders.filter(o => o.prizeId === pid && holdStatuses.indexOf(o.status) !== -1 && (!actName || o.sourceActivityName === actName))
-        .reduce((s, o) => s + (o.quantity || 1), 0);
-    }
     function actStatusInfo(a) {
       if (a.status === 'draft') return { txt: '草稿', color: '#b45309', bg: '#fef3c7' };
       return ACT_RUN_STATUS_META[getActivityRunStatus(a)];
@@ -3458,7 +3457,7 @@
     allActivities.forEach(a => {
       (a.items || []).forEach(it => {
         if (it.prizeId === pid) {
-          refs.push({ act: a, total: it.stock, sold: it.exchanged || 0, hold: holdOf(a.name) });
+          refs.push({ act: a, total: it.stock, sold: it.exchanged || 0 });
         }
       });
     });
@@ -3466,42 +3465,55 @@
     const cell = 'padding:12px 16px;';
     const numCell = cell + 'text-align:right;';
     let rowsHtml = '';
-    let sumSold = 0, sumHold = 0;
+    let sumSold = 0, sumAct = 0, actUnlimited = false;
     if (refs.length === 0) {
       const wSold = p.totalStock === -1 ? 0 : Math.max(p.totalStock - p.stock, 0);
-      const wHold = holdOf('');
       rowsHtml = '<tr style="border-bottom:1px solid #f0f0f0;">' +
         '<td style="' + cell + '"><span style="color:var(--ink-4);">未被活动引用</span></td>' +
         '<td style="' + numCell + '">' + fmt(p.stock) + '</td>' +
         '<td style="' + numCell + '">' + wSold + '</td>' +
-        '<td style="' + numCell + '">' + wHold + '</td>' +
-        '<td style="' + numCell + '">' + fmt(p.totalStock) + '</td>' +
+        '<td style="' + numCell + '">' + '—' + '</td>' +
         '</tr>';
-      sumSold = wSold; sumHold = wHold;
+      sumSold = wSold;
     } else {
       refs.forEach(r => {
-        sumSold += r.sold; sumHold += r.hold;
+        sumSold += r.sold;
+        if (r.total === -1) { actUnlimited = true; } else { sumAct += r.total; }
         const remain = r.total === -1 ? '不限' : Math.max(r.total - r.sold, 0);
         const st = actStatusInfo(r.act);
         rowsHtml += '<tr style="border-bottom:1px solid #f0f0f0;">' +
           '<td style="' + cell + '">' + r.act.name + badge(st) + '</td>' +
           '<td style="' + numCell + '">' + fmt(remain) + '</td>' +
           '<td style="' + numCell + '">' + r.sold + '</td>' +
-          '<td style="' + numCell + '">' + r.hold + '</td>' +
           '<td style="' + numCell + '">' + fmt(r.total) + '</td>' +
           '</tr>';
       });
     }
+    const actSumTxt = refs.length === 0 ? '—' : (actUnlimited ? '不限' : ('Σ ' + sumAct));
     rowsHtml += '<tr style="background:#fafafa;font-weight:600;">' +
       '<td style="' + cell + 'color:var(--ink-1);">合计</td>' +
       '<td style="' + numCell + 'color:var(--ink-1);">' + fmt(p.stock) + '</td>' +
       '<td style="' + numCell + 'color:var(--ink-1);">' + sumSold + '</td>' +
-      '<td style="' + numCell + 'color:var(--ink-1);">' + sumHold + '</td>' +
-      '<td style="' + numCell + 'color:var(--ink-1);">' + fmt(p.totalStock) + '</td>' +
+      '<td style="' + numCell + 'color:var(--ink-1);">' + actSumTxt + '<div style="font-weight:400;font-size:11px;color:var(--ink-3);">总库存 ' + fmt(p.totalStock) + '</div></td>' +
       '</tr>';
     document.getElementById('stockTableBody').innerHTML = rowsHtml;
-    document.getElementById('stockSummaryBar').textContent = '占用 = 已下单未履约数量（待发货 / 待收货 / 待使用）；剩余 = 活动配置库存 - 已售；合计取奖品仓库当前值。';
     document.getElementById('stockModal').classList.add('show');
+  }
+
+  function saveStockEdit() {
+    const p = allProducts.find(x => x.id === stockEditProductId);
+    if (!p) return;
+    const raw = document.getElementById('stockEditInput').value.trim();
+    if (!/^-?\d+$/.test(raw)) { showToast('请输入整数，-1 表示不限', 'error'); return; }
+    const v = parseInt(raw, 10);
+    if (v < -1) { showToast('请输入不小于 -1 的整数', 'error'); return; }
+    const sold = p.totalStock === -1 ? 0 : Math.max(p.totalStock - p.stock, 0);
+    if (v !== -1 && v < sold) { showToast('总库存不能小于已售合计 ' + sold, 'error'); return; }
+    p.totalStock = v;
+    if (v !== -1) { p.stock = Math.max(v - sold, 0); }
+    showToast('库存已更新', 'success');
+    openStockModal(stockEditProductId);
+    renderProducts();
   }
 
   function editProduct(id) { openProductModal(id); }
