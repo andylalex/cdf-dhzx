@@ -144,6 +144,8 @@
     .td-img { width: 36px; height: 36px; border-radius: 6px; object-fit: cover; background: #f4f4f5; flex-shrink: 0; }
   .td-actions { white-space: nowrap; }
   .td-actions-inner { display: inline-flex; gap: 2px; align-items: center; vertical-align: middle; }
+  .td-actions-inner.td-actions-wrap { flex-wrap: wrap; row-gap: 4px; max-width: 240px; }
+  #productTableBody td.td-actions { width: 140px; min-width: 140px; }
   td .toggle { flex-shrink: 0; }
 
   /* Tags */
@@ -735,7 +737,7 @@
             <div>
               <div style="font-weight:500;font-size:13px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">雅诗兰黛持妆粉底液 30ml</div>
               <div style="font-size:11px;color:var(--ink-4);font-family:monospace;margin-top:3px;">奖品ID：PRIZE-0001</div>
-              <div style="font-size:11px;color:var(--ink-4);font-family:monospace;margin-top:3px;">EOP大码：C117418</div>
+              <div style="font-size:11px;color:var(--ink-4);font-family:monospace;margin-top:3px;">EOP联营大码：C117418</div>
             </div>
           </div>
         </td>
@@ -750,11 +752,12 @@
         <td><span class="status-dot on"></span>启用</td>
         <td style="font-size:12px;color:var(--ink-2);">管理员</td>
         <td class="td-actions">
-          <div class="td-actions-inner">
-            <button class="btn btn-danger btn-sm" onclick="toggleProductStatus(1)">停用</button>
+          <div class="td-actions-inner td-actions-wrap">
             <button class="btn btn-text btn-sm" onclick="editProduct(1)">编辑</button>
             <button class="btn btn-text btn-sm" onclick="copyProduct(1)">复制</button>
-            <button class="btn btn-text btn-sm" onclick="openLogModal(1)">操作日志</button>
+            <button class="btn btn-text btn-sm" onclick="openStockModal(1)">库存</button>
+            <button class="btn btn-danger btn-sm" onclick="toggleProductStatus(1)">停用</button>
+            <button class="btn btn-text btn-sm" onclick="openLogModal(1)">日志</button>
             <button class="btn btn-danger btn-sm" onclick="deleteProduct(1)">删除</button>
           </div>
         </td>
@@ -769,7 +772,7 @@
             <div>
               <div style="font-weight:500;font-size:13px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">兰蔻小黑瓶精华肌底液 20ml</div>
               <div style="font-size:11px;color:var(--ink-4);font-family:monospace;margin-top:3px;">奖品ID：PRIZE-0002</div>
-              <div style="font-size:11px;color:var(--ink-4);font-family:monospace;margin-top:3px;">EOP大码：-</div>
+              <div style="font-size:11px;color:var(--ink-4);font-family:monospace;margin-top:3px;">EOP联营大码：-</div>
             </div>
           </div>
         </td>
@@ -784,11 +787,12 @@
         <td><span class="status-dot on"></span>启用</td>
         <td style="font-size:12px;color:var(--ink-2);">管理员</td>
         <td class="td-actions">
-          <div class="td-actions-inner">
-            <button class="btn btn-danger btn-sm" onclick="toggleProductStatus(2)">停用</button>
+          <div class="td-actions-inner td-actions-wrap">
             <button class="btn btn-text btn-sm" onclick="editProduct(2)">编辑</button>
             <button class="btn btn-text btn-sm" onclick="copyProduct(2)">复制</button>
-            <button class="btn btn-text btn-sm" onclick="openLogModal(2)">操作日志</button>
+            <button class="btn btn-text btn-sm" onclick="openStockModal(2)">库存</button>
+            <button class="btn btn-danger btn-sm" onclick="toggleProductStatus(2)">停用</button>
+            <button class="btn btn-text btn-sm" onclick="openLogModal(2)">日志</button>
             <button class="btn btn-danger btn-sm" onclick="deleteProduct(2)">删除</button>
           </div>
         </td>
@@ -803,7 +807,7 @@
             <div>
               <div style="font-weight:500;font-size:13px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">三亚免税城 SPA 美容服务体验券</div>
               <div style="font-size:11px;color:var(--ink-4);font-family:monospace;margin-top:3px;">奖品ID：PRIZE-0003</div>
-              <div style="font-size:11px;color:var(--ink-4);font-family:monospace;margin-top:3px;">EOP大码：-</div>
+              <div style="font-size:11px;color:var(--ink-4);font-family:monospace;margin-top:3px;">EOP联营大码：-</div>
             </div>
           </div>
         </td>
@@ -818,11 +822,12 @@
         <td><span class="status-dot on"></span>启用</td>
         <td style="font-size:12px;color:var(--ink-2);">管理员</td>
         <td class="td-actions">
-          <div class="td-actions-inner">
-            <button class="btn btn-danger btn-sm" onclick="toggleProductStatus(3)">停用</button>
+          <div class="td-actions-inner td-actions-wrap">
             <button class="btn btn-text btn-sm" onclick="editProduct(3)">编辑</button>
             <button class="btn btn-text btn-sm" onclick="copyProduct(3)">复制</button>
-            <button class="btn btn-text btn-sm" onclick="openLogModal(3)">操作日志</button>
+            <button class="btn btn-text btn-sm" onclick="openStockModal(3)">库存</button>
+            <button class="btn btn-danger btn-sm" onclick="toggleProductStatus(3)">停用</button>
+            <button class="btn btn-text btn-sm" onclick="openLogModal(3)">日志</button>
             <button class="btn btn-danger btn-sm" onclick="deleteProduct(3)">删除</button>
           </div>
         </td>
@@ -837,7 +842,7 @@
             <div>
               <div style="font-weight:500;font-size:13px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">资生堂红腰子精华 50ml</div>
               <div style="font-size:11px;color:var(--ink-4);font-family:monospace;margin-top:3px;">奖品ID：PRIZE-0004</div>
-              <div style="font-size:11px;color:var(--ink-4);font-family:monospace;margin-top:3px;">EOP大码：C203567</div>
+              <div style="font-size:11px;color:var(--ink-4);font-family:monospace;margin-top:3px;">EOP联营大码：C203567</div>
             </div>
           </div>
         </td>
@@ -852,11 +857,12 @@
         <td><span class="status-dot off"></span>停用</td>
         <td style="font-size:12px;color:var(--ink-2);">管理员</td>
         <td class="td-actions">
-          <div class="td-actions-inner">
-            <button class="btn btn-text btn-sm" onclick="toggleProductStatus(4)">启用</button>
+          <div class="td-actions-inner td-actions-wrap">
             <button class="btn btn-text btn-sm" onclick="editProduct(4)">编辑</button>
             <button class="btn btn-text btn-sm" onclick="copyProduct(4)">复制</button>
-            <button class="btn btn-text btn-sm" onclick="openLogModal(4)">操作日志</button>
+            <button class="btn btn-text btn-sm" onclick="openStockModal(4)">库存</button>
+            <button class="btn btn-text btn-sm" onclick="toggleProductStatus(4)">启用</button>
+            <button class="btn btn-text btn-sm" onclick="openLogModal(4)">日志</button>
             <button class="btn btn-danger btn-sm" onclick="deleteProduct(4)">删除</button>
           </div>
         </td>
@@ -871,7 +877,7 @@
             <div>
               <div style="font-weight:500;font-size:13px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">转盘抽奖机会 × 3</div>
               <div style="font-size:11px;color:var(--ink-4);font-family:monospace;margin-top:3px;">奖品ID：PRIZE-0005</div>
-              <div style="font-size:11px;color:var(--ink-4);font-family:monospace;margin-top:3px;">EOP大码：-</div>
+              <div style="font-size:11px;color:var(--ink-4);font-family:monospace;margin-top:3px;">EOP联营大码：-</div>
             </div>
           </div>
         </td>
@@ -886,11 +892,12 @@
         <td><span class="status-dot on"></span>启用</td>
         <td style="font-size:12px;color:var(--ink-2);">管理员</td>
         <td class="td-actions">
-          <div class="td-actions-inner">
-            <button class="btn btn-danger btn-sm" disabled="" style="opacity:0.45;cursor:not-allowed;">停用</button>
+          <div class="td-actions-inner td-actions-wrap">
             <button class="btn btn-text btn-sm" onclick="editProduct(5)">编辑</button>
             <button class="btn btn-text btn-sm" onclick="copyProduct(5)">复制</button>
-            <button class="btn btn-text btn-sm" onclick="openLogModal(5)">操作日志</button>
+            <button class="btn btn-text btn-sm" onclick="openStockModal(5)">库存</button>
+            <button class="btn btn-danger btn-sm" disabled="" style="opacity:0.45;cursor:not-allowed;">停用</button>
+            <button class="btn btn-text btn-sm" onclick="openLogModal(5)">日志</button>
             <button class="btn btn-danger btn-sm" disabled="" style="opacity:0.45;cursor:not-allowed;">删除</button>
           </div>
         </td>
@@ -905,7 +912,7 @@
             <div>
               <div style="font-weight:500;font-size:13px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">SK-II 神仙水 230ml</div>
               <div style="font-size:11px;color:var(--ink-4);font-family:monospace;margin-top:3px;">奖品ID：PRIZE-0006</div>
-              <div style="font-size:11px;color:var(--ink-4);font-family:monospace;margin-top:3px;">EOP大码：C118902</div>
+              <div style="font-size:11px;color:var(--ink-4);font-family:monospace;margin-top:3px;">EOP联营大码：C118902</div>
             </div>
           </div>
         </td>
@@ -920,11 +927,12 @@
         <td><span class="status-dot on"></span>启用</td>
         <td style="font-size:12px;color:var(--ink-2);">管理员</td>
         <td class="td-actions">
-          <div class="td-actions-inner">
-            <button class="btn btn-danger btn-sm" disabled="" style="opacity:0.45;cursor:not-allowed;">停用</button>
+          <div class="td-actions-inner td-actions-wrap">
             <button class="btn btn-text btn-sm" onclick="editProduct(6)">编辑</button>
             <button class="btn btn-text btn-sm" onclick="copyProduct(6)">复制</button>
-            <button class="btn btn-text btn-sm" onclick="openLogModal(6)">操作日志</button>
+            <button class="btn btn-text btn-sm" onclick="openStockModal(6)">库存</button>
+            <button class="btn btn-danger btn-sm" disabled="" style="opacity:0.45;cursor:not-allowed;">停用</button>
+            <button class="btn btn-text btn-sm" onclick="openLogModal(6)">日志</button>
             <button class="btn btn-danger btn-sm" disabled="" style="opacity:0.45;cursor:not-allowed;">删除</button>
           </div>
         </td>
@@ -939,7 +947,7 @@
             <div>
               <div style="font-weight:500;font-size:13px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">迪奥口红礼盒套装</div>
               <div style="font-size:11px;color:var(--ink-4);font-family:monospace;margin-top:3px;">奖品ID：PRIZE-0007</div>
-              <div style="font-size:11px;color:var(--ink-4);font-family:monospace;margin-top:3px;">EOP大码：-</div>
+              <div style="font-size:11px;color:var(--ink-4);font-family:monospace;margin-top:3px;">EOP联营大码：-</div>
             </div>
           </div>
         </td>
@@ -954,11 +962,12 @@
         <td><span class="status-dot on"></span>启用</td>
         <td style="font-size:12px;color:var(--ink-2);">管理员</td>
         <td class="td-actions">
-          <div class="td-actions-inner">
-            <button class="btn btn-danger btn-sm" disabled="" style="opacity:0.45;cursor:not-allowed;">停用</button>
+          <div class="td-actions-inner td-actions-wrap">
             <button class="btn btn-text btn-sm" onclick="editProduct(7)">编辑</button>
             <button class="btn btn-text btn-sm" onclick="copyProduct(7)">复制</button>
-            <button class="btn btn-text btn-sm" onclick="openLogModal(7)">操作日志</button>
+            <button class="btn btn-text btn-sm" onclick="openStockModal(7)">库存</button>
+            <button class="btn btn-danger btn-sm" disabled="" style="opacity:0.45;cursor:not-allowed;">停用</button>
+            <button class="btn btn-text btn-sm" onclick="openLogModal(7)">日志</button>
             <button class="btn btn-danger btn-sm" disabled="" style="opacity:0.45;cursor:not-allowed;">删除</button>
           </div>
         </td>
@@ -973,7 +982,7 @@
             <div>
               <div style="font-weight:500;font-size:13px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">中免海南限定化妆包</div>
               <div style="font-size:11px;color:var(--ink-4);font-family:monospace;margin-top:3px;">奖品ID：PRIZE-0008</div>
-              <div style="font-size:11px;color:var(--ink-4);font-family:monospace;margin-top:3px;">EOP大码：-</div>
+              <div style="font-size:11px;color:var(--ink-4);font-family:monospace;margin-top:3px;">EOP联营大码：-</div>
             </div>
           </div>
         </td>
@@ -988,11 +997,12 @@
         <td><span class="status-dot on"></span>启用</td>
         <td style="font-size:12px;color:var(--ink-2);">管理员</td>
         <td class="td-actions">
-          <div class="td-actions-inner">
-            <button class="btn btn-danger btn-sm" disabled="" style="opacity:0.45;cursor:not-allowed;">停用</button>
+          <div class="td-actions-inner td-actions-wrap">
             <button class="btn btn-text btn-sm" onclick="editProduct(8)">编辑</button>
             <button class="btn btn-text btn-sm" onclick="copyProduct(8)">复制</button>
-            <button class="btn btn-text btn-sm" onclick="openLogModal(8)">操作日志</button>
+            <button class="btn btn-text btn-sm" onclick="openStockModal(8)">库存</button>
+            <button class="btn btn-danger btn-sm" disabled="" style="opacity:0.45;cursor:not-allowed;">停用</button>
+            <button class="btn btn-text btn-sm" onclick="openLogModal(8)">日志</button>
             <button class="btn btn-danger btn-sm" disabled="" style="opacity:0.45;cursor:not-allowed;">删除</button>
           </div>
         </td>
@@ -1007,7 +1017,7 @@
             <div>
               <div style="font-weight:500;font-size:13px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">三亚机场贵宾室服务券</div>
               <div style="font-size:11px;color:var(--ink-4);font-family:monospace;margin-top:3px;">奖品ID：PRIZE-0009</div>
-              <div style="font-size:11px;color:var(--ink-4);font-family:monospace;margin-top:3px;">EOP大码：-</div>
+              <div style="font-size:11px;color:var(--ink-4);font-family:monospace;margin-top:3px;">EOP联营大码：-</div>
             </div>
           </div>
         </td>
@@ -1022,11 +1032,12 @@
         <td><span class="status-dot off"></span>停用</td>
         <td style="font-size:12px;color:var(--ink-2);">管理员</td>
         <td class="td-actions">
-          <div class="td-actions-inner">
-            <button class="btn btn-text btn-sm" disabled="" style="opacity:0.45;cursor:not-allowed;">启用</button>
+          <div class="td-actions-inner td-actions-wrap">
             <button class="btn btn-text btn-sm" onclick="editProduct(9)">编辑</button>
             <button class="btn btn-text btn-sm" onclick="copyProduct(9)">复制</button>
-            <button class="btn btn-text btn-sm" onclick="openLogModal(9)">操作日志</button>
+            <button class="btn btn-text btn-sm" onclick="openStockModal(9)">库存</button>
+            <button class="btn btn-text btn-sm" disabled="" style="opacity:0.45;cursor:not-allowed;">启用</button>
+            <button class="btn btn-text btn-sm" onclick="openLogModal(9)">日志</button>
             <button class="btn btn-danger btn-sm" disabled="" style="opacity:0.45;cursor:not-allowed;">删除</button>
           </div>
         </td>
@@ -1041,7 +1052,7 @@
             <div>
               <div style="font-weight:500;font-size:13px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">转盘抽奖机会 × 5</div>
               <div style="font-size:11px;color:var(--ink-4);font-family:monospace;margin-top:3px;">奖品ID：PRIZE-0010</div>
-              <div style="font-size:11px;color:var(--ink-4);font-family:monospace;margin-top:3px;">EOP大码：-</div>
+              <div style="font-size:11px;color:var(--ink-4);font-family:monospace;margin-top:3px;">EOP联营大码：-</div>
             </div>
           </div>
         </td>
@@ -1056,11 +1067,12 @@
         <td><span class="status-dot on"></span>启用</td>
         <td style="font-size:12px;color:var(--ink-2);">管理员</td>
         <td class="td-actions">
-          <div class="td-actions-inner">
-            <button class="btn btn-danger btn-sm" disabled="" style="opacity:0.45;cursor:not-allowed;">停用</button>
+          <div class="td-actions-inner td-actions-wrap">
             <button class="btn btn-text btn-sm" onclick="editProduct(10)">编辑</button>
             <button class="btn btn-text btn-sm" onclick="copyProduct(10)">复制</button>
-            <button class="btn btn-text btn-sm" onclick="openLogModal(10)">操作日志</button>
+            <button class="btn btn-text btn-sm" onclick="openStockModal(10)">库存</button>
+            <button class="btn btn-danger btn-sm" disabled="" style="opacity:0.45;cursor:not-allowed;">停用</button>
+            <button class="btn btn-text btn-sm" onclick="openLogModal(10)">日志</button>
             <button class="btn btn-danger btn-sm" disabled="" style="opacity:0.45;cursor:not-allowed;">删除</button>
           </div>
         </td>
@@ -1075,7 +1087,7 @@
             <div>
               <div style="font-weight:500;font-size:13px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">cdf中免海南 50元无门槛优惠券</div>
               <div style="font-size:11px;color:var(--ink-4);font-family:monospace;margin-top:3px;">奖品ID：PRIZE-0011</div>
-              <div style="font-size:11px;color:var(--ink-4);font-family:monospace;margin-top:3px;">EOP大码：-</div>
+              <div style="font-size:11px;color:var(--ink-4);font-family:monospace;margin-top:3px;">EOP联营大码：-</div>
             </div>
           </div>
         </td>
@@ -1090,11 +1102,12 @@
         <td><span class="status-dot on"></span>启用</td>
         <td style="font-size:12px;color:var(--ink-2);">管理员</td>
         <td class="td-actions">
-          <div class="td-actions-inner">
-            <button class="btn btn-danger btn-sm" disabled="" style="opacity:0.45;cursor:not-allowed;">停用</button>
+          <div class="td-actions-inner td-actions-wrap">
             <button class="btn btn-text btn-sm" onclick="editProduct(11)">编辑</button>
             <button class="btn btn-text btn-sm" onclick="copyProduct(11)">复制</button>
-            <button class="btn btn-text btn-sm" onclick="openLogModal(11)">操作日志</button>
+            <button class="btn btn-text btn-sm" onclick="openStockModal(11)">库存</button>
+            <button class="btn btn-danger btn-sm" disabled="" style="opacity:0.45;cursor:not-allowed;">停用</button>
+            <button class="btn btn-text btn-sm" onclick="openLogModal(11)">日志</button>
             <button class="btn btn-danger btn-sm" disabled="" style="opacity:0.45;cursor:not-allowed;">删除</button>
           </div>
         </td>
@@ -1109,7 +1122,7 @@
             <div>
               <div style="font-weight:500;font-size:13px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">cdf中免海南 满1000减100优惠券</div>
               <div style="font-size:11px;color:var(--ink-4);font-family:monospace;margin-top:3px;">奖品ID：PRIZE-0012</div>
-              <div style="font-size:11px;color:var(--ink-4);font-family:monospace;margin-top:3px;">EOP大码：-</div>
+              <div style="font-size:11px;color:var(--ink-4);font-family:monospace;margin-top:3px;">EOP联营大码：-</div>
             </div>
           </div>
         </td>
@@ -1124,11 +1137,12 @@
         <td><span class="status-dot on"></span>启用</td>
         <td style="font-size:12px;color:var(--ink-2);">管理员</td>
         <td class="td-actions">
-          <div class="td-actions-inner">
-            <button class="btn btn-danger btn-sm" disabled="" style="opacity:0.45;cursor:not-allowed;">停用</button>
+          <div class="td-actions-inner td-actions-wrap">
             <button class="btn btn-text btn-sm" onclick="editProduct(12)">编辑</button>
             <button class="btn btn-text btn-sm" onclick="copyProduct(12)">复制</button>
-            <button class="btn btn-text btn-sm" onclick="openLogModal(12)">操作日志</button>
+            <button class="btn btn-text btn-sm" onclick="openStockModal(12)">库存</button>
+            <button class="btn btn-danger btn-sm" disabled="" style="opacity:0.45;cursor:not-allowed;">停用</button>
+            <button class="btn btn-text btn-sm" onclick="openLogModal(12)">日志</button>
             <button class="btn btn-danger btn-sm" disabled="" style="opacity:0.45;cursor:not-allowed;">删除</button>
           </div>
         </td>
@@ -1143,7 +1157,7 @@
             <div>
               <div style="font-weight:500;font-size:13px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">福利值 1000点</div>
               <div style="font-size:11px;color:var(--ink-4);font-family:monospace;margin-top:3px;">奖品ID：PRIZE-0013</div>
-              <div style="font-size:11px;color:var(--ink-4);font-family:monospace;margin-top:3px;">EOP大码：-</div>
+              <div style="font-size:11px;color:var(--ink-4);font-family:monospace;margin-top:3px;">EOP联营大码：-</div>
             </div>
           </div>
         </td>
@@ -1158,11 +1172,12 @@
         <td><span class="status-dot on"></span>启用</td>
         <td style="font-size:12px;color:var(--ink-2);">管理员</td>
         <td class="td-actions">
-          <div class="td-actions-inner">
-            <button class="btn btn-danger btn-sm" disabled="" style="opacity:0.45;cursor:not-allowed;">停用</button>
+          <div class="td-actions-inner td-actions-wrap">
             <button class="btn btn-text btn-sm" onclick="editProduct(13)">编辑</button>
             <button class="btn btn-text btn-sm" onclick="copyProduct(13)">复制</button>
-            <button class="btn btn-text btn-sm" onclick="openLogModal(13)">操作日志</button>
+            <button class="btn btn-text btn-sm" onclick="openStockModal(13)">库存</button>
+            <button class="btn btn-danger btn-sm" disabled="" style="opacity:0.45;cursor:not-allowed;">停用</button>
+            <button class="btn btn-text btn-sm" onclick="openLogModal(13)">日志</button>
             <button class="btn btn-danger btn-sm" disabled="" style="opacity:0.45;cursor:not-allowed;">删除</button>
           </div>
         </td>
@@ -2108,7 +2123,7 @@
                 <th style="width:170px;">活动时间</th>
                 <th style="width:120px;">奖品标签</th>
                 <th style="width:90px;">剩余/活动库存</th>
-                <th style="width:80px;">上架状态</th>
+                <th style="width:110px;">状态</th>
                 <th style="width:60px;">操作</th>
               </tr>
             </thead>
@@ -2777,6 +2792,39 @@
   </div>
 </div>
 
+<!-- 库存弹窗 -->
+<div class="modal-mask" id="stockModal" onclick="closeModal('stockModal')">
+  <div class="modal" style="max-width:720px;" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <div class="modal-title" id="stockModalTitle">库存明细</div>
+      <button class="modal-close" onclick="closeModal('stockModal')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+    <div class="modal-body" style="padding:0;">
+      <div style="max-height:400px;overflow-y:auto;">
+        <table style="width:100%;border-collapse:collapse;">
+          <thead style="position:sticky;top:0;background:#fff;z-index:2;">
+            <tr style="border-bottom:1px solid var(--border);">
+              <th style="padding:12px 16px;text-align:left;font-size:12px;font-weight:600;color:var(--ink-3);">活动</th>
+              <th style="padding:12px 16px;text-align:right;font-size:12px;font-weight:600;color:var(--ink-3);width:90px;">剩余</th>
+              <th style="padding:12px 16px;text-align:right;font-size:12px;font-weight:600;color:var(--ink-3);width:90px;">已售</th>
+              <th style="padding:12px 16px;text-align:right;font-size:12px;font-weight:600;color:var(--ink-3);width:90px;">占用</th>
+              <th style="padding:12px 16px;text-align:right;font-size:12px;font-weight:600;color:var(--ink-3);width:90px;">总库存</th>
+            </tr>
+          </thead>
+          <tbody id="stockTableBody" style="font-size:13px;color:var(--ink-2);">
+          </tbody>
+        </table>
+      </div>
+      <div id="stockSummaryBar" style="padding:10px 16px;border-top:1px solid var(--border);font-size:12px;color:var(--ink-3);"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('stockModal')">关闭</button>
+    </div>
+  </div>
+</div>
+
 <!-- 确认弹窗 -->
 <div class="modal-mask" id="confirmModal" style="z-index:9999;">
   <div class="modal" style="max-width:400px;" onclick="event.stopPropagation()">
@@ -2961,6 +3009,26 @@
 </div>
 
 <script>
+  // ===== 演示数据基准时间（mock 数据集中在 2026-07 时段，状态判定以此为准） =====
+  var PROTOTYPE_NOW = new Date('2026-07-21T12:00:00');
+
+  // 活动运行状态：已终止 > 时间未开始/进行中/已结束
+  function getActivityRunStatus(a) {
+    if (!a) return 'ongoing';
+    if (a.status === 'terminated') return 'terminated';
+    var s = new Date(a.timeRange.start.replace(' ', 'T'));
+    var e = new Date(a.timeRange.end.replace(' ', 'T'));
+    if (PROTOTYPE_NOW < s) return 'notstarted';
+    if (PROTOTYPE_NOW > e) return 'ended';
+    return 'ongoing';
+  }
+  var ACT_RUN_STATUS_META = {
+    notstarted: { txt: '未开始', color: '#1565c0', bg: '#e3f2fd' },
+    ongoing: { txt: '进行中', color: '#2e7d32', bg: '#e8f5e9' },
+    ended: { txt: '已结束', color: '#6b7280', bg: '#f3f4f6' },
+    terminated: { txt: '已终止', color: '#374151', bg: '#e5e7eb' }
+  };
+
   // ===== 商品数据 =====
   const allProducts = [
     { id: 1, prizeId: 'PRIZE-0001', name: '雅诗兰黛持妆粉底液 30ml', desc: '到店兑换券', sku: 'EX-CDF-001', category: '香水化妆品', tag: '香水化妆品', type: '实物', original: 880, value: 880, img: 'assets/product-1.jpg', channel: '三亚国际免税城', relatedPrize: '', stock: 25, totalStock: 100, dailyStock: -1, deadlineType: 'days', deadlineValue: 30, status: '启用', prizeType: '实物礼品', usageScene: ['兑换中心'], exchangeRule: '到店出示兑换码即可领取', eopLianyingDaMa: 'C117418'},
@@ -3084,7 +3152,7 @@
             <div>
               <div style="font-weight:500;font-size:13px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${p.name}</div>
               <div style="font-size:11px;color:var(--ink-4);font-family:monospace;margin-top:3px;">奖品ID：${p.prizeId || 'PRIZE-' + String(p.id).padStart(4, '0')}</div>
-              <div style="font-size:11px;color:var(--ink-4);font-family:monospace;margin-top:3px;">EOP大码：${p.eopLianyingDaMa || '-'}</div>
+              <div style="font-size:11px;color:var(--ink-4);font-family:monospace;margin-top:3px;">EOP联营大码：${p.eopLianyingDaMa || '-'}</div>
             </div>
           </div>
         </td>
@@ -3103,11 +3171,12 @@
         <td><span class="status-dot ${statusDot}"></span>${p.status}</td>
         <td style="font-size:12px;color:var(--ink-2);">${p.createdBy || '管理员'}</td>
         <td class="td-actions">
-          <div class="td-actions-inner">
-            ${toggleBtn}
+          <div class="td-actions-inner td-actions-wrap">
             <button class="btn btn-text btn-sm" onclick="editProduct(${p.id})">编辑</button>
             <button class="btn btn-text btn-sm" onclick="copyProduct(${p.id})">复制</button>
-            <button class="btn btn-text btn-sm" onclick="openLogModal(${p.id})">操作日志</button>
+            <button class="btn btn-text btn-sm" onclick="openStockModal(${p.id})">库存</button>
+            ${toggleBtn}
+            <button class="btn btn-text btn-sm" onclick="openLogModal(${p.id})">日志</button>
             <button class="btn btn-danger btn-sm"${disabledAttr}${isProtected ? '' : ` onclick="deleteProduct(${p.id})"`}>删除</button>
           </div>
         </td>
@@ -3353,6 +3422,74 @@
       <td style="padding:12px 16px;"><span style="display:inline-block;padding:2px 8px;border-radius:4px;font-size:12px;background:#f4f4f5;">${log.type}</span></td>
     </tr>`).join('');
     document.getElementById('logModal').classList.add('show');
+  }
+
+  function openStockModal(productId) {
+    const p = allProducts.find(x => x.id === productId);
+    if (!p) return;
+    const pid = p.prizeId || ('PRIZE-' + String(p.id).padStart(4, '0'));
+    document.getElementById('stockModalTitle').textContent = '库存明细 - ' + p.name + '（' + pid + '）';
+
+    const holdStatuses = ['待发货', '待收货', '待使用'];
+    function holdOf(actName) {
+      return allOrders.filter(o => o.prizeId === pid && holdStatuses.indexOf(o.status) !== -1 && (!actName || o.sourceActivityName === actName))
+        .reduce((s, o) => s + (o.quantity || 1), 0);
+    }
+    function actStatusInfo(a) {
+      if (a.status === 'draft') return { txt: '草稿', color: '#b45309', bg: '#fef3c7' };
+      return ACT_RUN_STATUS_META[getActivityRunStatus(a)];
+    }
+    const fmt = v => (v === -1 || v === '不限') ? '不限' : v;
+    const badge = st => '<span style="display:inline-block;padding:1px 6px;border-radius:4px;font-size:11px;margin-left:6px;background:' + st.bg + ';color:' + st.color + ';">' + st.txt + '</span>';
+
+    const refs = [];
+    allActivities.forEach(a => {
+      (a.items || []).forEach(it => {
+        if (it.prizeId === pid) {
+          refs.push({ act: a, total: it.stock, sold: it.exchanged || 0, hold: holdOf(a.name) });
+        }
+      });
+    });
+
+    const cell = 'padding:12px 16px;';
+    const numCell = cell + 'text-align:right;';
+    let rowsHtml = '';
+    let sumSold = 0, sumHold = 0;
+    if (refs.length === 0) {
+      const wSold = p.totalStock === -1 ? 0 : Math.max(p.totalStock - p.stock, 0);
+      const wHold = holdOf('');
+      rowsHtml = '<tr style="border-bottom:1px solid #f0f0f0;">' +
+        '<td style="' + cell + '"><span style="color:var(--ink-4);">未被活动引用</span></td>' +
+        '<td style="' + numCell + '">' + fmt(p.stock) + '</td>' +
+        '<td style="' + numCell + '">' + wSold + '</td>' +
+        '<td style="' + numCell + '">' + wHold + '</td>' +
+        '<td style="' + numCell + '">' + fmt(p.totalStock) + '</td>' +
+        '</tr>';
+      sumSold = wSold; sumHold = wHold;
+    } else {
+      refs.forEach(r => {
+        sumSold += r.sold; sumHold += r.hold;
+        const remain = r.total === -1 ? '不限' : Math.max(r.total - r.sold, 0);
+        const st = actStatusInfo(r.act);
+        rowsHtml += '<tr style="border-bottom:1px solid #f0f0f0;">' +
+          '<td style="' + cell + '">' + r.act.name + badge(st) + '</td>' +
+          '<td style="' + numCell + '">' + fmt(remain) + '</td>' +
+          '<td style="' + numCell + '">' + r.sold + '</td>' +
+          '<td style="' + numCell + '">' + r.hold + '</td>' +
+          '<td style="' + numCell + '">' + fmt(r.total) + '</td>' +
+          '</tr>';
+      });
+    }
+    rowsHtml += '<tr style="background:#fafafa;font-weight:600;">' +
+      '<td style="' + cell + 'color:var(--ink-1);">合计</td>' +
+      '<td style="' + numCell + 'color:var(--ink-1);">' + fmt(p.stock) + '</td>' +
+      '<td style="' + numCell + 'color:var(--ink-1);">' + sumSold + '</td>' +
+      '<td style="' + numCell + 'color:var(--ink-1);">' + sumHold + '</td>' +
+      '<td style="' + numCell + 'color:var(--ink-1);">' + fmt(p.totalStock) + '</td>' +
+      '</tr>';
+    document.getElementById('stockTableBody').innerHTML = rowsHtml;
+    document.getElementById('stockSummaryBar').textContent = '占用 = 已下单未履约数量（待发货 / 待收货 / 待使用）；剩余 = 活动配置库存 - 已售；合计取奖品仓库当前值。';
+    document.getElementById('stockModal').classList.add('show');
   }
 
   function editProduct(id) { openProductModal(id); }
@@ -4289,6 +4426,8 @@
       const timeStr = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0') + ' ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
       a.auditLogs.unshift({ time: timeStr, auditor: '管理员', action: '终止', note: reason || '未填写原因' });
       renderActivities();
+      buildCenterPrizeItems();
+      renderCenterPrizes();
       showToast('活动已终止，剩余库存已恢复至奖品仓库', 'success');
     };
   }
@@ -4814,9 +4953,10 @@
   function buildCenterPrizeItems() {
     centerPrizeItems = [];
     allActivities.forEach(function(a) {
-      if (a.status !== 'active') return;
+      if (a.status === 'draft') return;
       var timeStart = a.timeRange ? a.timeRange.start : '';
       var timeEnd = a.timeRange ? a.timeRange.end : '';
+      var runStatus = getActivityRunStatus(a);
       (a.items || []).forEach(function(item, idx) {
         // match prize with product to get channel from prize library
         var matchedProduct = allProducts.find(function(p) { return p.name === item.name; });
@@ -4827,6 +4967,7 @@
           activityName: a.name,
           activityTimeStart: timeStart,
           activityTimeEnd: timeEnd,
+          activityStatus: runStatus,
           channel: matchedProduct ? matchedProduct.channel : 'cdf中免海南',
           payType: a.payType || '积分',
           source: a.source || '千帆',
@@ -4962,11 +5103,23 @@
 
     tbody.innerHTML = pageList.map(function(p) {
       var typeStyle = typeColorMap[p.type] || 'background:#f5f5f5;color:var(--ink-2);';
-      var statusDot = p.pending
+      var runMeta = ACT_RUN_STATUS_META[p.activityStatus] || ACT_RUN_STATUS_META.ongoing;
+      var runBadge = '<span style="display:inline-block;padding:1px 6px;border-radius:4px;font-size:11px;background:' + runMeta.bg + ';color:' + runMeta.color + ';">' + runMeta.txt + '</span>';
+      var shelfDot = p.pending
         ? '<span class="status-dot" style="background:#f59e0b;"></span><span style="color:#f59e0b;">待上架</span>'
         : (p.visible ? '<span class="status-dot on"></span>已上架' : '<span class="status-dot off"></span>已下架');
+      var statusCell = '<div>' + runBadge + '</div><div style="margin-top:4px;">' + shelfDot + '</div>';
       var statusStyle = 'white-space:nowrap;';
       var checkAttr = p.checked ? 'checked' : '';
+      var opsCell;
+      if (p.pending) {
+        opsCell = '';
+      } else if (p.activityStatus === 'ongoing') {
+        opsCell = '<button class="btn btn-text btn-sm" onclick="toggleCenterPrizeVisible(\'' + p.id + '\')">' + (p.visible ? '下架' : '上架') + '</button>';
+      } else {
+        var hintMap = { notstarted: '活动未开始', ended: '活动已结束', terminated: '活动已终止' };
+        opsCell = '<span style="font-size:12px;color:var(--ink-4);" title="活动状态非进行中，不可上下架">' + (hintMap[p.activityStatus] || '不可操作') + '</span>';
+      }
       return '<tr>' +
         '<td><input type="checkbox" ' + checkAttr + ' onchange="toggleCenterPrizeCheck(\'' + p.id + '\', this.checked)"></td>' +
         '<td><button class="btn btn-text btn-sm" onclick="openWeightModal(\'' + p.id + '\')">权重' + (p.sort ? ' ' + p.sort : '') + '</button></td>' +
@@ -4979,8 +5132,8 @@
         '<td style="font-size:11px;color:var(--ink-3);line-height:1.5;"><div>' + (p.activityTimeStart || '-') + '</div><div>' + (p.activityTimeEnd || '-') + '</div></td>' +
         '<td>' + (p.tags && p.tags.length > 0 ? p.tags.map(function(t) { return '<span style="display:inline-block;padding:1px 6px;border-radius:4px;font-size:11px;background:#e8f0fe;color:#1a73e8;margin-right:4px;">' + t + '</span>'; }).join('') : '<span style="color:var(--ink-4);">-</span>') + '</td>' +
         '<td style="font-size:12px;">' + (p.totalStock === -1 ? '不限' : p.stock + ' / ' + p.totalStock) + '</td>' +
-        '<td style="' + statusStyle + '">' + statusDot + '</td>' +
-        '<td class="td-actions">' + (p.pending ? '' : '<button class="btn btn-text btn-sm" onclick="toggleCenterPrizeVisible(\'' + p.id + '\')">' + (p.visible ? '下架' : '上架') + '</button>') + '</td>' +
+        '<td style="' + statusStyle + '">' + statusCell + '</td>' +
+        '<td class="td-actions">' + opsCell + '</td>' +
       '</tr>';
     }).join('');
   }
@@ -5012,9 +5165,16 @@
   function toggleCenterPrizeVisible(id) {
     var p = centerPrizeItems.find(function(x) { return x.id === id; });
     if (!p) return;
+    var act = allActivities.find(function(x) { return x.id === p.activityId; });
+    var runStatus = p.activityStatus || getActivityRunStatus(act);
+    if (runStatus !== 'ongoing') {
+      showToast('仅活动进行中时可上下架奖品', 'warning');
+      return;
+    }
     var isOn = !p.visible;
     var title = isOn ? '上架奖品' : '下架奖品';
-    var msg = isOn ? '确定要上架奖品「' + p.name + '」吗？' : '确定要下架奖品「' + p.name + '」吗？';
+    var msg = (isOn ? '确定要上架奖品「' + p.name + '」吗？' : '确定要下架奖品「' + p.name + '」吗？')
+      + '<div style="font-size:12px;color:var(--ink-3);margin-top:6px;">所属活动：' + p.activityName + '（进行中）</div>';
     showConfirm(title, msg, function() {
       p.visible = isOn;
       renderCenterPrizes();
@@ -5051,11 +5211,12 @@
   }
 
   function batchOnShelfCenterPrizes() {
-    // 待上架奖品由系统自动上架，批量操作自动跳过
-    var selected = centerPrizeItems.filter(function(p) { return p.checked && !p.pending; });
+    // 待上架奖品由系统自动上架、非进行中活动的奖品不可操作，批量操作自动跳过
+    var selected = centerPrizeItems.filter(function(p) { return p.checked && !p.pending && p.activityStatus === 'ongoing'; });
     var pendingCnt = centerPrizeItems.filter(function(p) { return p.checked && p.pending; }).length;
-    if (selected.length === 0) { showToast(pendingCnt > 0 ? '待上架奖品由系统自动上架，无需批量操作' : '请先勾选奖品', 'warning'); return; }
-    showConfirm('批量上架', '确定要上架选中的 ' + selected.length + ' 个奖品吗？' + (pendingCnt > 0 ? '<br><span style="color:var(--ink-3);font-size:12px;">已自动跳过 ' + pendingCnt + ' 个待上架奖品（待上架由系统自动上架）</span>' : ''), function() {
+    var blockedCnt = centerPrizeItems.filter(function(p) { return p.checked && !p.pending && p.activityStatus !== 'ongoing'; }).length;
+    if (selected.length === 0) { showToast(pendingCnt > 0 ? '待上架奖品由系统自动上架，无需批量操作' : (blockedCnt > 0 ? '所选奖品所属活动非进行中，不可上下架' : '请先勾选奖品'), 'warning'); return; }
+    showConfirm('批量上架', '确定要上架选中的 ' + selected.length + ' 个奖品吗？' + (pendingCnt > 0 || blockedCnt > 0 ? '<br><span style="color:var(--ink-3);font-size:12px;">已自动跳过 ' + (pendingCnt + blockedCnt) + ' 个不可操作奖品（待上架由系统自动上架；活动未开始/已结束/已终止不可上下架）</span>' : ''), function() {
       selected.forEach(function(p) { p.visible = true; p.checked = false; });
       centerPrizeItems.forEach(function(p) { if (p.pending) p.checked = false; });
       renderCenterPrizes();
@@ -5064,11 +5225,12 @@
   }
 
   function batchOffShelfCenterPrizes() {
-    // 待上架奖品本就不在前台展示，批量下架自动跳过
-    var selected = centerPrizeItems.filter(function(p) { return p.checked && !p.pending; });
+    // 待上架奖品本就不在前台展示、非进行中活动的奖品不可操作，批量下架自动跳过
+    var selected = centerPrizeItems.filter(function(p) { return p.checked && !p.pending && p.activityStatus === 'ongoing'; });
     var pendingCnt = centerPrizeItems.filter(function(p) { return p.checked && p.pending; }).length;
-    if (selected.length === 0) { showToast(pendingCnt > 0 ? '待上架奖品未在前台展示，无需批量下架' : '请先勾选奖品', 'warning'); return; }
-    showConfirm('批量下架', '确定要下架选中的 ' + selected.length + ' 个奖品吗？' + (pendingCnt > 0 ? '<br><span style="color:var(--ink-3);font-size:12px;">已自动跳过 ' + pendingCnt + ' 个待上架奖品</span>' : ''), function() {
+    var blockedCnt = centerPrizeItems.filter(function(p) { return p.checked && !p.pending && p.activityStatus !== 'ongoing'; }).length;
+    if (selected.length === 0) { showToast(pendingCnt > 0 ? '待上架奖品未在前台展示，无需批量下架' : (blockedCnt > 0 ? '所选奖品所属活动非进行中，不可上下架' : '请先勾选奖品'), 'warning'); return; }
+    showConfirm('批量下架', '确定要下架选中的 ' + selected.length + ' 个奖品吗？' + (pendingCnt > 0 || blockedCnt > 0 ? '<br><span style="color:var(--ink-3);font-size:12px;">已自动跳过 ' + (pendingCnt + blockedCnt) + ' 个不可操作奖品</span>' : ''), function() {
       selected.forEach(function(p) { p.visible = false; p.checked = false; });
       centerPrizeItems.forEach(function(p) { if (p.pending) p.checked = false; });
       renderCenterPrizes();
