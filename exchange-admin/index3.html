@@ -1229,7 +1229,8 @@
             <select class="form-input form-select" style="width:120px;" id="filterActStatus">
               <option value="">全部状态</option>
               <option value="draft">草稿</option>
-              <option value="active">进行中</option>
+              <option value="notstarted">未开始</option>
+              <option value="ongoing">进行中</option>
               <option value="terminated">已终止</option>
             </select>
             <select class="form-input form-select" style="width:120px;" id="filterActAuditStatus">
@@ -3028,6 +3029,17 @@
     ended: { txt: '已结束', color: '#6b7280', bg: '#f3f4f6' },
     terminated: { txt: '已终止', color: '#374151', bg: '#e5e7eb' }
   };
+  // 页面运营显示状态：由活动运行状态 × 上下架组合得出
+  function getCenterPrizeDisplayStatus(p) {
+    if (p.pending) return { txt: '待上架', color: '#f59e0b', bg: '#fff3e0' };
+    var st = p.activityStatus;
+    if (st === 'terminated') return ACT_RUN_STATUS_META.terminated;
+    if (st === 'ended') return ACT_RUN_STATUS_META.ended;
+    if (st === 'notstarted') {
+      return p.visible ? ACT_RUN_STATUS_META.notstarted : { txt: '已下架', color: '#9ca3af', bg: '#f3f4f6' };
+    }
+    return p.visible ? { txt: '显示中', color: '#2e7d32', bg: '#e8f5e9' } : { txt: '已下架', color: '#9ca3af', bg: '#f3f4f6' };
+  }
 
   // ===== 商品数据 =====
   const allProducts = [
@@ -3876,7 +3888,10 @@
       if (platformFilter && a.source !== platformFilter) return false;
       if (channelFilter && !(a.channel || []).includes(channelFilter)) return false;
       if (payFilter && a.payType !== payFilter) return false;
-      if (statusFilter && a.status !== statusFilter) return false;
+      if (statusFilter) {
+        const derivedStatus = a.status === 'active' ? getActivityRunStatus(a) : a.status;
+        if (derivedStatus !== statusFilter) return false;
+      }
       // 审核状态筛选：与列表徽章语义一致（待提交=草稿未提交审核 或 进行中未提交变更；待审核=草稿待审 或 进行中已提交变更）
       if (auditStatusFilter === 'pendingSubmit') {
         if (!((a.auditStatus || '') === 'pendingSubmit' || (a.status === 'active' && a.pendingVersion && !a.pendingSubmitted))) return false;
@@ -3896,11 +3911,14 @@
       const isTerminated = a.status === 'terminated';
       const isDraft = a.status === 'draft';
       const isActive = a.status === 'active';
+      const actRunStatus = isActive ? getActivityRunStatus(a) : '';
       let statusHtml;
       if (isTerminated) {
         statusHtml = '<span class="status-dot off"></span><span style="color:var(--ink-4);">已终止</span>';
       } else if (isDraft) {
         statusHtml = '<span class="status-dot" style="background:#94a3b8;"></span><span style="color:var(--ink-3);">草稿</span>';
+      } else if (actRunStatus === 'notstarted') {
+        statusHtml = '<span class="status-dot" style="background:#1565c0;"></span><span style="color:#1565c0;">未开始</span>';
       } else {
         statusHtml = '<span class="status-dot on"></span>进行中';
       }
@@ -5103,22 +5121,18 @@
 
     tbody.innerHTML = pageList.map(function(p) {
       var typeStyle = typeColorMap[p.type] || 'background:#f5f5f5;color:var(--ink-2);';
-      var runMeta = ACT_RUN_STATUS_META[p.activityStatus] || ACT_RUN_STATUS_META.ongoing;
-      var runBadge = '<span style="display:inline-block;padding:1px 6px;border-radius:4px;font-size:11px;background:' + runMeta.bg + ';color:' + runMeta.color + ';">' + runMeta.txt + '</span>';
-      var shelfDot = p.pending
-        ? '<span class="status-dot" style="background:#f59e0b;"></span><span style="color:#f59e0b;">待上架</span>'
-        : (p.visible ? '<span class="status-dot on"></span>已上架' : '<span class="status-dot off"></span>已下架');
-      var statusCell = '<div>' + runBadge + '</div><div style="margin-top:4px;">' + shelfDot + '</div>';
+      var dispMeta = getCenterPrizeDisplayStatus(p);
+      var statusCell = '<span class="status-dot" style="background:' + dispMeta.color + ';"></span><span style="color:' + dispMeta.color + ';">' + dispMeta.txt + '</span>';
       var statusStyle = 'white-space:nowrap;';
       var checkAttr = p.checked ? 'checked' : '';
       var opsCell;
       if (p.pending) {
         opsCell = '';
-      } else if (p.activityStatus === 'ongoing') {
+      } else if (p.activityStatus === 'ongoing' || p.activityStatus === 'notstarted') {
         opsCell = '<button class="btn btn-text btn-sm" onclick="toggleCenterPrizeVisible(\'' + p.id + '\')">' + (p.visible ? '下架' : '上架') + '</button>';
       } else {
-        var hintMap = { notstarted: '活动未开始', ended: '活动已结束', terminated: '活动已终止' };
-        opsCell = '<span style="font-size:12px;color:var(--ink-4);" title="活动状态非进行中，不可上下架">' + (hintMap[p.activityStatus] || '不可操作') + '</span>';
+        var hintMap = { ended: '活动已结束', terminated: '活动已终止' };
+        opsCell = '<span style="font-size:12px;color:var(--ink-4);" title="活动状态非进行中/未开始，不可上下架">' + (hintMap[p.activityStatus] || '不可操作') + '</span>';
       }
       return '<tr>' +
         '<td><input type="checkbox" ' + checkAttr + ' onchange="toggleCenterPrizeCheck(\'' + p.id + '\', this.checked)"></td>' +
@@ -5167,14 +5181,15 @@
     if (!p) return;
     var act = allActivities.find(function(x) { return x.id === p.activityId; });
     var runStatus = p.activityStatus || getActivityRunStatus(act);
-    if (runStatus !== 'ongoing') {
-      showToast('仅活动进行中时可上下架奖品', 'warning');
+    if (runStatus !== 'ongoing' && runStatus !== 'notstarted') {
+      showToast('仅活动进行中或未开始时可上下架奖品', 'warning');
       return;
     }
     var isOn = !p.visible;
     var title = isOn ? '上架奖品' : '下架奖品';
+    var runMeta = ACT_RUN_STATUS_META[runStatus] || ACT_RUN_STATUS_META.ongoing;
     var msg = (isOn ? '确定要上架奖品「' + p.name + '」吗？' : '确定要下架奖品「' + p.name + '」吗？')
-      + '<div style="font-size:12px;color:var(--ink-3);margin-top:6px;">所属活动：' + p.activityName + '（进行中）</div>';
+      + '<div style="font-size:12px;color:var(--ink-3);margin-top:6px;">所属活动：' + p.activityName + '（' + runMeta.txt + '）</div>';
     showConfirm(title, msg, function() {
       p.visible = isOn;
       renderCenterPrizes();
@@ -5211,12 +5226,12 @@
   }
 
   function batchOnShelfCenterPrizes() {
-    // 待上架奖品由系统自动上架、非进行中活动的奖品不可操作，批量操作自动跳过
-    var selected = centerPrizeItems.filter(function(p) { return p.checked && !p.pending && p.activityStatus === 'ongoing'; });
+    // 待上架奖品由系统自动上架、已结束/已终止活动的奖品不可操作，批量操作自动跳过
+    var selected = centerPrizeItems.filter(function(p) { return p.checked && !p.pending && (p.activityStatus === 'ongoing' || p.activityStatus === 'notstarted'); });
     var pendingCnt = centerPrizeItems.filter(function(p) { return p.checked && p.pending; }).length;
-    var blockedCnt = centerPrizeItems.filter(function(p) { return p.checked && !p.pending && p.activityStatus !== 'ongoing'; }).length;
-    if (selected.length === 0) { showToast(pendingCnt > 0 ? '待上架奖品由系统自动上架，无需批量操作' : (blockedCnt > 0 ? '所选奖品所属活动非进行中，不可上下架' : '请先勾选奖品'), 'warning'); return; }
-    showConfirm('批量上架', '确定要上架选中的 ' + selected.length + ' 个奖品吗？' + (pendingCnt > 0 || blockedCnt > 0 ? '<br><span style="color:var(--ink-3);font-size:12px;">已自动跳过 ' + (pendingCnt + blockedCnt) + ' 个不可操作奖品（待上架由系统自动上架；活动未开始/已结束/已终止不可上下架）</span>' : ''), function() {
+    var blockedCnt = centerPrizeItems.filter(function(p) { return p.checked && !p.pending && p.activityStatus !== 'ongoing' && p.activityStatus !== 'notstarted'; }).length;
+    if (selected.length === 0) { showToast(pendingCnt > 0 ? '待上架奖品由系统自动上架，无需批量操作' : (blockedCnt > 0 ? '所选奖品所属活动已结束/已终止，不可上下架' : '请先勾选奖品'), 'warning'); return; }
+    showConfirm('批量上架', '确定要上架选中的 ' + selected.length + ' 个奖品吗？' + (pendingCnt > 0 || blockedCnt > 0 ? '<br><span style="color:var(--ink-3);font-size:12px;">已自动跳过 ' + (pendingCnt + blockedCnt) + ' 个不可操作奖品（待上架由系统自动上架；活动已结束/已终止不可上下架）</span>' : ''), function() {
       selected.forEach(function(p) { p.visible = true; p.checked = false; });
       centerPrizeItems.forEach(function(p) { if (p.pending) p.checked = false; });
       renderCenterPrizes();
@@ -5225,11 +5240,11 @@
   }
 
   function batchOffShelfCenterPrizes() {
-    // 待上架奖品本就不在前台展示、非进行中活动的奖品不可操作，批量下架自动跳过
-    var selected = centerPrizeItems.filter(function(p) { return p.checked && !p.pending && p.activityStatus === 'ongoing'; });
+    // 待上架奖品本就不在前台展示、已结束/已终止活动的奖品不可操作，批量下架自动跳过
+    var selected = centerPrizeItems.filter(function(p) { return p.checked && !p.pending && (p.activityStatus === 'ongoing' || p.activityStatus === 'notstarted'); });
     var pendingCnt = centerPrizeItems.filter(function(p) { return p.checked && p.pending; }).length;
-    var blockedCnt = centerPrizeItems.filter(function(p) { return p.checked && !p.pending && p.activityStatus !== 'ongoing'; }).length;
-    if (selected.length === 0) { showToast(pendingCnt > 0 ? '待上架奖品未在前台展示，无需批量下架' : (blockedCnt > 0 ? '所选奖品所属活动非进行中，不可上下架' : '请先勾选奖品'), 'warning'); return; }
+    var blockedCnt = centerPrizeItems.filter(function(p) { return p.checked && !p.pending && p.activityStatus !== 'ongoing' && p.activityStatus !== 'notstarted'; }).length;
+    if (selected.length === 0) { showToast(pendingCnt > 0 ? '待上架奖品未在前台展示，无需批量下架' : (blockedCnt > 0 ? '所选奖品所属活动已结束/已终止，不可上下架' : '请先勾选奖品'), 'warning'); return; }
     showConfirm('批量下架', '确定要下架选中的 ' + selected.length + ' 个奖品吗？' + (pendingCnt > 0 || blockedCnt > 0 ? '<br><span style="color:var(--ink-3);font-size:12px;">已自动跳过 ' + (pendingCnt + blockedCnt) + ' 个不可操作奖品</span>' : ''), function() {
       selected.forEach(function(p) { p.visible = false; p.checked = false; });
       centerPrizeItems.forEach(function(p) { if (p.pending) p.checked = false; });
