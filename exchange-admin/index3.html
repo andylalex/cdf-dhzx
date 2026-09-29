@@ -2803,12 +2803,6 @@
       </button>
     </div>
     <div class="modal-body" style="padding:0;">
-      <div style="padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;">
-        <span style="font-size:13px;color:var(--ink-2);white-space:nowrap;">总库存</span>
-        <input id="stockEditInput" type="text" placeholder="填写库存数量，-1 表示不限" style="width:220px;padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;color:var(--ink-1);">
-        <button class="btn btn-primary" onclick="saveStockEdit()">保存</button>
-        <span style="font-size:12px;color:var(--ink-3);">剩余库存将同步收敛，且不小于已售合计</span>
-      </div>
       <div style="max-height:400px;overflow-y:auto;">
         <table style="width:100%;border-collapse:collapse;">
           <thead style="position:sticky;top:0;background:#fff;z-index:2;">
@@ -2822,6 +2816,12 @@
           <tbody id="stockTableBody" style="font-size:13px;color:var(--ink-2);">
           </tbody>
         </table>
+        <div style="padding:12px 16px;border-top:1px solid var(--border);display:flex;align-items:center;gap:8px;">
+          <span style="font-size:12px;color:var(--ink-3);margin-right:auto;">剩余库存将同步收敛，且不小于已售合计</span>
+          <button class="btn btn-primary" onclick="saveStockEdit()">保存</button>
+          <span style="font-size:13px;color:var(--ink-2);white-space:nowrap;">总库存</span>
+          <input id="stockEditInput" type="text" placeholder="-1 表示不限" style="width:90px;padding:6px 10px;margin-right:-10px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:right;color:var(--ink-1);">
+        </div>
       </div>
     </div>
     <div class="modal-footer">
@@ -3489,12 +3489,12 @@
           '</tr>';
       });
     }
-    const actSumTxt = refs.length === 0 ? '—' : (actUnlimited ? '不限' : ('Σ ' + sumAct));
+    const actSumTxt = refs.length === 0 ? '—' : (actUnlimited ? '不限' : sumAct);
     rowsHtml += '<tr style="background:#fafafa;font-weight:600;">' +
       '<td style="' + cell + 'color:var(--ink-1);">合计</td>' +
       '<td style="' + numCell + 'color:var(--ink-1);">' + fmt(p.stock) + '</td>' +
       '<td style="' + numCell + 'color:var(--ink-1);">' + sumSold + '</td>' +
-      '<td style="' + numCell + 'color:var(--ink-1);">' + actSumTxt + '<div style="font-weight:400;font-size:11px;color:var(--ink-3);">总库存 ' + fmt(p.totalStock) + '</div></td>' +
+      '<td style="' + numCell + 'color:var(--ink-1);">' + actSumTxt + '</td>' +
       '</tr>';
     document.getElementById('stockTableBody').innerHTML = rowsHtml;
     document.getElementById('stockModal').classList.add('show');
