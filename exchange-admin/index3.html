@@ -617,7 +617,11 @@
           </div>
           <div class="nav-child" onclick="switchPanel('activities', this)">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-            活动管理
+            活动管理（千帆）
+          </div>
+          <div class="nav-child" onclick="switchPanel('activitiesFanxing', this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            活动管理（繁星）
           </div>
           <div class="nav-child" onclick="switchPanel('exchangeCenter', this)">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
@@ -1204,6 +1208,10 @@
 
       <!-- ========== 活动管理 ========== -->
       <div class="panel" id="panel-activities">
+        <div style="display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:14px;" id="actSourceTabs">
+          <button data-sourcetab="qianfan" onclick="switchActSourceTab('qianfan')" style="padding:10px 24px;font-size:14px;font-weight:600;border:none;background:transparent;cursor:pointer;border-bottom:2px solid var(--primary);color:var(--primary);">千帆活动</button>
+          <button data-sourcetab="fanxing" onclick="switchActSourceTab('fanxing')" style="padding:10px 24px;font-size:14px;font-weight:500;border:none;background:transparent;cursor:pointer;border-bottom:2px solid transparent;color:var(--ink-3);">繁星活动</button>
+        </div>
         <div class="toolbar">
           <div class="toolbar-left">
             <input class="form-input" style="width:180px;" placeholder="搜索活动名称 / ID" id="searchActivity">
@@ -1533,6 +1541,61 @@
           </div>
         </td>
       </tr></tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ========== 2.1 活动管理（繁星）：复制自千帆活动管理，演示繁星侧操作差异 ========== -->
+      <div class="panel" id="panel-activitiesFanxing">
+        <div style="padding:10px 14px;margin-bottom:14px;background:#f5f3ff;border:1px solid #ddd6fe;border-radius:6px;font-size:12px;color:#6d28d9;">繁星活动由千帆平台统一审核：保存修改即自动同步提交千帆审核，无需单独点击"提交审核"；可在"审核状态"列查看审核结果（悬停 ⓘ 查看驳回原因），驳回后请修改内容重新保存。</div>
+        <div class="toolbar">
+          <div class="toolbar-left">
+            <input class="form-input" style="width:180px;" placeholder="搜索活动名称 / ID" id="searchActivityFx">
+            <select class="form-input form-select" style="width:120px;" id="filterActStatusFx">
+              <option value="">全部状态</option>
+              <option value="draft">草稿</option>
+              <option value="notstarted">未开始</option>
+              <option value="ongoing">进行中</option>
+              <option value="terminated">已终止</option>
+            </select>
+            <select class="form-input form-select" style="width:120px;" id="filterActAuditStatusFx">
+              <option value="">全部审核</option>
+              <option value="pendingSubmit">待提交</option>
+              <option value="pending">待审核</option>
+              <option value="approved">已通过</option>
+              <option value="rejected">已驳回</option>
+            </select>
+          </div>
+          <div class="toolbar-right">
+            <button class="btn btn-primary" onclick="openActivityModal()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              新建活动
+            </button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>活动ID</th>
+                  <th style="width:100px;">平台</th>
+                  <th>兑换活动名称</th>
+                  <th>活动时间</th>
+                  <th>活动渠道</th>
+                  <th>支付方式</th>
+                  <th style="width:80px;">奖品数量</th>
+                  <th style="width:90px;">记账方式</th>
+                  <th>创建时间</th>
+                  <th>创建人</th>
+                  <th>状态</th>
+                  <th>审核状态</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="activityTableBodyFx"></tbody>
             </table>
           </div>
         </div>
@@ -3086,7 +3149,7 @@
     var childrenEl = document.querySelector('.nav-children');
     if (childrenEl) { childrenEl.classList.add('open'); }
     var titles = {
-      products: '奖品仓库', activities: '活动管理',
+      products: '奖品仓库', activities: '活动管理（千帆）', activitiesFanxing: '活动管理（繁星）',
       orders: '兑换订单', exchangeCenter: '页面运营',
       reconciliation2: '兑换对账单'
     };
@@ -3095,6 +3158,8 @@
     if (panelId === 'products') renderProducts();
     if (panelId === 'orders') renderOrders();
     if (panelId === 'reconciliation2') { initBill2DefaultDates(); renderBill2Income(); }
+    if (panelId === 'activities') renderActivities('qianfan');
+    if (panelId === 'activitiesFanxing') renderActivities('fanxing');
     if (panelId === 'exchangeCenter') {
       buildCenterPrizeItems();
       var labelEl = document.getElementById('centerPrizePayValueLabel');
@@ -3902,18 +3967,49 @@
   let currentChangeAuditActivityId = null;
   
 
-  function renderActivities() {
-    const search = (document.getElementById('searchActivity')?.value || '').toLowerCase();
-    const platformFilter = document.getElementById('filterActPlatform')?.value || '';
-    const channelFilter = document.getElementById('filterActChannel')?.value || '';
-    const payFilter = document.getElementById('filterActPayType')?.value || '';
-    const statusFilter = document.getElementById('filterActStatus')?.value || '';
-    const auditStatusFilter = document.getElementById('filterActAuditStatus')?.value || '';
-    const dateStart = document.getElementById('filterActDateStart')?.value || '';
-    const dateEnd = document.getElementById('filterActDateEnd')?.value || '';
-    const accountTypeFilter = document.getElementById('filterActAccountType')?.value || '';
+  let currentActivityPanel = 'qianfan'; // 当前活动面板：qianfan=活动管理（千帆） fanxing=活动管理（繁星）
+  let currentSourceTab = 'qianfan';     // 千帆页来源tab：qianfan=千帆活动 fanxing=繁星活动
+
+  function syncActSourceTabStyle() {
+    document.querySelectorAll('#actSourceTabs button').forEach(function(b) {
+      const on = b.getAttribute('data-sourcetab') === currentSourceTab;
+      b.style.borderBottom = on ? '2px solid var(--primary)' : '2px solid transparent';
+      b.style.color = on ? 'var(--primary)' : 'var(--ink-3)';
+      b.style.fontWeight = on ? '600' : '500';
+    });
+  }
+
+  function switchActSourceTab(tab) {
+    currentSourceTab = tab;
+    syncActSourceTabStyle();
+    renderActivities();
+  }
+
+  function renderActivities(panel) {
+    if (panel) currentActivityPanel = panel;
+    const isFxPanel = currentActivityPanel === 'fanxing';
+    const idSuffix = isFxPanel ? 'Fx' : '';
+    if (!isFxPanel) syncActSourceTabStyle();
+    const search = (document.getElementById('searchActivity' + idSuffix)?.value || '').toLowerCase();
+    const platformFilter = isFxPanel ? '' : (document.getElementById('filterActPlatform')?.value || '');
+    const channelFilter = isFxPanel ? '' : (document.getElementById('filterActChannel')?.value || '');
+    const payFilter = isFxPanel ? '' : (document.getElementById('filterActPayType')?.value || '');
+    const statusFilter = document.getElementById('filterActStatus' + idSuffix)?.value || '';
+    const auditStatusFilter = document.getElementById('filterActAuditStatus' + idSuffix)?.value || '';
+    const dateStart = isFxPanel ? '' : (document.getElementById('filterActDateStart')?.value || '');
+    const dateEnd = isFxPanel ? '' : (document.getElementById('filterActDateEnd')?.value || '');
+    const accountTypeFilter = isFxPanel ? '' : (document.getElementById('filterActAccountType')?.value || '');
 
     let filtered = allActivities.filter(a => {
+      const isFxAct = !!(a.source && a.source.startsWith('繁星'));
+      // 面板来源范围：繁星页只列繁星活动；千帆页按来源tab粗筛（默认仅千帆活动）
+      if (isFxPanel) {
+        if (!isFxAct) return false;
+      } else if (currentSourceTab === 'fanxing') {
+        if (!isFxAct) return false;
+      } else if (a.source !== '千帆') {
+        return false;
+      }
       if (search && !a.name.toLowerCase().includes(search) && !String(a.id).includes(search)) return false;
       if (platformFilter && a.source !== platformFilter) return false;
       if (channelFilter && !(a.channel || []).includes(channelFilter)) return false;
@@ -3936,8 +4032,9 @@
       return true;
     });
 
-    const tbody = document.getElementById('activityTableBody');
+    const tbody = document.getElementById(isFxPanel ? 'activityTableBodyFx' : 'activityTableBody');
     tbody.innerHTML = filtered.map(a => {
+      const isFxAct = !!(a.source && a.source.startsWith('繁星'));
       const isTerminated = a.status === 'terminated';
       const isDraft = a.status === 'draft';
       const isActive = a.status === 'active';
@@ -3962,11 +4059,18 @@
       const hasPendingRejected = isActive && a.pendingVersion && a.pendingRejected && !a.pendingSubmitted;
       const hasPendingSubmit = !hasPendingRejected && ((isActive && a.pendingVersion && !a.pendingSubmitted) || (isDraft && (a.auditStatus || '') === 'pendingSubmit'));
       const hasPendingAudit = isActive && a.pendingVersion && a.pendingSubmitted;
-      const auditStatusHtml = hasPendingRejected
+      let auditStatusHtml = hasPendingRejected
         ? auditStatusMap.rejected
         : (hasPendingSubmit
         ? '<span class="status-dot" style="background:#2563eb;"></span><span style="color:#2563eb;">待提交</span>'
         : (hasPendingAudit ? auditStatusMap.pending : (auditStatusMap[a.auditStatus] || '<span style="color:var(--ink-4);">-</span>')));
+      // 已驳回时展示驳回原因悬浮提示（取审核日志中最近一条驳回记录的备注）
+      if (hasPendingRejected || (!hasPendingSubmit && !hasPendingAudit && (a.auditStatus || '') === 'rejected')) {
+        const lastReject = (a.auditLogs || []).find(function(l) { return l.action === '驳回' || l.action === '审核驳回' || l.action === '变更审核驳回'; });
+        if (lastReject && lastReject.note) {
+          auditStatusHtml += '<span title="' + String(lastReject.note).replace(/"/g, '&quot;') + '" style="cursor:help;color:#dc2626;font-size:12px;margin-left:3px;">ⓘ</span>';
+        }
+      }
       const hasLogs = (a.auditLogs || []).length > 0;
       // 平台badge
       const platformBadge = a.source === '千帆'
@@ -3983,6 +4087,36 @@
         ? '<span class="tag tag-gold">贝壳</span>'
         : '<span class="tag tag-blue">积分</span>';
       const prizeCount = (a.items || []).length;
+      // 操作列：繁星页=全量操作（无提审/审核按钮，审核中的行锁定）；千帆页繁星行=只审不管；千帆页千帆行=原有操作
+      let actionBtns;
+      if (isFxPanel) {
+        const locked = (isDraft && (a.auditStatus || '') === 'pending') || (isActive && a.pendingVersion && a.pendingSubmitted);
+        actionBtns =
+          (hasLogs ? '<button class="btn btn-text btn-sm" onclick="openActivityLogModal(' + a.id + ')">日志</button>' : '') +
+          (!isTerminated && !locked ? '<button class="btn btn-text btn-sm" onclick="openActivityConfig(' + a.id + ')">奖品配置</button>' : '') +
+          (!isTerminated && !locked ? '<button class="btn btn-text btn-sm" onclick="openActivityModal(' + a.id + ')">编辑</button>' : '') +
+          '<button class="btn btn-text btn-sm" onclick="copyActivity(' + a.id + ')">复制</button>' +
+          (isActive && !locked ? '<button class="btn btn-danger btn-sm" onclick="terminateActivity(' + a.id + ')">终止</button>' : '');
+      } else if (isFxAct) {
+        // 繁星活动由繁星侧保存即自动同步提交千帆审核，千帆页仅保留审核与日志入口
+        actionBtns =
+          (isActive && a.pendingVersion && a.pendingSubmitted ? '<button class="btn btn-primary btn-sm" onclick="openChangeAuditModal(' + a.id + ')">审核</button>' : '') +
+          (isDraft && (a.auditStatus || '') === 'pending' ? '<button class="btn btn-primary btn-sm" onclick="openActivityAuditModal(' + a.id + ')">审核</button>' : '') +
+          (hasLogs ? '<button class="btn btn-text btn-sm" onclick="openActivityLogModal(' + a.id + ')">日志</button>' : '');
+      } else {
+        actionBtns =
+          (isActive && a.pendingVersion && a.pendingSubmitted ? '<button class="btn btn-primary btn-sm" onclick="openChangeAuditModal(' + a.id + ')">审核</button>' : '') +
+          (isActive && a.pendingVersion && !a.pendingSubmitted ? '<button class="btn btn-primary btn-sm" onclick="' + (a.pendingRejected ? 'resubmitActivity' : 'submitActivityChange') + '(' + a.id + ')">提交审核</button>' : '') +
+          (isActive && !a.pendingVersion && (a.auditStatus === 'approved' || a.auditStatus === 'rejected') ? '<button class="btn btn-primary btn-sm" onclick="resubmitActivity(' + a.id + ')">提交审核</button>' : '') +
+          (isDraft && (a.auditStatus || '') === 'pendingSubmit' ? '<button class="btn btn-primary btn-sm" onclick="submitDraftAudit(' + a.id + ')">提交审核</button>' : '') +
+          (isDraft && (a.auditStatus || '') === 'pending' ? '<button class="btn btn-primary btn-sm" onclick="openActivityAuditModal(' + a.id + ')">审核</button>' : '') +
+          (isDraft && (a.auditStatus || '') === 'rejected' ? '<button class="btn btn-primary btn-sm" onclick="submitDraftAudit(' + a.id + ')">提交审核</button>' : '') +
+          (hasLogs ? '<button class="btn btn-text btn-sm" onclick="openActivityLogModal(' + a.id + ')">日志</button>' : '') +
+          (!isTerminated ? '<button class="btn btn-text btn-sm" onclick="openActivityConfig(' + a.id + ')">奖品配置</button>' : '') +
+          (!isTerminated ? '<button class="btn btn-text btn-sm" onclick="openActivityModal(' + a.id + ')">编辑</button>' : '') +
+          '<button class="btn btn-text btn-sm" onclick="copyActivity(' + a.id + ')">复制</button>' +
+          (isActive ? '<button class="btn btn-danger btn-sm" onclick="terminateActivity(' + a.id + ')">终止</button>' : '');
+      }
       return `<tr>
         <td style="font-family:monospace;font-size:12px;color:var(--ink-2);">${a.id}</td>
         <td style="font-size:12px;">${platformBadge}</td>
@@ -3998,17 +4132,7 @@
         <td>${auditStatusHtml}</td>
         <td class="td-actions">
           <div class="td-actions-inner">
-            ${isActive && a.pendingVersion && a.pendingSubmitted ? '<button class="btn btn-primary btn-sm" onclick="openChangeAuditModal(' + a.id + ')">审核</button>' : ''}
-            ${isActive && a.pendingVersion && !a.pendingSubmitted ? '<button class="btn btn-primary btn-sm" onclick="' + (a.pendingRejected ? 'resubmitActivity' : 'submitActivityChange') + '(' + a.id + ')">' + '提交审核' + '</button>' : ''}
-            ${isActive && !a.pendingVersion && (a.auditStatus === 'approved' || a.auditStatus === 'rejected') ? '<button class="btn btn-primary btn-sm" onclick="resubmitActivity(' + a.id + ')">提交审核</button>' : ''}
-            ${isDraft && a.auditStatus === 'pendingSubmit' ? '<button class="btn btn-primary btn-sm" onclick="submitDraftAudit(' + a.id + ')">提交审核</button>' : ''}
-            ${isDraft && a.auditStatus === 'pending' ? '<button class="btn btn-primary btn-sm" onclick="openActivityAuditModal(' + a.id + ')">审核</button>' : ''}
-            ${isDraft && a.auditStatus === 'rejected' ? '<button class="btn btn-primary btn-sm" onclick="submitDraftAudit(' + a.id + ')">提交审核</button>' : ''}
-            ${hasLogs ? '<button class="btn btn-text btn-sm" onclick="openActivityLogModal(' + a.id + ')">日志</button>' : ''}
-            ${!isTerminated ? '<button class="btn btn-text btn-sm" onclick="openActivityConfig(' + a.id + ')">奖品配置</button>' : ''}
-            ${!isTerminated ? '<button class="btn btn-text btn-sm" onclick="openActivityModal(' + a.id + ')">编辑</button>' : ''}
-            <button class="btn btn-text btn-sm" onclick="copyActivity(${a.id})">复制</button>
-            ${isActive ? '<button class="btn btn-danger btn-sm" onclick="terminateActivity(' + a.id + ')">终止</button>' : ''}
+            ${actionBtns}
           </div>
         </td>
       </tr>`;
@@ -4083,7 +4207,8 @@
       if (!a) return;
       const usePendingDraft = a.status === 'active';
       setActivityLockFields(usePendingDraft);
-      document.getElementById('activityModalTitle').textContent = usePendingDraft ? '编辑活动（修改后保存为待审核草稿）' : '编辑活动';
+      const isFxAct = !!(a.source && a.source.startsWith('繁星'));
+      document.getElementById('activityModalTitle').textContent = isFxAct ? '编辑活动（保存后自动同步提交千帆审核）' : (usePendingDraft ? '编辑活动（修改后保存为待审核草稿）' : '编辑活动');
       const draft = usePendingDraft && a.pendingVersion ? a.pendingVersion : a;
       document.getElementById('act_name').value = draft.name || '';
       if (draft.timeRange) {
@@ -4112,7 +4237,7 @@
 
     } else {
       setActivityLockFields(false);
-      document.getElementById('activityModalTitle').textContent = '新建活动';
+      document.getElementById('activityModalTitle').textContent = currentActivityPanel === 'fanxing' ? '新建活动（繁星，保存后自动同步提交千帆审核）' : '新建活动';
       document.getElementById('act_name').value = '';
       document.getElementById('act_start').value = '';
       document.getElementById('act_end').value = '';
@@ -4148,6 +4273,7 @@
     if (editingActivityId) {
       const a = allActivities.find(x => x.id === editingActivityId);
       if (a) {
+        const isFxAct = !!(a.source && a.source.startsWith('繁星'));
         if (a.status === 'active') {
           // 名称、开始时间、支付方式、记账方式线上锁定，强制取线上现值，仅结束时间/渠道/会员折扣/奖品可变更
           a.pendingVersion = {
@@ -4162,8 +4288,16 @@
           a.pendingSubmitted = false;
           delete a.pendingRejected;
           a.auditLogs = a.auditLogs || [];
-          a.auditLogs.push({ time: new Date().toLocaleString('zh-CN', { hour12: false }), auditor: '当前用户', action: '编辑', note: describePrizeChanges(a.items || [], (a.pendingVersion && a.pendingVersion.items) || []) });
-          showToast('已保存为待审核草稿，线上版本不受影响', 'success');
+          const saveTime = new Date().toLocaleString('zh-CN', { hour12: false });
+          a.auditLogs.push({ time: saveTime, auditor: '当前用户', action: '编辑', note: describePrizeChanges(a.items || [], (a.pendingVersion && a.pendingVersion.items) || []) });
+          if (isFxAct) {
+            // 繁星活动保存即自动同步提交千帆审核
+            a.pendingSubmitted = true;
+            a.auditLogs.push({ time: saveTime, auditor: '当前用户', action: '提交变更审核' });
+            showToast('已保存并自动同步提交千帆审核', 'success');
+          } else {
+            showToast('已保存为待审核草稿，线上版本不受影响', 'success');
+          }
         } else {
           a.name = name;
           a.timeRange = { start, end };
@@ -4171,15 +4305,28 @@
           a.payType = payType;
           a.accountType = accountType;
           a.memberDiscount = memberDiscount;
-          showToast('活动已更新', 'success');
+          if (isFxAct) {
+            // 繁星草稿保存即自动同步提交千帆审核（含被驳回后修改再次提交）
+            a.auditStatus = 'pending';
+            a.auditLogs = a.auditLogs || [];
+            a.auditLogs.push({ time: new Date().toLocaleString('zh-CN', { hour12: false }), auditor: '当前用户', action: '提交审核' });
+            showToast('已保存并同步提交千帆审核', 'success');
+          } else {
+            showToast('活动已更新', 'success');
+          }
         }
       }
     } else {
       const newId = allActivities.length > 0 ? Math.max(...allActivities.map(a => a.id)) + 1 : 1;
       const now = new Date();
       const createdAt = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0') + ' ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
-      allActivities.push({ id: newId, name, timeRange: { start, end }, createdAt, createdBy: '管理员', status: 'draft', auditStatus: 'pendingSubmit', channel: channels, payType, accountType, memberDiscount, items: [] });
-      showToast('活动已创建', 'success');
+      const isFxNew = currentActivityPanel === 'fanxing';
+      const newAct = { id: newId, name, timeRange: { start, end }, createdAt, createdBy: '管理员', status: 'draft', auditStatus: isFxNew ? 'pending' : 'pendingSubmit', source: isFxNew ? '繁星-三亚国际免税城' : '千帆', channel: channels, payType, accountType, memberDiscount, items: [] };
+      if (isFxNew) {
+        newAct.auditLogs = [{ time: createdAt, auditor: '当前用户', action: '提交审核' }];
+      }
+      allActivities.push(newAct);
+      showToast(isFxNew ? '活动已创建并同步提交千帆审核' : '活动已创建', 'success');
     }
     closeModal('activityModal');
     renderActivities();
@@ -4197,7 +4344,7 @@
     const a = allActivities.find(x => x.id === activityId);
     if (!a) return;
     const source = a.status === 'active' && a.pendingVersion ? a.pendingVersion : a;
-    document.querySelector('#activityConfigModal .modal-title').textContent = a.status === 'active' ? '奖品配置（修改后保存为待审核草稿）' : '奖品配置';
+    document.querySelector('#activityConfigModal .modal-title').textContent = a.status === 'active' ? ((a.source && a.source.startsWith('繁星')) ? '奖品配置（保存后自动同步提交千帆审核）' : '奖品配置（修改后保存为待审核草稿）') : '奖品配置';
     document.getElementById('configActName').textContent = source.name || a.name || '-';
     const timeRange = source.timeRange ? (source.timeRange.start + ' ~ ' + source.timeRange.end) : '-';
     document.getElementById('configActTimeRange').textContent = timeRange;
@@ -4624,7 +4771,14 @@
       a.pendingSubmitted = false;
       a.auditLogs = a.auditLogs || [];
       a.auditLogs.unshift({ time: nowTimeStr(), auditor: '当前用户', action: '编辑', note: describePrizeChanges(a.items || [], (a.pendingVersion && a.pendingVersion.items) || []) });
-      showToast('已保存为待审核草稿，线上版本不受影响', 'success');
+      if (a.source && a.source.startsWith('繁星')) {
+        // 繁星活动保存即自动同步提交千帆审核
+        a.pendingSubmitted = true;
+        a.auditLogs.unshift({ time: nowTimeStr(), auditor: '当前用户', action: '提交变更审核' });
+        showToast('已保存并自动同步提交千帆审核', 'success');
+      } else {
+        showToast('已保存为待审核草稿，线上版本不受影响', 'success');
+      }
     } else {
       showToast('奖品配置已保存', 'success');
     }
@@ -7855,6 +8009,9 @@
   document.getElementById('filterActStatus')?.addEventListener('change', renderActivities);
   document.getElementById('filterActAuditStatus')?.addEventListener('change', renderActivities);
   document.getElementById('filterActAccountType')?.addEventListener('change', renderActivities);
+  document.getElementById('searchActivityFx')?.addEventListener('input', renderActivities);
+  document.getElementById('filterActStatusFx')?.addEventListener('change', renderActivities);
+  document.getElementById('filterActAuditStatusFx')?.addEventListener('change', renderActivities);
 </script>
 <script>
   // ===== Search Select Component =====
