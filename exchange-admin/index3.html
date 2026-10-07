@@ -5841,14 +5841,14 @@
       ]
     },
     // 场景3 审核通过：进行中/已通过（无待生效版本）
-    { id: 3, name: '中秋好礼兑换活动', timeRange: { start: '2026-09-10 00:00', end: '2026-09-30 23:59' }, createdAt: '2026-09-08 11:00', createdBy: '运营专员', status: 'active', auditStatus: 'approved', rule: '中秋限定好礼兑换', channel: ['APP', '微信小程序', 'H5'], payType: '积分', source: '千帆', memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 350000, actualCost: 52600, actualRevenue: 52600, costShare: { type: '混合分摊', platform: 20, store: 50, brand: 30 }, revenueShare: { type: '平台全额' }, auditLogs: [{ time: '2026-09-08 15:40', auditor: '运营专员', action: '提交审核' }, { time: '2026-09-08 17:10', auditor: '管理员A', action: '审核通过' }],
+    { id: 3, name: '中秋好礼兑换活动', timeRange: { start: '2026-09-10 00:00', end: '2026-09-30 23:59' }, createdAt: '2026-09-08 11:00', createdBy: '运营专员', status: 'active', auditStatus: 'approved', rule: '中秋限定好礼兑换', channel: ['APP', '微信小程序', 'H5'], payType: '积分', source: '千帆', memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 350000, actualCost: 52600, actualRevenue: 52600, costShare: { type: '混合分摊', platform: 20, store: 50, brand: 30 }, revenueShare: { type: '平台全额' }, auditLogs: [{ time: '2026-09-08 17:10', auditor: '管理员A', action: '审核通过' }, { time: '2026-09-08 16:30', auditor: '运营专员', action: '提交审核', note: '调整后重新提交审核' }, { time: '2026-09-08 15:40', auditor: '运营专员', action: '编辑活动', note: '编辑活动基础信息：调整活动名称与每人限兑数量' }, { time: '2026-09-08 15:10', auditor: '管理员A', action: '终止', note: '奖品配置有误，终止活动待调整' }, { time: '2026-09-08 14:20', auditor: '运营专员', action: '配置奖品', note: '新增奖品「中秋月饼礼盒（PRIZE-0024）」，调整「CDF 100元代金券」兑换积分' }, { time: '2026-09-08 13:00', auditor: '管理员B', action: '审核驳回', note: '奖品图片不符合规范，请替换后重新提交' }, { time: '2026-09-08 11:30', auditor: '运营专员', action: '提交审核' }, { time: '2026-09-08 11:00', auditor: '运营专员', action: '新建活动' }],
       items: [
         { prizeId: 'PRIZE-0024', name: '中秋月饼礼盒', type: '实物礼品', price: 6800, stock: 80, dailyStock: 20, exchanged: 6, monthLimit: 1, dayLimit: 1, tags: ['节日活动', '限时'] },
         { prizeId: 'PRIZE-0011', name: 'CDF 100元代金券', type: '优惠券-优选单券', price: 500, stock: -1, dailyStock: -1, exchanged: 21, monthLimit: -1, dayLimit: -1, tags: ['节日活动'] },
       ]
     },
     // 场景4 二次编辑：进行中/待提交（有待生效版本，未提交变更审核）
-    { id: 4, name: '会员专属兑换活动', timeRange: { start: '2026-07-20 10:00', end: '2026-07-27 23:59' }, createdAt: '2026-07-19 09:00', createdBy: '管理员', status: 'active', auditStatus: 'approved', rule: '仅限银卡及以上会员参与', channel: ['APP', 'H5'], payType: '贝壳', source: '千帆', memberDiscount: { normal: 100, silver: 90, gold: 85, platinum: 80, diamond: 75 }, accountType: '主营业务', budgetLimit: 300000, actualCost: 0, actualRevenue: 0, costShare: { type: '平台全额' }, revenueShare: { type: '平台全额' }, auditLogs: [{ time: '2026-07-19 10:15', auditor: '运营专员', action: '审核通过' }],
+    { id: 4, name: '会员专属兑换活动', timeRange: { start: '2026-07-20 10:00', end: '2026-07-27 23:59' }, createdAt: '2026-07-19 09:00', createdBy: '管理员', status: 'active', auditStatus: 'approved', rule: '仅限银卡及以上会员参与', channel: ['APP', 'H5'], payType: '贝壳', source: '千帆', memberDiscount: { normal: 100, silver: 90, gold: 85, platinum: 80, diamond: 75 }, accountType: '主营业务', budgetLimit: 300000, actualCost: 0, actualRevenue: 0, costShare: { type: '平台全额' }, revenueShare: { type: '平台全额' }, auditLogs: [{ time: '2026-07-19 09:00', auditor: '管理员', action: '新建活动' }, { time: '2026-07-19 10:15', auditor: '运营专员', action: '审核通过' }],
       pendingVersion: {
         name: '会员专属兑换活动',
         timeRange: { start: '2026-07-20 10:00', end: '2026-07-30 23:59' },
@@ -5870,7 +5870,7 @@
       ]
     },
     // 场景5 二级提交审核：进行中/待审核（有待生效版本，已提交变更审核）
-    { id: 5, name: '夏日狂欢兑换活动', timeRange: { start: '2026-07-19 10:00', end: '2026-07-25 23:59' }, createdAt: '2026-07-18 14:30', createdBy: '管理员', status: 'active', auditStatus: 'approved', rule: '每人每场限兑2件', channel: ['APP', '微信小程序'], payType: '积分', source: '千帆', memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 500000, actualCost: 149600, actualRevenue: 149600, costShare: { type: '混合分摊', platform: 20, store: 50, brand: 30 }, revenueShare: { type: '平台全额' }, auditLogs: [{ time: '2026-07-18 15:20', auditor: '管理员A', action: '审核通过' }, { time: '2026-07-19 09:10', auditor: '当前用户', action: '提交变更审核' }, { time: '2026-07-19 14:35', auditor: '当前用户', action: '移除', note: '移除奖品「中免海南限定化妆包（PRIZE-0008）」' }],
+    { id: 5, name: '夏日狂欢兑换活动', timeRange: { start: '2026-07-19 10:00', end: '2026-07-25 23:59' }, createdAt: '2026-07-18 14:30', createdBy: '管理员', status: 'active', auditStatus: 'approved', rule: '每人每场限兑2件', channel: ['APP', '微信小程序'], payType: '积分', source: '千帆', memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 500000, actualCost: 149600, actualRevenue: 149600, costShare: { type: '混合分摊', platform: 20, store: 50, brand: 30 }, revenueShare: { type: '平台全额' }, auditLogs: [{ time: '2026-07-18 14:30', auditor: '管理员', action: '新建活动' }, { time: '2026-07-18 15:20', auditor: '管理员A', action: '审核通过' }, { time: '2026-07-19 09:10', auditor: '当前用户', action: '提交审核' }, { time: '2026-07-19 14:35', auditor: '当前用户', action: '配置奖品', note: '移除奖品「中免海南限定化妆包（PRIZE-0008）」' }],
       pendingVersion: {
         name: '夏日狂欢兑换活动',
         timeRange: { start: '2026-07-19 10:00', end: '2026-07-30 23:59' },
@@ -5896,18 +5896,18 @@
       ]
     },
     // 场景6 二次审核通过：进行中/已通过（变更已生效，无待生效版本）
-    { id: 6, name: '金秋焕新季兑换活动', timeRange: { start: '2026-09-05 00:00', end: '2026-09-28 23:59' }, createdAt: '2026-09-01 10:30', createdBy: '运营专员', status: 'active', auditStatus: 'approved', rule: '秋季焕新好物兑换', channel: ['APP', 'H5'], payType: '积分', source: '繁星-三亚国际免税城', memberDiscount: { normal: 100, silver: 92, gold: 88, platinum: 84, diamond: 80 }, accountType: '主营业务', budgetLimit: 280000, actualCost: 31200, actualRevenue: 31200, costShare: { type: '混合分摊', platform: 30, store: 40, brand: 30 }, revenueShare: { type: '混合分成', platform: 30, store: 40, brand: 30 }, auditLogs: [{ time: '2026-09-01 16:00', auditor: '管理员B', action: '审核通过' }, { time: '2026-09-10 11:20', auditor: '运营专员', action: '提交变更审核' }, { time: '2026-09-10 15:00', auditor: '管理员B', action: '变更审核通过' }],
+    { id: 6, name: '金秋焕新季兑换活动', timeRange: { start: '2026-09-05 00:00', end: '2026-09-28 23:59' }, createdAt: '2026-09-01 10:30', createdBy: '运营专员', status: 'active', auditStatus: 'approved', rule: '秋季焕新好物兑换', channel: ['APP', 'H5'], payType: '积分', source: '繁星-三亚国际免税城', memberDiscount: { normal: 100, silver: 92, gold: 88, platinum: 84, diamond: 80 }, accountType: '主营业务', budgetLimit: 280000, actualCost: 31200, actualRevenue: 31200, costShare: { type: '混合分摊', platform: 30, store: 40, brand: 30 }, revenueShare: { type: '混合分成', platform: 30, store: 40, brand: 30 }, auditLogs: [{ time: '2026-09-01 10:30', auditor: '运营专员', action: '新建活动' }, { time: '2026-09-01 16:00', auditor: '管理员B', action: '审核通过' }, { time: '2026-09-10 11:20', auditor: '运营专员', action: '提交审核' }, { time: '2026-09-10 15:00', auditor: '管理员B', action: '审核通过' }],
       items: [
         { prizeId: 'PRIZE-0006', name: 'SK-II 神仙水 230ml', type: '实物礼品', price: 12000, stock: 36, dailyStock: -1, exchanged: 2, monthLimit: -1, dayLimit: -1, tags: ['会员专属'] },
         { prizeId: 'PRIZE-0014', name: '免税店专属折扣券', type: '优惠券-券中心', price: 80, stock: 420, dailyStock: -1, exchanged: 30, monthLimit: -1, dayLimit: -1, tags: ['满减活动'] },
       ]
     },
     // 场景7 驳回（新建）：草稿/已驳回
-    { id: 7, name: '八月会员日活动', timeRange: { start: '2026-08-08 00:00', end: '2026-08-08 23:59' }, createdAt: '2026-07-31 09:00', createdBy: '运营专员', status: 'draft', auditStatus: 'rejected', rule: '会员日专享折扣', channel: ['APP'], payType: '积分', source: '繁星-三亚国际免税城', memberDiscount: { normal: 100, silver: 90, gold: 80, platinum: 70, diamond: 60 }, accountType: '主营业务', budgetLimit: 150000, actualCost: 0, actualRevenue: 0, costShare: { type: '混合分摊', platform: 30, store: 40, brand: 30 }, revenueShare: { type: '混合分成', platform: 30, store: 40, brand: 30 }, auditLogs: [{ time: '2026-08-01 16:40', auditor: '运营专员', action: '移除', note: '移除奖品「CDF 50元无门槛券」，奖品库存不足' }, { time: '2026-08-01 15:10', auditor: '系统', action: '自动终止', note: '活动已手动终止，系统自动终止关联兑换任务' }, { time: '2026-08-01 14:00', auditor: '管理员', action: '终止', note: '业务方向调整，手动终止活动' }, { time: '2026-08-01 11:25', auditor: '管理员A', action: '千帆驳回', note: '千帆侧校验不通过：会员折扣力度超出平台规则上限，请调整后重新提交' }, { time: '2026-08-01 10:40', auditor: '管理员B', action: '驳回', note: '活动时间与平台档期冲突，驳回本次变更' }, { time: '2026-08-01 09:30', auditor: '管理员A', action: '变更审核通过' }, { time: '2026-07-31 16:20', auditor: '运营专员', action: '重新提交变更审核' }, { time: '2026-07-31 15:40', auditor: '管理员A', action: '变更审核驳回', note: '变更后预算超限，请调整后重新提交' }, { time: '2026-07-31 14:30', auditor: '运营专员', action: '提交变更审核' }, { time: '2026-07-31 14:00', auditor: '运营专员', action: '保存待审核变更', note: '保存奖品配置修改，待提交审核' }, { time: '2026-07-31 13:30', auditor: '运营专员', action: '编辑', note: '编辑活动基础信息：调整活动名称与奖品数量' }, { time: '2026-07-31 11:00', auditor: '管理员B', action: '审核驳回', note: '奖品图片不符合规范，请替换后重新提交' }, { time: '2026-07-31 10:20', auditor: '管理员B', action: '审核通过' }, { time: '2026-07-31 09:10', auditor: '运营专员', action: '提交审核' }],
+    { id: 7, name: '八月会员日活动', timeRange: { start: '2026-08-08 00:00', end: '2026-08-08 23:59' }, createdAt: '2026-07-31 09:00', createdBy: '运营专员', status: 'draft', auditStatus: 'rejected', rule: '会员日专享折扣', channel: ['APP'], payType: '积分', source: '繁星-三亚国际免税城', memberDiscount: { normal: 100, silver: 90, gold: 80, platinum: 70, diamond: 60 }, accountType: '主营业务', budgetLimit: 150000, actualCost: 0, actualRevenue: 0, costShare: { type: '混合分摊', platform: 30, store: 40, brand: 30 }, revenueShare: { type: '混合分成', platform: 30, store: 40, brand: 30 }, auditLogs: [{ time: '2026-08-01 16:40', auditor: '运营专员', action: '配置奖品', note: '移除奖品「CDF 50元无门槛券」，奖品库存不足' }, { time: '2026-08-01 15:10', auditor: '系统', action: '终止', note: '活动已手动终止，系统自动终止关联兑换任务' }, { time: '2026-08-01 14:00', auditor: '管理员', action: '终止', note: '业务方向调整，手动终止活动' }, { time: '2026-08-01 11:25', auditor: '管理员A', action: '审核驳回', note: '千帆侧校验不通过：会员折扣力度超出平台规则上限，请调整后重新提交' }, { time: '2026-08-01 10:40', auditor: '管理员B', action: '审核驳回', note: '活动时间与平台档期冲突，驳回本次变更' }, { time: '2026-08-01 09:30', auditor: '管理员A', action: '审核通过' }, { time: '2026-07-31 16:20', auditor: '运营专员', action: '提交审核' }, { time: '2026-07-31 15:40', auditor: '管理员A', action: '审核驳回', note: '变更后预算超限，请调整后重新提交' }, { time: '2026-07-31 14:30', auditor: '运营专员', action: '提交审核' }, { time: '2026-07-31 14:00', auditor: '运营专员', action: '配置奖品', note: '保存奖品配置修改，待提交审核' }, { time: '2026-07-31 13:30', auditor: '运营专员', action: '编辑活动', note: '编辑活动基础信息：调整活动名称与奖品数量' }, { time: '2026-07-31 11:00', auditor: '管理员B', action: '审核驳回', note: '奖品图片不符合规范，请替换后重新提交' }, { time: '2026-07-31 10:20', auditor: '管理员B', action: '审核通过' }, { time: '2026-07-31 09:10', auditor: '运营专员', action: '提交审核' }, { time: '2026-07-31 09:00', auditor: '运营专员', action: '新建活动' }],
       items: []
     },
     // 场景8 驳回（二次编辑）：进行中/已驳回（线上版本不变更，待生效版本保留，可直接提交审核或编辑后再次提交）
-    { id: 8, name: '国庆预热专场', timeRange: { start: '2026-09-12 00:00', end: '2026-09-26 23:59' }, createdAt: '2026-09-05 14:00', createdBy: '运营专员', status: 'active', auditStatus: 'rejected', rule: '国庆预热抢先兑', channel: ['APP', '微信小程序'], payType: '积分', source: '千帆', memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 500000, actualCost: 88400, actualRevenue: 88400, costShare: { type: '混合分摊', platform: 20, store: 50, brand: 30 }, revenueShare: { type: '平台全额' }, auditLogs: [{ time: '2026-09-05 18:00', auditor: '管理员A', action: '审核通过' }, { time: '2026-09-15 10:30', auditor: '运营专员', action: '提交变更审核' }, { time: '2026-09-15 14:00', auditor: '管理员A', action: '变更审核驳回', note: '变更后预算超限，请调整后重新提交' }],
+    { id: 8, name: '国庆预热专场', timeRange: { start: '2026-09-12 00:00', end: '2026-09-26 23:59' }, createdAt: '2026-09-05 14:00', createdBy: '运营专员', status: 'active', auditStatus: 'rejected', rule: '国庆预热抢先兑', channel: ['APP', '微信小程序'], payType: '积分', source: '千帆', memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 500000, actualCost: 88400, actualRevenue: 88400, costShare: { type: '混合分摊', platform: 20, store: 50, brand: 30 }, revenueShare: { type: '平台全额' }, auditLogs: [{ time: '2026-09-05 14:00', auditor: '运营专员', action: '新建活动' }, { time: '2026-09-05 18:00', auditor: '管理员A', action: '审核通过' }, { time: '2026-09-15 10:30', auditor: '运营专员', action: '提交审核' }, { time: '2026-09-15 14:00', auditor: '管理员A', action: '审核驳回', note: '变更后预算超限，请调整后重新提交' }],
       pendingVersion: {
         name: '国庆预热专场',
         timeRange: { start: '2026-09-12 00:00', end: '2026-10-08 23:59' },
@@ -5929,7 +5929,7 @@
       ]
     },
     // 场景9 手动终止/活动结束时间到：已终止/全部审核状态
-    { id: 9, name: '年中大促活动', timeRange: { start: '2026-07-18 10:00', end: '2026-07-18 23:59' }, createdAt: '2026-07-17 16:00', createdBy: '管理员', status: 'terminated', auditStatus: 'approved', rule: '', channel: ['微信小程序', '支付宝小程序', 'H5'], payType: '贝壳', source: '千帆', memberDiscount: { normal: 100, silver: 100, gold: 100, platinum: 100, diamond: 100 }, accountType: '主营业务', budgetLimit: 800000, actualCost: 446700, actualRevenue: 446700, costShare: { type: '混合分摊', platform: 20, store: 40, brand: 40 }, revenueShare: { type: '混合分摊', platform: 20, store: 40, brand: 40 }, auditLogs: [{ time: '2026-07-17 18:00', auditor: '管理员A', action: '审核通过' }, { time: '2026-07-19 00:30', auditor: '管理员', action: '终止' }],
+    { id: 9, name: '年中大促活动', timeRange: { start: '2026-07-18 10:00', end: '2026-07-18 23:59' }, createdAt: '2026-07-17 16:00', createdBy: '管理员', status: 'terminated', auditStatus: 'approved', rule: '', channel: ['微信小程序', '支付宝小程序', 'H5'], payType: '贝壳', source: '千帆', memberDiscount: { normal: 100, silver: 100, gold: 100, platinum: 100, diamond: 100 }, accountType: '主营业务', budgetLimit: 800000, actualCost: 446700, actualRevenue: 446700, costShare: { type: '混合分摊', platform: 20, store: 40, brand: 40 }, revenueShare: { type: '混合分摊', platform: 20, store: 40, brand: 40 }, auditLogs: [{ time: '2026-07-17 16:00', auditor: '管理员', action: '新建活动' }, { time: '2026-07-17 18:00', auditor: '管理员A', action: '审核通过' }, { time: '2026-07-19 00:30', auditor: '管理员', action: '终止' }],
       items: [
         { prizeId: 'PRIZE-0017', name: '海蓝之谜面霜 30ml', type: '实物礼品', price: 15000, stock: 20, dailyStock: -1, exchanged: 20, monthLimit: -1, dayLimit: -1, tags: ['节日活动'] },
         { prizeId: 'PRIZE-0018', name: 'CDF 50元无门槛券', type: '优惠券-优选单券', price: 300, stock: -1, dailyStock: -1, exchanged: 489, monthLimit: -1, dayLimit: -1, tags: ['新人专享'] },
@@ -5943,14 +5943,14 @@
       ]
     },
     // 场景11 繁星-提交审核：草稿/待审核（千帆页繁星行可审核）
-    { id: 11, name: '七夕·三亚情侣兑换专场', timeRange: { start: '2026-08-01 10:00', end: '2026-08-07 23:59' }, createdAt: '2026-07-28 14:00', createdBy: '运营专员', status: 'draft', auditStatus: 'pending', rule: '情人节三亚店限定兑换', channel: ['APP', '微信小程序'], payType: '积分', source: '繁星-三亚国际免税城', memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 180000, actualCost: 0, actualRevenue: 0, costShare: { type: '平台全额' }, revenueShare: { type: '平台全额' }, auditLogs: [{ time: '2026-07-28 16:30', auditor: '运营专员', action: '提交审核', note: '' }],
+    { id: 11, name: '七夕·三亚情侣兑换专场', timeRange: { start: '2026-08-01 10:00', end: '2026-08-07 23:59' }, createdAt: '2026-07-28 14:00', createdBy: '运营专员', status: 'draft', auditStatus: 'pending', rule: '情人节三亚店限定兑换', channel: ['APP', '微信小程序'], payType: '积分', source: '繁星-三亚国际免税城', memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 180000, actualCost: 0, actualRevenue: 0, costShare: { type: '平台全额' }, revenueShare: { type: '平台全额' }, auditLogs: [{ time: '2026-07-28 14:00', auditor: '运营专员', action: '新建活动' }, { time: '2026-07-28 16:30', auditor: '运营专员', action: '提交审核', note: '' }],
       items: [
         { prizeId: 'PRIZE-0019', name: '限定款情侣对戒', type: '实物礼品', price: 9999, stock: 20, dailyStock: 5, exchanged: 0, monthLimit: 1, dayLimit: 1, tags: ['节日活动', '限时'] },
         { prizeId: 'PRIZE-0020', name: '迪奥真我香水 50ml', type: '实物礼品', price: 8500, stock: 30, dailyStock: -1, exchanged: 0, monthLimit: -1, dayLimit: -1, tags: ['节日活动'] },
       ]
     },
     // 场景12 繁星-二次编辑：进行中/待提交（有待生效版本，未提交变更审核）
-    { id: 12, name: '三亚会员专属兑换活动', timeRange: { start: '2026-07-20 10:00', end: '2026-07-27 23:59' }, createdAt: '2026-07-18 10:00', createdBy: '运营专员', status: 'active', auditStatus: 'approved', rule: '仅限银卡及以上会员参与', channel: ['APP', 'H5'], payType: '积分', source: '繁星-三亚国际免税城', memberDiscount: { normal: 100, silver: 90, gold: 85, platinum: 80, diamond: 75 }, accountType: '主营业务', budgetLimit: 220000, actualCost: 0, actualRevenue: 0, costShare: { type: '平台全额' }, revenueShare: { type: '平台全额' }, auditLogs: [{ time: '2026-07-18 15:40', auditor: '管理员B', action: '审核通过' }],
+    { id: 12, name: '三亚会员专属兑换活动', timeRange: { start: '2026-07-20 10:00', end: '2026-07-27 23:59' }, createdAt: '2026-07-18 10:00', createdBy: '运营专员', status: 'active', auditStatus: 'approved', rule: '仅限银卡及以上会员参与', channel: ['APP', 'H5'], payType: '积分', source: '繁星-三亚国际免税城', memberDiscount: { normal: 100, silver: 90, gold: 85, platinum: 80, diamond: 75 }, accountType: '主营业务', budgetLimit: 220000, actualCost: 0, actualRevenue: 0, costShare: { type: '平台全额' }, revenueShare: { type: '平台全额' }, auditLogs: [{ time: '2026-07-18 10:00', auditor: '运营专员', action: '新建活动' }, { time: '2026-07-18 15:40', auditor: '管理员B', action: '审核通过' }],
       pendingVersion: {
         name: '三亚会员专属兑换活动',
         timeRange: { start: '2026-07-20 10:00', end: '2026-07-30 23:59' },
@@ -5970,7 +5970,7 @@
       ]
     },
     // 场景13 繁星-二级提交审核：进行中/待审核（有待生效版本，已提交变更审核；千帆页繁星行可审核）
-    { id: 13, name: '海口夏日狂欢兑换活动', timeRange: { start: '2026-07-19 10:00', end: '2026-07-25 23:59' }, createdAt: '2026-07-17 09:30', createdBy: '运营专员', status: 'active', auditStatus: 'approved', rule: '每人每场限兑2件', channel: ['APP', '微信小程序'], payType: '积分', source: '繁星-海口国际免税城', memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 320000, actualCost: 62400, actualRevenue: 62400, costShare: { type: '混合分摊', platform: 20, store: 50, brand: 30 }, revenueShare: { type: '平台全额' }, auditLogs: [{ time: '2026-07-17 16:20', auditor: '管理员B', action: '审核通过' }, { time: '2026-07-20 10:10', auditor: '运营专员', action: '提交变更审核' }],
+    { id: 13, name: '海口夏日狂欢兑换活动', timeRange: { start: '2026-07-19 10:00', end: '2026-07-25 23:59' }, createdAt: '2026-07-17 09:30', createdBy: '运营专员', status: 'active', auditStatus: 'approved', rule: '每人每场限兑2件', channel: ['APP', '微信小程序'], payType: '积分', source: '繁星-海口国际免税城', memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 320000, actualCost: 62400, actualRevenue: 62400, costShare: { type: '混合分摊', platform: 20, store: 50, brand: 30 }, revenueShare: { type: '平台全额' }, auditLogs: [{ time: '2026-07-17 09:30', auditor: '运营专员', action: '新建活动' }, { time: '2026-07-17 16:20', auditor: '管理员B', action: '审核通过' }, { time: '2026-07-20 10:10', auditor: '运营专员', action: '提交审核' }],
       pendingVersion: {
         name: '海口夏日狂欢兑换活动',
         timeRange: { start: '2026-07-19 10:00', end: '2026-07-30 23:59' },
@@ -5992,7 +5992,7 @@
       ]
     },
     // 场景14 繁星-驳回（二次编辑）：进行中/已驳回（线上版本不变更，待生效版本保留，可直接提交审核或编辑后再次提交）
-    { id: 14, name: '三亚国庆预热专场', timeRange: { start: '2026-09-12 00:00', end: '2026-09-26 23:59' }, createdAt: '2026-09-03 10:00', createdBy: '运营专员', status: 'active', auditStatus: 'rejected', rule: '国庆预热抢先兑', channel: ['APP', '微信小程序'], payType: '积分', source: '繁星-三亚国际免税城', memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 400000, actualCost: 45200, actualRevenue: 45200, costShare: { type: '混合分摊', platform: 20, store: 50, brand: 30 }, revenueShare: { type: '平台全额' }, auditLogs: [{ time: '2026-09-03 17:00', auditor: '管理员B', action: '审核通过' }, { time: '2026-09-14 09:50', auditor: '运营专员', action: '提交变更审核' }, { time: '2026-09-14 14:30', auditor: '管理员B', action: '千帆驳回', note: '变更后预算超限，请调整后重新提交' }],
+    { id: 14, name: '三亚国庆预热专场', timeRange: { start: '2026-09-12 00:00', end: '2026-09-26 23:59' }, createdAt: '2026-09-03 10:00', createdBy: '运营专员', status: 'active', auditStatus: 'rejected', rule: '国庆预热抢先兑', channel: ['APP', '微信小程序'], payType: '积分', source: '繁星-三亚国际免税城', memberDiscount: { normal: 100, silver: 95, gold: 90, platinum: 85, diamond: 80 }, accountType: '主营业务', budgetLimit: 400000, actualCost: 45200, actualRevenue: 45200, costShare: { type: '混合分摊', platform: 20, store: 50, brand: 30 }, revenueShare: { type: '平台全额' }, auditLogs: [{ time: '2026-09-03 10:00', auditor: '运营专员', action: '新建活动' }, { time: '2026-09-03 17:00', auditor: '管理员B', action: '审核通过' }, { time: '2026-09-14 09:50', auditor: '运营专员', action: '提交审核' }, { time: '2026-09-14 14:30', auditor: '管理员B', action: '审核驳回', note: '变更后预算超限，请调整后重新提交' }],
       pendingVersion: {
         name: '三亚国庆预热专场',
         timeRange: { start: '2026-09-12 00:00', end: '2026-10-08 23:59' },
@@ -6014,7 +6014,7 @@
       ]
     },
     // 场景15 繁星-手动终止/活动结束时间到：已终止/已通过
-    { id: 15, name: '三亚年中大促活动', timeRange: { start: '2026-07-18 10:00', end: '2026-07-18 23:59' }, createdAt: '2026-07-16 15:00', createdBy: '管理员', status: 'terminated', auditStatus: 'approved', rule: '', channel: ['微信小程序', '支付宝小程序', 'H5'], payType: '积分', source: '繁星-三亚国际免税城', memberDiscount: { normal: 100, silver: 100, gold: 100, platinum: 100, diamond: 100 }, accountType: '主营业务', budgetLimit: 600000, actualCost: 238600, actualRevenue: 238600, costShare: { type: '混合分摊', platform: 20, store: 40, brand: 40 }, revenueShare: { type: '混合分摊', platform: 20, store: 40, brand: 40 }, auditLogs: [{ time: '2026-07-16 18:30', auditor: '管理员B', action: '审核通过' }, { time: '2026-07-19 00:10', auditor: '管理员', action: '终止' }],
+    { id: 15, name: '三亚年中大促活动', timeRange: { start: '2026-07-18 10:00', end: '2026-07-18 23:59' }, createdAt: '2026-07-16 15:00', createdBy: '管理员', status: 'terminated', auditStatus: 'approved', rule: '', channel: ['微信小程序', '支付宝小程序', 'H5'], payType: '积分', source: '繁星-三亚国际免税城', memberDiscount: { normal: 100, silver: 100, gold: 100, platinum: 100, diamond: 100 }, accountType: '主营业务', budgetLimit: 600000, actualCost: 238600, actualRevenue: 238600, costShare: { type: '混合分摊', platform: 20, store: 40, brand: 40 }, revenueShare: { type: '混合分摊', platform: 20, store: 40, brand: 40 }, auditLogs: [{ time: '2026-07-16 15:00', auditor: '管理员', action: '新建活动' }, { time: '2026-07-16 18:30', auditor: '管理员B', action: '审核通过' }, { time: '2026-07-19 00:10', auditor: '管理员', action: '终止' }],
       items: [
         { prizeId: 'PRIZE-0017', name: '海蓝之谜面霜 30ml', type: '实物礼品', price: 15000, stock: 20, dailyStock: -1, exchanged: 20, monthLimit: -1, dayLimit: -1, tags: ['节日活动'] },
         { prizeId: 'PRIZE-0018', name: 'CDF 50元无门槛券', type: '优惠券-优选单券', price: 300, stock: -1, dailyStock: -1, exchanged: 356, monthLimit: -1, dayLimit: -1, tags: ['新人专享'] },
@@ -6374,11 +6374,11 @@
           delete a.pendingRejected;
           a.auditLogs = a.auditLogs || [];
           const saveTime = new Date().toLocaleString('zh-CN', { hour12: false });
-          a.auditLogs.push({ time: saveTime, auditor: '当前用户', action: '编辑', note: describePrizeChanges(a.items || [], (a.pendingVersion && a.pendingVersion.items) || []) });
+          const prizeChangeNote = describePrizeChanges(a.items || [], (a.pendingVersion && a.pendingVersion.items) || []);
+          a.auditLogs.push({ time: saveTime, auditor: '当前用户', action: prizeChangeNote ? '配置奖品' : '编辑活动', note: prizeChangeNote });
           if (isFxAct) {
             // 繁星活动保存即自动同步提交千帆审核
             a.pendingSubmitted = true;
-            a.auditLogs.push({ time: saveTime, auditor: '当前用户', action: '提交变更审核' });
             showToast('已保存并自动同步提交千帆审核', 'success');
           } else {
             showToast('已保存为待审核草稿，线上版本不受影响', 'success');
@@ -6394,7 +6394,7 @@
             // 繁星草稿保存即自动同步提交千帆审核（含被驳回后修改再次提交）
             a.auditStatus = 'pending';
             a.auditLogs = a.auditLogs || [];
-            a.auditLogs.push({ time: new Date().toLocaleString('zh-CN', { hour12: false }), auditor: '当前用户', action: '提交审核' });
+            a.auditLogs.push({ time: new Date().toLocaleString('zh-CN', { hour12: false }), auditor: '当前用户', action: '编辑活动' });
             showToast('已保存并同步提交千帆审核', 'success');
           } else {
             showToast('活动已更新', 'success');
@@ -6408,7 +6408,7 @@
       const isFxNew = currentActivityPanel === 'fanxing';
       const newAct = { id: newId, name, timeRange: { start, end }, createdAt, createdBy: '管理员', status: 'draft', auditStatus: isFxNew ? 'pending' : 'pendingSubmit', source: isFxNew ? '繁星-三亚国际免税城' : '千帆', channel: channels, payType, accountType, memberDiscount, items: [] };
       if (isFxNew) {
-        newAct.auditLogs = [{ time: createdAt, auditor: '当前用户', action: '提交审核' }];
+        newAct.auditLogs = [{ time: createdAt, auditor: '当前用户', action: '新建活动' }];
       }
       allActivities.push(newAct);
       showToast(isFxNew ? '活动已创建并同步提交千帆审核' : '活动已创建', 'success');
@@ -6822,23 +6822,16 @@
     } else {
       listEl.innerHTML = logs.map(function(log) {
         const colorMap = {
-          '审核通过': 'color:#16a34a;background:#f0fdf4;',
-          '审核驳回': 'color:#dc2626;background:#fef2f2;',
-          '变更审核通过': 'color:#16a34a;background:#f0fdf4;',
-          '变更审核驳回': 'color:#dc2626;background:#fef2f2;',
-          '提交审核': 'color:#7c3aed;background:#f5f3ff;',
-          '提交变更审核': 'color:#7c3aed;background:#f5f3ff;',
-          '重新提交变更审核': 'color:#7c3aed;background:#f5f3ff;',
-          '编辑': 'color:#2563eb;background:#eff6ff;',
-          '保存待审核变更': 'color:#d97706;background:#fff7ed;',
-          '驳回': 'color:#dc2626;background:#fef2f2;',
-          '千帆驳回': 'color:#dc2626;background:#fef2f2;',
-          '自动终止': 'color:var(--ink-4);background:#f5f5f5;',
+          '新建活动': 'color:#0d9488;background:#f0fdfa;',
+          '编辑活动': 'color:#2563eb;background:#eff6ff;',
+          '配置奖品': 'color:#d97706;background:#fff7ed;',
           '终止': 'color:var(--ink-4);background:#f5f5f5;',
-          '移除': 'color:#e11d48;background:#fff1f2;'
+          '提交审核': 'color:#7c3aed;background:#f5f3ff;',
+          '审核驳回': 'color:#dc2626;background:#fef2f2;',
+          '审核通过': 'color:#16a34a;background:#f0fdf4;'
         };
         const actionColor = colorMap[log.action] || 'color:var(--primary);background:#eff6ff;';
-        const isReject = log.action === '驳回' || log.action === '审核驳回' || log.action === '变更审核驳回' || log.action === '千帆驳回';
+        const isReject = log.action === '审核驳回';
         return '<tr>' +
           '<td><span style="display:inline-block;padding:2px 10px;border-radius:4px;font-size:12px;font-weight:500;' + actionColor + '">' + log.action + '</span></td>' +
           '<td style="font-size:13px;color:var(--ink-2);">' + (log.auditor || '-') + '</td>' +
@@ -6864,11 +6857,11 @@
       delete a.pendingRejected;
       a.pendingSubmitted = false;
       a.auditLogs = a.auditLogs || [];
-      a.auditLogs.unshift({ time: nowTimeStr(), auditor: '当前用户', action: '编辑', note: describePrizeChanges(a.items || [], (a.pendingVersion && a.pendingVersion.items) || []) });
+      const prizeChangeNote = describePrizeChanges(a.items || [], (a.pendingVersion && a.pendingVersion.items) || []);
+      a.auditLogs.unshift({ time: nowTimeStr(), auditor: '当前用户', action: prizeChangeNote ? '配置奖品' : '编辑活动', note: prizeChangeNote });
       if (a.source && a.source.startsWith('繁星')) {
         // 繁星活动保存即自动同步提交千帆审核
         a.pendingSubmitted = true;
-        a.auditLogs.unshift({ time: nowTimeStr(), auditor: '当前用户', action: '提交变更审核' });
         showToast('已保存并自动同步提交千帆审核', 'success');
       } else {
         showToast('已保存为待审核草稿，线上版本不受影响', 'success');
@@ -6886,7 +6879,7 @@
     showConfirm('提交审核', '提交后变更将进入审核流程，审核通过前线上版本保持当前配置不变。确定提交吗？', function() {
       a.pendingSubmitted = true;
       a.auditLogs = a.auditLogs || [];
-      a.auditLogs.unshift({ time: nowTimeStr(), auditor: '当前用户', action: '提交变更审核' });
+      a.auditLogs.unshift({ time: nowTimeStr(), auditor: '当前用户', action: '提交审核' });
       renderActivities();
       showToast('变更已提交审核，请等待管理员审核', 'success');
     });
@@ -6922,7 +6915,7 @@
         a.pendingSubmitted = true;
         a.auditStatus = 'approved';
         a.auditLogs = a.auditLogs || [];
-        a.auditLogs.unshift({ time: nowTimeStr(), auditor: '当前用户', action: '重新提交变更审核' });
+        a.auditLogs.unshift({ time: nowTimeStr(), auditor: '当前用户', action: '提交审核' });
         renderActivities();
         showToast('已提交审核，请等待管理员审核', 'success');
       });
@@ -6941,7 +6934,7 @@
       a.pendingSubmitted = true;
       delete a.pendingRejected;
       a.auditLogs = a.auditLogs || [];
-      a.auditLogs.unshift({ time: nowTimeStr(), auditor: '当前用户', action: '提交变更审核' });
+      a.auditLogs.unshift({ time: nowTimeStr(), auditor: '当前用户', action: '提交审核' });
       renderActivities();
       showToast('已提交审核，请等待管理员审核', 'success');
     });
@@ -7132,7 +7125,7 @@
     delete a.pendingRejected;
     delete a.pendingChangeNote;
     a.auditLogs = a.auditLogs || [];
-    a.auditLogs.unshift({ time: nowTimeStr(), auditor: '管理员', action: '变更审核通过' });
+    a.auditLogs.unshift({ time: nowTimeStr(), auditor: '管理员', action: '审核通过' });
     renderActivities();
     closeModal('changeAuditModal');
     showToast('变更审核通过，新配置已生效', 'success');
@@ -7156,7 +7149,7 @@
       showConfirm('驳回活动', '驳回后该活动将保留在列表中，状态置为"已驳回"，可修改后提交审核。确定驳回吗？', function() {
         a.auditStatus = 'rejected';
         a.auditLogs = a.auditLogs || [];
-        a.auditLogs.unshift({ time: nowTimeStr(), auditor: '管理员', action: (a.source && a.source.startsWith('繁星')) ? '千帆驳回' : '驳回', note: reason });
+        a.auditLogs.unshift({ time: nowTimeStr(), auditor: '管理员', action: '审核驳回', note: reason });
         resetChangeRejectInput();
         renderActivities();
         closeModal('changeAuditModal');
@@ -7171,7 +7164,7 @@
       a.pendingRejected = true;
       a.auditStatus = 'rejected';
       a.auditLogs = a.auditLogs || [];
-      a.auditLogs.unshift({ time: nowTimeStr(), auditor: '管理员', action: (a.source && a.source.startsWith('繁星')) ? '千帆驳回' : '变更审核驳回', note: reason });
+      a.auditLogs.unshift({ time: nowTimeStr(), auditor: '管理员', action: '审核驳回', note: reason });
       resetChangeRejectInput();
       renderActivities();
       closeModal('changeAuditModal');
