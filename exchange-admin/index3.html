@@ -4390,9 +4390,7 @@
           <div class="checkbox-group" id="actChannelGroup">
             <label><input type="checkbox" name="act_channel" value="APP"> APP</label>
             <label><input type="checkbox" name="act_channel" value="微信小程序"> 微信小程序</label>
-            <label><input type="checkbox" name="act_channel" value="支付宝小程序"> 支付宝小程序</label>
             <label><input type="checkbox" name="act_channel" value="H5"> H5</label>
-            <label><input type="checkbox" name="act_channel" value="第三方"> 第三方</label>
           </div>
         </div>
         <div class="form-group full">
@@ -6299,12 +6297,11 @@
       });
       const payRb = document.querySelector('input[name="act_payType"][value="' + (draft.payType || '积分') + '"]');
       if (payRb) payRb.checked = true;
-      // 繁星活动仅支持积分支付：隐藏贝壳选项并强制选中积分
-      const shellPayLabel = document.getElementById('payTypeShellLabel');
-      if (shellPayLabel) shellPayLabel.style.display = isFxAct ? 'none' : '';
+      // 繁星活动仅支持积分支付：贝壳选项仍展示但禁用不可选，并强制选中积分
+      const shellRbEdit = document.querySelector('input[name="act_payType"][value="贝壳"]');
+      if (shellRbEdit) shellRbEdit.disabled = isFxAct;
       if (isFxAct) {
-        const shellRb = document.querySelector('input[name="act_payType"][value="贝壳"]');
-        if (shellRb) shellRb.checked = false;
+        if (shellRbEdit) shellRbEdit.checked = false;
         const pointRb = document.querySelector('input[name="act_payType"][value="积分"]');
         if (pointRb) pointRb.checked = true;
       }
@@ -6330,9 +6327,10 @@
       document.getElementById('act_member_gold').value = 100;
       document.getElementById('act_member_platinum').value = 100;
       document.getElementById('act_member_diamond').value = 100;
-      const shellPayLabelNew = document.getElementById('payTypeShellLabel');
-      if (shellPayLabelNew) shellPayLabelNew.style.display = currentActivityPanel === 'fanxing' ? 'none' : '';
-      document.querySelector('input[name="act_payType"][value="贝壳"]').checked = false;
+      // 繁星活动仅支持积分支付：新建时贝壳选项展示但禁用不可选，强制选中积分
+      const shellRbNew = document.querySelector('input[name="act_payType"][value="贝壳"]');
+      if (shellRbNew) shellRbNew.disabled = currentActivityPanel === 'fanxing';
+      if (shellRbNew) shellRbNew.checked = false;
       document.querySelector('input[name="act_payType"][value="积分"]').checked = true;
       document.querySelector('input[name="act_accountType"][value="主营业务"]').checked = true;
       toggleAccountField();
