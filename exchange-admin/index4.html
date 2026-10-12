@@ -6332,7 +6332,7 @@
       var ro = !!currentConfigReadonly;
       var tagSelectHtml = '<div class="tag-select-wrap" style="position:relative;">' +
         '<div class="tag-select-trigger" id="tagTrigger_' + a.id + '_' + idx + '"' + ((item.invalid || ro) ? '' : ' onclick="openTagSelect(' + a.id + ',' + idx + ')"') + ' title="' + (item.invalid ? '无效奖品不可编辑标签' : (ro ? '只读模式不可编辑' : '')) + '" style="cursor:' + ((item.invalid || ro) ? 'not-allowed' : 'pointer') + ';border:1px solid var(--border);border-radius:4px;padding:3px 8px;font-size:12px;background:' + ((item.invalid || ro) ? '#f5f5f5;color:var(--ink-4);' : '#fff;') + 'min-height:24px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + tagDisplay + '</div>' +
-        '<div class="tag-select-panel" id="tagPanel_' + a.id + '_' + idx + '" style="display:none;position:absolute;left:0;top:calc(100% + 2px);bottom:auto;z-index:1000;background:#fff;border:1px solid var(--border);border-radius:6px;padding:8px;box-shadow:0 4px 12px rgba(0,0,0,0.15);width:160px;">' +
+        '<div class="tag-select-panel" id="tagPanel_' + a.id + '_' + idx + '" style="display:none;position:fixed;left:0;top:0;z-index:2000;background:#fff;border:1px solid var(--border);border-radius:6px;padding:8px;box-shadow:0 4px 12px rgba(0,0,0,0.15);width:160px;">' +
         '<input type="text" oninput="filterTagOptions(' + a.id + ',' + idx + ',this.value)" placeholder="搜索标签" style="width:100%;padding:4px 6px;font-size:12px;border:1px solid var(--border);border-radius:3px;margin-bottom:6px;box-sizing:border-box;">' +
         '<div id="tagOptions_' + a.id + '_' + idx + '" style="max-height:140px;overflow-y:auto;">' + tagOptionsHtml + '</div>' +
         '</div></div>';
@@ -6401,20 +6401,19 @@
     document.querySelectorAll('.tag-select-panel').forEach(function(p) { p.style.display = 'none'; });
     var panel = document.getElementById('tagPanel_' + activityId + '_' + itemIdx);
     if (panel) {
-      panel.style.display = 'block';
-      panel.style.top = 'calc(100% + 2px)';
-      panel.style.bottom = 'auto';
       var input = panel.querySelector('input[type="text"]');
       if (input) { input.value = ''; }
       var labels = panel.querySelectorAll('label');
       labels.forEach(function(l) { l.style.display = 'flex'; });
-      var body = panel.closest('.modal-body');
-      if (body) {
-        var panelRect = panel.getBoundingClientRect();
-        var bodyRect = body.getBoundingClientRect();
-        if (panelRect.bottom > bodyRect.bottom) {
-          panel.style.top = 'auto';
-          panel.style.bottom = 'calc(100% + 2px)';
+      var trig = document.getElementById('tagTrigger_' + activityId + '_' + itemIdx);
+      if (trig) {
+        panel.style.display = 'block';
+        var r = trig.getBoundingClientRect();
+        panel.style.left = r.left + 'px';
+        panel.style.top = (r.bottom + 2) + 'px';
+        var pRect = panel.getBoundingClientRect();
+        if (pRect.bottom > window.innerHeight && pRect.height < r.top) {
+          panel.style.top = (r.top - pRect.height - 2) + 'px';
         }
       }
     }
