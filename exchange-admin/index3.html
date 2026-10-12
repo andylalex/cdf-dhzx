@@ -117,6 +117,13 @@
   .form-input::placeholder { color: var(--ink-4); }
   .form-select { appearance: none; padding-right: 32px; background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5l5 5 5-5' stroke='%234a4a4a' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; cursor: pointer; }
 
+  /* 时间范围筛选组件（类型切换 + 日期范围一体） */
+  .time-filter-comp { display: inline-flex; align-items: stretch; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; background: #fff; transition: border-color .2s; }
+  .time-filter-comp:focus-within { border-color: var(--red); }
+  .time-filter-comp .form-input { border: none; border-radius: 0; }
+  .time-filter-comp .tf-type { border-right: 1px solid var(--border); }
+  .time-filter-comp .tf-sep { display: flex; align-items: center; padding: 0 4px; color: var(--ink-4); font-size: 12px; background: #fff; }
+
   /* Buttons */
   .btn { display: inline-flex; align-items: center; gap: 6px; padding: 0 16px; height: 34px; border-radius: 6px; font-size: 13px; font-weight: 500; transition: all .15s; white-space: nowrap; }
   .btn svg { width: 16px; height: 16px; }
@@ -3639,9 +3646,15 @@
               </select>
               
               <div class="search-select-wrapper" style="width: 150px;"><input type="text" class="search-select-input" placeholder="全部活动" style="width: 100%;"><div class="search-select-dropdown"></div><input type="hidden" id="filterOrderActivity" onchange="renderOrders()" style="display: none;"></div>
-              <input type="date" class="form-input" style="width:130px;" id="filterOrderDateStart" onchange="renderOrders()">
-              <span style="color:var(--ink-4);font-size:12px;">~</span>
-              <input type="date" class="form-input" style="width:130px;" id="filterOrderDateEnd" onchange="renderOrders()">
+              <div class="time-filter-comp">
+                <select class="form-input form-select tf-type" style="width:96px;" id="filterOrderTimeType" onchange="renderOrders()">
+                  <option value="orderTime">下单时间</option>
+                  <option value="completeTime">完成时间</option>
+                </select>
+                <input type="date" class="form-input" style="width:122px;" id="filterOrderDateStart" onchange="renderOrders()">
+                <span class="tf-sep">~</span>
+                <input type="date" class="form-input" style="width:122px;" id="filterOrderDateEnd" onchange="renderOrders()">
+              </div>
             </div>
             <div class="toolbar-right">
               <button class="btn btn-outline btn-sm" onclick="openBatchExpressModal()">批量导入物流</button>
@@ -3662,7 +3675,7 @@
                   <th style="width:100px;">应付/实付</th>
                   <th style="width:90px;">记账方式</th>
                   <th style="width:90px;">状态</th>
-                  <th style="min-width:100px;">下单时间</th>
+                  <th style="min-width:120px;">下单/完成时间</th>
                   <th style="width:120px;">操作</th>
                 </tr>
               </thead>
@@ -3721,9 +3734,15 @@
                 <option value="cEnd">C端</option>
                 <option value="bEnd">B端</option>
               </select>
-              <input type="date" class="form-input" style="width:130px;" id="filterRefundDateStart" onchange="renderRefunds()">
-              <span style="color:var(--ink-4);font-size:12px;">~</span>
-              <input type="date" class="form-input" style="width:130px;" id="filterRefundDateEnd" onchange="renderRefunds()">
+              <div class="time-filter-comp">
+                <select class="form-input form-select tf-type" style="width:96px;" id="filterRefundTimeType" onchange="renderRefunds()">
+                  <option value="orderTime">申请时间</option>
+                  <option value="completeTime">完成时间</option>
+                </select>
+                <input type="date" class="form-input" style="width:122px;" id="filterRefundDateStart" onchange="renderRefunds()">
+                <span class="tf-sep">~</span>
+                <input type="date" class="form-input" style="width:122px;" id="filterRefundDateEnd" onchange="renderRefunds()">
+              </div>
             </div>
             <div class="toolbar-right">
               <button class="btn btn-outline btn-sm" onclick="openAuditManageModal()">
@@ -3747,7 +3766,7 @@
                   <th style="width:80px;">订单渠道</th>
                   <th style="width:70px;">来源端</th>
                   <th style="width:90px;">退款状态</th>
-                  <th style="min-width:100px;">申请时间</th>
+                  <th style="min-width:120px;">申请/完成时间</th>
                   <th style="width:100px;">操作</th>
                 </tr>
               </thead>
@@ -3787,9 +3806,15 @@
           </div>
           <div class="toolbar" style="margin-bottom:12px;">
             <div class="toolbar-left">
-              <input type="month" class="form-input" style="width:130px;" id="bill2IncMonthDateStart" onchange="renderBill2Income()">
-              <span style="color:var(--ink-4);font-size:12px;">~</span>
-              <input type="month" class="form-input" style="width:130px;" id="bill2IncMonthDateEnd" onchange="renderBill2Income()">
+              <div class="time-filter-comp">
+                <select class="form-input form-select tf-type" style="width:96px;" id="bill2IncMonthTimeType" onchange="renderBill2Income()">
+                  <option value="completeTime" selected>完成时间</option>
+                  <option value="orderTime">下单时间</option>
+                </select>
+                <input type="month" class="form-input" style="width:100px;" id="bill2IncMonthDateStart" onchange="renderBill2Income()">
+                <span class="tf-sep">~</span>
+                <input type="month" class="form-input" style="width:100px;" id="bill2IncMonthDateEnd" onchange="renderBill2Income()">
+              </div>
               <select class="form-input form-select" style="width:160px;" id="bill2IncMonthPrizeType" onchange="renderBill2Income()">
                 <option value="">全部奖品类型</option>
                 <option value="实物礼品">实物礼品</option>
@@ -3838,9 +3863,15 @@
           </div>
           <div class="toolbar" style="margin-bottom:12px;">
             <div class="toolbar-left">
-              <input type="date" class="form-input" style="width:130px;" id="bill2IncDayDateStart" onchange="renderBill2Income()">
-              <span style="color:var(--ink-4);font-size:12px;">~</span>
-              <input type="date" class="form-input" style="width:130px;" id="bill2IncDayDateEnd" onchange="renderBill2Income()">
+              <div class="time-filter-comp">
+                <select class="form-input form-select tf-type" style="width:96px;" id="bill2IncDayTimeType" onchange="renderBill2Income()">
+                  <option value="completeTime" selected>完成时间</option>
+                  <option value="orderTime">下单时间</option>
+                </select>
+                <input type="date" class="form-input" style="width:122px;" id="bill2IncDayDateStart" onchange="renderBill2Income()">
+                <span class="tf-sep">~</span>
+                <input type="date" class="form-input" style="width:122px;" id="bill2IncDayDateEnd" onchange="renderBill2Income()">
+              </div>
               <select class="form-input form-select" style="width:160px;" id="bill2IncDayPrizeType" onchange="renderBill2Income()">
                 <option value="">全部奖品类型</option>
                 <option value="实物礼品">实物礼品</option>
@@ -3883,9 +3914,15 @@
         <div id="bill2IncomeDetail" style="display: block;">
           <div class="toolbar" style="margin-bottom:12px;">
             <div class="toolbar-left">
-              <input type="date" class="form-input" style="width:130px;" id="bill2IncDetailDateStart" onchange="renderBill2Income()">
-              <span style="color:var(--ink-4);font-size:12px;">~</span>
-              <input type="date" class="form-input" style="width:130px;" id="bill2IncDetailDateEnd" onchange="renderBill2Income()">
+              <div class="time-filter-comp">
+                <select class="form-input form-select tf-type" style="width:96px;" id="bill2IncDetailTimeType" onchange="renderBill2Income()">
+                  <option value="completeTime" selected>完成时间</option>
+                  <option value="orderTime">下单时间</option>
+                </select>
+                <input type="date" class="form-input" style="width:122px;" id="bill2IncDetailDateStart" onchange="renderBill2Income()">
+                <span class="tf-sep">~</span>
+                <input type="date" class="form-input" style="width:122px;" id="bill2IncDetailDateEnd" onchange="renderBill2Income()">
+              </div>
               <select class="form-input form-select" style="width:160px;" id="bill2IncDetailPrizeType" onchange="renderBill2Income()">
                 <option value="">全部奖品类型</option>
                 <option value="实物礼品">实物礼品</option>
@@ -3944,6 +3981,7 @@
                     <th style="text-align: right;">实收数</th>
                     <th style="text-align: right;">退款数</th>
                     <th>兑换时间</th>
+                    <th>完成时间</th>
                     <th>状态</th>
                   </tr>
                 </thead>
@@ -3980,9 +4018,15 @@
         <div id="bill2ExpenseMonth" style="display: none;">
           <div class="toolbar" style="margin-bottom:12px;">
             <div class="toolbar-left">
-              <input type="month" class="form-input" style="width:130px;" id="bill2ExpMonthDateStart" onchange="renderBill2Expense()">
-              <span style="color:var(--ink-4);font-size:12px;">~</span>
-              <input type="month" class="form-input" style="width:130px;" id="bill2ExpMonthDateEnd" onchange="renderBill2Expense()">
+              <div class="time-filter-comp">
+                <select class="form-input form-select tf-type" style="width:96px;" id="bill2ExpMonthTimeType" onchange="renderBill2Expense()">
+                  <option value="completeTime" selected>完成时间</option>
+                  <option value="orderTime">下单时间</option>
+                </select>
+                <input type="month" class="form-input" style="width:100px;" id="bill2ExpMonthDateStart" onchange="renderBill2Expense()">
+                <span class="tf-sep">~</span>
+                <input type="month" class="form-input" style="width:100px;" id="bill2ExpMonthDateEnd" onchange="renderBill2Expense()">
+              </div>
               <select class="form-input form-select" style="width:160px;" id="bill2ExpMonthPrizeType" onchange="renderBill2Expense()">
                 <option value="">全部奖品类型</option>
                 <option value="实物礼品">实物礼品</option>
@@ -4024,9 +4068,15 @@
         <div id="bill2ExpenseDay" style="display:none;">
           <div class="toolbar" style="margin-bottom:12px;">
             <div class="toolbar-left">
-              <input type="date" class="form-input" style="width:130px;" id="bill2ExpDayDateStart" onchange="renderBill2Expense()">
-              <span style="color:var(--ink-4);font-size:12px;">~</span>
-              <input type="date" class="form-input" style="width:130px;" id="bill2ExpDayDateEnd" onchange="renderBill2Expense()">
+              <div class="time-filter-comp">
+                <select class="form-input form-select tf-type" style="width:96px;" id="bill2ExpDayTimeType" onchange="renderBill2Expense()">
+                  <option value="completeTime" selected>完成时间</option>
+                  <option value="orderTime">下单时间</option>
+                </select>
+                <input type="date" class="form-input" style="width:122px;" id="bill2ExpDayDateStart" onchange="renderBill2Expense()">
+                <span class="tf-sep">~</span>
+                <input type="date" class="form-input" style="width:122px;" id="bill2ExpDayDateEnd" onchange="renderBill2Expense()">
+              </div>
               <select class="form-input form-select" style="width:160px;" id="bill2ExpDayPrizeType" onchange="renderBill2Expense()">
                 <option value="">全部奖品类型</option>
                 <option value="实物礼品">实物礼品</option>
@@ -4068,9 +4118,15 @@
         <div id="bill2ExpenseDetail" style="display: block;">
           <div class="toolbar" style="margin-bottom:12px;">
             <div class="toolbar-left">
-              <input type="date" class="form-input" style="width:130px;" id="bill2ExpDetailDateStart" onchange="renderBill2Expense()">
-              <span style="color:var(--ink-4);font-size:12px;">~</span>
-              <input type="date" class="form-input" style="width:130px;" id="bill2ExpDetailDateEnd" onchange="renderBill2Expense()">
+              <div class="time-filter-comp">
+                <select class="form-input form-select tf-type" style="width:96px;" id="bill2ExpDetailTimeType" onchange="renderBill2Expense()">
+                  <option value="completeTime" selected>完成时间</option>
+                  <option value="orderTime">下单时间</option>
+                </select>
+                <input type="date" class="form-input" style="width:122px;" id="bill2ExpDetailDateStart" onchange="renderBill2Expense()">
+                <span class="tf-sep">~</span>
+                <input type="date" class="form-input" style="width:122px;" id="bill2ExpDetailDateEnd" onchange="renderBill2Expense()">
+              </div>
               <select class="form-input form-select" style="width:140px;" id="bill2ExpDetailScene" onchange="renderBill2Expense()">
                 <option value="">全部使用场景</option>
                 <option value="兑换中心">兑换中心</option>
@@ -4123,6 +4179,7 @@
                     <th style="text-align:right;">成本数</th>
                     <th style="text-align: right;">退款数</th>
                     <th>兑换时间</th>
+                    <th>完成时间</th>
                     <th>状态</th>
                   </tr>
                 </thead>
@@ -7831,7 +7888,7 @@
           '<div><span style="color:var(--ink-4);">订单渠道: </span>' + (o.channel || '-') + '</div>' +
           '<div><span style="color:var(--ink-4);">记账方式: </span>' + (o.accountType || '-') + '</div>' +
           '<div><span style="color:var(--ink-4);">下单时间: </span>' + (o.time || '-') + '</div>' +
-          (o.completeTime ? '<div><span style="color:var(--ink-4);">完成时间: </span>' + o.completeTime + '</div>' : '') +
+          '<div><span style="color:var(--ink-4);">完成时间: </span>' + (o.completeTime || '-') + '</div>' +
           (o.sourceActivityName ? '<div><span style="color:var(--ink-4);">来源活动: </span>' + o.sourceActivityName + ' (' + o.sourceActivityId + ')</div>' : '') +
         '</div>' +
       '</div>';
@@ -7856,6 +7913,8 @@
     var sourceFilter = document.getElementById('filterOrderSource') ? document.getElementById('filterOrderSource').value : '';
     var dateStartFilter = document.getElementById('filterOrderDateStart') ? document.getElementById('filterOrderDateStart').value : '';
     var dateEndFilter = document.getElementById('filterOrderDateEnd') ? document.getElementById('filterOrderDateEnd').value : '';
+    var timeTypeFilter = document.getElementById('filterOrderTimeType') ? document.getElementById('filterOrderTimeType').value : 'orderTime';
+    var orderTimeField = timeTypeFilter === 'completeTime' ? 'completeTime' : 'time';
 
     var list = allOrders.filter(function(o) {
       if (search && o.orderId.toLowerCase().indexOf(search) === -1 && o.prizeName.toLowerCase().indexOf(search) === -1) return false;
@@ -7868,8 +7927,8 @@
       if (usageSceneFilter && o.usageScene !== usageSceneFilter) return false;
       if (activityFilter && o.sourceActivityName !== activityFilter) return false;
       if (sourceFilter && o.sourceType !== sourceFilter) return false;
-      if (dateStartFilter && (!o.time || o.time.substring(0,10) < dateStartFilter)) return false;
-      if (dateEndFilter && (!o.time || o.time.substring(0,10) > dateEndFilter)) return false;
+      if (dateStartFilter && (!o[orderTimeField] || o[orderTimeField].substring(0,10) < dateStartFilter)) return false;
+    if (dateEndFilter && (!o[orderTimeField] || o[orderTimeField].substring(0,10) > dateEndFilter)) return false;
       return true;
     });
 
@@ -7951,9 +8010,7 @@
 
       // 时间合并格
       var timeHtml = '<div style="font-size:12px;">' + o.time + '</div>';
-      if (o.completeTime) {
-        timeHtml += '<div style="font-size:11px;color:var(--ink-4);margin-top:2px;">完成: ' + o.completeTime + '</div>';
-      }
+      timeHtml += '<div style="font-size:11px;color:var(--ink-4);margin-top:2px;">完成: ' + (o.completeTime || '-') + '</div>';
 
       return '<tr>' +
         '<td>' + orderIdHtml + '</td>' +
@@ -7972,6 +8029,15 @@
     }).join('');
   }
 
+  // 售后单完成时间（退款完成时间）：取日志中最后一条“退款完成”的时间
+  function getRefundCompleteTime(r) {
+    var t = '';
+    (r.logs || []).forEach(function(log) {
+      if (log.action && log.action.indexOf('退款完成') >= 0) t = log.time || '';
+    });
+    return t;
+  }
+
   function renderRefunds() {
     var search = (document.getElementById('searchRefund') ? document.getElementById('searchRefund').value : '').toLowerCase();
     var statusFilter = document.getElementById('filterRefundStatus') ? document.getElementById('filterRefundStatus').value : '';
@@ -7981,6 +8047,7 @@
     var sourceEndFilter = document.getElementById('filterRefundSourceEnd') ? document.getElementById('filterRefundSourceEnd').value : '';
     var dateStartFilter = document.getElementById('filterRefundDateStart') ? document.getElementById('filterRefundDateStart').value : '';
     var dateEndFilter = document.getElementById('filterRefundDateEnd') ? document.getElementById('filterRefundDateEnd').value : '';
+    var timeTypeFilter = document.getElementById('filterRefundTimeType') ? document.getElementById('filterRefundTimeType').value : 'orderTime';
 
     var list = allRefunds.filter(function(r) {
       if (search && r.refundId.toLowerCase().indexOf(search) === -1 && r.orderId.toLowerCase().indexOf(search) === -1 && (r.userName || '').toLowerCase().indexOf(search) === -1 && (r.userPhone || '').indexOf(search) === -1) return false;
@@ -7989,8 +8056,9 @@
       if (channelFilter && r.channel !== channelFilter) return false;
       if (sourceFilter && r.sourceType !== sourceFilter) return false;
       if (sourceEndFilter && r.sourceEnd !== sourceEndFilter) return false;
-      if (dateStartFilter && (!r.time || r.time.substring(0,10) < dateStartFilter)) return false;
-      if (dateEndFilter && (!r.time || r.time.substring(0,10) > dateEndFilter)) return false;
+      var refundTimeField = timeTypeFilter === 'completeTime' ? getRefundCompleteTime(r) : r.time;
+      if (dateStartFilter && (!refundTimeField || refundTimeField.substring(0,10) < dateStartFilter)) return false;
+      if (dateEndFilter && (!refundTimeField || refundTimeField.substring(0,10) > dateEndFilter)) return false;
       return true;
     });
 
@@ -8067,7 +8135,7 @@
         '<td style="font-size:12px;color:var(--ink-3);">' + (r.channel || '-') + '</td>' +
         '<td><span style="display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;' + (r.sourceEnd === 'bEnd' ? 'background:#e8f5e9;color:#2e7d32;' : 'background:#e3f2fd;color:#1565c0;') + '">' + (r.sourceEnd === 'bEnd' ? 'B端' : 'C端') + '</span></td>' +
         '<td><span style="display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;' + getStatusStyle(r.status) + '">' + r.status + '</span></td>' +
-        '<td style="font-size:12px;color:var(--ink-3);">' + r.time + '</td>' +
+        '<td style="font-size:12px;color:var(--ink-3);"><div>' + r.time + '</div><div style="font-size:11px;color:var(--ink-4);margin-top:2px;">完成: ' + (getRefundCompleteTime(r) || '-') + '</div></td>' +
         '<td class="td-actions">' + actions + '</td>' +
       '</tr>';
     }).join('');
@@ -8785,53 +8853,53 @@
 
   // 收入账单模拟数据（基于订单）
   var bill2IncomeData = [
-    { orderId: 'EX20260722001', prizeName: '雅诗兰黛持妆粉底液 30ml', prizeType: '实物礼品', activity: '夏日狂欢兑换活动', payType: '积分', amount: 8800, actualAmount: 8800, userPhone: '138****8888', time: '2026-07-22 10:30', status: '已完成', channel: 'APP', accountType: '主营业务', store: '三亚国际免税城' },
-    { orderId: 'EX20260721002', prizeName: '兰蔻小黑瓶精华肌底液 20ml', prizeType: '实物礼品', activity: '会员专属兑换活动', payType: '贝壳', amount: 1200, actualAmount: 1200, userPhone: '186****6677', time: '2026-07-21 14:22', status: '已完成', channel: '微信小程序', accountType: '主营业务', store: '海口国际免税城' },
-    { orderId: 'EX20260721003', prizeName: 'CDF 100元代金券', prizeType: '优惠券-优选单券', activity: '夏日狂欢兑换活动', payType: '积分', amount: 1000, actualAmount: 1000, userPhone: '159****3344', time: '2026-07-21 11:08', status: '已完成', channel: 'APP', accountType: '主营业务', store: '博鳌免税店' },
-    { orderId: 'EX20260720004', prizeName: 'SK-II 神仙水 230ml', prizeType: '实物礼品', activity: '会员专属兑换活动', payType: '贝壳', amount: 1500, actualAmount: 1500, userPhone: '177****2211', time: '2026-07-20 16:45', status: '已完成', channel: 'H5', accountType: '主营业务', store: '三亚凤凰机场店' },
-    { orderId: 'EX20260720005', prizeName: '海南免税95折券', prizeType: '优惠券-优选单券', activity: '夏日狂欢兑换活动', payType: '积分', amount: 350, actualAmount: 350, userPhone: '132****5566', time: '2026-07-20 10:22', status: '已完成', channel: 'APP', accountType: '主营业务', store: '海口美兰机场店' },
+    { orderId: 'EX20260722001', prizeName: '雅诗兰黛持妆粉底液 30ml', prizeType: '实物礼品', activity: '夏日狂欢兑换活动', payType: '积分', amount: 8800, actualAmount: 8800, userPhone: '138****8888', time: '2026-07-22 10:30', completeTime: '2026-07-23 10:30', status: '已完成', channel: 'APP', accountType: '主营业务', store: '三亚国际免税城' },
+    { orderId: 'EX20260721002', prizeName: '兰蔻小黑瓶精华肌底液 20ml', prizeType: '实物礼品', activity: '会员专属兑换活动', payType: '贝壳', amount: 1200, actualAmount: 1200, userPhone: '186****6677', time: '2026-07-21 14:22', completeTime: '2026-07-22 09:15', status: '已完成', channel: '微信小程序', accountType: '主营业务', store: '海口国际免税城' },
+    { orderId: 'EX20260721003', prizeName: 'CDF 100元代金券', prizeType: '优惠券-优选单券', activity: '夏日狂欢兑换活动', payType: '积分', amount: 1000, actualAmount: 1000, userPhone: '159****3344', time: '2026-07-21 11:08', completeTime: '2026-07-22 08:40', status: '已完成', channel: 'APP', accountType: '主营业务', store: '博鳌免税店' },
+    { orderId: 'EX20260720004', prizeName: 'SK-II 神仙水 230ml', prizeType: '实物礼品', activity: '会员专属兑换活动', payType: '贝壳', amount: 1500, actualAmount: 1500, userPhone: '177****2211', time: '2026-07-20 16:45', completeTime: '2026-07-21 11:20', status: '已完成', channel: 'H5', accountType: '主营业务', store: '三亚凤凰机场店' },
+    { orderId: 'EX20260720005', prizeName: '海南免税95折券', prizeType: '优惠券-优选单券', activity: '夏日狂欢兑换活动', payType: '积分', amount: 350, actualAmount: 350, userPhone: '132****5566', time: '2026-07-20 10:22', completeTime: '2026-07-21 09:05', status: '已完成', channel: 'APP', accountType: '主营业务', store: '海口美兰机场店' },
     { orderId: 'EX20260719006', prizeName: '全场通用88折券', prizeType: '优惠券-券中心', activity: '夏日狂欢兑换活动', payType: '积分', amount: 500, actualAmount: 500, userPhone: '188****7788', time: '2026-07-19 15:30', status: '退款中', channel: '微信小程序', accountType: '非主营业务', store: '三亚国际免税城' },
-    { orderId: 'EX20260719007', prizeName: '迪奥口红套装', prizeType: '实物礼品', activity: '年中大促转盘', payType: '贝壳', amount: 3500, actualAmount: 3500, userPhone: '150****1122', time: '2026-07-19 09:18', status: '已完成', channel: 'H5', accountType: '非主营业务', store: '海口国际免税城' },
-    { orderId: 'EX20260718008', prizeName: 'CDF 50元无门槛券', prizeType: '优惠券-优选单券', activity: '夏日狂欢兑换活动', payType: '积分', amount: 500, actualAmount: 500, userPhone: '135****9900', time: '2026-07-18 10:22', status: '已完成', channel: 'APP', accountType: '主营业务', store: '博鳌免税店' },
-    { orderId: 'EX20260718009', prizeName: '转盘抽奖机会 × 3', prizeType: '转盘抽奖', activity: '每日签到转盘抽奖', payType: '贝壳', amount: 200, actualAmount: 200, userPhone: '139****4455', time: '2026-07-18 08:15', status: '已完成', channel: '支付宝小程序', accountType: '非主营业务', store: '三亚凤凰机场店' },
-    { orderId: 'EX20260717010', prizeName: '三亚SPA体验券', prizeType: '预约抽奖', activity: '七月预约抽奖', payType: '积分', amount: 2000, actualAmount: 2000, userPhone: '186****3322', time: '2026-07-17 16:40', status: '已完成', channel: '微信小程序', accountType: '非主营业务', store: '海口美兰机场店' },
-    { orderId: 'EX20260717011', prizeName: '全场通用88折券', prizeType: '优惠券-券中心', activity: '夏日狂欢兑换活动', payType: '贝壳', amount: 800, actualAmount: 800, userPhone: '177****8866', time: '2026-07-17 11:20', status: '已完成', channel: 'H5', accountType: '主营业务', store: '三亚国际免税城' },
-    { orderId: 'EX20260716012', prizeName: '资生堂红腰子精华 50ml', prizeType: '实物礼品', activity: '限时闪购活动', payType: '积分', amount: 6500, actualAmount: 6500, userPhone: '155****2233', time: '2026-07-16 14:30', status: '已完成', channel: 'APP', accountType: '主营业务', store: '海口国际免税城' },
-    { orderId: 'EX20260716013', prizeName: 'CDF 100元代金券', prizeType: '优惠券-优选单券', activity: '年中大促活动', payType: '贝壳', amount: 1000, actualAmount: 1000, userPhone: '188****1100', time: '2026-07-16 09:45', status: '已完成', channel: '第三方', accountType: '主营业务', store: '博鳌免税店' },
-    { orderId: 'EX20260715014', prizeName: '转盘抽奖机会 × 5', prizeType: '转盘抽奖', activity: '周年庆转盘抽奖', payType: '积分', amount: 300, actualAmount: 300, userPhone: '132****7788', time: '2026-07-15 17:00', status: '已完成', channel: '支付宝小程序', accountType: '非主营业务', store: '三亚凤凰机场店' },
-    { orderId: 'EX20260715015', prizeName: '每日签到福利值 50', prizeType: '福利值', activity: '每日签到', payType: '积分', amount: 50, actualAmount: 50, userPhone: '150****5566', time: '2026-07-15 08:00', status: '已完成', channel: 'APP', accountType: '非主营业务', store: '海口美兰机场店' },
+    { orderId: 'EX20260719007', prizeName: '迪奥口红套装', prizeType: '实物礼品', activity: '年中大促转盘', payType: '贝壳', amount: 3500, actualAmount: 3500, userPhone: '150****1122', time: '2026-07-19 09:18', completeTime: '2026-07-20 14:30', status: '已完成', channel: 'H5', accountType: '非主营业务', store: '海口国际免税城' },
+    { orderId: 'EX20260718008', prizeName: 'CDF 50元无门槛券', prizeType: '优惠券-优选单券', activity: '夏日狂欢兑换活动', payType: '积分', amount: 500, actualAmount: 500, userPhone: '135****9900', time: '2026-07-18 10:22', completeTime: '2026-07-19 16:10', status: '已完成', channel: 'APP', accountType: '主营业务', store: '博鳌免税店' },
+    { orderId: 'EX20260718009', prizeName: '转盘抽奖机会 × 3', prizeType: '转盘抽奖', activity: '每日签到转盘抽奖', payType: '贝壳', amount: 200, actualAmount: 200, userPhone: '139****4455', time: '2026-07-18 08:15', completeTime: '2026-07-19 10:00', status: '已完成', channel: '支付宝小程序', accountType: '非主营业务', store: '三亚凤凰机场店' },
+    { orderId: 'EX20260717010', prizeName: '三亚SPA体验券', prizeType: '预约抽奖', activity: '七月预约抽奖', payType: '积分', amount: 2000, actualAmount: 2000, userPhone: '186****3322', time: '2026-07-17 16:40', completeTime: '2026-07-18 15:30', status: '已完成', channel: '微信小程序', accountType: '非主营业务', store: '海口美兰机场店' },
+    { orderId: 'EX20260717011', prizeName: '全场通用88折券', prizeType: '优惠券-券中心', activity: '夏日狂欢兑换活动', payType: '贝壳', amount: 800, actualAmount: 800, userPhone: '177****8866', time: '2026-07-17 11:20', completeTime: '2026-07-18 10:10', status: '已完成', channel: 'H5', accountType: '主营业务', store: '三亚国际免税城' },
+    { orderId: 'EX20260716012', prizeName: '资生堂红腰子精华 50ml', prizeType: '实物礼品', activity: '限时闪购活动', payType: '积分', amount: 6500, actualAmount: 6500, userPhone: '155****2233', time: '2026-07-16 14:30', completeTime: '2026-07-17 13:20', status: '已完成', channel: 'APP', accountType: '主营业务', store: '海口国际免税城' },
+    { orderId: 'EX20260716013', prizeName: 'CDF 100元代金券', prizeType: '优惠券-优选单券', activity: '年中大促活动', payType: '贝壳', amount: 1000, actualAmount: 1000, userPhone: '188****1100', time: '2026-07-16 09:45', completeTime: '2026-07-17 09:30', status: '已完成', channel: '第三方', accountType: '主营业务', store: '博鳌免税店' },
+    { orderId: 'EX20260715014', prizeName: '转盘抽奖机会 × 5', prizeType: '转盘抽奖', activity: '周年庆转盘抽奖', payType: '积分', amount: 300, actualAmount: 300, userPhone: '132****7788', time: '2026-07-15 17:00', completeTime: '2026-07-16 11:00', status: '已完成', channel: '支付宝小程序', accountType: '非主营业务', store: '三亚凤凰机场店' },
+    { orderId: 'EX20260715015', prizeName: '每日签到福利值 50', prizeType: '福利值', activity: '每日签到', payType: '积分', amount: 50, actualAmount: 50, userPhone: '150****5566', time: '2026-07-15 08:00', completeTime: '2026-07-15 18:00', status: '已完成', channel: 'APP', accountType: '非主营业务', store: '海口美兰机场店' },
     // 退款记录（逆向）
-    { orderId: 'EX20260719006-R', prizeName: '全场通用88折券', prizeType: '优惠券-券中心', activity: '夏日狂欢兑换活动', payType: '积分', amount: -500, actualAmount: -500, userPhone: '188****7788', time: '2026-07-19 18:00', status: '退款中', channel: '微信小程序', accountType: '非主营业务', store: '三亚国际免税城' },
+    { orderId: 'EX20260719006-R', prizeName: '全场通用88折券', prizeType: '优惠券-券中心', activity: '夏日狂欢兑换活动', payType: '积分', amount: -500, actualAmount: -500, userPhone: '188****7788', time: '2026-07-19 18:00', completeTime: '2026-07-21 10:00', status: '退款中', channel: '微信小程序', accountType: '非主营业务', store: '三亚国际免税城' },
   ];
 
   // 成本账单模拟数据（成本维度，按使用场景），含积分/贝壳拆分
   var bill2ExpenseData = [
-    { orderId: 'EX20260722001', prizeName: '雅诗兰黛持妆粉底液 30ml', prizeType: '实物礼品', scene: '兑换中心', bizType: '奖品成本', cost: 4500, pointsCost: Math.round(4500 * 0.8), shellsCost: Math.round(4500 * 0.2), time: '2026-07-22 10:30', payType: '积分', amount: 4500, actualAmount: 4500, status: '已完成', channel: 'APP', accountType: '主营业务', activity: '夏日狂欢兑换活动' },
-    { orderId: 'EX20260721002', prizeName: '兰蔻小黑瓶精华肌底液 20ml', prizeType: '实物礼品', scene: '兑换中心', bizType: '奖品成本', cost: 3800, pointsCost: Math.round(3800 * 0.8), shellsCost: Math.round(3800 * 0.2), time: '2026-07-21 14:22', payType: '贝壳', amount: 3800, actualAmount: 3800, status: '已完成', channel: '微信小程序', accountType: '主营业务', activity: '夏日狂欢兑换活动' },
-    { orderId: 'EX20260721003', prizeName: 'CDF 100元代金券', prizeType: '优惠券-优选单券', scene: '兑换中心', bizType: '券成本', cost: 100, pointsCost: Math.round(100 * 0.8), shellsCost: Math.round(100 * 0.2), time: '2026-07-21 11:08', payType: '积分', amount: 100, actualAmount: 100, status: '已完成', channel: 'APP', accountType: '主营业务', activity: '夏日狂欢兑换活动' },
-    { orderId: 'EX20260721003', prizeName: 'CDF 100元代金券', prizeType: '优惠券-优选单券', scene: '兑换中心', bizType: '平台服务费', cost: 2, pointsCost: Math.round(2 * 0.8), shellsCost: Math.round(2 * 0.2), time: '2026-07-21 11:08', payType: '积分', amount: 2, actualAmount: 2, status: '已完成', channel: 'APP', accountType: '主营业务', activity: '夏日狂欢兑换活动' },
-    { orderId: 'EX20260720004', prizeName: 'SK-II 神仙水 230ml', prizeType: '实物礼品', scene: '兑换中心', bizType: '奖品成本', cost: 5200, pointsCost: Math.round(5200 * 0.8), shellsCost: Math.round(5200 * 0.2), time: '2026-07-20 16:45', payType: '贝壳', amount: 5200, actualAmount: 5200, status: '已完成', channel: 'H5', accountType: '主营业务', activity: '夏日狂欢兑换活动' },
-    { orderId: 'EX20260720005', prizeName: '海南免税95折券', prizeType: '优惠券-优选单券', scene: '兑换中心', bizType: '券成本', cost: 50, pointsCost: Math.round(50 * 0.8), shellsCost: Math.round(50 * 0.2), time: '2026-07-20 10:22', payType: '积分', amount: 50, actualAmount: 50, status: '已完成', channel: 'APP', accountType: '主营业务', activity: '夏日狂欢兑换活动' },
-    { orderId: 'EX20260719006', prizeName: '全场通用88折券', prizeType: '优惠券-券中心', scene: '签到', bizType: '券成本', cost: 80, pointsCost: Math.round(80 * 0.8), shellsCost: Math.round(80 * 0.2), time: '2026-07-19 15:30', payType: '贝壳', amount: 80, actualAmount: 80, status: '已完成', channel: '微信小程序', accountType: '非主营业务', activity: '每日签到' },
-    { orderId: 'EX20260719007', prizeName: '迪奥口红套装', prizeType: '实物礼品', scene: '兑换中心', bizType: '奖品成本', cost: 6800, pointsCost: Math.round(6800 * 0.8), shellsCost: Math.round(6800 * 0.2), time: '2026-07-19 09:18', payType: '贝壳', amount: 6800, actualAmount: 6800, status: '已完成', channel: 'H5', accountType: '主营业务', activity: '夏日狂欢兑换活动' },
-    { orderId: 'EX20260718008', prizeName: 'CDF 50元无门槛券', prizeType: '优惠券-优选单券', scene: '签到', bizType: '券成本', cost: 50, pointsCost: Math.round(50 * 0.8), shellsCost: Math.round(50 * 0.2), time: '2026-07-18 10:22', payType: '积分', amount: 50, actualAmount: 50, status: '已完成', channel: 'APP', accountType: '主营业务', activity: '每日签到' },
-    { orderId: 'EX20260718009', prizeName: '转盘抽奖机会 × 3', prizeType: '转盘抽奖', scene: '转盘抽奖', bizType: '奖品成本', cost: 60, pointsCost: Math.round(60 * 0.8), shellsCost: Math.round(60 * 0.2), time: '2026-07-18 08:15', payType: '贝壳', amount: 60, actualAmount: 60, status: '已完成', channel: '支付宝小程序', accountType: '非主营业务', activity: '周年庆转盘抽奖' },
-    { orderId: 'EX20260717011', prizeName: '全场通用88折券', prizeType: '优惠券-券中心', scene: '兑换中心', bizType: '券成本', cost: 80, pointsCost: Math.round(80 * 0.8), shellsCost: Math.round(80 * 0.2), time: '2026-07-17 11:20', payType: '贝壳', amount: 80, actualAmount: 80, status: '已完成', channel: 'H5', accountType: '主营业务', activity: '夏日狂欢兑换活动' },
-    { orderId: 'EX20260716012', prizeName: '资生堂红腰子精华 50ml', prizeType: '实物礼品', scene: '兑换中心', bizType: '奖品成本', cost: 5500, pointsCost: Math.round(5500 * 0.8), shellsCost: Math.round(5500 * 0.2), time: '2026-07-16 14:30', payType: '积分', amount: 5500, actualAmount: 5500, status: '已完成', channel: 'APP', accountType: '主营业务', activity: '夏日狂欢兑换活动' },
-    { orderId: 'EX20260716013', prizeName: 'CDF 100元代金券', prizeType: '优惠券-优选单券', scene: '兑换中心', bizType: '券成本', cost: 100, pointsCost: Math.round(100 * 0.8), shellsCost: Math.round(100 * 0.2), time: '2026-07-16 09:45', payType: '贝壳', amount: 100, actualAmount: 100, status: '已完成', channel: '第三方', accountType: '主营业务', activity: '夏日狂欢兑换活动' },
-    { orderId: 'EX20260715014', prizeName: '转盘抽奖机会 × 5', prizeType: '转盘抽奖', scene: '转盘抽奖', bizType: '奖品成本', cost: 100, pointsCost: Math.round(100 * 0.8), shellsCost: Math.round(100 * 0.2), time: '2026-07-15 17:00', payType: '贝壳', amount: 100, actualAmount: 100, status: '已完成', channel: '支付宝小程序', accountType: '非主营业务', activity: '周年庆转盘抽奖' },
-    { orderId: 'EX20260715015', prizeName: '每日签到福利值 50', prizeType: '福利值', scene: '任务', bizType: '福利成本', cost: 30, pointsCost: Math.round(30 * 0.8), shellsCost: Math.round(30 * 0.2), time: '2026-07-15 08:00', payType: '积分', amount: 30, actualAmount: 30, status: '已完成', channel: 'APP', accountType: '非主营业务', activity: '新人任务' },
-    { orderId: 'EX20260723016', prizeName: '海蓝之谜精华面霜 60ml', prizeType: '实物礼品', scene: '兑换中心', bizType: '奖品成本', cost: 7200, pointsCost: Math.round(7200 * 0.8), shellsCost: Math.round(7200 * 0.2), time: '2026-07-23 10:15', payType: '积分', amount: 7200, actualAmount: 7200, status: '已完成', channel: 'APP', accountType: '主营业务', activity: '夏日狂欢兑换活动' },
-    { orderId: 'EX20260723017', prizeName: '每日签到88折券', prizeType: '优惠券-券中心', scene: '签到', bizType: '券成本', cost: 60, pointsCost: Math.round(60 * 0.8), shellsCost: Math.round(60 * 0.2), time: '2026-07-23 08:30', payType: '贝壳', amount: 60, actualAmount: 60, status: '已完成', channel: '微信小程序', accountType: '主营业务', activity: '每日签到' },
-    { orderId: 'EX20260722018', prizeName: '新人任务福利值 100', prizeType: '福利值', scene: '任务', bizType: '福利成本', cost: 40, pointsCost: Math.round(40 * 0.8), shellsCost: Math.round(40 * 0.2), time: '2026-07-22 19:20', payType: '积分', amount: 40, actualAmount: 40, status: '已完成', channel: 'H5', accountType: '非主营业务', activity: '新人任务' },
-    { orderId: 'EX20260722019', prizeName: '转盘抽奖机会 × 8', prizeType: '转盘抽奖', scene: '转盘抽奖', bizType: '奖品成本', cost: 160, pointsCost: Math.round(160 * 0.8), shellsCost: Math.round(160 * 0.2), time: '2026-07-22 20:45', payType: '贝壳', amount: 160, actualAmount: 160, status: '已完成', channel: 'APP', accountType: '非主营业务', activity: '周年庆转盘抽奖' },
-    { orderId: 'EX20260720021', prizeName: 'CDF 200元代金券', prizeType: '优惠券-优选单券', scene: '兑换中心', bizType: '券成本', cost: 200, pointsCost: Math.round(200 * 0.8), shellsCost: Math.round(200 * 0.2), time: '2026-07-20 13:25', payType: '贝壳', amount: 200, actualAmount: 200, status: '已完成', channel: '支付宝小程序', accountType: '主营业务', activity: '夏日狂欢兑换活动' },
-    { orderId: 'EX20260720021', prizeName: 'CDF 200元代金券', prizeType: '优惠券-优选单券', scene: '兑换中心', bizType: '平台服务费', cost: 4, pointsCost: Math.round(4 * 0.8), shellsCost: Math.round(4 * 0.2), time: '2026-07-20 13:25', payType: '积分', amount: 4, actualAmount: 4, status: '已完成', channel: '支付宝小程序', accountType: '主营业务', activity: '夏日狂欢兑换活动' },
-    { orderId: 'EX20260719022', prizeName: '签到专享95折券', prizeType: '优惠券-券中心', scene: '签到', bizType: '券成本', cost: 70, pointsCost: Math.round(70 * 0.8), shellsCost: Math.round(70 * 0.2), time: '2026-07-19 08:05', payType: '贝壳', amount: 70, actualAmount: 70, status: '已完成', channel: '第三方', accountType: '主营业务', activity: '每日签到' },
-    { orderId: 'EX20260718023', prizeName: '签到福利值 30', prizeType: '福利值', scene: '签到', bizType: '福利成本', cost: 20, pointsCost: Math.round(20 * 0.8), shellsCost: Math.round(20 * 0.2), time: '2026-07-18 09:30', payType: '积分', amount: 20, actualAmount: 20, status: '已完成', channel: 'APP', accountType: '非主营业务', activity: '每日签到' },
+    { orderId: 'EX20260722001', prizeName: '雅诗兰黛持妆粉底液 30ml', prizeType: '实物礼品', scene: '兑换中心', bizType: '奖品成本', cost: 4500, pointsCost: Math.round(4500 * 0.8), shellsCost: Math.round(4500 * 0.2), time: '2026-07-22 10:30', completeTime: '2026-07-23 09:30', payType: '积分', amount: 4500, actualAmount: 4500, status: '已完成', channel: 'APP', accountType: '主营业务', activity: '夏日狂欢兑换活动' },
+    { orderId: 'EX20260721002', prizeName: '兰蔻小黑瓶精华肌底液 20ml', prizeType: '实物礼品', scene: '兑换中心', bizType: '奖品成本', cost: 3800, pointsCost: Math.round(3800 * 0.8), shellsCost: Math.round(3800 * 0.2), time: '2026-07-21 14:22', completeTime: '2026-07-22 10:00', payType: '贝壳', amount: 3800, actualAmount: 3800, status: '已完成', channel: '微信小程序', accountType: '主营业务', activity: '夏日狂欢兑换活动' },
+    { orderId: 'EX20260721003', prizeName: 'CDF 100元代金券', prizeType: '优惠券-优选单券', scene: '兑换中心', bizType: '券成本', cost: 100, pointsCost: Math.round(100 * 0.8), shellsCost: Math.round(100 * 0.2), time: '2026-07-21 11:08', completeTime: '2026-07-22 08:30', payType: '积分', amount: 100, actualAmount: 100, status: '已完成', channel: 'APP', accountType: '主营业务', activity: '夏日狂欢兑换活动' },
+    { orderId: 'EX20260721003', prizeName: 'CDF 100元代金券', prizeType: '优惠券-优选单券', scene: '兑换中心', bizType: '平台服务费', cost: 2, pointsCost: Math.round(2 * 0.8), shellsCost: Math.round(2 * 0.2), time: '2026-07-21 11:08', completeTime: '2026-07-22 08:30', payType: '积分', amount: 2, actualAmount: 2, status: '已完成', channel: 'APP', accountType: '主营业务', activity: '夏日狂欢兑换活动' },
+    { orderId: 'EX20260720004', prizeName: 'SK-II 神仙水 230ml', prizeType: '实物礼品', scene: '兑换中心', bizType: '奖品成本', cost: 5200, pointsCost: Math.round(5200 * 0.8), shellsCost: Math.round(5200 * 0.2), time: '2026-07-20 16:45', completeTime: '2026-07-21 10:30', payType: '贝壳', amount: 5200, actualAmount: 5200, status: '已完成', channel: 'H5', accountType: '主营业务', activity: '夏日狂欢兑换活动' },
+    { orderId: 'EX20260720005', prizeName: '海南免税95折券', prizeType: '优惠券-优选单券', scene: '兑换中心', bizType: '券成本', cost: 50, pointsCost: Math.round(50 * 0.8), shellsCost: Math.round(50 * 0.2), time: '2026-07-20 10:22', completeTime: '2026-07-21 09:00', payType: '积分', amount: 50, actualAmount: 50, status: '已完成', channel: 'APP', accountType: '主营业务', activity: '夏日狂欢兑换活动' },
+    { orderId: 'EX20260719006', prizeName: '全场通用88折券', prizeType: '优惠券-券中心', scene: '签到', bizType: '券成本', cost: 80, pointsCost: Math.round(80 * 0.8), shellsCost: Math.round(80 * 0.2), time: '2026-07-19 15:30', completeTime: '2026-07-20 11:00', payType: '贝壳', amount: 80, actualAmount: 80, status: '已完成', channel: '微信小程序', accountType: '非主营业务', activity: '每日签到' },
+    { orderId: 'EX20260719007', prizeName: '迪奥口红套装', prizeType: '实物礼品', scene: '兑换中心', bizType: '奖品成本', cost: 6800, pointsCost: Math.round(6800 * 0.8), shellsCost: Math.round(6800 * 0.2), time: '2026-07-19 09:18', completeTime: '2026-07-20 14:00', payType: '贝壳', amount: 6800, actualAmount: 6800, status: '已完成', channel: 'H5', accountType: '主营业务', activity: '夏日狂欢兑换活动' },
+    { orderId: 'EX20260718008', prizeName: 'CDF 50元无门槛券', prizeType: '优惠券-优选单券', scene: '签到', bizType: '券成本', cost: 50, pointsCost: Math.round(50 * 0.8), shellsCost: Math.round(50 * 0.2), time: '2026-07-18 10:22', completeTime: '2026-07-19 15:00', payType: '积分', amount: 50, actualAmount: 50, status: '已完成', channel: 'APP', accountType: '主营业务', activity: '每日签到' },
+    { orderId: 'EX20260718009', prizeName: '转盘抽奖机会 × 3', prizeType: '转盘抽奖', scene: '转盘抽奖', bizType: '奖品成本', cost: 60, pointsCost: Math.round(60 * 0.8), shellsCost: Math.round(60 * 0.2), time: '2026-07-18 08:15', completeTime: '2026-07-19 09:40', payType: '贝壳', amount: 60, actualAmount: 60, status: '已完成', channel: '支付宝小程序', accountType: '非主营业务', activity: '周年庆转盘抽奖' },
+    { orderId: 'EX20260717011', prizeName: '全场通用88折券', prizeType: '优惠券-券中心', scene: '兑换中心', bizType: '券成本', cost: 80, pointsCost: Math.round(80 * 0.8), shellsCost: Math.round(80 * 0.2), time: '2026-07-17 11:20', completeTime: '2026-07-18 10:20', payType: '贝壳', amount: 80, actualAmount: 80, status: '已完成', channel: 'H5', accountType: '主营业务', activity: '夏日狂欢兑换活动' },
+    { orderId: 'EX20260716012', prizeName: '资生堂红腰子精华 50ml', prizeType: '实物礼品', scene: '兑换中心', bizType: '奖品成本', cost: 5500, pointsCost: Math.round(5500 * 0.8), shellsCost: Math.round(5500 * 0.2), time: '2026-07-16 14:30', completeTime: '2026-07-17 11:30', payType: '积分', amount: 5500, actualAmount: 5500, status: '已完成', channel: 'APP', accountType: '主营业务', activity: '夏日狂欢兑换活动' },
+    { orderId: 'EX20260716013', prizeName: 'CDF 100元代金券', prizeType: '优惠券-优选单券', scene: '兑换中心', bizType: '券成本', cost: 100, pointsCost: Math.round(100 * 0.8), shellsCost: Math.round(100 * 0.2), time: '2026-07-16 09:45', completeTime: '2026-07-17 09:20', payType: '贝壳', amount: 100, actualAmount: 100, status: '已完成', channel: '第三方', accountType: '主营业务', activity: '夏日狂欢兑换活动' },
+    { orderId: 'EX20260715014', prizeName: '转盘抽奖机会 × 5', prizeType: '转盘抽奖', scene: '转盘抽奖', bizType: '奖品成本', cost: 100, pointsCost: Math.round(100 * 0.8), shellsCost: Math.round(100 * 0.2), time: '2026-07-15 17:00', completeTime: '2026-07-16 10:30', payType: '贝壳', amount: 100, actualAmount: 100, status: '已完成', channel: '支付宝小程序', accountType: '非主营业务', activity: '周年庆转盘抽奖' },
+    { orderId: 'EX20260715015', prizeName: '每日签到福利值 50', prizeType: '福利值', scene: '任务', bizType: '福利成本', cost: 30, pointsCost: Math.round(30 * 0.8), shellsCost: Math.round(30 * 0.2), time: '2026-07-15 08:00', completeTime: '2026-07-15 17:00', payType: '积分', amount: 30, actualAmount: 30, status: '已完成', channel: 'APP', accountType: '非主营业务', activity: '新人任务' },
+    { orderId: 'EX20260723016', prizeName: '海蓝之谜精华面霜 60ml', prizeType: '实物礼品', scene: '兑换中心', bizType: '奖品成本', cost: 7200, pointsCost: Math.round(7200 * 0.8), shellsCost: Math.round(7200 * 0.2), time: '2026-07-23 10:15', completeTime: '2026-07-23 18:00', payType: '积分', amount: 7200, actualAmount: 7200, status: '已完成', channel: 'APP', accountType: '主营业务', activity: '夏日狂欢兑换活动' },
+    { orderId: 'EX20260723017', prizeName: '每日签到88折券', prizeType: '优惠券-券中心', scene: '签到', bizType: '券成本', cost: 60, pointsCost: Math.round(60 * 0.8), shellsCost: Math.round(60 * 0.2), time: '2026-07-23 08:30', completeTime: '2026-07-23 16:00', payType: '贝壳', amount: 60, actualAmount: 60, status: '已完成', channel: '微信小程序', accountType: '主营业务', activity: '每日签到' },
+    { orderId: 'EX20260722018', prizeName: '新人任务福利值 100', prizeType: '福利值', scene: '任务', bizType: '福利成本', cost: 40, pointsCost: Math.round(40 * 0.8), shellsCost: Math.round(40 * 0.2), time: '2026-07-22 19:20', completeTime: '2026-07-23 09:10', payType: '积分', amount: 40, actualAmount: 40, status: '已完成', channel: 'H5', accountType: '非主营业务', activity: '新人任务' },
+    { orderId: 'EX20260722019', prizeName: '转盘抽奖机会 × 8', prizeType: '转盘抽奖', scene: '转盘抽奖', bizType: '奖品成本', cost: 160, pointsCost: Math.round(160 * 0.8), shellsCost: Math.round(160 * 0.2), time: '2026-07-22 20:45', completeTime: '2026-07-23 10:20', payType: '贝壳', amount: 160, actualAmount: 160, status: '已完成', channel: 'APP', accountType: '非主营业务', activity: '周年庆转盘抽奖' },
+    { orderId: 'EX20260720021', prizeName: 'CDF 200元代金券', prizeType: '优惠券-优选单券', scene: '兑换中心', bizType: '券成本', cost: 200, pointsCost: Math.round(200 * 0.8), shellsCost: Math.round(200 * 0.2), time: '2026-07-20 13:25', completeTime: '2026-07-21 14:00', payType: '贝壳', amount: 200, actualAmount: 200, status: '已完成', channel: '支付宝小程序', accountType: '主营业务', activity: '夏日狂欢兑换活动' },
+    { orderId: 'EX20260720021', prizeName: 'CDF 200元代金券', prizeType: '优惠券-优选单券', scene: '兑换中心', bizType: '平台服务费', cost: 4, pointsCost: Math.round(4 * 0.8), shellsCost: Math.round(4 * 0.2), time: '2026-07-20 13:25', completeTime: '2026-07-21 14:00', payType: '积分', amount: 4, actualAmount: 4, status: '已完成', channel: '支付宝小程序', accountType: '主营业务', activity: '夏日狂欢兑换活动' },
+    { orderId: 'EX20260719022', prizeName: '签到专享95折券', prizeType: '优惠券-券中心', scene: '签到', bizType: '券成本', cost: 70, pointsCost: Math.round(70 * 0.8), shellsCost: Math.round(70 * 0.2), time: '2026-07-19 08:05', completeTime: '2026-07-20 09:00', payType: '贝壳', amount: 70, actualAmount: 70, status: '已完成', channel: '第三方', accountType: '主营业务', activity: '每日签到' },
+    { orderId: 'EX20260718023', prizeName: '签到福利值 30', prizeType: '福利值', scene: '签到', bizType: '福利成本', cost: 20, pointsCost: Math.round(20 * 0.8), shellsCost: Math.round(20 * 0.2), time: '2026-07-18 09:30', completeTime: '2026-07-19 11:00', payType: '积分', amount: 20, actualAmount: 20, status: '已完成', channel: 'APP', accountType: '非主营业务', activity: '每日签到' },
     // 退款记录（逆向）
-    { orderId: 'EX20260720005-R', prizeName: '海南免税95折券', prizeType: '优惠券-优选单券', scene: '兑换中心', bizType: '券成本', cost: -50, pointsCost: Math.round(-50 * 0.8), shellsCost: Math.round(-50 * 0.2), time: '2026-07-22 14:00', payType: '积分', amount: -50, actualAmount: -50, status: '已退款', channel: 'APP', accountType: '主营业务', activity: '夏日狂欢兑换活动' },
-    { orderId: 'EX20260719006-R', prizeName: '全场通用88折券', prizeType: '优惠券-券中心', scene: '签到', bizType: '券成本', cost: -80, pointsCost: Math.round(-80 * 0.8), shellsCost: Math.round(-80 * 0.2), time: '2026-07-23 10:30', payType: '贝壳', amount: -80, actualAmount: -80, status: '已退款', channel: '微信小程序', accountType: '非主营业务', activity: '每日签到' },
+    { orderId: 'EX20260720005-R', prizeName: '海南免税95折券', prizeType: '优惠券-优选单券', scene: '兑换中心', bizType: '券成本', cost: -50, pointsCost: Math.round(-50 * 0.8), shellsCost: Math.round(-50 * 0.2), time: '2026-07-22 14:00', completeTime: '2026-07-22 14:00', payType: '积分', amount: -50, actualAmount: -50, status: '已退款', channel: 'APP', accountType: '主营业务', activity: '夏日狂欢兑换活动' },
+    { orderId: 'EX20260719006-R', prizeName: '全场通用88折券', prizeType: '优惠券-券中心', scene: '签到', bizType: '券成本', cost: -80, pointsCost: Math.round(-80 * 0.8), shellsCost: Math.round(-80 * 0.2), time: '2026-07-23 10:30', completeTime: '2026-07-23 10:30', payType: '贝壳', amount: -80, actualAmount: -80, status: '已退款', channel: '微信小程序', accountType: '非主营业务', activity: '每日签到' },
   ];
 
   // 计算分摊金额（从活动管理读取配置）
@@ -8998,6 +9066,9 @@
       if (dateStart) { var ds = document.getElementById('bill2ExpDetailDateStart'); if (ds) ds.value = dateStart; }
       if (dateEnd) { var de = document.getElementById('bill2ExpDetailDateEnd'); if (de) de.value = dateEnd; }
       if (prizeType) { var pt = document.getElementById('bill2ExpDetailPrizeType'); if (pt) pt.value = prizeType; }
+      var ttExp = document.getElementById('bill2ExpDetailTimeType');
+      var ttExpSrc = document.getElementById(periodType === 'month' ? 'bill2ExpMonthTimeType' : 'bill2ExpDayTimeType');
+      if (ttExp && ttExpSrc) ttExp.value = ttExpSrc.value;
       renderBill2Expense();
     } else {
       // 收入账单 → 切换到"收入明细"tab
@@ -9015,6 +9086,9 @@
       // 设置明细tab的筛选条件
       if (dateStart2) { var ds2 = document.getElementById('bill2IncDetailDateStart'); if (ds2) ds2.value = dateStart2; }
       if (dateEnd2) { var de2 = document.getElementById('bill2IncDetailDateEnd'); if (de2) de2.value = dateEnd2; }
+      var ttInc = document.getElementById('bill2IncDetailTimeType');
+      var ttIncSrc = document.getElementById(periodType === 'month' ? 'bill2IncMonthTimeType' : 'bill2IncDayTimeType');
+      if (ttInc && ttIncSrc) ttInc.value = ttIncSrc.value;
       var pt2 = document.getElementById('bill2IncDetailPrizeType');
       var pn2 = document.getElementById('bill2IncDetailPrizeName');
       var st2 = document.getElementById('bill2IncDetailStore');
@@ -9045,19 +9119,22 @@
       window._bill2IncActSS.setOptions(actOpts);
     }
 
-    var dateStart, dateEnd, typeFilter;
+    var dateStart, dateEnd, typeFilter, timeType;
     if (currentBill2IncomeSubTab === 'month') {
       dateStart = (document.getElementById('bill2IncMonthDateStart') || {}).value || '';
       dateEnd = (document.getElementById('bill2IncMonthDateEnd') || {}).value || '';
       typeFilter = (document.getElementById('bill2IncMonthPrizeType') || {}).value || '';
+      timeType = (document.getElementById('bill2IncMonthTimeType') || {}).value || 'completeTime';
     } else if (currentBill2IncomeSubTab === 'day') {
       dateStart = (document.getElementById('bill2IncDayDateStart') || {}).value || '';
       dateEnd = (document.getElementById('bill2IncDayDateEnd') || {}).value || '';
       typeFilter = (document.getElementById('bill2IncDayPrizeType') || {}).value || '';
+      timeType = (document.getElementById('bill2IncDayTimeType') || {}).value || 'completeTime';
     } else {
       dateStart = (document.getElementById('bill2IncDetailDateStart') || {}).value || '';
       dateEnd = (document.getElementById('bill2IncDetailDateEnd') || {}).value || '';
       typeFilter = (document.getElementById('bill2IncDetailPrizeType') || {}).value || '';
+      timeType = (document.getElementById('bill2IncDetailTimeType') || {}).value || 'completeTime';
     }
     var activityFilter = (document.getElementById('bill2IncDetailActivity') || {}).value || '';
     var payTypeFilter = (document.getElementById('bill2IncDetailPayType') || {}).value || '';
@@ -9068,8 +9145,10 @@
     var prizeNameFilter = (document.getElementById('bill2IncDetailPrizeName') || {}).value || '';
 
     var filtered = bill2IncomeData.filter(function(r) {
-      var d = r.time.substring(0, 10);
-      var dMonth = r.time.substring(0, 7);
+      var effTime = timeType === 'completeTime' ? (r.completeTime || '') : r.time;
+      if (!effTime) return false;
+      var d = effTime.substring(0, 10);
+      var dMonth = effTime.substring(0, 7);
       if (currentBill2IncomeSubTab === 'month') {
         if (dateStart && dMonth < dateStart) return false;
         if (dateEnd && dMonth > dateEnd) return false;
@@ -9106,7 +9185,9 @@
 
       var map = {};
       filtered.forEach(function(r) {
-        var p = r.time.substring(0, periodLen);
+        var effTime = timeType === 'completeTime' ? (r.completeTime || '') : r.time;
+        if (!effTime) return;
+        var p = effTime.substring(0, periodLen);
         var dimValue = dim === 'ptype' ? r.prizeType : dim === 'prize' ? r.prizeName : (r.store || '-');
         var key = p + '|' + dimValue;
         if (!map[key]) map[key] = { period: p, dimValue: dimValue, pFwd: 0, pRev: 0, sFwd: 0, sRev: 0, activities: {} };
@@ -9179,7 +9260,7 @@
       var pageList = sorted.slice((bill2PageState[subKey]-1)*BILL2_PAGE_SIZE, bill2PageState[subKey]*BILL2_PAGE_SIZE);
       var tbody = document.getElementById('bill2IncomeDetailBody');
       if (sorted.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="13" style="text-align:center;color:var(--ink-4);padding:40px 0;">暂无数据</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="14" style="text-align:center;color:var(--ink-4);padding:40px 0;">暂无数据</td></tr>';
         document.getElementById('bill2IncomeDetailCount').textContent = '0';
         updateBill2PageInfo(subKey, 0);
       } else {
@@ -9213,6 +9294,7 @@
             '<td style="text-align:right;font-weight:500;">' + actual.toLocaleString() + '</td>' +
             '<td style="text-align:right;font-weight:500;color:var(--danger,#dc2626);">' + (refundVal > 0 ? refundVal.toLocaleString() : '-') + '</td>' +
             '<td style="font-size:12px;">' + r.time + '</td>' +
+            '<td style="font-size:12px;">' + (r.completeTime || '-') + '</td>' +
             '<td>' + statusHtml + '</td>' +
             '</tr>';
         }).join('');
@@ -9224,22 +9306,25 @@
 
   // 成本渲染函数
   function renderBill2Expense() {
-    var dateStart, dateEnd, sceneFilter, prizeTypeFilter, orderNoFilter, channelFilter, accountTypeFilter, activityFilter;
+    var dateStart, dateEnd, sceneFilter, prizeTypeFilter, orderNoFilter, channelFilter, accountTypeFilter, activityFilter, timeType;
     if (currentBill2ExpenseSubTab === 'month') {
       dateStart = (document.getElementById('bill2ExpMonthDateStart') || {}).value || '';
       dateEnd = (document.getElementById('bill2ExpMonthDateEnd') || {}).value || '';
       sceneFilter = (document.getElementById('bill2ExpMonthScene') || {}).value || '';
       prizeTypeFilter = (document.getElementById('bill2ExpMonthPrizeType') || {}).value || '';
+      timeType = (document.getElementById('bill2ExpMonthTimeType') || {}).value || 'completeTime';
     } else if (currentBill2ExpenseSubTab === 'day') {
       dateStart = (document.getElementById('bill2ExpDayDateStart') || {}).value || '';
       dateEnd = (document.getElementById('bill2ExpDayDateEnd') || {}).value || '';
       sceneFilter = (document.getElementById('bill2ExpDayScene') || {}).value || '';
       prizeTypeFilter = (document.getElementById('bill2ExpDayPrizeType') || {}).value || '';
+      timeType = (document.getElementById('bill2ExpDayTimeType') || {}).value || 'completeTime';
     } else {
       dateStart = (document.getElementById('bill2ExpDetailDateStart') || {}).value || '';
       dateEnd = (document.getElementById('bill2ExpDetailDateEnd') || {}).value || '';
       sceneFilter = (document.getElementById('bill2ExpDetailScene') || {}).value || '';
       prizeTypeFilter = (document.getElementById('bill2ExpDetailPrizeType') || {}).value || '';
+      timeType = (document.getElementById('bill2ExpDetailTimeType') || {}).value || 'completeTime';
       orderNoFilter = (document.getElementById('bill2ExpDetailOrderNo') || {}).value || '';
       channelFilter = (document.getElementById('bill2ExpDetailChannel') || {}).value || '';
       accountTypeFilter = (document.getElementById('bill2ExpDetailAccountType') || {}).value || '';
@@ -9247,8 +9332,10 @@
     }
 
     var filtered = bill2ExpenseData.filter(function(r) {
-      var d = r.time.substring(0, 10);
-      var dMonth = r.time.substring(0, 7);
+      var effTime = timeType === 'completeTime' ? (r.completeTime || '') : r.time;
+      if (!effTime) return false;
+      var d = effTime.substring(0, 10);
+      var dMonth = effTime.substring(0, 7);
       if (currentBill2ExpenseSubTab === 'month') {
         if (dateStart && dMonth < dateStart) return false;
         if (dateEnd && dMonth > dateEnd) return false;
@@ -9279,7 +9366,9 @@
 
       var map = {};
       filtered.forEach(function(r) {
-        var p = r.time.substring(0, periodLen);
+        var effTime = timeType === 'completeTime' ? (r.completeTime || '') : r.time;
+        if (!effTime) return;
+        var p = effTime.substring(0, periodLen);
         var key = p + '|' + r.prizeType;
         if (!map[key]) map[key] = { period: p, scene: r.prizeType, pCost: 0, sCost: 0 };
         map[key].pCost += r.pointsCost;
@@ -9329,7 +9418,7 @@
       var pageList = sorted.slice((bill2PageState[subKey]-1)*BILL2_PAGE_SIZE, bill2PageState[subKey]*BILL2_PAGE_SIZE);
       var tbody = document.getElementById('bill2ExpenseDetailBody');
       if (sorted.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="12" style="text-align:center;color:var(--ink-4);padding:40px 0;">暂无数据</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="13" style="text-align:center;color:var(--ink-4);padding:40px 0;">暂无数据</td></tr>';
         document.getElementById('bill2ExpenseDetailCount').textContent = '0';
         updateBill2PageInfo(subKey, 0);
       } else {
@@ -9359,6 +9448,7 @@
             '<td style="text-align:right;font-weight:500;">' + costVal.toLocaleString() + '</td>' +
             '<td style="text-align:right;font-weight:500;color:var(--danger,#dc2626);">' + (refundVal > 0 ? refundVal.toLocaleString() : '-') + '</td>' +
             '<td style="font-size:12px;">' + r.time + '</td>' +
+            '<td style="font-size:12px;">' + (r.completeTime || '-') + '</td>' +
             '<td>' + statusHtml + '</td>' +
             '</tr>';
         }).join('');
