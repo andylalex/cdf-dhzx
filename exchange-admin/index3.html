@@ -7905,6 +7905,7 @@
           '<div><span style="color:var(--ink-4);">下单时间: </span>' + (o.time || '-') + '</div>' +
           '<div><span style="color:var(--ink-4);">完成时间: </span>' + (o.completeTime || '-') + '</div>' +
           (o.sourceActivityName ? '<div><span style="color:var(--ink-4);">来源活动: </span>' + o.sourceActivityName + ' (' + o.sourceActivityId + ')</div>' : '') +
+          (o.sourceOrderId ? '<div><span style="color:var(--ink-4);">来源订单号: </span><span style="font-family:monospace;">' + o.sourceOrderId + '</span></div>' : '') +
         '</div>' +
       '</div>';
     document.getElementById('orderDetailContent').innerHTML = html;
