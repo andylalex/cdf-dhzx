@@ -8756,30 +8756,31 @@
     if (_bill2DatesInitialized) return;
     _bill2DatesInitialized = true;
     var now = new Date();
-    // 月汇总默认：当月起往前3个月
-    var thisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-    var monthStart = new Date(now.getFullYear(), now.getMonth() - 2, 1); // 当月往前推2个月 = 3个月范围
+    var year = now.getFullYear();
+    // 月汇总默认：当年7月到9月
     var fmtMonth = function(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0'); };
+    var monthStart = new Date(year, 6, 1);
+    var monthEnd = new Date(year, 8, 1);
     var incMonthStart = document.getElementById('bill2IncMonthDateStart');
     var incMonthEnd = document.getElementById('bill2IncMonthDateEnd');
     if (incMonthStart) incMonthStart.value = fmtMonth(monthStart);
-    if (incMonthEnd) incMonthEnd.value = fmtMonth(thisMonth);
+    if (incMonthEnd) incMonthEnd.value = fmtMonth(monthEnd);
     var expMonthStart = document.getElementById('bill2ExpMonthDateStart');
     var expMonthEnd = document.getElementById('bill2ExpMonthDateEnd');
     if (expMonthStart) expMonthStart.value = fmtMonth(monthStart);
-    if (expMonthEnd) expMonthEnd.value = fmtMonth(thisMonth);
-    // 日汇总默认：从昨天开始往前30天
-    var yesterday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
-    var dayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 30);
+    if (expMonthEnd) expMonthEnd.value = fmtMonth(monthEnd);
+    // 日汇总默认：当年7月1日到9月30日
     var fmtDate = function(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
+    var dayStart = new Date(year, 6, 1);
+    var dayEnd = new Date(year, 8, 30);
     var incDayStart = document.getElementById('bill2IncDayDateStart');
     var incDayEnd = document.getElementById('bill2IncDayDateEnd');
     if (incDayStart) incDayStart.value = fmtDate(dayStart);
-    if (incDayEnd) incDayEnd.value = fmtDate(yesterday);
+    if (incDayEnd) incDayEnd.value = fmtDate(dayEnd);
     var expDayStart = document.getElementById('bill2ExpDayDateStart');
     var expDayEnd = document.getElementById('bill2ExpDayDateEnd');
     if (expDayStart) expDayStart.value = fmtDate(dayStart);
-    if (expDayEnd) expDayEnd.value = fmtDate(yesterday);
+    if (expDayEnd) expDayEnd.value = fmtDate(dayEnd);
   }
 
   // 收入账单模拟数据（基于订单）
