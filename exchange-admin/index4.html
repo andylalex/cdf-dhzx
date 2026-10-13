@@ -3585,6 +3585,7 @@
                     <th style="width:140px;">关联奖品</th>
                     <th style="width:100px;">使用场景</th>
                     <th style="width:110px;">适用门店</th>
+                    <th style="width:110px;">适用店铺</th>
                     <th style="width:90px;">奖品成本（元）</th>
                     <th style="width:110px;">剩余/总库存</th>
                     <th style="width:100px;">有效期</th>
@@ -5715,7 +5716,7 @@
               <input class="form-control" id="f_welfarePoints" type="number" placeholder="请输入消耗福利值" disabled="">
             </div>
           </div>
-          <div class="form-group full" id="channelGroup" style="">
+          <div class="form-group" id="channelGroup" style="">
             <label class="form-label">适用门店</label>
             <select class="form-control form-select" id="f_channel">
               <option value="cdf中免海南">cdf中免海南</option>
@@ -5724,6 +5725,20 @@
               <option value="博鳌免税店">博鳌免税店</option>
               <option value="三亚凤凰机场店">三亚凤凰机场店</option>
               <option value="海口美兰机场店">海口美兰机场店</option>
+            </select>
+          </div>
+          <div class="form-group" id="shopGroup" style="margin-top:0;">
+            <label class="form-label">适用店铺</label>
+            <select class="form-control form-select" id="f_shop">
+              <option value="">不适用</option>
+              <option value="大食代美食广场">大食代美食广场</option>
+              <option value="肯德基">肯德基</option>
+              <option value="麦当劳">麦当劳</option>
+              <option value="星巴克">星巴克</option>
+              <option value="海底捞火锅">海底捞火锅</option>
+              <option value="西贝莜面村">西贝莜面村</option>
+              <option value="和府捞面">和府捞面</option>
+              <option value="喜茶">喜茶</option>
             </select>
           </div>
         </div>
@@ -6060,8 +6075,8 @@
     { id: 8, prizeId: 'PRIZE-0008', name: '中免海南限定化妆包', desc: '海星主题', sku: 'EX-CDF-008', category: '香水化妆品', tag: '香水化妆品', type: '实物', original: 280, value: 280, img: 'assets/product-8.jpg', channel: '海口美兰机场店', relatedPrize: '', stock: 60, totalStock: 150, dailyStock: -1, deadlineType: 'days', deadlineValue: -1, status: '启用', prizeType: '实物礼品', usageScene: ['兑换中心'], exchangeRule: '不限期兑换', eopLianyingDaMa: ''},
     { id: 9, prizeId: 'PRIZE-0009', name: '三亚机场贵宾室服务券', desc: '电子权益', sku: 'EX-CDF-009', category: '电子券', tag: '电子券', type: '虚拟', original: 350, img: 'assets/product-9.jpg', channel: 'cdf中免海南', relatedPrize: '会员专属预约抽奖活动', stock: 40, totalStock: 80, dailyStock: -1, deadlineType: 'days', deadlineValue: 30, status: '停用', prizeType: '预约抽奖', usageScene: ['兑换中心', '签到'], exchangeRule: '预约成功后凭券进入贵宾室', eopLianyingDaMa: ''},
     { id: 10, prizeId: 'PRIZE-0010', name: '转盘抽奖机会 × 5', desc: '福利转盘', sku: 'EX-CDF-010', category: '虚拟权益', tag: '虚拟权益', type: '虚拟', original: 0, img: 'assets/product-10.jpg', channel: 'cdf中免海南', relatedPrize: '周年庆转盘抽奖活动', stock: -1, totalStock: -1, dailyStock: -1, deadlineType: 'days', deadlineValue: -1, status: '启用', prizeType: '转盘抽奖', usageScene: ['转盘抽奖'], exchangeRule: '每日签到可获得转盘机会', eopLianyingDaMa: ''},
-    { id: 11, prizeId: 'PRIZE-0011', name: 'cdf中免海南 50元无门槛优惠券', desc: '优选单券', sku: 'EX-CDF-011', category: '优惠券', tag: '优惠券', type: '虚拟', original: 50, img: 'assets/product-11.jpg', channel: 'cdf中免海南', relatedPrize: '', stock: 200, totalStock: 500, dailyStock: -1, deadlineType: 'days', deadlineValue: 30, status: '启用', prizeType: '优惠券-优选单券', usageScene: ['兑换中心'], exchangeRule: '发放至账户卡包，下单时自动抵扣', eopLianyingDaMa: ''},
-    { id: 12, prizeId: 'PRIZE-0012', name: 'cdf中免海南 满1000减100优惠券', desc: '券中心', sku: 'EX-CDF-012', category: '优惠券', tag: '优惠券', type: '虚拟', original: 100, img: 'assets/product-12.jpg', channel: 'cdf中免海南', relatedPrize: '', stock: 150, totalStock: 300, dailyStock: -1, deadlineType: 'days', deadlineValue: 60, status: '启用', prizeType: '优惠券-券中心', usageScene: ['兑换中心'], exchangeRule: '券中心领取，单笔满1000元可用', eopLianyingDaMa: ''},
+    { id: 11, prizeId: 'PRIZE-0011', name: 'cdf中免海南 50元无门槛优惠券', desc: '优选单券', sku: 'EX-CDF-011', category: '优惠券', tag: '优惠券', type: '虚拟', original: 50, img: 'assets/product-11.jpg', channel: 'cdf中免海南', relatedPrize: '', stock: 200, totalStock: 500, dailyStock: -1, deadlineType: 'days', deadlineValue: 30, status: '启用', prizeType: '优惠券-优选单券', usageScene: ['兑换中心'], shop: '大食代美食广场', exchangeRule: '发放至账户卡包，下单时自动抵扣', eopLianyingDaMa: ''},
+    { id: 12, prizeId: 'PRIZE-0012', name: 'cdf中免海南 满1000减100优惠券', desc: '券中心', sku: 'EX-CDF-012', category: '优惠券', tag: '优惠券', type: '虚拟', original: 100, img: 'assets/product-12.jpg', channel: 'cdf中免海南', relatedPrize: '', stock: 150, totalStock: 300, dailyStock: -1, deadlineType: 'days', deadlineValue: 60, status: '启用', prizeType: '优惠券-券中心', usageScene: ['兑换中心'], shop: '海底捞火锅', exchangeRule: '券中心领取，单笔满1000元可用', eopLianyingDaMa: ''},
     { id: 13, prizeId: 'PRIZE-0013', name: '福利值 1000点', desc: '账户福利值', sku: 'EX-CDF-013', category: '虚拟权益', tag: '虚拟权益', type: '虚拟', original: 1000, img: 'assets/product-13.jpg', channel: 'cdf中免海南', relatedPrize: '', stock: -1, totalStock: -1, dailyStock: -1, deadlineType: 'days', deadlineValue: -1, status: '启用', prizeType: '福利值', usageScene: ['兑换中心', '签到'], exchangeRule: '自动发放至账户福利值余额，长期有效', eopLianyingDaMa: ''}
   ];
 
@@ -6137,7 +6152,7 @@
 
     const tbody = document.getElementById('productTableBody');
     if (list.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;color:var(--ink-4);padding:40px 0;">暂无数据</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="13" style="text-align:center;color:var(--ink-4);padding:40px 0;">暂无数据</td></tr>';
       return;
     }
 
@@ -6162,6 +6177,7 @@
         ? '<button class="btn btn-danger btn-sm"' + disabledAttr + (isProtected ? '' : ' onclick="toggleProductStatus(' + p.id + ')"') + '>停用</button>'
         : '<button class="btn btn-text btn-sm"' + disabledAttr + (isProtected ? '' : ' onclick="toggleProductStatus(' + p.id + ')"') + '>启用</button>';
       const channelText = p.channel || '-';
+      const shopText = p.shop || '-';
       const relatedText = p.relatedPrize || '-';
       return `
       <tr>
@@ -6186,6 +6202,7 @@
           }).join('') || '<span style="color:var(--ink-4);">-</span>'}
         </td>
         <td style="font-size:12px;color:var(--ink-2);">${channelText}</td>
+        <td style="font-size:12px;color:var(--ink-2);">${shopText}</td>
         <td style="font-size:12px;">${p.value ? '¥' + p.value.toLocaleString() : '-'}</td>
         <td style="font-size:12px;">${stockText}</td>
         <td style="font-size:12px;">${validityText}</td>
@@ -6275,18 +6292,22 @@
   function onPrizeTypeChange() {
     const prizeType = document.getElementById('f_prizeType').value;
     const channelGroup = document.getElementById('channelGroup');
+    const shopGroup = document.getElementById('shopGroup');
     const deadlineGroup = document.getElementById('deadlineGroup');
 
     // 重置所有
     channelGroup.style.display = 'none';
+    shopGroup.style.display = 'none';
     deadlineGroup.style.display = 'none';
 
     if (prizeType === '实物礼品') {
       channelGroup.style.display = '';
+      shopGroup.style.display = '';
       deadlineGroup.style.display = '';
     }
     if (prizeType === '优惠券-优选单券' || prizeType === '优惠券-券中心') {
       channelGroup.style.display = '';
+      shopGroup.style.display = '';
       deadlineGroup.style.display = '';
     }
 
@@ -6366,6 +6387,7 @@
         document.getElementById('f_deadlineDate').value = '';
       }
       document.getElementById('f_channel').value = p.channel || 'cdf中免海南';
+      document.getElementById('f_shop').value = p.shop || '';
     } else {
       document.querySelectorAll('#productModal input[type="text"], #productModal input[type="number"], #productModal textarea').forEach(el => el.value = '');
       document.getElementById('f_prizeType').value = '实物礼品';
@@ -6379,6 +6401,7 @@
       document.getElementById('f_monthLimit').value = '-1';
       document.getElementById('f_dayLimit').value = '-1';
       document.getElementById('f_channel').value = 'cdf中免海南';
+      document.getElementById('f_shop').value = '';
       document.querySelector('input[name="f_deadlineType"][value="days"]').checked = true;
     }
     toggleDeadlineType();
@@ -6561,6 +6584,7 @@
       }
     }
     const channel = document.getElementById('f_channel').value;
+    const shop = document.getElementById('f_shop').value;
     var welfarePoints = document.getElementById('f_welfarePoints') ? parseInt(document.getElementById('f_welfarePoints').value) || 0 : 0;
     var monthLimit = document.getElementById('f_monthLimit') ? parseInt(document.getElementById('f_monthLimit').value) || -1 : -1;
     var dayLimit = document.getElementById('f_dayLimit') ? parseInt(document.getElementById('f_dayLimit').value) || -1 : -1;
@@ -6576,6 +6600,7 @@
       totalStock: stock,
       status: '启用',
       channel,
+      shop,
       deadlineType: document.querySelector('input[name="f_deadlineType"]:checked')?.value || 'days',
       deadlineValue: document.querySelector('input[name="f_deadlineType"]:checked')?.value === 'date' ? document.getElementById('f_deadlineDate').value : document.getElementById('f_deadlineDays').value,
       value: document.getElementById('f_value').value ? parseFloat(document.getElementById('f_value').value) : 0,
@@ -11291,7 +11316,9 @@
         }
       },
       destroy: function() {
+        var host = wrapper.parentNode;
         wrapper.remove();
+        if (host) host.appendChild(inputEl);
         inputEl.style.display = '';
         inputEl._ssInited = false;
       }
