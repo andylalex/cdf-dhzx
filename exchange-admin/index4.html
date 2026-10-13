@@ -8046,7 +8046,8 @@
 
       // 操作按钮
       var actions = '';
-      actions += '<button class="btn btn-text btn-sm" onclick="viewRefundLogs(\'' + r.refundId + '\')">日志</button>';
+      actions = '<button class="btn btn-primary btn-sm" onclick="openAuditModal(\'' + r.refundId + '\')">审核</button>';
+      actions += ' <button class="btn btn-text btn-sm" onclick="viewRefundLogs(\'' + r.refundId + '\')">日志</button>';
 
       // 奖品信息合并格
       var rPrizeImg = r.prizeImg || getOrderPrizeImg(r.prizeId);
@@ -8522,12 +8523,12 @@
       r.materials.forEach(function(m, idx) {
         var isVideo = m.indexOf('.mp4') >= 0 || m.indexOf('.mov') >= 0 || m.indexOf('video') >= 0;
         if (isVideo) {
-          materialsHtml += '<div onclick="viewRefundMaterial(\'' + refundId + '\',' + idx + ')" style="cursor:pointer;position:relative;width:60px;height:60px;border-radius:6px;background:#f0f0f0;display:flex;align-items:center;justify-content:center;" title="点击查看视频">' +
+          materialsHtml += '<div onclick="openRefundMaterialViewer(' + idx + ',\'' + refundId + '\')" style="cursor:pointer;position:relative;width:60px;height:60px;border-radius:6px;background:#f0f0f0;display:flex;align-items:center;justify-content:center;" title="点击查看视频">' +
             '<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;"><span style="color:#fff;font-size:10px;">▶</span></div>' +
             '<span style="font-size:10px;color:var(--ink-4);">视频' + (idx+1) + '</span>' +
           '</div>';
         } else {
-          materialsHtml += '<img src="' + m + '" onclick="viewRefundMaterial(\'' + refundId + '\',' + idx + ')" style="cursor:pointer;width:60px;height:60px;border-radius:6px;object-fit:cover;" title="点击查看大图">';
+          materialsHtml += '<img src="' + m + '" onclick="openRefundMaterialViewer(' + idx + ',\'' + refundId + '\')" style="cursor:pointer;width:60px;height:60px;border-radius:6px;object-fit:cover;" title="点击查看大图">';
         }
       });
       materialsHtml += '</div>';
