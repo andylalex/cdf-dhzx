@@ -4756,6 +4756,19 @@
                 <option value="三亚凤凰机场店">三亚凤凰机场店</option>
                 <option value="海口美兰机场店">海口美兰机场店</option>
               </select>
+              <select class="form-input form-select" style="width:150px;" id="bill2IncMonthShop" onchange="renderBill2Income()">
+                <option value="">全部店铺</option>
+                <option value="星巴克咖啡店">星巴克咖啡店</option>
+                <option value="喜茶饮品店">喜茶饮品店</option>
+                <option value="海底捞餐饮">海底捞餐饮</option>
+                <option value="万达影院">万达影院</option>
+                <option value="三亚度假酒店">三亚度假酒店</option>
+                <option value="海口亚特兰蒂斯酒店">海口亚特兰蒂斯酒店</option>
+                <option value="中免海南商城">中免海南商城</option>
+                <option value="悦诗风吟美妆店">悦诗风吟美妆店</option>
+                <option value="肯德基快餐">肯德基快餐</option>
+                <option value="免税城spa会所">免税城spa会所</option>
+              </select>
             </div>
             <div class="toolbar-right">
               <button class="btn btn-outline btn-sm" onclick="exportBill2('income-month')">导出</button>
@@ -4819,6 +4832,19 @@
                 <option value="博鳌免税店">博鳌免税店</option>
                 <option value="三亚凤凰机场店">三亚凤凰机场店</option>
                 <option value="海口美兰机场店">海口美兰机场店</option>
+              </select>
+              <select class="form-input form-select" style="width:150px;" id="bill2IncDayShop" onchange="renderBill2Income()">
+                <option value="">全部店铺</option>
+                <option value="星巴克咖啡店">星巴克咖啡店</option>
+                <option value="喜茶饮品店">喜茶饮品店</option>
+                <option value="海底捞餐饮">海底捞餐饮</option>
+                <option value="万达影院">万达影院</option>
+                <option value="三亚度假酒店">三亚度假酒店</option>
+                <option value="海口亚特兰蒂斯酒店">海口亚特兰蒂斯酒店</option>
+                <option value="中免海南商城">中免海南商城</option>
+                <option value="悦诗风吟美妆店">悦诗风吟美妆店</option>
+                <option value="肯德基快餐">肯德基快餐</option>
+                <option value="免税城spa会所">免税城spa会所</option>
               </select>
             </div>
             <div class="toolbar-right">
@@ -4892,6 +4918,19 @@
                 <option value="三亚凤凰机场店">三亚凤凰机场店</option>
                 <option value="海口美兰机场店">海口美兰机场店</option>
               </select>
+              <select class="form-input form-select" style="width:150px;" id="bill2IncDetailShop" onchange="renderBill2Income()">
+                <option value="">全部店铺</option>
+                <option value="星巴克咖啡店">星巴克咖啡店</option>
+                <option value="喜茶饮品店">喜茶饮品店</option>
+                <option value="海底捞餐饮">海底捞餐饮</option>
+                <option value="万达影院">万达影院</option>
+                <option value="三亚度假酒店">三亚度假酒店</option>
+                <option value="海口亚特兰蒂斯酒店">海口亚特兰蒂斯酒店</option>
+                <option value="中免海南商城">中免海南商城</option>
+                <option value="悦诗风吟美妆店">悦诗风吟美妆店</option>
+                <option value="肯德基快餐">肯德基快餐</option>
+                <option value="免税城spa会所">免税城spa会所</option>
+              </select>
               <div class="search-select-wrapper" style="width: 180px;"><input type="text" class="search-select-input" placeholder="全部活动来源" style="width: 100%;"><div class="search-select-dropdown"></div><input type="hidden" id="bill2IncDetailActivity" onchange="renderBill2Income()" style="display: none;" value=""></div>
               <select class="form-input form-select" style="width:120px;" id="bill2IncDetailPayType" onchange="renderBill2Income()">
                 <option value="">全部支付方式</option>
@@ -4916,6 +4955,7 @@
                     <th>订单渠道</th>
                     <th>记账方式</th>
                     <th>门店</th>
+                    <th>店铺</th>
                     <th>活动来源</th>
                     <th>支付方式</th>
                     <th style="text-align: right;">应收数</th>
@@ -9857,14 +9897,17 @@
       var pt2 = document.getElementById('bill2IncDetailPrizeType');
       var pn2 = document.getElementById('bill2IncDetailPrizeName');
       var st2 = document.getElementById('bill2IncDetailStore');
+      var sh2 = document.getElementById('bill2IncDetailShop');
       if (dim === 'ptype') {
         if (pt2) pt2.value = prizeType || '';
         if (pn2) pn2.value = '';
         if (st2) st2.value = '';
+        if (sh2) sh2.value = '';
       } else if (dim === 'prize') {
         if (pt2) pt2.value = '';
         if (pn2) pn2.value = prizeType || '';
         if (st2) st2.value = '';
+        if (sh2) sh2.value = '';
       }
       renderBill2Income();
     }
@@ -9880,25 +9923,28 @@
       window._bill2IncActSS.setOptions(actOpts);
     }
 
-    var dateStart, dateEnd, typeFilter, timeType, storeFilter;
+    var dateStart, dateEnd, typeFilter, timeType, storeFilter, shopFilter;
     if (currentBill2IncomeSubTab === 'month') {
       dateStart = (document.getElementById('bill2IncMonthDateStart') || {}).value || '';
       dateEnd = (document.getElementById('bill2IncMonthDateEnd') || {}).value || '';
       typeFilter = (document.getElementById('bill2IncMonthPrizeType') || {}).value || '';
       timeType = (document.getElementById('bill2IncMonthTimeType') || {}).value || 'completeTime';
       storeFilter = (document.getElementById('bill2IncMonthStore') || {}).value || '';
+      shopFilter = (document.getElementById('bill2IncMonthShop') || {}).value || '';
     } else if (currentBill2IncomeSubTab === 'day') {
       dateStart = (document.getElementById('bill2IncDayDateStart') || {}).value || '';
       dateEnd = (document.getElementById('bill2IncDayDateEnd') || {}).value || '';
       typeFilter = (document.getElementById('bill2IncDayPrizeType') || {}).value || '';
       timeType = (document.getElementById('bill2IncDayTimeType') || {}).value || 'completeTime';
       storeFilter = (document.getElementById('bill2IncDayStore') || {}).value || '';
+      shopFilter = (document.getElementById('bill2IncDayShop') || {}).value || '';
     } else {
       dateStart = (document.getElementById('bill2IncDetailDateStart') || {}).value || '';
       dateEnd = (document.getElementById('bill2IncDetailDateEnd') || {}).value || '';
       typeFilter = (document.getElementById('bill2IncDetailPrizeType') || {}).value || '';
       timeType = (document.getElementById('bill2IncDetailTimeType') || {}).value || 'completeTime';
       storeFilter = (document.getElementById('bill2IncDetailStore') || {}).value || '';
+      shopFilter = (document.getElementById('bill2IncDetailShop') || {}).value || '';
     }
     var activityFilter = (document.getElementById('bill2IncDetailActivity') || {}).value || '';
     var payTypeFilter = (document.getElementById('bill2IncDetailPayType') || {}).value || '';
@@ -9929,6 +9975,7 @@
       if (typeFilter && r.prizeType !== typeFilter) return false;
       if (r.prizeType === '福利值' || r.prizeType === '预约抽奖') return false;
       if (currentBill2IncomeSubTab !== 'detail' && storeFilter && r.store !== storeFilter) return false;
+      if (shopFilter && getMerchantName(r.orderId) !== shopFilter) return false;
       if (currentBill2IncomeSubTab === 'detail') {
         if (activityFilter && r.activity !== activityFilter) return false;
         if (payTypeFilter && r.payType !== payTypeFilter) return false;
@@ -10031,7 +10078,7 @@
       var pageList = sorted.slice((bill2PageState[subKey]-1)*BILL2_PAGE_SIZE, bill2PageState[subKey]*BILL2_PAGE_SIZE);
       var tbody = document.getElementById('bill2IncomeDetailBody');
       if (sorted.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="14" style="text-align:center;color:var(--ink-4);padding:40px 0;">暂无数据</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="15" style="text-align:center;color:var(--ink-4);padding:40px 0;">暂无数据</td></tr>';
         document.getElementById('bill2IncomeDetailCount').textContent = '0';
         updateBill2PageInfo(subKey, 0);
       } else {
@@ -10059,6 +10106,7 @@
             '<td style="font-size:12px;">' + (r.channel || '-') + '</td>' +
             '<td style="font-size:12px;">' + (r.accountType || '-') + '</td>' +
             '<td style="font-size:12px;">' + (r.store || '-') + '</td>' +
+            '<td style="font-size:12px;">' + merchantName + '</td>' +
             '<td style="font-size:12px;">' + (r.activity || '-') + '</td>' +
             '<td style="font-size:12px;">' + r.payType + '</td>' +
             '<td style="text-align:right;font-weight:500;">' + receivable.toLocaleString() + '</td>' +
